@@ -54,6 +54,8 @@ targetCompatibility = "1.8"; // defaults to sourceCompatibility
  * List of dependencies
  */
 dependencies {
+    provided(group: "com.google.code.findbugs", name: "jsr305",
+        version: "3.0.0");
     testCompile(group: "org.testng", name: "testng", version: "6.8.13") {
         exclude(group: "junit", module: "junit");
         exclude(group: "org.beanshell", module: "bsh");
