@@ -4,9 +4,19 @@ import com.github.parboiled1.grappa.debugger.view.GrappaDebuggerView;
 
 public final class GrappaDebuggerPresenter
 {
-    private final GrappaDebuggerView view;
+    private GrappaDebuggerView view;
+
+    public GrappaDebuggerPresenter()
+    {
+    }
 
     public GrappaDebuggerPresenter(final GrappaDebuggerView view)
+    {
+        this.view = view;
+    }
+
+    // TODO! Find a way NOT to have that
+    public void setView(final GrappaDebuggerView view)
     {
         this.view = view;
     }

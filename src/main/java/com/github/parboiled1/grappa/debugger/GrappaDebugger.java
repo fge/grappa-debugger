@@ -9,6 +9,13 @@ import javafx.stage.Stage;
 public final class GrappaDebugger
     extends Application
 {
+    private final GrappaDebuggerPresenter presenter;
+
+    public GrappaDebugger()
+    {
+        presenter = new GrappaDebuggerPresenter();
+    }
+
     /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
@@ -28,10 +35,27 @@ public final class GrappaDebugger
     {
         final GrappaDebuggerView view
             = new JavafxGrappaDebuggerView(primaryStage);
-        final GrappaDebuggerPresenter presenter
-            = new GrappaDebuggerPresenter(view);
+        
+        presenter.setView(view);
 
         presenter.display();
+    }
+
+    /**
+     * This method is called when the application should stop, and provides a
+     * convenient place to prepare for application exit and destroy resources.
+     * <p>
+     * The implementation of this method provided by the Application class
+     * does nothing.
+     * </p>
+     * <p>
+     * NOTE: This method is called on the JavaFX Application Thread.
+     * </p>
+     */
+    @Override
+    public void stop()
+    {
+        presenter.close();
     }
 
     public static void main(final String... args)
