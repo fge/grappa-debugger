@@ -35,7 +35,7 @@ public final class GrappaDebugger
     {
         final GrappaDebuggerView view
             = new JavafxGrappaDebuggerView(primaryStage);
-        
+
         presenter.setView(view);
 
         presenter.display();
