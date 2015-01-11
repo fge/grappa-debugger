@@ -26,6 +26,8 @@ public class MainWindowUi
     @FXML
     MenuItem treeMenuItem;
     @FXML
+    MenuItem parse;
+    @FXML
     MenuItem closeButton;
 
     @FXML
@@ -65,5 +67,10 @@ public class MainWindowUi
     public void treeEvent(final ActionEvent ignored)
     {
         presenter.handleTree();
+    }
+
+    public void parseEvent(final ActionEvent ignored)
+    {
+        presenter.handleParse();
     }
 }

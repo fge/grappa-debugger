@@ -1,5 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import javafx.scene.control.TreeItem;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -14,4 +16,6 @@ public interface MainWindowView
     String getInputText();
 
     void fillTree();
+
+    void setParseTree(TreeItem<String> root);
 }

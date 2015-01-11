@@ -54,4 +54,10 @@ public final class DefaultMainWindowView
         root.getChildren().addAll(e1, e2);
         ui.traceTree.setRoot(root);
     }
+
+    @Override
+    public void setParseTree(final TreeItem<String> root)
+    {
+        ui.traceTree.setRoot(root);
+    }
 }
