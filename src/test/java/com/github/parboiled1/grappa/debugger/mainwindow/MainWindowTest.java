@@ -10,6 +10,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public final class MainWindowTest
 {
@@ -58,5 +59,21 @@ public final class MainWindowTest
         final String trace = "trace";
         presenter.addTrace(trace);
         verify(view).addTrace(trace);
+    }
+
+    @Test
+    public void runTraceTest()
+    {
+        final String input = "input";
+        when(view.getInputText()).thenReturn(input);
+
+        final InOrder inOrder = inOrder(presenter, view, model);
+
+        ui.runTrace(mock(ActionEvent.class));
+
+        inOrder.verify(presenter).runTrace();
+        inOrder.verify(view).getInputText();
+        inOrder.verify(model).trace(presenter, input);
+        inOrder.verifyNoMoreInteractions();
     }
 }

@@ -10,4 +10,6 @@ public interface MainWindowView
     void closeWindow();
 
     void addTrace(String trace);
+
+    String getInputText();
 }

@@ -36,4 +36,10 @@ public final class DefaultMainWindowView
     {
         ui.event.appendText(trace);
     }
+
+    @Override
+    public String getInputText()
+    {
+        return ui.input.getText();
+    }
 }

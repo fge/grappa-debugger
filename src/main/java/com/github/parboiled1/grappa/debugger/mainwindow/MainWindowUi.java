@@ -50,8 +50,8 @@ public class MainWindowUi
     }
 
 
-    public void runTrace(ActionEvent ignored)
+    public void runTrace(final ActionEvent ignored)
     {
-        presenter.runTrace(input.getText());
+        presenter.runTrace();
     }
 }

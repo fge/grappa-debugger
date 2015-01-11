@@ -34,8 +34,9 @@ public class MainWindowPresenter
         view.addTrace(trace);
     }
 
-    public void runTrace(final String text)
+    public void runTrace()
     {
+        final String text = view.getInputText();
         model.trace(this, text);
     }
 }
