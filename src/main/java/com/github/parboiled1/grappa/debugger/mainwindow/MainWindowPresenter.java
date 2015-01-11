@@ -54,15 +54,39 @@ public class MainWindowPresenter
 
     public void loadFile()
     {
-        final FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choose a file to load");
-        chooser.setInitialDirectory(Paths.get("").toAbsolutePath().toFile());
-
-        final File file = chooser.showOpenDialog(stage);
+        final File file = getInputFile();
 
         if (file == null)
             return;
 
+        final String content;
+
+        try {
+            content = getContents(file);
+        } catch (IOException e) {
+            final Alert alert = alertFactory.newError("Problem!",
+                "Unable to load file contents", e);
+            alert.showAndWait();
+            return;
+        }
+
+        view.setInputText(content);
+    }
+
+    // Visible for testing
+    File getInputFile()
+    {
+        final FileChooser chooser = new FileChooser();
+        chooser.setTitle("Choose a file to load");
+        chooser.setInitialDirectory(Paths.get("").toAbsolutePath().toFile());
+
+        return chooser.showOpenDialog(stage);
+    }
+
+    // Visible for testing
+    String getContents(final File file)
+        throws IOException
+    {
         final Path path = file.toPath();
 
         final char[] buf = new char[2048];
@@ -75,12 +99,8 @@ public class MainWindowPresenter
             int nrChars;
             while ((nrChars = reader.read(buf)) != -1)
                 sb.append(buf, 0, nrChars);
-            view.setInputText(sb.toString());
-            throw new IOException("pwet");
-        } catch (IOException e) {
-            final Alert alert = alertFactory.newError("Problem!",
-                "Unable to load file contents", e);
-            alert.showAndWait();
         }
+
+        return sb.toString();
     }
 }
