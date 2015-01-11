@@ -24,6 +24,8 @@ public class MainWindowUi
     @FXML
     MenuItem trace;
     @FXML
+    MenuItem treeMenuItem;
+    @FXML
     MenuItem closeButton;
 
     @FXML
@@ -53,9 +55,15 @@ public class MainWindowUi
         presenter.handleCloseWindow();
     }
 
-
+    @FXML
     public void runTraceEvent(final ActionEvent ignored)
     {
         presenter.handleRunTrace();
+    }
+
+    @FXML
+    public void treeEvent(final ActionEvent ignored)
+    {
+        presenter.handleTree();
     }
 }

@@ -12,4 +12,6 @@ public interface MainWindowView
     void addTraceText(String trace);
 
     String getInputText();
+
+    void fillTree();
 }

@@ -102,4 +102,9 @@ public class MainWindowPresenter
 
         return sb.toString();
     }
+
+    public void handleTree()
+    {
+        view.fillTree();
+    }
 }
