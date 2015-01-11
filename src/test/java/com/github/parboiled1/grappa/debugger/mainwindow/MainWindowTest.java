@@ -1,11 +1,12 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import com.github.parboiled1.grappa.debugger.alert.AlertFactory;
 import javafx.event.ActionEvent;
+import javafx.stage.Stage;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -14,31 +15,28 @@ import static org.mockito.Mockito.when;
 
 public final class MainWindowTest
 {
-    private MainWindowUi ui;
     private MainWindowView view;
-    private MainWindowPresenter presenter;
     private MainWindowModel model;
+
+    private MainWindowPresenterBuilder builder;
+    private MainWindowPresenter presenter;
+    private AlertFactory alertFactory;
+
+    private MainWindowUi ui;
 
     @BeforeMethod
     public void init()
     {
         view = mock(MainWindowView.class);
-        ui = spy(new MainWindowUi());
         model = mock(MainWindowModel.class);
-        presenter = spy(new MainWindowPresenter(ui, view, model));
+        alertFactory = spy(new AlertFactory());
+
+        builder = new MainWindowPresenterBuilder().withStage(mock(Stage.class))
+            .withView(view).withModel(model).withAlertFactory(alertFactory);
+        presenter = spy(builder.build());
+
+        ui = spy(new MainWindowUi());
         ui.init(presenter, view);
-    }
-
-    @Test
-    public void loadInputTest()
-    {
-        final InOrder inOrder = inOrder(presenter, view);
-
-        ui.loadInput(mock(ActionEvent.class));
-
-        inOrder.verify(presenter).loadInput();
-        inOrder.verify(view).setInputText(anyString());
-        inOrder.verifyNoMoreInteractions();
     }
 
     @Test

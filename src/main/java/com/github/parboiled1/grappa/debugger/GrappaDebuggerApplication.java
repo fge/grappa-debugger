@@ -1,9 +1,12 @@
 package com.github.parboiled1.grappa.debugger;
 
+import com.github.parboiled1.grappa.debugger.alert.AlertFactory;
 import com.github.parboiled1.grappa.debugger.mainwindow.DefaultMainWindowModel;
 import com.github.parboiled1.grappa.debugger.mainwindow.DefaultMainWindowView;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowModel;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowPresenter;
+import com.github.parboiled1.grappa.debugger.mainwindow
+    .MainWindowPresenterBuilder;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowUi;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowView;
 import javafx.application.Application;
@@ -18,8 +21,6 @@ import java.net.URL;
 public final class GrappaDebuggerApplication
     extends Application
 {
-    private Pane pane;
-
     @Override
     public void start(final Stage primaryStage)
         throws IOException
@@ -32,13 +33,17 @@ public final class GrappaDebuggerApplication
         final FXMLLoader loader = new FXMLLoader(url);
 
         final Pane pane = loader.load();
-        this.pane = pane;
 
         final MainWindowUi ui = loader.getController();
         final MainWindowView view = new DefaultMainWindowView(ui);
         final MainWindowModel model = new DefaultMainWindowModel();
-        final MainWindowPresenter presenter
-            = new MainWindowPresenter(ui, view, model);
+
+        final MainWindowPresenterBuilder builder
+            = new MainWindowPresenterBuilder();
+
+        final MainWindowPresenter presenter = builder.withStage(primaryStage)
+            .withView(view).withAlertFactory(new AlertFactory())
+            .withModel(model).build();
 
         ui.init(presenter, view);
 

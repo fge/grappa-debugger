@@ -40,7 +40,7 @@ public class MainWindowUi
     @FXML
     public void loadInput(final ActionEvent ignored)
     {
-        presenter.loadInput();
+        presenter.loadFile();
     }
 
     @FXML
