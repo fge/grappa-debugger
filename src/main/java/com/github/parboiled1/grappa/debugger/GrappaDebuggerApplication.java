@@ -16,29 +16,31 @@ import java.net.URL;
 public final class GrappaDebuggerApplication
     extends Application
 {
-     @Override
-     public void start(final Stage primaryStage)
-         throws IOException
-     {
-         final URL url = GrappaDebuggerApplication.class
-             .getResource("/mainWindow.fxml");
-         if (url == null)
-             throw new IOException("cannot load fxml file");
+    private Pane pane;
 
-         final FXMLLoader loader = new FXMLLoader(url);
+    @Override
+    public void start(final Stage primaryStage)
+        throws IOException
+    {
+        final URL url = GrappaDebuggerApplication.class
+            .getResource("/mainWindow.fxml");
+        if (url == null)
+            throw new IOException("cannot load fxml file");
 
-         final Pane pane = loader.load();
+        final FXMLLoader loader = new FXMLLoader(url);
 
-         final MainWindowUi ui = loader.getController();
-         final MainWindowView view = new DefaultMainWindowView(ui);
-         final MainWindowPresenter presenter
-             = new MainWindowPresenter(ui, view);
+        final Pane pane = loader.load();
+        this.pane = pane;
 
-         ui.init(presenter, view);
+        final MainWindowUi ui = loader.getController();
+        final MainWindowView view = new DefaultMainWindowView(ui);
+        final MainWindowPresenter presenter = new MainWindowPresenter(ui, view);
 
-         primaryStage.setScene(new Scene(pane));
-         primaryStage.show();
-     }
+        ui.init(presenter, view);
+
+        primaryStage.setScene(new Scene(pane));
+        primaryStage.show();
+    }
 
     public static void main(final String... args)
     {
