@@ -14,7 +14,7 @@ import java.io.StringWriter;
 
 public class AlertFactory
 {
-    public Alert newError(final String title, final String header,
+    public void showError(final String title, final String header,
         final Throwable throwable)
     {
         final Alert alert = new Alert(AlertType.ERROR);
@@ -24,7 +24,7 @@ public class AlertFactory
         final Pane pane = getExceptionPane(throwable);
 
         alert.getDialogPane().setContent(pane);
-        return alert;
+        alert.show();
     }
 
     private Pane getExceptionPane(final Throwable ex)

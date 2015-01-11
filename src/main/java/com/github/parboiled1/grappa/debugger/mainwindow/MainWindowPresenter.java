@@ -1,7 +1,6 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.alert.AlertFactory;
-import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -70,9 +69,8 @@ public class MainWindowPresenter
         try {
             content = getContents(file);
         } catch (IOException e) {
-            final Alert alert = alertFactory.newError("Problem!",
-                "Unable to load file contents", e);
-            alert.showAndWait();
+            alertFactory.showError("Problem!", "Unable to load file contents",
+                e);
             return;
         }
 
