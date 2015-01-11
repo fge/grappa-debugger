@@ -9,7 +9,7 @@ public interface MainWindowView
 
     void closeWindow();
 
-    void addTrace(String trace);
+    void addTraceText(String trace);
 
     String getInputText();
 }

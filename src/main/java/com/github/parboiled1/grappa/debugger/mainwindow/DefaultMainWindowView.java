@@ -20,7 +20,7 @@ public final class DefaultMainWindowView
     @Override
     public void setInputText(final String inputText)
     {
-        ui.input.setText(Objects.requireNonNull(inputText));
+        ui.inputText.setText(Objects.requireNonNull(inputText));
     }
 
     @Override
@@ -32,14 +32,14 @@ public final class DefaultMainWindowView
     }
 
     @Override
-    public void addTrace(final String trace)
+    public void addTraceText(final String trace)
     {
-        ui.event.appendText(trace);
+        ui.traceText.appendText(trace);
     }
 
     @Override
     public String getInputText()
     {
-        return ui.input.getText();
+        return ui.inputText.getText();
     }
 }

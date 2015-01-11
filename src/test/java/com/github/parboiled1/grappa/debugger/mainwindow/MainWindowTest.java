@@ -52,9 +52,9 @@ public final class MainWindowTest
     {
         final InOrder inOrder = inOrder(presenter, view);
 
-        ui.closeWindow(mock(ActionEvent.class));
+        ui.closeWindowEvent(mock(ActionEvent.class));
 
-        inOrder.verify(presenter).closeWindow();
+        inOrder.verify(presenter).handleCloseWindow();
         inOrder.verify(view).closeWindow();
         inOrder.verifyNoMoreInteractions();
     }
@@ -63,8 +63,8 @@ public final class MainWindowTest
     public void traceTest()
     {
         final String trace = "trace";
-        presenter.addTrace(trace);
-        verify(view).addTrace(trace);
+        presenter.handleAddTrace(trace);
+        verify(view).addTraceText(trace);
     }
 
     @Test
@@ -75,9 +75,9 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view, model);
 
-        ui.runTrace(mock(ActionEvent.class));
+        ui.runTraceEvent(mock(ActionEvent.class));
 
-        inOrder.verify(presenter).runTrace();
+        inOrder.verify(presenter).handleRunTrace();
         inOrder.verify(view).getInputText();
         inOrder.verify(model).trace(presenter, input);
         inOrder.verifyNoMoreInteractions();
@@ -93,8 +93,9 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view, alertFactory);
 
-        ui.loadInput(mock(ActionEvent.class));
+        ui.loadFileEvent(mock(ActionEvent.class));
 
+        inOrder.verify(presenter).handleLoadFile();
         inOrder.verify(presenter).getInputFile();
         inOrder.verifyNoMoreInteractions();
     }
@@ -113,8 +114,9 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view, alertFactory);
 
-        ui.loadInput(mock(ActionEvent.class));
+        ui.loadFileEvent(mock(ActionEvent.class));
 
+        inOrder.verify(presenter).handleLoadFile();
         inOrder.verify(presenter).getInputFile();
         inOrder.verify(presenter).getContents(file);
         inOrder.verify(alertFactory)
@@ -137,8 +139,9 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view);
 
-        ui.loadInput(mock(ActionEvent.class));
-        
+        ui.loadFileEvent(mock(ActionEvent.class));
+
+        inOrder.verify(presenter).handleLoadFile();
         inOrder.verify(presenter).getInputFile();
         inOrder.verify(presenter).getContents(file);
         inOrder.verify(view).setInputText(content);

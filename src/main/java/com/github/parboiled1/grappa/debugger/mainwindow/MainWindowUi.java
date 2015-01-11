@@ -26,9 +26,9 @@ public class MainWindowUi
     MenuItem closeButton;
 
     @FXML
-    TextArea event;
+    TextArea traceText;
     @FXML
-    TextArea input;
+    TextArea inputText;
 
     public void init(final MainWindowPresenter presenter,
         final MainWindowView view)
@@ -38,20 +38,20 @@ public class MainWindowUi
     }
 
     @FXML
-    public void loadInput(final ActionEvent ignored)
+    public void loadFileEvent(final ActionEvent ignored)
     {
-        presenter.loadFile();
+        presenter.handleLoadFile();
     }
 
     @FXML
-    public void closeWindow(final ActionEvent ignored)
+    public void closeWindowEvent(final ActionEvent ignored)
     {
-        presenter.closeWindow();
+        presenter.handleCloseWindow();
     }
 
 
-    public void runTrace(final ActionEvent ignored)
+    public void runTraceEvent(final ActionEvent ignored)
     {
-        presenter.runTrace();
+        presenter.handleRunTrace();
     }
 }

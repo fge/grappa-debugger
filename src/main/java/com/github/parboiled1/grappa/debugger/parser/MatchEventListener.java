@@ -37,7 +37,7 @@ public final class MatchEventListener
             .append(" (line ").append(lineNumber)
             .append(", column ").append(columnNumber)
             .append(")\n");
-        presenter.addTrace(sb.toString());
+        presenter.handleAddTrace(sb.toString());
     }
 
     @Subscribe
@@ -55,6 +55,6 @@ public final class MatchEventListener
             .append(" (line ").append(lineNumber)
             .append(", column ").append(columnNumber)
             .append(")\n");
-        presenter.addTrace(sb.toString());
+        presenter.handleAddTrace(sb.toString());
     }
 }

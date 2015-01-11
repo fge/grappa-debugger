@@ -29,28 +29,23 @@ public class MainWindowPresenter
         alertFactory = builder.alertFactory;
     }
 
-    public void loadInput()
-    {
-        view.setInputText("hello");
-    }
-
-    public void closeWindow()
+    public void handleCloseWindow()
     {
         view.closeWindow();
     }
 
-    public void addTrace(final String trace)
+    public void handleAddTrace(final String trace)
     {
-        view.addTrace(trace);
+        view.addTraceText(trace);
     }
 
-    public void runTrace()
+    public void handleRunTrace()
     {
         final String text = view.getInputText();
         model.trace(this, text);
     }
 
-    public void loadFile()
+    public void handleLoadFile()
     {
         /*
          * TODO: cannot reliably read text content...

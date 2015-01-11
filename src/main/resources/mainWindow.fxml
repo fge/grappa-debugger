@@ -16,19 +16,19 @@
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem fx:id="loadInput" mnemonicParsing="false"
-                    text="Load input" onAction="#loadInput"/>
+                    text="Load file" onAction="#loadFileEvent"/>
                 <MenuItem fx:id="trace" mnemonicParsing="false"
-                    text="Run trace" onAction="#runTrace"/>
+                    text="Run trace" onAction="#runTraceEvent"/>
                 <MenuItem fx:id="closeButton" mnemonicParsing="false"
-                    text="Close" onAction="#closeWindow"/>
+                    text="Close" onAction="#closeWindowEvent"/>
             </Menu>
         </MenuBar>
     </top>
     <center>
         <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0"
             BorderPane.alignment="CENTER">
-            <TextArea fx:id="event" prefHeight="200.0" prefWidth="200.0"/>
-            <TextArea fx:id="input" prefHeight="200.0" prefWidth="200.0"/>
+            <TextArea fx:id="traceText" prefHeight="200.0" prefWidth="200.0"/>
+            <TextArea fx:id="inputText" prefHeight="200.0" prefWidth="200.0"/>
         </SplitPane>
     </center>
 </BorderPane>
