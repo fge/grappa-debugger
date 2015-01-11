@@ -36,4 +36,16 @@ public final class MainWindowTest
         inOrder.verify(view).setInputText(anyString());
         inOrder.verifyNoMoreInteractions();
     }
+
+    @Test
+    public void closeWindowTest()
+    {
+        final InOrder inOrder = inOrder(presenter, view);
+
+        ui.closeWindow(mock(ActionEvent.class));
+
+        inOrder.verify(presenter).closeWindow();
+        inOrder.verify(view).closeWindow();
+        inOrder.verifyNoMoreInteractions();
+    }
 }

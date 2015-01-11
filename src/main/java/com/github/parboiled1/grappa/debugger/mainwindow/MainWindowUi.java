@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -14,6 +15,10 @@ public class MainWindowUi
     private MainWindowPresenter presenter;
     private MainWindowView view;
 
+    @FXML
+    public Pane pane;
+    @FXML
+    MenuItem closeButton;
     @FXML
     MenuItem loadInput;
     @FXML
@@ -32,5 +37,10 @@ public class MainWindowUi
     public void loadInput(final ActionEvent ignored)
     {
         presenter.loadInput();
+    }
+
+    public void closeWindow(final ActionEvent event)
+    {
+        presenter.closeWindow();
     }
 }

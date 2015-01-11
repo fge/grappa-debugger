@@ -20,4 +20,9 @@ public class MainWindowPresenter
     {
         view.setInputText("hello");
     }
+
+    public void closeWindow()
+    {
+        view.closeWindow();
+    }
 }

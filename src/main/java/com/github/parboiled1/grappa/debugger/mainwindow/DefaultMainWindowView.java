@@ -1,5 +1,8 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
@@ -18,5 +21,13 @@ public final class DefaultMainWindowView
     public void setInputText(final String inputText)
     {
         ui.input.setText(Objects.requireNonNull(inputText));
+    }
+
+    @Override
+    public void closeWindow()
+    {
+        // Source: http://stackoverflow.com/a/13602324
+        final Window window = ui.pane.getScene().getWindow();
+        ((Stage) window).close();
     }
 }

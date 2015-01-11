@@ -6,4 +6,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface MainWindowView
 {
     void setInputText(String inputText);
+
+    void closeWindow();
 }
