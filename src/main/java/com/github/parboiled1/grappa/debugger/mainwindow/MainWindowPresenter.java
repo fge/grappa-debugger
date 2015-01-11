@@ -9,7 +9,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -54,6 +53,13 @@ public class MainWindowPresenter
 
     public void loadFile()
     {
+        /*
+         * TODO: cannot reliably read text content...
+         *
+         * The FileChooser can only select files; you cannot tell it, for
+         * instance, that you want to read them using a given encoding, which
+         * sucks.
+         */
         final File file = getInputFile();
 
         if (file == null)
@@ -93,8 +99,8 @@ public class MainWindowPresenter
         final StringBuilder sb = new StringBuilder();
 
         try (
-            final BufferedReader reader = Files.newBufferedReader(path,
-                StandardCharsets.UTF_8);
+            // TODO: ugly! Depending on the default encoding...
+            final BufferedReader reader = Files.newBufferedReader(path);
         ) {
             int nrChars;
             while ((nrChars = reader.read(buf)) != -1)
