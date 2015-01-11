@@ -5,8 +5,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
     minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
     xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
@@ -27,7 +27,12 @@
     <center>
         <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0"
             BorderPane.alignment="CENTER">
-            <TextArea fx:id="traceText" prefHeight="200.0" prefWidth="200.0"/>
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                <TreeView fx:id="traceTree" prefHeight="200.0"
+                    prefWidth="200.0"/>
+                <TextArea fx:id="traceText" prefHeight="200.0"
+                    prefWidth="200.0"/>
+            </SplitPane>
             <TextArea fx:id="inputText" prefHeight="200.0" prefWidth="200.0"/>
         </SplitPane>
     </center>

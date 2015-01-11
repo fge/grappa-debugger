@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,7 +27,10 @@ public class MainWindowUi
     MenuItem closeButton;
 
     @FXML
+    TreeView<String> traceTree;
+    @FXML
     TextArea traceText;
+
     @FXML
     TextArea inputText;
 
