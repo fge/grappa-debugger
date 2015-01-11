@@ -17,10 +17,6 @@
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem fx:id="loadInput" mnemonicParsing="false"
                     text="Load file" onAction="#loadFileEvent"/>
-                <MenuItem fx:id="trace" mnemonicParsing="false"
-                    text="Run trace" onAction="#runTraceEvent"/>
-                <MenuItem fx:id="treeMenuItem" text="Tree"
-                    onAction="#treeEvent"/>
                 <MenuItem fx:id="parse" mnemonicParsing="false"
                     text="Parse" onAction="#parseEvent"/>
                 <MenuItem fx:id="closeButton" mnemonicParsing="false"

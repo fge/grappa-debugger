@@ -45,7 +45,7 @@ public final class GrappaDebuggerApplication
             .withView(view).withAlertFactory(new AlertFactory())
             .withModel(model).build();
 
-        ui.init(presenter, view);
+        ui.init(presenter);
 
         primaryStage.setScene(new Scene(pane));
         primaryStage.show();

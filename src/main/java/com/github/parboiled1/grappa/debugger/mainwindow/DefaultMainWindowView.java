@@ -33,26 +33,9 @@ public final class DefaultMainWindowView
     }
 
     @Override
-    public void addTraceText(final String trace)
-    {
-        ui.traceText.appendText(trace);
-    }
-
-    @Override
     public String getInputText()
     {
         return ui.inputText.getText();
-    }
-
-    @Override
-    public void fillTree()
-    {
-        final TreeItem<String> root = new TreeItem<>("root");
-        final TreeItem<String> e1 = new TreeItem<>("e1");
-        final TreeItem<String> e2 = new TreeItem<>("e2");
-        //noinspection unchecked
-        root.getChildren().addAll(e1, e2);
-        ui.traceTree.setRoot(root);
     }
 
     @Override

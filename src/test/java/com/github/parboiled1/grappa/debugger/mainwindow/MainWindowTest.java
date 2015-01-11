@@ -18,8 +18,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public final class MainWindowTest
 {
@@ -44,7 +42,7 @@ public final class MainWindowTest
         presenter = spy(builder.build());
 
         ui = spy(new MainWindowUi());
-        ui.init(presenter, view);
+        ui.init(presenter);
     }
 
     @Test
@@ -56,30 +54,6 @@ public final class MainWindowTest
 
         inOrder.verify(presenter).handleCloseWindow();
         inOrder.verify(view).closeWindow();
-        inOrder.verifyNoMoreInteractions();
-    }
-
-    @Test
-    public void traceTest()
-    {
-        final String trace = "trace";
-        presenter.handleAddTrace(trace);
-        verify(view).addTraceText(trace);
-    }
-
-    @Test
-    public void runTraceTest()
-    {
-        final String input = "input";
-        when(view.getInputText()).thenReturn(input);
-
-        final InOrder inOrder = inOrder(presenter, view, model);
-
-        ui.runTraceEvent(mock(ActionEvent.class));
-
-        inOrder.verify(presenter).handleRunTrace();
-        inOrder.verify(view).getInputText();
-        inOrder.verify(model).trace(presenter, input);
         inOrder.verifyNoMoreInteractions();
     }
 

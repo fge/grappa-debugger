@@ -30,22 +30,6 @@ public class MainWindowPresenter
         alertFactory = builder.alertFactory;
     }
 
-    public void handleCloseWindow()
-    {
-        view.closeWindow();
-    }
-
-    public void handleAddTrace(final String trace)
-    {
-        view.addTraceText(trace);
-    }
-
-    public void handleRunTrace()
-    {
-        final String text = view.getInputText();
-        model.trace(this, text);
-    }
-
     public void handleLoadFile()
     {
         /*
@@ -104,15 +88,15 @@ public class MainWindowPresenter
         return sb.toString();
     }
 
-    public void handleTree()
-    {
-        view.fillTree();
-    }
-
     public void handleParse()
     {
         final String inputText = view.getInputText();
         final TreeItem<String> root = model.runTrace(inputText);
         view.setParseTree(root);
+    }
+
+    public void handleCloseWindow()
+    {
+        view.closeWindow();
     }
 }

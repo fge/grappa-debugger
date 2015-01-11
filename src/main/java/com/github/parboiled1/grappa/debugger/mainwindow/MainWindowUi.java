@@ -14,7 +14,6 @@ import java.util.Objects;
 public class MainWindowUi
 {
     private MainWindowPresenter presenter;
-    private MainWindowView view;
 
     @FXML
     Pane pane;
@@ -22,27 +21,19 @@ public class MainWindowUi
     @FXML
     MenuItem loadInput;
     @FXML
-    MenuItem trace;
-    @FXML
-    MenuItem treeMenuItem;
-    @FXML
     MenuItem parse;
     @FXML
     MenuItem closeButton;
 
     @FXML
     TreeView<String> traceTree;
-    @FXML
-    TextArea traceText;
 
     @FXML
     TextArea inputText;
 
-    public void init(final MainWindowPresenter presenter,
-        final MainWindowView view)
+    public void init(final MainWindowPresenter presenter)
     {
         this.presenter = Objects.requireNonNull(presenter);
-        this.view = Objects.requireNonNull(view);
     }
 
     @FXML
@@ -51,26 +42,14 @@ public class MainWindowUi
         presenter.handleLoadFile();
     }
 
+    public void parseEvent(final ActionEvent ignored)
+    {
+        presenter.handleParse();
+    }
+
     @FXML
     public void closeWindowEvent(final ActionEvent ignored)
     {
         presenter.handleCloseWindow();
-    }
-
-    @FXML
-    public void runTraceEvent(final ActionEvent ignored)
-    {
-        presenter.handleRunTrace();
-    }
-
-    @FXML
-    public void treeEvent(final ActionEvent ignored)
-    {
-        presenter.handleTree();
-    }
-
-    public void parseEvent(final ActionEvent ignored)
-    {
-        presenter.handleParse();
     }
 }
