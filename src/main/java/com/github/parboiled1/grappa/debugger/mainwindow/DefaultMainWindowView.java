@@ -30,4 +30,10 @@ public final class DefaultMainWindowView
         final Window window = ui.pane.getScene().getWindow();
         ((Stage) window).close();
     }
+
+    @Override
+    public void addTrace(final String trace)
+    {
+        ui.event.appendText(trace);
+    }
 }

@@ -9,19 +9,22 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public final class MainWindowTest
 {
     private MainWindowUi ui;
     private MainWindowView view;
     private MainWindowPresenter presenter;
+    private MainWindowModel model;
 
     @BeforeMethod
     public void init()
     {
         view = mock(MainWindowView.class);
         ui = spy(new MainWindowUi());
-        presenter = spy(new MainWindowPresenter(ui, view));
+        model = mock(MainWindowModel.class);
+        presenter = spy(new MainWindowPresenter(ui, view, model));
         ui.init(presenter, view);
     }
 
@@ -47,5 +50,13 @@ public final class MainWindowTest
         inOrder.verify(presenter).closeWindow();
         inOrder.verify(view).closeWindow();
         inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void traceTest()
+    {
+        final String trace = "trace";
+        presenter.addTrace(trace);
+        verify(view).addTrace(trace);
     }
 }

@@ -17,6 +17,8 @@
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem fx:id="loadInput" mnemonicParsing="false"
                     text="Load input" onAction="#loadInput"/>
+                <MenuItem fx:id="trace" mnemonicParsing="false"
+                    text="Run trace" onAction="#runTrace"/>
                 <MenuItem fx:id="closeButton" mnemonicParsing="false"
                     text="Close" onAction="#closeWindow"/>
             </Menu>

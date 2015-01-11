@@ -16,11 +16,15 @@ public class MainWindowUi
     private MainWindowView view;
 
     @FXML
-    public Pane pane;
-    @FXML
-    MenuItem closeButton;
+    Pane pane;
+
     @FXML
     MenuItem loadInput;
+    @FXML
+    MenuItem trace;
+    @FXML
+    MenuItem closeButton;
+
     @FXML
     TextArea event;
     @FXML
@@ -39,8 +43,15 @@ public class MainWindowUi
         presenter.loadInput();
     }
 
-    public void closeWindow(final ActionEvent event)
+    @FXML
+    public void closeWindow(final ActionEvent ignored)
     {
         presenter.closeWindow();
+    }
+
+
+    public void runTrace(ActionEvent ignored)
+    {
+        presenter.runTrace(input.getText());
     }
 }

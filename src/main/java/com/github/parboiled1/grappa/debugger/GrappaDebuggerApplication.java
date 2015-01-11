@@ -1,6 +1,8 @@
 package com.github.parboiled1.grappa.debugger;
 
+import com.github.parboiled1.grappa.debugger.mainwindow.DefaultMainWindowModel;
 import com.github.parboiled1.grappa.debugger.mainwindow.DefaultMainWindowView;
+import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowModel;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowPresenter;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowUi;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowView;
@@ -34,7 +36,9 @@ public final class GrappaDebuggerApplication
 
         final MainWindowUi ui = loader.getController();
         final MainWindowView view = new DefaultMainWindowView(ui);
-        final MainWindowPresenter presenter = new MainWindowPresenter(ui, view);
+        final MainWindowModel model = new DefaultMainWindowModel();
+        final MainWindowPresenter presenter
+            = new MainWindowPresenter(ui, view, model);
 
         ui.init(presenter, view);
 

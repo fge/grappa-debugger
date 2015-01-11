@@ -8,4 +8,6 @@ public interface MainWindowView
     void setInputText(String inputText);
 
     void closeWindow();
+
+    void addTrace(String trace);
 }
