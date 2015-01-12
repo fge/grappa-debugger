@@ -1,7 +1,6 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
@@ -55,16 +54,5 @@ public final class DefaultMainWindowView
     public void setTraceDetail(final String text)
     {
         ui.traceDetail.setText(text);
-    }
-
-    private void clearChildren(final TreeItem<MatchResult> item)
-    {
-        final ObservableList<TreeItem<MatchResult>> children
-            = item.getChildren();
-        if (children == null)
-            return;
-
-        children.forEach(this::clearChildren);
-        children.clear();
     }
 }
