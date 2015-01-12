@@ -103,6 +103,10 @@ public class MainWindowPresenter
 
     public void handleMatchResult(final TreeItem<MatchResult> treeItem)
     {
+        // TODO: unlike what IDEA says, this CAN happen that treeItem is null
+        //noinspection ConstantConditions
+        if (treeItem == null)
+            return;
         view.setTraceDetail(treeItem.getValue().toString());
     }
 }
