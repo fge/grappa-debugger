@@ -53,7 +53,7 @@ public final class MatchResult
             .append(", column ").append(column)
             .append("\n----\n").append(buffer.extractLine(line))
             .append('\n')
-            .append(Strings.repeat(" ", column)).append("^\n----\n");
+            .append(Strings.repeat(" ", column - 1)).append("^\n----\n");
         if (success) {
             sb.append("Match SUCCESS; text matched:\n<")
                 .append(buffer.extract(start, parsingNode.getEndIndex()))
