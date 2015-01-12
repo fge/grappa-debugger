@@ -12,7 +12,7 @@ public class TestParser
     @Label("unquoted")
     public Rule unquoted()
     {
-        return oneOrMore(noneOf("\\\""));
+        return zeroOrMore(noneOf("\\\""));
     }
 
     @Label("quoted")
