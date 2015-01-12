@@ -46,7 +46,7 @@ public final class MainWindowTest
     }
 
     @Test
-    public void closeWindowTest()
+    public void closeWindowEventTest()
     {
         final InOrder inOrder = inOrder(presenter, view);
 
@@ -58,7 +58,7 @@ public final class MainWindowTest
     }
 
     @Test
-    public void loadFileNoFileTest()
+    public void loadFileEventNoFileTest()
     {
         // This is the default but let's make it explicit
         // NOTE: when(presenter.getInputFile()).thenReturn(null) doesn't work
@@ -73,8 +73,8 @@ public final class MainWindowTest
         inOrder.verifyNoMoreInteractions();
     }
 
-    @Test(dependsOnMethods = "loadFileNoFileTest")
-    public void loadFileIOErrorTest()
+    @Test(dependsOnMethods = "loadFileEventNoFileTest")
+    public void loadFileEventIOErrorTest()
         throws IOException
     {
         final File file = mock(File.class);
@@ -98,10 +98,10 @@ public final class MainWindowTest
     }
 
     @Test(dependsOnMethods = {
-        "loadFileNoFileTest",
-        "loadFileIOErrorTest"
+        "loadFileEventNoFileTest",
+        "loadFileEventIOErrorTest"
     })
-    public void loadFileOKTest()
+    public void loadFileEventOKTest()
         throws IOException
     {
         final File file = mock(File.class);

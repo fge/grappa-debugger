@@ -5,8 +5,7 @@ import com.github.parboiled1.grappa.debugger.mainwindow.DefaultMainWindowModel;
 import com.github.parboiled1.grappa.debugger.mainwindow.DefaultMainWindowView;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowModel;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowPresenter;
-import com.github.parboiled1.grappa.debugger.mainwindow
-    .MainWindowPresenterBuilder;
+import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowPresenterBuilder;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowUi;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowView;
 import javafx.application.Application;
