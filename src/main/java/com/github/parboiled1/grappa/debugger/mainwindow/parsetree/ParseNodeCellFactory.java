@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow.parsetree;
 
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowPresenter;
+import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowUi;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
@@ -11,11 +12,11 @@ import javafx.util.Callback;
 public final class ParseNodeCellFactory
     implements Callback<TreeView<MatchResult>, TreeCell<MatchResult>>
 {
-    private final MainWindowPresenter presenter;
+    private final MainWindowUi ui;
 
-    public ParseNodeCellFactory(final MainWindowPresenter presenter)
+    public ParseNodeCellFactory(final MainWindowUi ui)
     {
-        this.presenter = presenter;
+        this.ui = ui;
     }
 
     @Override
@@ -23,7 +24,7 @@ public final class ParseNodeCellFactory
     {
         final ParsingTreeCell cell = new ParsingTreeCell();
         final EventHandler<MouseEvent> handler
-            = event -> presenter.handleMatchResult(cell.getTreeItem());
+            = event -> ui.matchResultShowEvent(cell.getTreeItem());
         cell.setOnMouseClicked(handler);
         return cell;
     }

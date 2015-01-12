@@ -1,5 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import com.github.parboiled1.grappa.debugger.mainwindow.parsetree
+    .ParseNodeCellFactory;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -18,6 +20,7 @@ public final class DefaultMainWindowView
     public DefaultMainWindowView(final MainWindowUi ui)
     {
         this.ui = ui;
+        ui.traceTree.setCellFactory(new ParseNodeCellFactory(ui));
     }
 
     @Override

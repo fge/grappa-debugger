@@ -101,12 +101,12 @@ public class MainWindowPresenter
         view.closeWindow();
     }
 
-    public void handleMatchResult(final TreeItem<MatchResult> treeItem)
+    public void handleMatchResultShow(final TreeItem<MatchResult> item)
     {
-        // TODO: unlike what IDEA says, this CAN happen that treeItem is null
+        // TODO: unlike what IDEA says, this CAN happen that item is null
         //noinspection ConstantConditions
-        if (treeItem == null)
+        if (item == null)
             return;
-        view.setTraceDetail(treeItem.getValue().toString());
+        view.setTraceDetail(item.getValue().toString());
     }
 }
