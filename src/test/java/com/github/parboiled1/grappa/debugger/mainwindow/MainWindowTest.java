@@ -59,7 +59,6 @@ public final class MainWindowTest
 
     @Test
     public void loadFileNoFileTest()
-        throws IOException
     {
         // This is the default but let's make it explicit
         // NOTE: when(presenter.getInputFile()).thenReturn(null) doesn't work
