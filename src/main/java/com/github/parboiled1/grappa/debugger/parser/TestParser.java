@@ -2,8 +2,10 @@ package com.github.parboiled1.grappa.debugger.parser;
 
 import org.parboiled.BaseParser;
 import org.parboiled.Rule;
+import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.annotations.Label;
 
+@BuildParseTree
 public class TestParser
     extends BaseParser<String>
 {

@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.alert.AlertFactory;
+import com.github.parboiled1.grappa.debugger.parser.ParsingRunResult;
 import javafx.scene.control.TreeItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -91,7 +92,8 @@ public class MainWindowPresenter
     public void handleParse()
     {
         final String inputText = view.getInputText();
-        final TreeItem<String> root = model.runTrace(inputText);
+        final ParsingRunResult result = model.runTrace(inputText);
+        final TreeItem<String> root = result.getRoot();
         view.setParseTree(root);
     }
 

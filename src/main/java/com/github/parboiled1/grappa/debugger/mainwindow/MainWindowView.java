@@ -13,5 +13,7 @@ public interface MainWindowView
 
     void setParseTree(TreeItem<String> root);
 
+    void setTraceDetail(String text);
+
     void closeWindow();
 }

@@ -27,6 +27,8 @@ public class MainWindowUi
 
     @FXML
     TreeView<String> traceTree;
+    @FXML
+    TextArea traceDetail;
 
     @FXML
     TextArea inputText;

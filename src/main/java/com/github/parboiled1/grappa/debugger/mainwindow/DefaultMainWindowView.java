@@ -43,4 +43,10 @@ public final class DefaultMainWindowView
     {
         ui.traceTree.setRoot(root);
     }
+
+    @Override
+    public void setTraceDetail(final String text)
+    {
+        ui.traceDetail.setText(text);
+    }
 }

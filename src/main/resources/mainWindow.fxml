@@ -30,7 +30,7 @@
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                 <TreeView fx:id="traceTree" prefHeight="200.0"
                     prefWidth="200.0"/>
-                <TextArea fx:id="traceText" prefHeight="200.0"
+                <TextArea fx:id="traceDetail" prefHeight="200.0"
                     prefWidth="200.0"/>
             </SplitPane>
             <TextArea fx:id="inputText" prefHeight="200.0" prefWidth="200.0"/>

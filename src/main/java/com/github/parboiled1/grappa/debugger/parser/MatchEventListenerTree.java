@@ -1,17 +1,22 @@
 package com.github.parboiled1.grappa.debugger.parser;
 
+import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.run.MatchFailureEvent;
 import com.github.parboiled1.grappa.run.MatchSuccessEvent;
 import com.github.parboiled1.grappa.run.PreMatchEvent;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
 import javafx.scene.control.TreeItem;
 import org.parboiled.Context;
 import org.parboiled.MatcherContext;
+import org.parboiled.Node;
 import org.parboiled.support.MatcherPath;
+import org.parboiled.support.Position;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,6 +24,9 @@ public final class MatchEventListenerTree
 {
     private final Map<MatchId, TreeItem<String>> treeItems
         = new HashMap<>();
+    private final Map<TreeItem<String>, String> details
+        = new IdentityHashMap<>();
+
     private TreeItem<String> root;
 
     @Subscribe
@@ -49,6 +57,7 @@ public final class MatchEventListenerTree
         final TreeItem<String> item = treeItems.get(id);
         final String value = item.getValue();
         item.setValue(value + " (FAILED)");
+        details.put(item, failureDetails(context));
     }
 
     @Subscribe
@@ -59,11 +68,42 @@ public final class MatchEventListenerTree
         final TreeItem<String> item = treeItems.get(id);
         final String value = item.getValue();
         item.setValue(value + " (SUCCESS)");
+        details.put(item, successDetails(context));
     }
 
-    public TreeItem<String> getRoot()
+    private String successDetails(final MatcherContext<?> context)
     {
-        return root;
+        final StringBuilder sb = new StringBuilder();
+        final InputBuffer buffer = context.getInputBuffer();
+        final Node<?> node = context.getNode();
+        final int start = node.getStartIndex();
+        final int end = node.getEndIndex();
+        final Position position = buffer.getPosition(start);
+            sb.append("matched text:\n<")
+                .append(buffer.extract(start, end))
+                .append(">\n at line ").append(position.getLine())
+                .append(", column ").append(position.getColumn());
+        return sb.toString();
+    }
+
+    public ParsingRunResult getResult()
+    {
+        return new ParsingRunResult(root, details);
+    }
+
+    private static String failureDetails(final MatcherContext<?> context)
+    {
+        final StringBuilder sb = new StringBuilder();
+        final InputBuffer buffer = context.getInputBuffer();
+        final int start = context.getCurrentIndex();
+        final Position position = buffer.getPosition(start);
+        sb.append("failed to match at line ").append(position.getLine())
+            .append(", column ").append(position.getColumn())
+            .append("\n:")
+            .append(buffer.extractLine(position.getLine()))
+            .append(Strings.repeat(" ", position.getColumn()))
+            .append('^');
+        return sb.toString();
     }
 
     private static final class MatchId
