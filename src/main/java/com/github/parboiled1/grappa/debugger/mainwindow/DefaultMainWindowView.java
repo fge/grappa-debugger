@@ -47,7 +47,7 @@ public final class DefaultMainWindowView
         final TreeView<MatchResult> tree = ui.traceTree;
         final TreeItem<MatchResult> oldRoot = tree.getRoot();
         if (oldRoot != null)
-            clearChildren(oldRoot);
+            oldRoot.getChildren().clear();
         tree.setRoot(root);
     }
 

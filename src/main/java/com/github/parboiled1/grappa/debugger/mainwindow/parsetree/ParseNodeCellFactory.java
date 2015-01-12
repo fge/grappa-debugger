@@ -35,15 +35,9 @@ public final class ParseNodeCellFactory
         protected void updateItem(final MatchResult item, final boolean empty)
         {
             super.updateItem(item, empty);
-            if (!empty) {
-                final String text = item.getLabel() + " ("
-                    + (item.isSuccess() ? "SUCCESS" : "FAILURE") + ')';
-                setText(text);
-                setGraphic(getTreeItem().getGraphic());
-            } else {
-                setText(null);
-                setGraphic(null);
-            }
+            final String text = empty ? null : String.format("%s (%s)",
+                item.getLabel(), item.isSuccess() ? "SUCCESS": "FAILURE");
+            setText(text);
         }
     }
 }
