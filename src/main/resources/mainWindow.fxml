@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
+
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
     minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
     xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
@@ -29,7 +30,7 @@
             BorderPane.alignment="CENTER">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                 <TreeView fx:id="traceTree" prefHeight="200.0"
-                    prefWidth="200.0"/>
+                    prefWidth="200.0" style="font-family: monospace"/>
                 <TextArea fx:id="traceDetail" prefHeight="200.0"
                     prefWidth="200.0"/>
             </SplitPane>

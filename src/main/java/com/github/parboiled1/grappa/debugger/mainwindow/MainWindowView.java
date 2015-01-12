@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.scene.control.TreeItem;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -11,7 +12,7 @@ public interface MainWindowView
 
     String getInputText();
 
-    void setParseTree(TreeItem<String> root);
+    void setParseTree(TreeItem<MatchResult> root);
 
     void setTraceDetail(String text);
 

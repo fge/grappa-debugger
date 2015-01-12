@@ -1,8 +1,9 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
-import com.github.parboiled1.grappa.debugger.parser.ParsingRunResult;
+import com.github.parboiled1.grappa.debugger.parser.MatchResult;
+import javafx.scene.control.TreeItem;
 
 public interface MainWindowModel
 {
-    ParsingRunResult runTrace(String inputText);
+    TreeItem<MatchResult> runTrace(String inputText);
 }

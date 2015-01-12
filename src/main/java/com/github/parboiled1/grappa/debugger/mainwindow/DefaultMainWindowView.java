@@ -1,6 +1,9 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import com.github.parboiled1.grappa.debugger.parser.MatchResult;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -39,14 +42,29 @@ public final class DefaultMainWindowView
     }
 
     @Override
-    public void setParseTree(final TreeItem<String> root)
+    public void setParseTree(final TreeItem<MatchResult> root)
     {
-        ui.traceTree.setRoot(root);
+        final TreeView<MatchResult> tree = ui.traceTree;
+        final TreeItem<MatchResult> oldRoot = tree.getRoot();
+        if (oldRoot != null)
+            clearChildren(oldRoot);
+        tree.setRoot(root);
     }
 
     @Override
     public void setTraceDetail(final String text)
     {
         ui.traceDetail.setText(text);
+    }
+
+    private void clearChildren(final TreeItem<MatchResult> item)
+    {
+        final ObservableList<TreeItem<MatchResult>> children
+            = item.getChildren();
+        if (children == null)
+            return;
+
+        children.forEach(this::clearChildren);
+        children.clear();
     }
 }

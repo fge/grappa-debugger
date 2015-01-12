@@ -1,5 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import com.github.parboiled1.grappa.debugger.mainwindow.parsetree.ParseNodeCellFactory;
+import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -26,7 +28,7 @@ public class MainWindowUi
     MenuItem closeButton;
 
     @FXML
-    TreeView<String> traceTree;
+    TreeView<MatchResult> traceTree;
     @FXML
     TextArea traceDetail;
 
@@ -36,6 +38,7 @@ public class MainWindowUi
     public void init(final MainWindowPresenter presenter)
     {
         this.presenter = Objects.requireNonNull(presenter);
+        traceTree.setCellFactory(new ParseNodeCellFactory(presenter));
     }
 
     @FXML
@@ -44,6 +47,7 @@ public class MainWindowUi
         presenter.handleLoadFile();
     }
 
+    @FXML
     public void parseEvent(final ActionEvent ignored)
     {
         presenter.handleParse();
