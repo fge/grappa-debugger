@@ -7,7 +7,8 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
-
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
     minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
     xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
@@ -35,7 +36,9 @@
                     prefHeight="200.0" prefWidth="200.0"
                     style="-fx-font-family: monospace"/>
             </SplitPane>
-            <TextArea fx:id="inputText" prefHeight="200.0" prefWidth="200.0"/>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                <TextFlow fx:id="inputText"/>
+            </ScrollPane>
         </SplitPane>
     </center>
 </BorderPane>

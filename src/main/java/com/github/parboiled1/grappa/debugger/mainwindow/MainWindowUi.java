@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -36,7 +37,7 @@ public class MainWindowUi
     TextArea traceDetail;
 
     @FXML
-    TextArea inputText;
+    TextFlow inputText;
 
     @NotFXML
     public void init(final MainWindowPresenter presenter)
