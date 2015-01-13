@@ -2,14 +2,18 @@ package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.mainwindow.parsetree.ParseNodeCellFactory;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 public final class DefaultMainWindowView
@@ -37,6 +41,28 @@ public final class DefaultMainWindowView
         // Source: http://stackoverflow.com/a/13602324
         final Window window = ui.pane.getScene().getWindow();
         ((Stage) window).close();
+    }
+
+    @Override
+    public void highlightMatch(final int start, final int end)
+    {
+        if (start == end)
+            return;
+        if (end == 0)
+            return;
+        final String text = getInputText();
+        final int length = text.length();
+        final int realEnd = Math.min(end, length - 1);
+        final List<Node> nodes = new ArrayList<>(3);
+        if (start > 0)
+            nodes.add(new Text(text.substring(0, start)));
+        final Text matched = new Text(text.substring(start, realEnd));
+        matched.setFill(Color.RED);
+        matched.setUnderline(true);
+        nodes.add(matched);
+        if (realEnd < length)
+            nodes.add(new Text(text.substring(realEnd)));
+        ui.inputText.getChildren().setAll(nodes);
     }
 
     @Override

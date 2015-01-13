@@ -38,6 +38,16 @@ public class MatchResult
         return label;
     }
 
+    public InputBuffer getBuffer()
+    {
+        return buffer;
+    }
+
+    public Node<?> getParsingNode()
+    {
+        return parsingNode;
+    }
+
     @Nonnull
     @Override
     public String toString()

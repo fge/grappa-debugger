@@ -17,4 +17,6 @@ public interface MainWindowView
     void setTraceDetail(String text);
 
     void closeWindow();
+
+    void highlightMatch(int start, int end);
 }

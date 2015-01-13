@@ -6,6 +6,7 @@ import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.scene.control.TreeItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.parboiled.Node;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
@@ -109,6 +110,18 @@ public class MainWindowPresenter
         //noinspection ConstantConditions
         if (item == null)
             return;
-        view.setTraceDetail(item.getValue().toString());
+        final MatchResult matchResult = item.getValue();
+
+        view.setTraceDetail(matchResult.toString());
+
+        if (!matchResult.isSuccess()) {
+            view.setInputText(view.getInputText());
+            return;
+        }
+
+        final Node<?> node = matchResult.getParsingNode();
+        final int start = node.getStartIndex();
+        final int end = node.getEndIndex();
+        view.highlightMatch(start, end);
     }
 }
