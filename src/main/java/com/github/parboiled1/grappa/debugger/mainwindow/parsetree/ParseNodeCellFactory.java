@@ -1,6 +1,5 @@
 package com.github.parboiled1.grappa.debugger.mainwindow.parsetree;
 
-import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowPresenter;
 import com.github.parboiled1.grappa.debugger.mainwindow.MainWindowUi;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.event.EventHandler;
