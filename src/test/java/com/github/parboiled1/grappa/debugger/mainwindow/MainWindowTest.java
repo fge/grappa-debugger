@@ -1,7 +1,9 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.alert.AlertFactory;
+import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.event.ActionEvent;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
@@ -18,6 +20,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public final class MainWindowTest
 {
@@ -120,6 +123,28 @@ public final class MainWindowTest
         inOrder.verify(presenter).getInputFile();
         inOrder.verify(presenter).getContents(file);
         inOrder.verify(view).setInputText(content);
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    // TODO: this test is probably too complicated
+    @Test
+    public void parseEventTest()
+    {
+        final String inputText = "meh";
+        @SuppressWarnings("unchecked")
+        final TreeItem<MatchResult> item = mock(TreeItem.class);
+
+        when(view.getInputText()).thenReturn(inputText);
+        when(model.runTrace(same(inputText))).thenReturn(item);
+
+        final InOrder inOrder = inOrder(presenter, model, view);
+
+        ui.parseEvent(event);
+
+        inOrder.verify(presenter).handleParse();
+        inOrder.verify(view).getInputText();
+        inOrder.verify(model).runTrace(same(inputText));
+        inOrder.verify(view).setParseTree(same(item));
         inOrder.verifyNoMoreInteractions();
     }
 }
