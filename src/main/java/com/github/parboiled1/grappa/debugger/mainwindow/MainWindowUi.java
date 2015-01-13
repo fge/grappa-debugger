@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.internal.NonFinalForTesting;
+import com.github.parboiled1.grappa.debugger.internal.NotFXML;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,29 +38,32 @@ public class MainWindowUi
     @FXML
     TextArea inputText;
 
+    @NotFXML
     public void init(final MainWindowPresenter presenter)
     {
         this.presenter = Objects.requireNonNull(presenter);
     }
 
     @FXML
-    public void loadFileEvent(final ActionEvent ignored)
+    void loadFileEvent(final ActionEvent ignored)
     {
         presenter.handleLoadFile();
     }
 
     @FXML
-    public void parseEvent(final ActionEvent ignored)
+    void parseEvent(final ActionEvent ignored)
     {
         presenter.handleParse();
     }
 
     @FXML
-    public void closeWindowEvent(final ActionEvent ignored)
+    void closeWindowEvent(final ActionEvent ignored)
     {
         presenter.handleCloseWindow();
     }
 
+    // TODO: handle that better... See ParseNodeCellFactory
+    @NotFXML
     public void matchResultShowEvent(final TreeItem<MatchResult> item)
     {
         presenter.handleMatchResultShow(item);
