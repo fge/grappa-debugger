@@ -46,13 +46,13 @@ public final class DefaultMainWindowView
     @Override
     public void highlightMatch(final int start, final int end)
     {
-        if (start == end)
-            return;
-        if (end == 0)
-            return;
         final String text = getInputText();
         final int length = text.length();
-        final int realEnd = Math.min(end, length - 1);
+        if (end == 0 || start == length || start == end) {
+            setInputText(text);
+            return;
+        }
+        final int realEnd = Math.min(end, length);
         final List<Node> nodes = new ArrayList<>(3);
         if (start > 0)
             nodes.add(new Text(text.substring(0, start)));

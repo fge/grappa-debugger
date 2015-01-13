@@ -19,4 +19,9 @@ public interface MainWindowView
     void closeWindow();
 
     void highlightMatch(int start, int end);
+
+    default void resetInputText()
+    {
+        setInputText(getInputText());
+    }
 }
