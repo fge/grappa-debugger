@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
+import com.github.parboiled1.grappa.debugger.internal.NonFinalForTesting;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
+@NonFinalForTesting
 public class MainWindowUi
 {
     private MainWindowPresenter presenter;

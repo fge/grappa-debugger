@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.mainwindow;
 
 import com.github.parboiled1.grappa.debugger.alert.AlertFactory;
+import com.github.parboiled1.grappa.debugger.internal.NonFinalForTesting;
 import com.github.parboiled1.grappa.debugger.parser.MatchResult;
 import javafx.scene.control.TreeItem;
 import javafx.stage.FileChooser;
@@ -16,6 +17,7 @@ import java.nio.file.Paths;
 
 // Non final for testing
 @ParametersAreNonnullByDefault
+@NonFinalForTesting
 public class MainWindowPresenter
 {
     private final Stage stage;

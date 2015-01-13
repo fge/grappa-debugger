@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.parser;
 
 import com.github.parboiled1.grappa.buffers.InputBuffer;
+import com.github.parboiled1.grappa.debugger.internal.NonFinalForTesting;
 import com.google.common.base.Strings;
 import org.parboiled.Node;
 import org.parboiled.support.Position;
@@ -10,7 +11,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public final class MatchResult
+@NonFinalForTesting
+public class MatchResult
 {
     private final String label;
     private final boolean success;
