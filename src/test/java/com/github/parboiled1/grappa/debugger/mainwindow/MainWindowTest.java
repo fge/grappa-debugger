@@ -29,6 +29,7 @@ public final class MainWindowTest
     private AlertFactory alertFactory;
 
     private MainWindowUi ui;
+    private ActionEvent event;
 
     @BeforeMethod
     public void init()
@@ -43,6 +44,7 @@ public final class MainWindowTest
 
         ui = spy(new MainWindowUi());
         ui.init(presenter);
+        event = mock(ActionEvent.class);
     }
 
     @Test
@@ -50,7 +52,7 @@ public final class MainWindowTest
     {
         final InOrder inOrder = inOrder(presenter, view);
 
-        ui.closeWindowEvent(mock(ActionEvent.class));
+        ui.closeWindowEvent(event);
 
         inOrder.verify(presenter).handleCloseWindow();
         inOrder.verify(view).closeWindow();
@@ -66,7 +68,7 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view, alertFactory);
 
-        ui.loadFileEvent(mock(ActionEvent.class));
+        ui.loadFileEvent(event);
 
         inOrder.verify(presenter).handleLoadFile();
         inOrder.verify(presenter).getInputFile();
@@ -87,7 +89,7 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view, alertFactory);
 
-        ui.loadFileEvent(mock(ActionEvent.class));
+        ui.loadFileEvent(event);
 
         inOrder.verify(presenter).handleLoadFile();
         inOrder.verify(presenter).getInputFile();
@@ -112,7 +114,7 @@ public final class MainWindowTest
 
         final InOrder inOrder = inOrder(presenter, view);
 
-        ui.loadFileEvent(mock(ActionEvent.class));
+        ui.loadFileEvent(event);
 
         inOrder.verify(presenter).handleLoadFile();
         inOrder.verify(presenter).getInputFile();
