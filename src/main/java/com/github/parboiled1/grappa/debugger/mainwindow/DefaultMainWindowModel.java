@@ -16,7 +16,7 @@ public final class DefaultMainWindowModel
         final TestParser parser = Parboiled.createParser(TestParser.class);
         final EventBasedParseRunner<String> runner
             = new EventBasedParseRunner<>(parser.quotedString());
-        final ParseListener listener = new ParseListener();
+        final ParseListener<String> listener = new ParseListener<>();
         runner.registerListener(listener);
         runner.run(inputText);
         return listener.getRoot();

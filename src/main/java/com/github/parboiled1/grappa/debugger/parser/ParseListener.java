@@ -3,9 +3,9 @@ package com.github.parboiled1.grappa.debugger.parser;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.run.MatchFailureEvent;
 import com.github.parboiled1.grappa.run.MatchSuccessEvent;
+import com.github.parboiled1.grappa.run.ParseRunnerListener;
 import com.github.parboiled1.grappa.run.PreMatchEvent;
 import com.google.common.base.MoreObjects;
-import com.google.common.eventbus.Subscribe;
 import javafx.scene.control.TreeItem;
 import org.parboiled.Context;
 import org.parboiled.MatcherContext;
@@ -17,17 +17,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public final class ParseListener
+public final class ParseListener<V>
+    extends ParseRunnerListener<V>
 {
     private final Map<MatchId, TreeItem<MatchResult>> treeItems
         = new HashMap<>();
 
     private TreeItem<MatchResult> root;
 
-    @Subscribe
-    public void preMatch(final PreMatchEvent<?> event)
+    @Override
+    public void beforeMatch(final PreMatchEvent<V> event)
     {
-        final MatcherContext<?> context = event.getContext();
+        final MatcherContext<V> context = event.getContext();
         final MatchId id = new MatchId(context);
         final TreeItem<MatchResult> item = new TreeItem<>();
 
@@ -43,10 +44,10 @@ public final class ParseListener
         treeItems.get(parentId).getChildren().add(item);
     }
 
-    @Subscribe
-    public void failure(final MatchFailureEvent<?> event)
+    @Override
+    public void matchFailure(final MatchFailureEvent<V> event)
     {
-        final MatcherContext<?> context = event.getContext();
+        final MatcherContext<V> context = event.getContext();
         final MatchId id = new MatchId(context);
         final TreeItem<MatchResult> item = treeItems.get(id);
         final InputBuffer buffer = context.getInputBuffer();
@@ -56,15 +57,15 @@ public final class ParseListener
         item.setValue(result);
     }
 
-    @Subscribe
-    public void success(final MatchSuccessEvent<?> event)
+    @Override
+    public void matchSuccess(final MatchSuccessEvent<V> event)
     {
-        final MatcherContext<?> context = event.getContext();
+        final MatcherContext<V> context = event.getContext();
         final MatchId id = new MatchId(context);
         final TreeItem<MatchResult> item = treeItems.get(id);
         final InputBuffer buffer = context.getInputBuffer();
         final String label = context.getMatcher().getLabel();
-        final Node<?> parsingNode = context.getNode();
+        final Node<V> parsingNode = context.getNode();
         final MatchResult result = new MatchResult(label, true, buffer, parsingNode);
         item.setValue(result);
     }
