@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -15,6 +16,15 @@ public final class DefaultTraceTabView
     {
         this.ui = ui;
         bindColumn(ui.eventTime, "nanoseconds");
+        ui.eventTime.setCellFactory(param -> new TableCell<TraceEvent, Long>()
+        {
+            @Override
+            protected void updateItem(final Long item, final boolean empty)
+            {
+                super.updateItem(item, empty);
+                setText(empty ? null : nanosToText(item));
+            }
+        });
         bindColumn(ui.eventDepth, "level");
         bindColumn(ui.eventIndex, "index");
         bindColumn(ui.eventPath, "path");
@@ -32,5 +42,18 @@ public final class DefaultTraceTabView
         final String propertyName)
     {
         column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
+    }
+
+    @SuppressWarnings("AutoBoxing")
+    private static String nanosToText(final long nanos)
+    {
+        long value = nanos;
+        final long nrNanoseconds = value % 1000;
+        value /= 1000;
+        final long nrMicroseconds = value % 1000;
+        value /= 1000;
+
+        return String.format("%d ms, %03d.%03d µs", value, nrMicroseconds,
+            nrNanoseconds);
     }
 }
