@@ -2,6 +2,8 @@ package com.github.parboiled1.grappa.debugger;
 
 import com.github.parboiled1.grappa.debugger.basewindow.BaseWindowPresenter;
 import com.github.parboiled1.grappa.debugger.basewindow.BaseWindowUi;
+import com.github.parboiled1.grappa.debugger.basewindow.BaseWindowView;
+import com.github.parboiled1.grappa.debugger.basewindow.DefaultBaseWindowView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -61,9 +63,11 @@ public final class TestApp
             throw new RuntimeException(e);
         }
 
-        final BaseWindowPresenter presenter = new BaseWindowPresenter(this);
-
         final BaseWindowUi ui = loader.getController();
+        final BaseWindowView view = new DefaultBaseWindowView(ui);
+        final BaseWindowPresenter presenter
+            = new BaseWindowPresenter(this, view);
+
         ui.init(presenter);
 
         stage.setScene(new Scene(pane));

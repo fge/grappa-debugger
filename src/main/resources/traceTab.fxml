@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.text.TextFlow?>
+<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.github.parboiled1.grappa.debugger.tracetab.TraceTabUi">
+    <Tab text="Parse tree" closable="false">
+        <SplitPane dividerPositions="0.5">
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                <TreeView/>
+                <!-- TODO: replace with something else -->
+                <TextArea editable="false" style="-fx-font-family: monospace"/>
+            </SplitPane>
+            <ScrollPane>
+                <TextFlow/>
+            </ScrollPane>
+        </SplitPane>
+    </Tab>
+    <Tab text="Statistics" closable="false">
+        <TableView>
+            <TableColumn text="Rule"/>
+            <TableColumn text="Total Invocations"/>
+            <TableColumn text="Total time (ns)"/>
+            <TableColumn text="Succesful matches"/>
+            <TableColumn text="Failed matches"/>
+            <TableColumn text="Time/invocation"/>
+            <TableColumn text="Success percentage"/>
+        </TableView>
+    </Tab>
+    <Tab text="All events" closable="false">
+        <TableView>
+            <TableColumn text="Time (ns)"/>
+            <TableColumn text="Rule"/>
+            <TableColumn text="Index (as position)"/>
+            <TableColumn text="Event type"/>
+            <TableColumn text="Depth"/>
+            <TableColumn text="Path"/>
+        </TableView>
+    </Tab>
+</TabPane>
+
