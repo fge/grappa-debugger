@@ -4,7 +4,7 @@ import com.github.parboiled1.grappa.debugger.BaseWindowFactory;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabModel;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabPresenter;
 
-public final class BaseWindowPresenter
+public class BaseWindowPresenter
 {
     private final BaseWindowFactory windowFactory;
     private final BaseWindowView view;

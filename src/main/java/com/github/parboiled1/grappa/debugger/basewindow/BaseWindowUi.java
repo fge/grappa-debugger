@@ -23,12 +23,13 @@ public class BaseWindowUi
     }
 
     @FXML
-    public void closeWindowEvent(final ActionEvent event)
+    void closeWindowEvent(final ActionEvent event)
     {
         presenter.handleCloseWindow();
     }
 
-    public void loadTabEvent(ActionEvent event)
+    @FXML
+    void loadTabEvent(final ActionEvent event)
     {
         presenter.handleLoadTab();
     }
