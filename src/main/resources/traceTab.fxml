@@ -25,23 +25,27 @@
     </Tab>
     <Tab text="Statistics" closable="false">
         <TableView>
-            <TableColumn text="Rule"/>
-            <TableColumn text="Total Invocations"/>
-            <TableColumn text="Total time (ns)"/>
-            <TableColumn text="Succesful matches"/>
-            <TableColumn text="Failed matches"/>
-            <TableColumn text="Time/invocation"/>
-            <TableColumn text="Success percentage"/>
+            <columns>
+                <TableColumn text="Rule"/>
+                <TableColumn text="Total Invocations"/>
+                <TableColumn text="Total time (ns)"/>
+                <TableColumn text="Succesful matches"/>
+                <TableColumn text="Failed matches"/>
+                <TableColumn text="Time/invocation"/>
+                <TableColumn text="Success percentage"/>
+            </columns>
         </TableView>
     </Tab>
     <Tab text="All events" closable="false">
-        <TableView>
-            <TableColumn text="Time (ns)"/>
-            <TableColumn text="Rule"/>
-            <TableColumn text="Index (as position)"/>
-            <TableColumn text="Event type"/>
-            <TableColumn text="Depth"/>
-            <TableColumn text="Path"/>
+        <TableView fx:id="events">
+            <columns>
+                <TableColumn fx:id="eventTime" text="Time (ns)"/>
+                <TableColumn fx:id="eventType" text="Event type"/>
+                <TableColumn fx:id="eventRule" text="Matcher"/>
+                <TableColumn fx:id="eventIndex" text="Index"/>
+                <TableColumn fx:id="eventDepth" text="Depth"/>
+                <TableColumn fx:id="eventPath" text="Matcher path"/>
+            </columns>
         </TableView>
     </Tab>
 </TabPane>
