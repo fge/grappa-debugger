@@ -1,6 +1,9 @@
 package com.github.parboiled1.grappa.debugger.basewindow;
 
+import com.github.parboiled1.grappa.debugger.tracetab.DefaultTraceTabView;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabPresenter;
+import com.github.parboiled1.grappa.debugger.tracetab.TraceTabUi;
+import com.github.parboiled1.grappa.debugger.tracetab.TraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -32,6 +35,9 @@ public final class DefaultBaseWindowView
             throw new RuntimeException("cannot create tab", oops);
         }
         ui.pane.setCenter(pane);
-        // TODO: bind presenter to ui
+        final TraceTabUi tabUi = loader.getController();
+        final TraceTabView view = new DefaultTraceTabView(tabUi);
+        presenter.setView(view);
+        tabUi.init(presenter);
     }
 }
