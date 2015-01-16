@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.basewindow;
 
+import com.github.parboiled1.grappa.debugger.tracetab.TraceTabPresenter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -21,7 +22,7 @@ public final class DefaultBaseWindowView
     }
 
     @Override
-    public void injectTab()
+    public void injectTab(final TraceTabPresenter presenter)
     {
         final FXMLLoader loader = new FXMLLoader(traceTabFxml);
         final Node pane;
@@ -31,5 +32,6 @@ public final class DefaultBaseWindowView
             throw new RuntimeException("cannot create tab", oops);
         }
         ui.pane.setCenter(pane);
+        // TODO: bind presenter to ui
     }
 }

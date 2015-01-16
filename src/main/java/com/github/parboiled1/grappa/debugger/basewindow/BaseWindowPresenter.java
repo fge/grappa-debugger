@@ -1,6 +1,8 @@
 package com.github.parboiled1.grappa.debugger.basewindow;
 
 import com.github.parboiled1.grappa.debugger.BaseWindowFactory;
+import com.github.parboiled1.grappa.debugger.tracetab.TraceTabModel;
+import com.github.parboiled1.grappa.debugger.tracetab.TraceTabPresenter;
 
 public final class BaseWindowPresenter
 {
@@ -26,6 +28,10 @@ public final class BaseWindowPresenter
 
     public void handleLoadTab()
     {
-        view.injectTab();
+        final TraceTabModel model = new TraceTabModel()
+        {
+        };
+        final TraceTabPresenter presenter = new TraceTabPresenter(model);
+        view.injectTab(presenter);
     }
 }
