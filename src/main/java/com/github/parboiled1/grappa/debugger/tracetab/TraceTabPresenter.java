@@ -1,13 +1,11 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
-import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,7 +19,6 @@ public class TraceTabPresenter
 
     private final Map<String, RuleStatistics> statistics
         = new LinkedHashMap<>();
-    private final List<TraceEvent> timedEvents = new ArrayList<>();
     private final Deque<TraceEvent> eventStack = new ArrayDeque<>();
 
     public TraceTabPresenter(final TraceTabModel model)
@@ -43,35 +40,22 @@ public class TraceTabPresenter
 
         process(events);
         view.setParseDate(trace.getStartDate());
-        view.setTraceEvents(timedEvents);
+        view.setTraceEvents(model.getTraceEvents());
         view.setStatistics(statistics.values());
-        view.setInputText(new InputTextInfo(model.getInputText()));
+        view.setInputText(model.getInputTextInfo());
     }
 
     private void process(final List<TraceEvent> traceEvents)
     {
-        final long traceBegin = traceEvents.get(0).getNanoseconds();
-
         TraceEventType type;
         long nanos;
-        int start;
         String matcher;
-        String path;
-        int level;
-        TraceEvent currentEvent;
 
         for (final TraceEvent traceEvent: traceEvents) {
             type = traceEvent.getType();
             nanos = traceEvent.getNanoseconds();
-            start = traceEvent.getIndex();
             matcher = traceEvent.getMatcher();
-            path = traceEvent.getPath();
-            level = traceEvent.getLevel();
 
-            // Add to trace events
-            currentEvent = new TraceEvent(type, nanos - traceBegin, start,
-                matcher, path, level);
-            timedEvents.add(currentEvent);
 
             if (type == TraceEventType.BEFORE_MATCH) {
                 eventStack.push(traceEvent);

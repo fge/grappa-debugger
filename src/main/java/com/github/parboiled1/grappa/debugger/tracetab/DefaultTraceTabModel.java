@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.parboiled1.grappa.buffers.CharSequenceInputBuffer;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
+import com.github.parboiled1.grappa.trace.TraceEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
@@ -15,8 +18,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+@NotThreadSafe
 public final class DefaultTraceTabModel
     implements TraceTabModel
 {
@@ -31,6 +37,9 @@ public final class DefaultTraceTabModel
     private final ParsingRunTrace trace;
     private final InputBuffer buffer;
 
+    private final List<TraceEvent> traceEvents;
+    private final InputTextInfo textInfo;
+
     public DefaultTraceTabModel(final Path zipPath)
         throws IOException
     {
@@ -42,6 +51,8 @@ public final class DefaultTraceTabModel
             trace = loadTrace(zipfs);
             buffer = loadBuffer(zipfs);
         }
+        traceEvents = relativize(trace.getEvents());
+        textInfo = new InputTextInfo(buffer);
     }
 
     private InputBuffer loadBuffer(final FileSystem zipfs)
@@ -87,5 +98,39 @@ public final class DefaultTraceTabModel
     public InputBuffer getInputText()
     {
         return buffer;
+    }
+
+    @Nonnull
+    @Override
+    public List<TraceEvent> getTraceEvents()
+    {
+        return Collections.unmodifiableList(traceEvents);
+    }
+
+    @Nonnull
+    @Override
+    public InputTextInfo getInputTextInfo()
+    {
+        return textInfo;
+    }
+
+    private static List<TraceEvent> relativize(final List<TraceEvent> events)
+    {
+        if (events.isEmpty())
+            return Collections.emptyList();
+
+        final long startTime = events.get(0).getNanoseconds();
+
+        return events.parallelStream()
+            .map(event -> timeRelative(event, startTime))
+            .collect(Collectors.toList());
+    }
+
+    private static TraceEvent timeRelative(final TraceEvent orig,
+        final long startTime)
+    {
+        return new TraceEvent(orig.getType(), orig.getNanoseconds() - startTime,
+            orig.getIndex(), orig.getMatcher(), orig.getPath(),
+            orig.getLevel());
     }
 }
