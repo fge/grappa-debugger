@@ -2,6 +2,7 @@ package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -35,9 +36,33 @@ public final class DefaultTraceTabView
          */
         bindColumn(ui.statsRule, "ruleName");
         bindColumn(ui.statsInvocations, "nrInvocations");
+        bindColumn(ui.statsSuccess, "nrSuccesses");
+        ui.statsSuccessRate.setCellValueFactory(
+            param -> new SimpleObjectProperty<Double>()
+            {
+                @SuppressWarnings("AutoBoxing")
+                @Override
+                public Double get()
+                {
+                    final RuleStatistics stats = param.getValue();
+                    //noinspection AutoBoxing
+                    return 100.0 * stats.getNrSuccesses()
+                        / stats.getNrInvocations();
+                }
+            });
+        ui.statsSuccessRate.setCellFactory(
+            param -> new TableCell<RuleStatistics, Double>()
+            {
+                @Override
+                protected void updateItem(final Double item,
+                    final boolean empty)
+                {
+                    super.updateItem(item, empty);
+                    setText(empty ? null : String.format("%.2f%%", item));
+                }
+            });
         bindColumn(ui.statsTotalTime, "totalTime");
         setDisplayNanos(ui.statsTotalTime);
-        bindColumn(ui.statsSuccess, "nrSuccesses");
     }
 
     @Override

@@ -65,7 +65,7 @@
                     <TableColumn fx:id="statsInvocations"
                         text="Total invocations"/>
                     <TableColumn fx:id="statsSuccess" text="Succesful matches"/>
-                    <TableColumn text="Success rate"/>
+                    <TableColumn fx:id="statsSuccessRate" text="Success rate"/>
                     <TableColumn fx:id="statsTotalTime"
                         text="Total time spent"/>
                     <TableColumn text="Time/invocation"/>

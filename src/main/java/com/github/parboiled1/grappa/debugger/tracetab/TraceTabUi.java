@@ -25,10 +25,13 @@ public class TraceTabUi
     TableColumn<RuleStatistics, Integer> statsInvocations;
 
     @FXML
-    TableColumn<RuleStatistics, Long> statsTotalTime;
+    TableColumn<RuleStatistics, Integer> statsSuccess;
 
     @FXML
-    TableColumn<RuleStatistics, Integer> statsSuccess;
+    TableColumn<RuleStatistics, Double> statsSuccessRate;
+
+    @FXML
+    TableColumn<RuleStatistics, Long> statsTotalTime;
 
     /*
      * Events tab
