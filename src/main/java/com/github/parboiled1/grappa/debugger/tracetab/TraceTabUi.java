@@ -3,12 +3,16 @@ package com.github.parboiled1.grappa.debugger.tracetab;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class TraceTabUi
 {
     private TraceTabPresenter presenter;
+
+    @FXML
+    Tab eventsTab;
 
     @FXML
     TableView<TraceEvent> events;

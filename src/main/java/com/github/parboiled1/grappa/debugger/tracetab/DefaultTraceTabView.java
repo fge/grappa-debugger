@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,6 +23,7 @@ public final class DefaultTraceTabView
             protected void updateItem(final Long item, final boolean empty)
             {
                 super.updateItem(item, empty);
+                //noinspection AutoUnboxing
                 setText(empty ? null : nanosToText(item));
             }
         });
@@ -36,6 +38,11 @@ public final class DefaultTraceTabView
     public void setTraceEvents(final List<TraceEvent> events)
     {
         ui.events.getItems().setAll(events);
+        final Tab tab = ui.eventsTab;
+        @SuppressWarnings("AutoBoxing")
+        final String newText
+            = String.format("%s (%d)", tab.getText(), events.size());
+        tab.setText(newText);
     }
 
     private static <T> void bindColumn(final TableColumn<TraceEvent, T> column,

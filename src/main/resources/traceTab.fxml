@@ -36,10 +36,10 @@
             </columns>
         </TableView>
     </Tab>
-    <Tab text="All events" closable="false">
+    <Tab text="All events" fx:id="eventsTab" closable="false">
         <TableView fx:id="events">
             <columns>
-                <TableColumn fx:id="eventTime" text="Time (ns)"/>
+                <TableColumn fx:id="eventTime" text="Time"/>
                 <TableColumn fx:id="eventType" text="Event type"/>
                 <TableColumn fx:id="eventRule" text="Matcher"/>
                 <TableColumn fx:id="eventIndex" text="Index"/>
