@@ -1,16 +1,25 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import com.github.parboiled1.grappa.trace.TraceEventType;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TraceTabPresenter
 {
     private final TraceTabModel model;
+
     private TraceTabView view;
+    private final Map<String, RuleStatistics> ruleStatistics = new HashMap<>();
+    private final List<TraceEvent> timedEvents = new ArrayList<>();
+    private final Deque<TraceEvent> eventStack = new ArrayDeque<>();
 
     public TraceTabPresenter(final TraceTabModel model)
     {
@@ -31,26 +40,50 @@ public class TraceTabPresenter
             throw new RuntimeException(e);
         }
 
-        final List<TraceEvent> events = timeRelativize(tmp.getTraceEvents());
-        view.setTraceEvents(events);
+        final List<TraceEvent> traceEvents = tmp.getTraceEvents();
+        process(traceEvents);
+        view.setTraceEvents(timedEvents);
+        view.setStatistics(ruleStatistics.values());
     }
 
-    private List<TraceEvent> timeRelativize(final List<TraceEvent> traceEvents)
+    private void process(final List<TraceEvent> traceEvents)
     {
         if (traceEvents.isEmpty())
-            return Collections.emptyList();
+            return;
 
-        final long startTime = traceEvents.get(0).getNanoseconds();
-        final List<TraceEvent> newEvents = new ArrayList<>(traceEvents.size());
+        final long traceBegin = traceEvents.get(0).getNanoseconds();
 
-        TraceEvent newEvent;
-        for (final TraceEvent event: traceEvents) {
-            newEvent = new TraceEvent(event.getType(),
-                event.getNanoseconds() - startTime, event.getIndex(),
-                event.getMatcher(), event.getPath(), event.getLevel());
-            newEvents.add(newEvent);
+        TraceEventType type;
+        long nanos;
+        int start;
+        String matcher;
+        String path;
+        int level;
+        TraceEvent currentEvent;
+
+        for (final TraceEvent traceEvent: traceEvents) {
+            type = traceEvent.getType();
+            nanos = traceEvent.getNanoseconds();
+            start = traceEvent.getIndex();
+            matcher = traceEvent.getMatcher();
+            path = traceEvent.getPath();
+            level = traceEvent.getLevel();
+
+            // Add to trace events
+            currentEvent = new TraceEvent(type, nanos - traceBegin, start,
+                matcher, path, level);
+            timedEvents.add(currentEvent);
+
+            if (type == TraceEventType.BEFORE_MATCH) {
+                eventStack.push(traceEvent);
+                ruleStatistics.computeIfAbsent(matcher, RuleStatistics::new);
+                continue;
+            }
+
+            final boolean success = type == TraceEventType.MATCH_SUCCESS;
+            final TraceEvent startEvent = eventStack.pop();
+            final RuleStatistics stats = ruleStatistics.get(matcher);
+            stats.addInvocation(nanos - startEvent.getNanoseconds(), success);
         }
-
-        return Collections.unmodifiableList(newEvents);
     }
 }

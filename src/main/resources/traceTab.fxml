@@ -59,15 +59,16 @@
                 </GridPane>
                 <AnchorPane/>
             </SplitPane>
-            <TableView>
+            <TableView fx:id="stats">
                 <columns>
-                    <TableColumn text="Rule"/>
-                    <TableColumn text="Total Invocations"/>
-                    <TableColumn text="Total time (ns)"/>
-                    <TableColumn text="Succesful matches"/>
-                    <TableColumn text="Failed matches"/>
+                    <TableColumn fx:id="statsRule" text="Rule"/>
+                    <TableColumn fx:id="statsInvocations"
+                        text="Total invocations"/>
+                    <TableColumn fx:id="statsSuccess" text="Succesful matches"/>
+                    <TableColumn text="Success rate"/>
+                    <TableColumn fx:id="statsTotalTime"
+                        text="Total time spent"/>
                     <TableColumn text="Time/invocation"/>
-                    <TableColumn text="Success percentage"/>
                 </columns>
             </TableView>
         </SplitPane>
