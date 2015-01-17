@@ -9,6 +9,14 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.text.TextFlow?>
+<?import org.controlsfx.control.PropertySheet?>
+<?import org.controlsfx.property.BeanProperty?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.parboiled1.grappa.debugger.tracetab.TraceTabUi">
     <Tab text="Parse tree" closable="false">
@@ -24,17 +32,45 @@
         </SplitPane>
     </Tab>
     <Tab text="Statistics" closable="false">
-        <TableView>
-            <columns>
-                <TableColumn text="Rule"/>
-                <TableColumn text="Total Invocations"/>
-                <TableColumn text="Total time (ns)"/>
-                <TableColumn text="Succesful matches"/>
-                <TableColumn text="Failed matches"/>
-                <TableColumn text="Time/invocation"/>
-                <TableColumn text="Success percentage"/>
-            </columns>
-        </TableView>
+        <SplitPane orientation="VERTICAL" dividerPositions="0.5">
+            <SplitPane orientation="HORIZONTAL" dividerPositions="0.5">
+                <GridPane gridLinesVisible="false">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <Label text="Date:" GridPane.rowIndex="0"
+                        GridPane.columnIndex="0"/>
+                    <TextField editable="false" GridPane.rowIndex="0"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Number of rules:" GridPane.rowIndex="1"
+                        GridPane.columnIndex="0"/>
+                    <TextField editable="false" GridPane.rowIndex="1"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Total parse time:" GridPane.rowIndex="2"
+                        GridPane.columnIndex="0"/>
+                    <TextField editable="false" GridPane.rowIndex="2"
+                        GridPane.columnIndex="1"/>
+                </GridPane>
+                <AnchorPane/>
+            </SplitPane>
+            <TableView>
+                <columns>
+                    <TableColumn text="Rule"/>
+                    <TableColumn text="Total Invocations"/>
+                    <TableColumn text="Total time (ns)"/>
+                    <TableColumn text="Succesful matches"/>
+                    <TableColumn text="Failed matches"/>
+                    <TableColumn text="Time/invocation"/>
+                    <TableColumn text="Success percentage"/>
+                </columns>
+            </TableView>
+        </SplitPane>
     </Tab>
     <Tab text="All events" fx:id="eventsTab" closable="false">
         <TableView fx:id="events">
