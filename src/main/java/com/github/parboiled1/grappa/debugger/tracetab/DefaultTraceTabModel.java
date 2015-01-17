@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.parboiled1.grappa.buffers.CharSequenceInputBuffer;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import com.github.parboiled1.grappa.trace.TraceEventType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -17,7 +19,11 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,6 +45,7 @@ public final class DefaultTraceTabModel
 
     private final List<TraceEvent> traceEvents;
     private final InputTextInfo textInfo;
+    private final Collection<RuleStatistics> ruleStats;
 
     public DefaultTraceTabModel(final Path zipPath)
         throws IOException
@@ -51,8 +58,46 @@ public final class DefaultTraceTabModel
             trace = loadTrace(zipfs);
             buffer = loadBuffer(zipfs);
         }
-        traceEvents = relativize(trace.getEvents());
+
+        final List<TraceEvent> events = trace.getEvents();
+        traceEvents = relativize(events);
         textInfo = new InputTextInfo(buffer);
+        ruleStats = collectStatistics(events);
+    }
+
+    @Nonnull
+    @Override
+    public ParsingRunTrace getTrace()
+    {
+        return trace;
+    }
+
+    @Nonnull
+    @Override
+    public InputBuffer getInputText()
+    {
+        return buffer;
+    }
+
+    @Nonnull
+    @Override
+    public List<TraceEvent> getTraceEvents()
+    {
+        return Collections.unmodifiableList(traceEvents);
+    }
+
+    @Nonnull
+    @Override
+    public InputTextInfo getInputTextInfo()
+    {
+        return textInfo;
+    }
+
+    @Nonnull
+    @Override
+    public Collection<RuleStatistics> getRuleStats()
+    {
+        return Collections.unmodifiableCollection(ruleStats);
     }
 
     private InputBuffer loadBuffer(final FileSystem zipfs)
@@ -85,35 +130,6 @@ public final class DefaultTraceTabModel
         }
     }
 
-
-    @Nonnull
-    @Override
-    public ParsingRunTrace getTrace()
-    {
-        return trace;
-    }
-
-    @Nonnull
-    @Override
-    public InputBuffer getInputText()
-    {
-        return buffer;
-    }
-
-    @Nonnull
-    @Override
-    public List<TraceEvent> getTraceEvents()
-    {
-        return Collections.unmodifiableList(traceEvents);
-    }
-
-    @Nonnull
-    @Override
-    public InputTextInfo getInputTextInfo()
-    {
-        return textInfo;
-    }
-
     private static List<TraceEvent> relativize(final List<TraceEvent> events)
     {
         if (events.isEmpty())
@@ -132,5 +148,35 @@ public final class DefaultTraceTabModel
         return new TraceEvent(orig.getType(), orig.getNanoseconds() - startTime,
             orig.getIndex(), orig.getMatcher(), orig.getPath(),
             orig.getLevel());
+    }
+
+    private static Collection<RuleStatistics> collectStatistics(
+        final Iterable<TraceEvent> events)
+    {
+        final Deque<TraceEvent> eventStack = new ArrayDeque<>();
+        final Map<String, RuleStatistics> statistics = new LinkedHashMap<>();
+
+        TraceEventType type;
+        long nanos;
+        String matcher;
+
+        for (final TraceEvent event: events) {
+            type = event.getType();
+            nanos = event.getNanoseconds();
+            matcher = event.getMatcher();
+
+            if (type == TraceEventType.BEFORE_MATCH) {
+                eventStack.push(event);
+                statistics.computeIfAbsent(matcher, RuleStatistics::new);
+                continue;
+            }
+
+            final boolean success = type == TraceEventType.MATCH_SUCCESS;
+            final TraceEvent startEvent = eventStack.pop();
+            final RuleStatistics stats = statistics.get(matcher);
+            stats.addInvocation(nanos - startEvent.getNanoseconds(), success);
+        }
+
+        return statistics.values();
     }
 }
