@@ -68,7 +68,7 @@
                     <TableColumn fx:id="statsSuccessRate" text="Success rate"/>
                     <TableColumn fx:id="statsTotalTime"
                         text="Total time spent"/>
-                    <TableColumn text="Time/invocation"/>
+                    <TableColumn fx:id="statsAvgTime" text="Time/invocation"/>
                 </columns>
             </TableView>
         </SplitPane>

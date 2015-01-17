@@ -33,6 +33,9 @@ public class TraceTabUi
     @FXML
     TableColumn<RuleStatistics, Long> statsTotalTime;
 
+    @FXML
+    TableColumn<RuleStatistics, Long> statsAvgTime;
+
     /*
      * Events tab
      */
