@@ -43,6 +43,9 @@
                         <RowConstraints vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <Label text="Date:" GridPane.rowIndex="0"
                         GridPane.columnIndex="0"/>
@@ -52,9 +55,21 @@
                         GridPane.columnIndex="0"/>
                     <Label fx:id="nrRules" GridPane.rowIndex="1"
                         GridPane.columnIndex="1"/>
-                    <Label text="Total parse time:" GridPane.rowIndex="2"
+                    <Label text="Total rule invocations:" GridPane.rowIndex="2"
                         GridPane.columnIndex="0"/>
-                    <Label fx:id="totalParseTime" GridPane.rowIndex="2"
+                    <Label fx:id="totalInvocations" GridPane.rowIndex="2"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Successful rules:" GridPane.rowIndex="3"
+                        GridPane.columnIndex="0"/>
+                    <Label fx:id="totalSuccess" GridPane.rowIndex="3"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Global success rate:" GridPane.rowIndex="4"
+                        GridPane.columnIndex="0"/>
+                    <Label fx:id="totalSuccessRate" GridPane.rowIndex="4"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Total parse time:" GridPane.rowIndex="5"
+                        GridPane.columnIndex="0"/>
+                    <Label fx:id="totalParseTime" GridPane.rowIndex="5"
                         GridPane.columnIndex="1"/>
                 </GridPane>
                 <AnchorPane/>

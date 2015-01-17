@@ -14,10 +14,19 @@ public class TraceTabUi
     private TraceTabPresenter presenter;
 
     @FXML
+    Label parseDate;
+
+    @FXML
     Label nrRules;
 
     @FXML
-    Label parseDate;
+    Label totalInvocations;
+
+    @FXML
+    Label totalSuccess;
+
+    @FXML
+    Label totalSuccessRate;
 
     @FXML
     Label totalParseTime;

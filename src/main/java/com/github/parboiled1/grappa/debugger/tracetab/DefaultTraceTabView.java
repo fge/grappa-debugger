@@ -113,6 +113,19 @@ public final class DefaultTraceTabView
     {
         ui.nrRules.setText(String.valueOf(values.size()));
         ui.stats.getItems().setAll(values);
+
+        int totalInvocations = 0;
+        int totalSuccesses = 0;
+
+        for (final RuleStatistics stats: values) {
+            totalInvocations += stats.getNrInvocations();
+            totalSuccesses += stats.getNrSuccesses();
+        }
+
+        final double pct = 100.0 * totalSuccesses / totalInvocations;
+        ui.totalInvocations.setText(String.valueOf(totalInvocations));
+        ui.totalSuccess.setText(String.valueOf(totalSuccesses));
+        ui.totalSuccessRate.setText(String.format("%.02f%%", pct));
     }
 
     @Override
