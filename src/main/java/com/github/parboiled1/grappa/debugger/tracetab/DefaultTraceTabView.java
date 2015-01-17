@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import javafx.beans.property.SimpleObjectProperty;
@@ -7,6 +8,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -136,6 +138,16 @@ public final class DefaultTraceTabView
         final LocalDateTime time
             = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         ui.parseDate.setText(time.toString());
+    }
+
+    @Override
+    public void setInputText(final InputTextInfo textInfo)
+    {
+        ui.inputNrChars.setText(String.valueOf(textInfo.getNrChars()));
+        ui.inputNrCodePoints
+            .setText(String.valueOf(textInfo.getNrCodePoints()));
+        ui.inputNrLines.setText(String.valueOf(textInfo.getNrLines()));
+        ui.inputText.getChildren().add(new Text(textInfo.getContents()));
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,

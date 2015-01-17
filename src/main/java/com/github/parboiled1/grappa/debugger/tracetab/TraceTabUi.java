@@ -8,11 +8,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.text.TextFlow;
 
 public class TraceTabUi
 {
     private TraceTabPresenter presenter;
 
+    /*
+     * Tree tab
+     */
+    @FXML
+    TextFlow inputText;
+
+    /*
+     * General statistics
+     */
     @FXML
     Label parseDate;
 
@@ -30,6 +40,19 @@ public class TraceTabUi
 
     @FXML
     Label totalParseTime;
+
+    /*
+     * Input text information
+     */
+    @FXML
+    Label inputNrChars;
+
+    @FXML
+    Label inputNrCodePoints;
+
+    @FXML
+    Label inputNrLines;
+
     /*
      * Statistics table
      */

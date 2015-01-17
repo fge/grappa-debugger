@@ -27,7 +27,7 @@
                 <TextArea editable="false" style="-fx-font-family: monospace"/>
             </SplitPane>
             <ScrollPane>
-                <TextFlow/>
+                <TextFlow fx:id="inputText"/>
             </ScrollPane>
         </SplitPane>
     </Tab>
@@ -72,7 +72,29 @@
                     <Label fx:id="totalParseTime" GridPane.rowIndex="5"
                         GridPane.columnIndex="1"/>
                 </GridPane>
-                <AnchorPane/>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <Label text="Input: number of characters:"
+                        GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="inputNrChars" GridPane.rowIndex="0"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Input: number of code points:"
+                        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="inputNrCodePoints" GridPane.rowIndex="1"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Input: number of lines:" GridPane.rowIndex="2"
+                        GridPane.columnIndex="0"/>
+                    <Label fx:id="inputNrLines" GridPane.rowIndex="2"
+                        GridPane.columnIndex="1"/>
+                </GridPane>
             </SplitPane>
             <TableView fx:id="stats">
                 <columns>

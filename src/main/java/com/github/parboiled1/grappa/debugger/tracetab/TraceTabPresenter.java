@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
@@ -18,6 +19,7 @@ public class TraceTabPresenter
     private final TraceTabModel model;
 
     private TraceTabView view;
+
     private final Map<String, RuleStatistics> statistics
         = new LinkedHashMap<>();
     private final List<TraceEvent> timedEvents = new ArrayList<>();
@@ -51,6 +53,7 @@ public class TraceTabPresenter
         view.setParseDate(trace.getStartDate());
         view.setTraceEvents(timedEvents);
         view.setStatistics(statistics.values());
+        view.setInputText(new InputTextInfo(tmp.getInputText()));
     }
 
     private void process(final List<TraceEvent> traceEvents)
