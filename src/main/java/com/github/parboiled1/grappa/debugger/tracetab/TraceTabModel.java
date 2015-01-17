@@ -1,13 +1,15 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.buffers.InputBuffer;
-import com.github.parboiled1.grappa.trace.TraceEvent;
+import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 
-import java.util.List;
+import javax.annotation.Nonnull;
 
 public interface TraceTabModel
 {
-    List<TraceEvent> getTraceEvents();
+    @Nonnull
+    ParsingRunTrace getTrace();
 
+    @Nonnull
     InputBuffer getInputText();
 }

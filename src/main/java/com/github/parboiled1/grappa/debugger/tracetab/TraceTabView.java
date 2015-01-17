@@ -11,4 +11,6 @@ public interface TraceTabView
     void setTraceEvents(List<TraceEvent> events);
 
     void setStatistics(Collection<RuleStatistics> values);
+
+    void setParseDate(long startDate);
 }

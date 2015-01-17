@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
+import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 
@@ -41,17 +42,19 @@ public class TraceTabPresenter
             throw new RuntimeException(e);
         }
 
-        final List<TraceEvent> traceEvents = tmp.getTraceEvents();
-        process(traceEvents);
+        final ParsingRunTrace trace = tmp.getTrace();
+        final List<TraceEvent> events = trace.getEvents();
+        if (events.isEmpty())
+            return;
+
+        process(events);
+        view.setParseDate(trace.getStartDate());
         view.setTraceEvents(timedEvents);
         view.setStatistics(statistics.values());
     }
 
     private void process(final List<TraceEvent> traceEvents)
     {
-        if (traceEvents.isEmpty())
-            return;
-
         final long traceBegin = traceEvents.get(0).getNanoseconds();
 
         TraceEventType type;

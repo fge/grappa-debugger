@@ -8,6 +8,7 @@ import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
@@ -28,7 +29,7 @@ public final class TestTraceTabModel
     private static final TypeReference<List<TraceEvent>> TYPE_REF
         = new TypeReference<List<TraceEvent>>() {};
 
-    private final List<TraceEvent> events;
+    private final ParsingRunTrace trace;
     private final String inputText;
 
     public TestTraceTabModel()
@@ -41,11 +42,11 @@ public final class TestTraceTabModel
             final FileSystem zipfs = FileSystems.newFileSystem(uri, ENV);
         ) {
             inputText = readInputText(zipfs);
-            events = readEvents(zipfs);
+            trace = readTrace(zipfs);
         }
     }
 
-    private List<TraceEvent> readEvents(final FileSystem zipfs)
+    private ParsingRunTrace readTrace(final FileSystem zipfs)
         throws IOException
     {
         final ObjectMapper mapper = new ObjectMapper()
@@ -55,9 +56,7 @@ public final class TestTraceTabModel
         try (
             final BufferedReader reader = Files.newBufferedReader(path);
         ) {
-            final ParsingRunTrace trace
-                = mapper.readValue(reader, ParsingRunTrace.class);
-            return trace.getEvents();
+            return mapper.readValue(reader, ParsingRunTrace.class);
         }
     }
 
@@ -79,12 +78,14 @@ public final class TestTraceTabModel
         return sb.toString();
     }
 
+    @Nonnull
     @Override
-    public List<TraceEvent> getTraceEvents()
+    public ParsingRunTrace getTrace()
     {
-        return Collections.unmodifiableList(events);
+        return trace;
     }
 
+    @Nonnull
     @Override
     public InputBuffer getInputText()
     {

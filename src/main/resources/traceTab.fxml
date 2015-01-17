@@ -46,15 +46,15 @@
                     </rowConstraints>
                     <Label text="Date:" GridPane.rowIndex="0"
                         GridPane.columnIndex="0"/>
-                    <TextField editable="false" GridPane.rowIndex="0"
+                    <Label fx:id="parseDate" GridPane.rowIndex="0"
                         GridPane.columnIndex="1"/>
                     <Label text="Number of rules:" GridPane.rowIndex="1"
                         GridPane.columnIndex="0"/>
-                    <TextField editable="false" GridPane.rowIndex="1"
+                    <Label fx:id="nrRules" GridPane.rowIndex="1"
                         GridPane.columnIndex="1"/>
                     <Label text="Total parse time:" GridPane.rowIndex="2"
                         GridPane.columnIndex="0"/>
-                    <TextField editable="false" GridPane.rowIndex="2"
+                    <Label fx:id="totalParseTime" GridPane.rowIndex="2"
                         GridPane.columnIndex="1"/>
                 </GridPane>
                 <AnchorPane/>
