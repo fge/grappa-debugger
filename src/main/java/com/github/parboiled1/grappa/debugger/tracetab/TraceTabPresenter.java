@@ -6,7 +6,6 @@ import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -37,14 +36,7 @@ public class TraceTabPresenter
 
     public void loadTrace()
     {
-        final TraceTabModel tmp;
-        try {
-            tmp = new TestTraceTabModel();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        final ParsingRunTrace trace = tmp.getTrace();
+        final ParsingRunTrace trace = model.getTrace();
         final List<TraceEvent> events = trace.getEvents();
         if (events.isEmpty())
             return;
@@ -53,7 +45,7 @@ public class TraceTabPresenter
         view.setParseDate(trace.getStartDate());
         view.setTraceEvents(timedEvents);
         view.setStatistics(statistics.values());
-        view.setInputText(new InputTextInfo(tmp.getInputText()));
+        view.setInputText(new InputTextInfo(model.getInputText()));
     }
 
     private void process(final List<TraceEvent> traceEvents)

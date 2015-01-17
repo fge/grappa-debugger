@@ -1,10 +1,12 @@
 package com.github.parboiled1.grappa.debugger.basewindow;
 
-import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.debugger.BaseWindowFactory;
+import com.github.parboiled1.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabModel;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabPresenter;
-import com.github.parboiled1.grappa.trace.ParsingRunTrace;
+
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class BaseWindowPresenter
 {
@@ -30,22 +32,13 @@ public class BaseWindowPresenter
 
     public void handleLoadTab()
     {
-        final TraceTabModel model = new TraceTabModel()
-        {
-            @Override
-            public ParsingRunTrace getTrace()
-            {
-                // TODO
-                return null;
-            }
+        final TraceTabModel model;
+        try {
+            model = new DefaultTraceTabModel(Paths.get("/tmp/trace.zip"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-            @Override
-            public InputBuffer getInputText()
-            {
-                // TODO
-                return null;
-            }
-        };
         final TraceTabPresenter presenter = new TraceTabPresenter(model);
         view.injectTab(presenter);
         presenter.loadTrace();
