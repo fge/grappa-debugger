@@ -81,10 +81,4 @@ public final class GrappaDebugger
     {
         windows.remove(presenter).close();
     }
-
-    @Override
-    public Stage getStage(final BaseWindowPresenter presenter)
-    {
-        return windows.get(presenter);
-    }
 }
