@@ -5,7 +5,6 @@ import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,24 +34,23 @@ public class BaseWindowPresenter
 
     public void handleLoadFile()
     {
-        final Stage stage = windowFactory.getStage(this);
-        final File file = view.chooseFile(stage);
+        final File file = view.chooseFile();
 
         if (file == null)
             return;
 
         final TraceTabPresenter presenter;
+        final Path path = file.toPath();
 
         try {
-            final Path path = file.toPath();
             presenter = loadFile(path);
-            stage.setTitle("Grappa debugger: " + path.toAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         view.injectTab(presenter);
         presenter.loadTrace();
+        view.setWindowTitle("Grappa debugger: " + path.toAbsolutePath());
     }
 
     @VisibleForTesting

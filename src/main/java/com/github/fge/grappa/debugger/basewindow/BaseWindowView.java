@@ -8,6 +8,7 @@ public interface BaseWindowView
 {
     void injectTab(TraceTabPresenter presenter);
 
-    // TODO: not very nice, but...
-    File chooseFile(Object object);
+    File chooseFile();
+
+    void setWindowTitle(String windowTitle);
 }

@@ -62,7 +62,7 @@ public final class GrappaDebugger
         }
 
         final BaseWindowUi ui = loader.getController();
-        final BaseWindowView view = new DefaultBaseWindowView(ui);
+        final BaseWindowView view = new DefaultBaseWindowView(stage, ui);
         final BaseWindowPresenter presenter
             = new BaseWindowPresenter(this, view);
 
