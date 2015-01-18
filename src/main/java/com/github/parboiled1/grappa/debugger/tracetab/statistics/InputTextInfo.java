@@ -4,7 +4,6 @@ import com.github.parboiled1.grappa.buffers.InputBuffer;
 
 public final class InputTextInfo
 {
-    private final String contents;
     private final int nrLines;
     private final int nrChars;
     private final int nrCodePoints;
@@ -13,13 +12,8 @@ public final class InputTextInfo
     {
         nrLines = buffer.getLineCount();
         nrChars = buffer.length();
-        contents = buffer.extract(0, nrChars);
-        nrCodePoints = contents.codePointCount(0, nrChars);
-    }
-
-    public String getContents()
-    {
-        return contents;
+        nrCodePoints = buffer.extract(0, buffer.length())
+            .codePointCount(0, nrChars);
     }
 
     public int getNrLines()

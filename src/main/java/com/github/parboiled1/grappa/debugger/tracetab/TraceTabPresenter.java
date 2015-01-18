@@ -48,7 +48,7 @@ public class TraceTabPresenter
         view.setTraceEvents(events);
         view.setStatistics(ruleStats);
         view.setInputTextInfo(textInfo);
-        view.setInputText(textInfo.getContents());
+        view.setInputText(buffer.extract(0, buffer.length()));
         view.setParseTree(parseTreeRoot);
     }
 
