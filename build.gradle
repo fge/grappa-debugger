@@ -92,6 +92,27 @@ pitest {
 }
 
 /*
+ * Creates a jar that can be used as a library on java projects.
+ * This jar already includes all the dependencies.
+ */
+task libJar(type: Jar, dependsOn: jar) {
+    classifier = "lib";
+    from {
+        configurations.compile.collect { zipTree(it) }
+    };
+    with jar;
+    manifest {
+        attributes("Main-Class": "com.github.fge.grappa.debugger.GrappaDebugger");
+    }
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "com.github.fge.grappa.debugger.GrappaDebugger");
+    }
+}
+
+/*
  * Necessary to generate the source and javadoc jars
  */
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -106,6 +127,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 artifacts {
     archives jar;
+    archives libJar;
     archives sourcesJar;
     archives javadocJar;
 }
