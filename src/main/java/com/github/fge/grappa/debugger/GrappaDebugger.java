@@ -79,7 +79,7 @@ public final class GrappaDebugger
     @Override
     public void close(final BaseWindowPresenter presenter)
     {
-        windows.get(presenter).close();
+        windows.remove(presenter).close();
     }
 
     @Override
