@@ -6,17 +6,21 @@ import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.LongFunction;
@@ -150,13 +154,18 @@ public final class DefaultTraceTabView
     }
 
     @Override
-    public void setInputText(final InputTextInfo textInfo)
+    public void setInputTextInfo(final InputTextInfo textInfo)
     {
         ui.inputNrChars.setText(String.valueOf(textInfo.getNrChars()));
         ui.inputNrCodePoints
             .setText(String.valueOf(textInfo.getNrCodePoints()));
         ui.inputNrLines.setText(String.valueOf(textInfo.getNrLines()));
-        ui.inputText.getChildren().add(new Text(textInfo.getContents()));
+    }
+
+    @Override
+    public void setInputText(final String inputText)
+    {
+        ui.inputText.getChildren().setAll(new Text(inputText));
     }
 
     @Override
@@ -169,6 +178,42 @@ public final class DefaultTraceTabView
     public void setParseNodeDetails(final String text)
     {
         ui.parseNodeDetails.setText(text);
+    }
+
+    @Override
+    public void highlightText(final List<String> fragments)
+    {
+        final List<Text> list = new ArrayList<>(3);
+
+        Text text;
+        String fragment;
+
+        // Before match
+        fragment = fragments.get(0);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragment);
+            text.setFill(Color.GRAY);
+            list.add(text);
+        }
+
+        // Match
+        fragment = fragments.get(1);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragments.get(1));
+            text.setFill(Color.RED);
+            text.setUnderline(true);
+            list.add(text);
+        }
+
+        // After match
+        fragment = fragments.get(2);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragment);
+            list.add(text);
+        }
+
+        final ObservableList<Node> children = ui.inputText.getChildren();
+        children.setAll(list);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,

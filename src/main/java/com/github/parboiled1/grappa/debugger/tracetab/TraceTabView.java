@@ -16,9 +16,13 @@ public interface TraceTabView
 
     void setParseDate(long startDate);
 
-    void setInputText(InputTextInfo textInfo);
+    void setInputTextInfo(InputTextInfo textInfo);
+
+    void setInputText(String inputText);
 
     void setParseTree(ParseNode node);
 
     void setParseNodeDetails(String text);
+
+    void highlightText(List<String> fragments);
 }
