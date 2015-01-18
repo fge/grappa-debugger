@@ -9,14 +9,11 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.text.TextFlow?>
-<?import org.controlsfx.control.PropertySheet?>
-<?import org.controlsfx.property.BeanProperty?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.parboiled1.grappa.debugger.tracetab.TraceTabUi">
     <Tab text="Parse tree" closable="false">

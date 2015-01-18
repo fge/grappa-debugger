@@ -6,8 +6,6 @@ import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -199,7 +197,7 @@ public final class DefaultTraceTabView
         // Match
         fragment = fragments.get(1);
         if (!fragment.isEmpty()) {
-            text = new Text(fragments.get(1));
+            text = new Text(fragment);
             text.setFill(Color.RED);
             text.setUnderline(true);
             list.add(text);
@@ -212,8 +210,7 @@ public final class DefaultTraceTabView
             list.add(text);
         }
 
-        final ObservableList<Node> children = ui.inputText.getChildren();
-        children.setAll(list);
+        ui.inputText.getChildren().setAll(list);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,

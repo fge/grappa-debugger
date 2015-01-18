@@ -87,7 +87,8 @@ public class TraceTabPresenter
 
         final List<String> ret = new ArrayList<>(3);
         ret.add(buffer.extract(0, start));
-        ret.add(buffer.extract(Math.min(start, length), end));
+        final String match = buffer.extract(Math.min(start, length), end);
+        ret.add(match.isEmpty() ? "" : '<' + match + '>');
         ret.add(buffer.extract(Math.min(end, length), length));
 
         return ret;
