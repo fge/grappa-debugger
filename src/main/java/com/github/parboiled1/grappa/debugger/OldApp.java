@@ -17,14 +17,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public final class GrappaDebuggerApplication
+public final class OldApp
     extends Application
 {
     @Override
     public void start(final Stage primaryStage)
         throws IOException
     {
-        final URL url = GrappaDebuggerApplication.class
+        final URL url = OldApp.class
             .getResource("/mainWindow.fxml");
         if (url == null)
             throw new IOException("cannot load fxml file");

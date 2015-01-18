@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO: implement default exception handling
-public final class TestApp
+public final class GrappaDebugger
     extends Application
     implements BaseWindowFactory
 {
@@ -26,10 +26,10 @@ public final class TestApp
     private final Map<BaseWindowPresenter, Stage> windows = new HashMap<>();
     private final AtomicInteger windowCount = new AtomicInteger();
 
-    public TestApp()
+    public GrappaDebugger()
         throws IOException
     {
-        baseWindowFxml = TestApp.class.getResource("/baseWindow.fxml");
+        baseWindowFxml = GrappaDebugger.class.getResource("/baseWindow.fxml");
         if (baseWindowFxml == null)
             throw new IOException("cannot load base window FXML file");
     }
