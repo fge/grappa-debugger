@@ -1,11 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab;
 
-import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
-import com.github.fge.grappa.debugger.tracetab.TraceTabView;
-import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;

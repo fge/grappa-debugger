@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab;
 
-import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;

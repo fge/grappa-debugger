@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab.statistics;
 
-import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.internal.NonFinalForTesting;
+import com.github.parboiled1.grappa.buffers.InputBuffer;
 
 @NonFinalForTesting
 public class InputTextInfo

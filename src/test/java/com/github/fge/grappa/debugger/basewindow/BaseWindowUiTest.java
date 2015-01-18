@@ -1,7 +1,5 @@
 package com.github.fge.grappa.debugger.basewindow;
 
-import com.github.fge.grappa.debugger.basewindow.BaseWindowPresenter;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowUi;
 import javafx.event.ActionEvent;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

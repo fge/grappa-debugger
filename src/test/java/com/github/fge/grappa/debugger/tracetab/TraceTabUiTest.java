@@ -1,7 +1,5 @@
 package com.github.fge.grappa.debugger.tracetab;
 
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
-import com.github.fge.grappa.debugger.tracetab.TraceTabUi;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
