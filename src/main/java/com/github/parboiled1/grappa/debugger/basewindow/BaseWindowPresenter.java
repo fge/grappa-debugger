@@ -9,7 +9,6 @@ import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class BaseWindowPresenter
 {
@@ -31,20 +30,6 @@ public class BaseWindowPresenter
     public void handleNewWindow()
     {
         windowFactory.createWindow();
-    }
-
-    public void handleLoadTab()
-    {
-        final TraceTabModel model;
-        try {
-            model = new DefaultTraceTabModel(Paths.get("/tmp/trace.zip"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        final TraceTabPresenter presenter = new TraceTabPresenter(model);
-        view.injectTab(presenter);
-        presenter.loadTrace();
     }
 
     public void handleLoadFile()

@@ -29,12 +29,6 @@ public class BaseWindowUi
     }
 
     @FXML
-    void loadTabEvent(final ActionEvent event)
-    {
-        presenter.handleLoadTab();
-    }
-
-    @FXML
     void loadFileEvent(final ActionEvent event)
     {
         presenter.handleLoadFile();

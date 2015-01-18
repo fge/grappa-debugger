@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doReturn;
@@ -50,14 +49,6 @@ public class BaseWindowPresenterTest
         presenter.handleNewWindow();
         verifyZeroInteractions(view);
         verify(factory).createWindow();
-    }
-
-    @Test(enabled = false)
-    public void handleLoadTabTest()
-    {
-        presenter.handleLoadTab();
-        verify(view).injectTab(any(TraceTabPresenter.class));
-        verifyZeroInteractions(factory);
     }
 
     @Test

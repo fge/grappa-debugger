@@ -37,13 +37,6 @@ public class BaseWindowUiTest
     }
 
     @Test
-    public void loadTabEventTest()
-    {
-        ui.loadTabEvent(event);
-        verify(presenter).handleLoadTab();
-    }
-
-    @Test
     public void loadFileEventTest()
     {
         ui.loadFileEvent(event);
