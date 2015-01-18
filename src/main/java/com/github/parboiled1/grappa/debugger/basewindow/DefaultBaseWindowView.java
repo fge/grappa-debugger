@@ -7,6 +7,7 @@ import com.github.parboiled1.grappa.debugger.tracetab.TraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
 import java.io.File;
@@ -16,6 +17,8 @@ import java.net.URL;
 public final class DefaultBaseWindowView
     implements BaseWindowView
 {
+    private static final ExtensionFilter ZIP_FILES
+        = new ExtensionFilter("ZIP files", "*.zip");
     private final BaseWindowUi ui;
     private final URL traceTabFxml;
 
@@ -47,7 +50,8 @@ public final class DefaultBaseWindowView
     @Override
     public File chooseFile(final Object object)
     {
-        new FileChooser().showOpenDialog((Window) object);
-        return null;
+        final FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(ZIP_FILES);
+        return chooser.showOpenDialog((Window) object);
     }
 }

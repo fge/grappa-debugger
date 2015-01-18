@@ -93,10 +93,11 @@ public class BaseWindowPresenterTest
 
         presenter.handleLoadFile();
 
-        final InOrder inOrder = inOrder(factory, view);
+        final InOrder inOrder = inOrder(factory, view, tabPresenter);
         inOrder.verify(factory).getStage(presenter);
         inOrder.verify(view).chooseFile(same(stage));
         inOrder.verify(view).injectTab(same(tabPresenter));
+        inOrder.verify(tabPresenter).loadTrace();
         inOrder.verifyNoMoreInteractions();
     }
 }

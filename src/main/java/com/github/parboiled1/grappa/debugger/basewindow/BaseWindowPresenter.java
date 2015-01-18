@@ -63,6 +63,7 @@ public class BaseWindowPresenter
         }
 
         view.injectTab(presenter);
+        presenter.loadTrace();
     }
 
     @VisibleForTesting
