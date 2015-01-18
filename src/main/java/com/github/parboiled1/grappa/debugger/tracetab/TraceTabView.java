@@ -19,4 +19,6 @@ public interface TraceTabView
     void setInputText(InputTextInfo textInfo);
 
     void setParseTree(ParseNode node);
+
+    void setParseNodeDetails(String text);
 }

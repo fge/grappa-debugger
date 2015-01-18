@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
@@ -22,6 +23,9 @@ public class TraceTabUi
      */
     @FXML
     TreeView<ParseNode> parseTree;
+
+    @FXML
+    TextArea parseNodeDetails;
 
     @FXML
     TextFlow inputText;

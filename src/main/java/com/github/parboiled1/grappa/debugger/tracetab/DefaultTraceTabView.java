@@ -165,6 +165,12 @@ public final class DefaultTraceTabView
         ui.parseTree.setRoot(buildTree(node));
     }
 
+    @Override
+    public void setParseNodeDetails(final String text)
+    {
+        ui.parseNodeDetails.setText(text);
+    }
+
     private static <S, T> void bindColumn(final TableColumn<S, T> column,
         final String propertyName)
     {
@@ -192,8 +198,6 @@ public final class DefaultTraceTabView
         {
             setEditable(false);
             setOnMouseClicked(event -> {
-                if (isSelected())
-                    return;
                 final ParseNode node = getItem();
                 ui.parseNodeShowEvent(node);
             });

@@ -22,9 +22,10 @@
     <Tab text="Parse tree" closable="false">
         <SplitPane dividerPositions="0.5">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
-                <TreeView fx:id="parseTree"/>
+                <TreeView fx:id="parseTree" editable="false"/>
                 <!-- TODO: replace with something else -->
-                <TextArea editable="false" style="-fx-font-family: monospace"/>
+                <TextArea fx:id="parseNodeDetails" editable="false"
+                    style="-fx-font-family: monospace"/>
             </SplitPane>
             <ScrollPane>
                 <TextFlow fx:id="inputText"/>
