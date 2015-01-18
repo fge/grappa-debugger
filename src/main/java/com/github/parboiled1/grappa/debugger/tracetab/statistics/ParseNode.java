@@ -1,11 +1,14 @@
 package com.github.parboiled1.grappa.debugger.tracetab.statistics;
 
+import com.github.parboiled1.grappa.debugger.internal.NonFinalForTesting;
+
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class ParseNode
+@NonFinalForTesting
+public class ParseNode
 {
     private final String ruleName;
     private boolean success;
