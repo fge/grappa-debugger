@@ -1,37 +1,26 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.buffers.InputBuffer;
-import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseNode;
-import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
-import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.parboiled.support.Position;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class TraceTabPresenter
 {
-    private final ParsingRunTrace trace;
-    private final List<TraceEvent> events;
-    private final Collection<RuleStatistics> ruleStats;
+    private final TraceTabModel model;
     private final InputBuffer buffer;
-    private final InputTextInfo textInfo;
-    private final ParseNode parseTreeRoot;
 
     private TraceTabView view;
 
     public TraceTabPresenter(final TraceTabModel model)
     {
-        trace = model.getTrace();
-        events = model.getTraceEvents();
-        ruleStats = model.getRuleStats();
+        this.model = model;
         buffer = model.getInputBuffer();
-        textInfo = model.getInputTextInfo();
-        parseTreeRoot = model.getParseTreeRoot();
     }
 
     public void setView(final TraceTabView view)
@@ -41,15 +30,17 @@ public class TraceTabPresenter
 
     public void loadTrace()
     {
+        final List<TraceEvent> events = model.getTraceEvents();
+
         if (events.isEmpty())
             return;
 
-        view.setParseDate(trace.getStartDate());
+        view.setParseDate(model.getTrace().getStartDate());
         view.setTraceEvents(events);
-        view.setStatistics(ruleStats);
-        view.setInputTextInfo(textInfo);
+        view.setStatistics(model.getRuleStats());
+        view.setInputTextInfo(model.getInputTextInfo());
         view.setInputText(buffer.extract(0, buffer.length()));
-        view.setParseTree(parseTreeRoot);
+        view.setParseTree(model.getParseTreeRoot());
     }
 
     void handleParseNodeShow(final ParseNode node)
@@ -79,7 +70,8 @@ public class TraceTabPresenter
         view.highlightText(fragments);
     }
 
-    private List<String> getFragments(final ParseNode node)
+    @VisibleForTesting
+    List<String> getFragments(final ParseNode node)
     {
         final int length = buffer.length();
         final int start = node.getStart();
