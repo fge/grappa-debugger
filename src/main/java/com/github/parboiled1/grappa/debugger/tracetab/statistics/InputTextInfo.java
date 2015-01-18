@@ -1,8 +1,10 @@
 package com.github.parboiled1.grappa.debugger.tracetab.statistics;
 
 import com.github.parboiled1.grappa.buffers.InputBuffer;
+import com.github.parboiled1.grappa.debugger.internal.NonFinalForTesting;
 
-public final class InputTextInfo
+@NonFinalForTesting
+public class InputTextInfo
 {
     private final int nrLines;
     private final int nrChars;
