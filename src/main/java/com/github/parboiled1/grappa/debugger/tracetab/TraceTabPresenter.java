@@ -24,12 +24,13 @@ public class TraceTabPresenter
     public void loadTrace()
     {
         final ParsingRunTrace trace = model.getTrace();
-        final List<TraceEvent> events = trace.getEvents();
+        final List<TraceEvent> events = model.getTraceEvents();
+
         if (events.isEmpty())
             return;
 
         view.setParseDate(trace.getStartDate());
-        view.setTraceEvents(model.getTraceEvents());
+        view.setTraceEvents(events);
         view.setStatistics(model.getRuleStats());
         view.setInputText(model.getInputTextInfo());
     }

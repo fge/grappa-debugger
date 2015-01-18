@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.parboiled1.grappa.buffers.CharSequenceInputBuffer;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseTreeBuilder;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
@@ -46,6 +48,7 @@ public final class DefaultTraceTabModel
     private final List<TraceEvent> traceEvents;
     private final InputTextInfo textInfo;
     private final Collection<RuleStatistics> ruleStats;
+    private final ParseNode rootNode;
 
     public DefaultTraceTabModel(final Path zipPath)
         throws IOException
@@ -63,6 +66,7 @@ public final class DefaultTraceTabModel
         traceEvents = relativize(events);
         textInfo = new InputTextInfo(buffer);
         ruleStats = collectStatistics(events);
+        rootNode = new ParseTreeBuilder(traceEvents).getRootNode();
     }
 
     @Nonnull
@@ -98,6 +102,13 @@ public final class DefaultTraceTabModel
     public Collection<RuleStatistics> getRuleStats()
     {
         return Collections.unmodifiableCollection(ruleStats);
+    }
+
+    @Nonnull
+    @Override
+    public ParseNode getParseTreeRoot()
+    {
+        return rootNode;
     }
 
     private InputBuffer loadBuffer(final FileSystem zipfs)

@@ -7,18 +7,25 @@ import java.util.List;
 public final class ParseNode
 {
     private final String ruleName;
-    private final boolean success;
+    private boolean success;
     private final int start;
-    private final int end;
+    private int end;
 
     private final List<ParseNode> children = new ArrayList<>();
 
-    public ParseNode(final String ruleName, final boolean success,
-        final int start, final int end)
+    public ParseNode(final String ruleName, final int start)
     {
         this.ruleName = ruleName;
-        this.success = success;
         this.start = start;
+    }
+
+    void setSuccess(final boolean success)
+    {
+        this.success = success;
+    }
+
+    void setEnd(final int end)
+    {
         this.end = end;
     }
 
