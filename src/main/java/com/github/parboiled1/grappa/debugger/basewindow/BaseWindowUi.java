@@ -33,4 +33,10 @@ public class BaseWindowUi
     {
         presenter.handleLoadTab();
     }
+
+    @FXML
+    void loadFileEvent(final ActionEvent event)
+    {
+        presenter.handleLoadFile();
+    }
 }

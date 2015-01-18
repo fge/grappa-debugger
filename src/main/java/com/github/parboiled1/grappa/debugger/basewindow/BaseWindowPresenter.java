@@ -4,8 +4,11 @@ import com.github.parboiled1.grappa.debugger.BaseWindowFactory;
 import com.github.parboiled1.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabModel;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabPresenter;
+import com.google.common.annotations.VisibleForTesting;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class BaseWindowPresenter
@@ -42,5 +45,31 @@ public class BaseWindowPresenter
         final TraceTabPresenter presenter = new TraceTabPresenter(model);
         view.injectTab(presenter);
         presenter.loadTrace();
+    }
+
+    public void handleLoadFile()
+    {
+        final File file = view.chooseFile(windowFactory.getStage(this));
+
+        if (file == null)
+            return;
+
+        final TraceTabPresenter presenter;
+
+        try {
+            presenter = loadFile(file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        view.injectTab(presenter);
+    }
+
+    @VisibleForTesting
+    TraceTabPresenter loadFile(final Path path)
+        throws IOException
+    {
+        final TraceTabModel model = new DefaultTraceTabModel(path.toRealPath());
+        return new TraceTabPresenter(model);
     }
 }

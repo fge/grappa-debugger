@@ -14,6 +14,8 @@
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" text="New window"
                     onAction="#newWindowEvent"/>
+                <MenuItem mnemonicParsing="false" text="Load file"
+                    onAction="#loadFileEvent"/>
                 <MenuItem mnemonicParsing="false" text="Load tab"
                     onAction="#loadTabEvent"/>
                 <MenuItem mnemonicParsing="false" text="Close"

@@ -42,4 +42,11 @@ public class BaseWindowUiTest
         ui.loadTabEvent(event);
         verify(presenter).handleLoadTab();
     }
+
+    @Test
+    public void loadFileEventTest()
+    {
+        ui.loadFileEvent(event);
+        verify(presenter).handleLoadFile();
+    }
 }

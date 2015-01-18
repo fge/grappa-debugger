@@ -6,7 +6,10 @@ import com.github.parboiled1.grappa.debugger.tracetab.TraceTabUi;
 import com.github.parboiled1.grappa.debugger.tracetab.TraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -39,5 +42,12 @@ public final class DefaultBaseWindowView
         final TraceTabView view = new DefaultTraceTabView(tabUi);
         presenter.setView(view);
         tabUi.init(presenter);
+    }
+
+    @Override
+    public File chooseFile(final Object object)
+    {
+        new FileChooser().showOpenDialog((Window) object);
+        return null;
     }
 }
