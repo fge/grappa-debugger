@@ -1,8 +1,6 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.BaseWindowFactory;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowPresenter;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import javafx.stage.Stage;
 import org.mockito.InOrder;
@@ -86,6 +84,7 @@ public class BaseWindowPresenterTest
 
         presenter.handleLoadFile();
 
+        // FIXME: Stage's .setTitle() is final, so we can't check that
         final InOrder inOrder = inOrder(factory, view, tabPresenter);
         inOrder.verify(factory).getStage(presenter);
         inOrder.verify(view).chooseFile(same(stage));

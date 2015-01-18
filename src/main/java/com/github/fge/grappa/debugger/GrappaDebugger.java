@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO: implement default exception handling
 public final class GrappaDebugger
@@ -24,7 +23,6 @@ public final class GrappaDebugger
     private final URL baseWindowFxml;
 
     private final Map<BaseWindowPresenter, Stage> windows = new HashMap<>();
-    private final AtomicInteger windowCount = new AtomicInteger();
 
     public GrappaDebugger()
         throws IOException
@@ -71,7 +69,7 @@ public final class GrappaDebugger
         ui.init(presenter);
 
         stage.setScene(new Scene(pane));
-        stage.setTitle("window " + windowCount.getAndIncrement());
+        stage.setTitle("Grappa debugger");
 
         windows.put(presenter, stage);
 
