@@ -78,7 +78,7 @@ public final class DefaultTraceTabModel
 
     @Nonnull
     @Override
-    public InputBuffer getInputText()
+    public InputBuffer getInputBuffer()
     {
         return buffer;
     }

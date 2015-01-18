@@ -17,7 +17,7 @@ public interface TraceTabModel
     ParsingRunTrace getTrace();
 
     @Nonnull
-    InputBuffer getInputText();
+    InputBuffer getInputBuffer();
 
     @Nonnull
     List<TraceEvent> getTraceEvents();

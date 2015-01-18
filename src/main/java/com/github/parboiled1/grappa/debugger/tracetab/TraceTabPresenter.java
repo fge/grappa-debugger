@@ -29,7 +29,7 @@ public class TraceTabPresenter
         trace = model.getTrace();
         events = model.getTraceEvents();
         ruleStats = model.getRuleStats();
-        buffer = model.getInputText();
+        buffer = model.getInputBuffer();
         textInfo = model.getInputTextInfo();
         parseTreeRoot = model.getParseTreeRoot();
     }
