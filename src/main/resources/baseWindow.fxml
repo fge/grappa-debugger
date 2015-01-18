@@ -22,6 +22,6 @@
         </MenuBar>
     </top>
     <center>
-        <Label text="Hello"/>
+        <Label text="Please load a trace file (File -> Load file)"/>
     </center>
 </BorderPane>
