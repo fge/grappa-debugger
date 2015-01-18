@@ -1,12 +1,16 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
@@ -36,6 +40,11 @@ public final class DefaultTraceTabView
     public DefaultTraceTabView(final TraceTabUi ui)
     {
         this.ui = ui;
+
+        /*
+         * Parse tree
+         */
+        ui.parseTree.setCellFactory(param -> new ParseNodeCell(ui));
 
         /*
          * Trace events
@@ -150,6 +159,12 @@ public final class DefaultTraceTabView
         ui.inputText.getChildren().add(new Text(textInfo.getContents()));
     }
 
+    @Override
+    public void setParseTree(final ParseNode node)
+    {
+        ui.parseTree.setRoot(buildTree(node));
+    }
+
     private static <S, T> void bindColumn(final TableColumn<S, T> column,
         final String propertyName)
     {
@@ -168,5 +183,53 @@ public final class DefaultTraceTabView
                 setText(empty ? null : NANOS_TO_STRING.apply(item));
             }
         });
+    }
+
+    private static final class ParseNodeCell
+        extends TreeCell<ParseNode>
+    {
+        private ParseNodeCell(final TraceTabUi ui)
+        {
+            setEditable(false);
+            setOnMouseClicked(event -> {
+                if (isSelected())
+                    return;
+                final ParseNode node = getItem();
+                ui.parseNodeShowEvent(node);
+            });
+        }
+
+        @Override
+        protected void updateItem(final ParseNode item, final boolean empty)
+        {
+            super.updateItem(item, empty);
+            setText(empty ? null : String.format("%s (%s)", item.getRuleName(),
+                item.isSuccess() ? "SUCCESS" : "FAILURE"));
+        }
+    }
+
+    private static TreeItem<ParseNode> buildTree(final ParseNode root)
+    {
+        final TreeItem<ParseNode> ret = new TreeItem<>(root);
+
+        addChildren(ret, root);
+
+        return ret;
+    }
+
+    private static void addChildren(final TreeItem<ParseNode> item,
+        final ParseNode parent)
+    {
+        TreeItem<ParseNode> childItem;
+        final List<TreeItem<ParseNode>> childrenItems
+            = FXCollections.observableArrayList();
+
+        for (final ParseNode node: parent.getChildren()) {
+            childItem = new TreeItem<>(node);
+            addChildren(childItem, node);
+            childrenItems.add(childItem);
+        }
+
+        item.getChildren().setAll(childrenItems);
     }
 }

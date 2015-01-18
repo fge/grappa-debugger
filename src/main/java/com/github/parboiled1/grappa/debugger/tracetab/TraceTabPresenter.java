@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 
@@ -33,5 +34,12 @@ public class TraceTabPresenter
         view.setTraceEvents(events);
         view.setStatistics(model.getRuleStats());
         view.setInputText(model.getInputTextInfo());
+        view.setParseTree(model.getParseTreeRoot());
+    }
+
+    void handleParseNodeShow(final ParseNode node)
+    {
+        // TODO
+
     }
 }

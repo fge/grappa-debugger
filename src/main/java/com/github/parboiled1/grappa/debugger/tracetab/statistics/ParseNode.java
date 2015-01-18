@@ -1,5 +1,6 @@
 package com.github.parboiled1.grappa.debugger.tracetab.statistics;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,5 +58,12 @@ public final class ParseNode
     public void addChild(final ParseNode parseNode)
     {
         children.add(parseNode);
+    }
+
+    @Override
+    @Nonnull
+    public String toString()
+    {
+        return ruleName + " (" + (success ? "SUCCESS" : "FAILURE") + ')';
     }
 }

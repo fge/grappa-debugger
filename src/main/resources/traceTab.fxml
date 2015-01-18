@@ -22,7 +22,7 @@
     <Tab text="Parse tree" closable="false">
         <SplitPane dividerPositions="0.5">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
-                <TreeView/>
+                <TreeView fx:id="parseTree"/>
                 <!-- TODO: replace with something else -->
                 <TextArea editable="false" style="-fx-font-family: monospace"/>
             </SplitPane>

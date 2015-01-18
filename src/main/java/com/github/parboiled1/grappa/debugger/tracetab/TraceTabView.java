@@ -1,6 +1,7 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.InputTextInfo;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 
@@ -16,4 +17,6 @@ public interface TraceTabView
     void setParseDate(long startDate);
 
     void setInputText(InputTextInfo textInfo);
+
+    void setParseTree(ParseNode node);
 }

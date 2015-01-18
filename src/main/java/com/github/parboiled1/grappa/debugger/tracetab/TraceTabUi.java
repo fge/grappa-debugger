@@ -1,5 +1,7 @@
 package com.github.parboiled1.grappa.debugger.tracetab;
 
+import com.github.parboiled1.grappa.debugger.internal.NotFXML;
+import com.github.parboiled1.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.parboiled1.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
@@ -8,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
 public class TraceTabUi
@@ -17,6 +20,9 @@ public class TraceTabUi
     /*
      * Tree tab
      */
+    @FXML
+    TreeView<ParseNode> parseTree;
+
     @FXML
     TextFlow inputText;
 
@@ -110,5 +116,11 @@ public class TraceTabUi
     public void init(final TraceTabPresenter presenter)
     {
         this.presenter = presenter;
+    }
+
+    @NotFXML
+    void parseNodeShowEvent(final ParseNode node)
+    {
+        presenter.handleParseNodeShow(node);
     }
 }
