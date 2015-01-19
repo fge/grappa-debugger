@@ -29,7 +29,7 @@
             <BorderPane>
                 <top>
                     <ToolBar>
-                        <Label text="meh"/>
+                        <Label fx:id="textInfo"/>
                     </ToolBar>
                 </top>
                 <center>

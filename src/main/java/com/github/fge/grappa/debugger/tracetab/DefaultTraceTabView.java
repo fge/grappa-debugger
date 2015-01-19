@@ -178,10 +178,9 @@ public final class DefaultTraceTabView
     @Override
     public void setInputTextInfo(final InputTextInfo textInfo)
     {
-        ui.inputNrChars.setText(String.valueOf(textInfo.getNrChars()));
-        ui.inputNrCodePoints
-            .setText(String.valueOf(textInfo.getNrCodePoints()));
-        ui.inputNrLines.setText(String.valueOf(textInfo.getNrLines()));
+        ui.textInfo.setText("Input text: " + textInfo.getNrLines()  + " lines, "
+            + textInfo.getNrChars() + " characters, "
+            + textInfo.getNrCodePoints() + " code points");
     }
 
     @Override

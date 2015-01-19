@@ -28,6 +28,9 @@ public class TraceTabUi
     TextArea parseNodeDetails;
 
     @FXML
+    Label textInfo;
+
+    @FXML
     TextFlow inputText;
 
     /*
