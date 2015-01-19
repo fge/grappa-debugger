@@ -22,6 +22,7 @@
         </MenuBar>
     </top>
     <center>
-        <Label text="Please load a trace file (File -> Load file)"/>
+        <Label fx:id="label"
+            text="Please load a trace file (File -> Load file)"/>
     </center>
 </BorderPane>

@@ -79,4 +79,10 @@ public final class DefaultBaseWindowView
     {
         alertFactory.showError(header, message, throwable);
     }
+
+    @Override
+    public void setLabelText(final String text)
+    {
+        ui.label.setText(text);
+    }
 }

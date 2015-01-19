@@ -13,4 +13,6 @@ public interface BaseWindowView
     void setWindowTitle(String windowTitle);
 
     void showError(String header, String message, Throwable throwable);
+
+    void setLabelText(String text);
 }

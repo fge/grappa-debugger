@@ -42,6 +42,8 @@ public class BaseWindowPresenter
         final TraceTabPresenter presenter;
         final Path path = file.toPath();
 
+        view.setLabelText("Please wait...");
+
         try {
             presenter = loadFile(path);
         } catch (IOException e) {

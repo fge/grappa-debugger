@@ -3,6 +3,7 @@ package com.github.fge.grappa.debugger.basewindow;
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
@@ -13,6 +14,9 @@ public class BaseWindowUi
 
     @FXML
     BorderPane pane;
+
+    @FXML
+    Label label;
 
     public void init(final BaseWindowPresenter presenter)
     {
