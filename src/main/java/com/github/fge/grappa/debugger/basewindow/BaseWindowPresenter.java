@@ -45,7 +45,8 @@ public class BaseWindowPresenter
         try {
             presenter = loadFile(path);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            view.showError("Trace file error",  "Unable to load trace file", e);
+            return;
         }
 
         view.injectTab(presenter);

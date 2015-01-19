@@ -14,6 +14,12 @@ import java.io.StringWriter;
 
 public class AlertFactory
 {
+    public void unhandledError(final Throwable throwable)
+    {
+        showError("Bug!", "You have encountered a bug! Please report it"
+            + " to the project page!", throwable);
+    }
+
     public void showError(final String title, final String header,
         final Throwable throwable)
     {

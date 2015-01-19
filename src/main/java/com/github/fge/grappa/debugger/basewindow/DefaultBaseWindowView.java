@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.basewindow;
 
+import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import com.github.fge.grappa.debugger.tracetab.TraceTabUi;
@@ -19,29 +20,37 @@ public final class DefaultBaseWindowView
 {
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
+    private static final URL TRACE_TAB_FXML;
+
+    static {
+        TRACE_TAB_FXML = BaseWindowView.class.getResource("/traceTab.fxml");
+        if (TRACE_TAB_FXML == null)
+            throw new ExceptionInInitializerError("failed to load tab fxml");
+    }
 
     private final Stage stage;
+    private final AlertFactory alertFactory;
     private final BaseWindowUi ui;
-    private final URL traceTabFxml;
 
-    public DefaultBaseWindowView(final Stage stage, final BaseWindowUi ui)
+    public DefaultBaseWindowView(final Stage stage,
+        final AlertFactory alertFactory, final BaseWindowUi ui)
     {
         this.stage = stage;
+        this.alertFactory = alertFactory;
         this.ui = ui;
-        traceTabFxml = BaseWindowPresenter.class.getResource("/traceTab.fxml");
-        if (traceTabFxml == null)
-            throw new RuntimeException("cannot load tab fxml");
     }
 
     @Override
     public void injectTab(final TraceTabPresenter presenter)
     {
-        final FXMLLoader loader = new FXMLLoader(traceTabFxml);
+        final FXMLLoader loader = new FXMLLoader(TRACE_TAB_FXML);
         final Node pane;
         try {
             pane = loader.load();
         } catch (IOException oops) {
-            throw new RuntimeException("cannot create tab", oops);
+            alertFactory.showError("Tab creation error",
+                "Unable to create tab", oops);
+            return;
         }
         ui.pane.setCenter(pane);
         final TraceTabUi tabUi = loader.getController();
@@ -62,5 +71,12 @@ public final class DefaultBaseWindowView
     public void setWindowTitle(final String windowTitle)
     {
         stage.setTitle(windowTitle);
+    }
+
+    @Override
+    public void showError(final String header, final String message,
+        final Throwable throwable)
+    {
+        alertFactory.showError(header, message, throwable);
     }
 }

@@ -11,4 +11,6 @@ public interface BaseWindowView
     File chooseFile();
 
     void setWindowTitle(String windowTitle);
+
+    void showError(String header, String message, Throwable throwable);
 }

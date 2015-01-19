@@ -1,8 +1,11 @@
 package com.github.fge.grappa.debugger.basewindow;
 
+import com.github.fge.grappa.debugger.alert.AlertFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
+
+import java.io.IOException;
 
 public class BaseWindowUi
 {
@@ -32,5 +35,10 @@ public class BaseWindowUi
     void loadFileEvent(final ActionEvent event)
     {
         presenter.handleLoadFile();
+    }
+
+    public void x(ActionEvent event)
+    {
+        new AlertFactory().unhandledError(new IOException());
     }
 }

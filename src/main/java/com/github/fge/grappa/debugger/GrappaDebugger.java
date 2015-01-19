@@ -1,10 +1,12 @@
 package com.github.fge.grappa.debugger;
 
+import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.basewindow.BaseWindowPresenter;
 import com.github.fge.grappa.debugger.basewindow.BaseWindowUi;
 import com.github.fge.grappa.debugger.basewindow.BaseWindowView;
 import com.github.fge.grappa.debugger.basewindow.DefaultBaseWindowView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -20,23 +22,29 @@ public final class GrappaDebugger
     extends Application
     implements BaseWindowFactory
 {
-    private final URL baseWindowFxml;
+    private static final URL BASE_WINDOW_FXML;
 
-    private final Map<BaseWindowPresenter, Stage> windows = new HashMap<>();
-
-    public GrappaDebugger()
-        throws IOException
-    {
-        baseWindowFxml = GrappaDebugger.class.getResource("/baseWindow.fxml");
-        if (baseWindowFxml == null)
-            throw new IOException("cannot load base window FXML file");
+    static {
+        BASE_WINDOW_FXML = GrappaDebugger.class.getResource("/baseWindow.fxml");
+        if (BASE_WINDOW_FXML == null)
+            throw new ExceptionInInitializerError("unable to load base window"
+                + " fxml");
     }
 
+    private final AlertFactory alertFactory = new AlertFactory();
+
+    private final Map<BaseWindowPresenter, Stage> windows = new HashMap<>();
 
     @Override
     public void start(final Stage primaryStage)
     {
         createWindow(primaryStage);
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            if (Platform.isFxApplicationThread())
+                alertFactory.unhandledError(e);
+            else
+                e.printStackTrace(System.err);
+        });
     }
 
     public static void main(final String... args)
@@ -52,17 +60,19 @@ public final class GrappaDebugger
 
     private void createWindow(final Stage stage)
     {
-        final FXMLLoader loader = new FXMLLoader(baseWindowFxml);
+        final FXMLLoader loader = new FXMLLoader(BASE_WINDOW_FXML);
         final Pane pane;
         try {
             pane = loader.load();
         } catch (IOException e) {
-            // TODO!
-            throw new RuntimeException(e);
+            alertFactory.showError("Window creation error",
+                "Unable to create window", e);
+            return;
         }
 
         final BaseWindowUi ui = loader.getController();
-        final BaseWindowView view = new DefaultBaseWindowView(stage, ui);
+        final BaseWindowView view
+            = new DefaultBaseWindowView(stage, alertFactory, ui);
         final BaseWindowPresenter presenter
             = new BaseWindowPresenter(this, view);
 
