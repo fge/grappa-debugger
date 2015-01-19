@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
@@ -8,12 +10,10 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
-<?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.control.Label?>
-
+<?import javafx.scene.text.TextFlow?>
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.tracetab.TraceTabUi">
     <Tab text="Parse tree" closable="false">
@@ -25,7 +25,11 @@
                     style="-fx-font-family: monospace"/>
             </SplitPane>
             <ScrollPane>
-                <TextFlow fx:id="inputText"/>
+                <TextFlow fx:id="inputText">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </TextFlow>
             </ScrollPane>
         </SplitPane>
     </Tab>
@@ -33,6 +37,9 @@
         <SplitPane orientation="VERTICAL" dividerPositions="0.5">
             <SplitPane orientation="HORIZONTAL" dividerPositions="0.5">
                 <GridPane gridLinesVisible="false">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
                         <ColumnConstraints hgrow="SOMETIMES"/>
@@ -71,6 +78,9 @@
                         GridPane.columnIndex="1"/>
                 </GridPane>
                 <GridPane>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
                         <ColumnConstraints hgrow="SOMETIMES"/>
