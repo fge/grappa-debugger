@@ -1,10 +1,12 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.fge.grappa.debugger.tracetab.statistics.TracingCharEscaper;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
+import com.google.common.escape.CharEscaper;
 import org.parboiled.support.Position;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 
 public class TraceTabPresenter
 {
+    private static final CharEscaper ESCAPER = new TracingCharEscaper();
+
     private final TraceTabModel model;
     private final InputBuffer buffer;
 
@@ -79,7 +83,9 @@ public class TraceTabPresenter
         final List<String> ret = new ArrayList<>(3);
         ret.add(buffer.extract(0, start));
         final String match = buffer.extract(Math.min(start, length), end);
-        ret.add(match.isEmpty() ? "" : '\u21fe' + match + '\u21fd');
+        ret.add(match.isEmpty()
+            ? ""
+            : '\u21fe' + ESCAPER.escape(match) + '\u21fd');
         ret.add(buffer.extract(Math.min(end, length), length));
 
         return ret;
