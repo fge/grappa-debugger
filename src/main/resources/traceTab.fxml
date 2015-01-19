@@ -9,7 +9,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -24,13 +26,22 @@
                 <TextArea fx:id="parseNodeDetails" editable="false"
                     style="-fx-font-family: monospace"/>
             </SplitPane>
-            <ScrollPane>
-                <TextFlow fx:id="inputText">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
-                </TextFlow>
-            </ScrollPane>
+            <BorderPane>
+                <top>
+                    <ToolBar>
+                        <Label text="meh"/>
+                    </ToolBar>
+                </top>
+                <center>
+                    <ScrollPane>
+                        <TextFlow fx:id="inputText">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            </padding>
+                        </TextFlow>
+                    </ScrollPane>
+                </center>
+            </BorderPane>
         </SplitPane>
     </Tab>
     <Tab text="Statistics" closable="false">
