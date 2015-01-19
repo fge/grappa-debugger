@@ -6,6 +6,7 @@ import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
+import org.parboiled.support.Position;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -14,6 +15,8 @@ import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollection;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
@@ -78,5 +81,20 @@ public class TraceTabPresenterTest
         verify(view).setStatistics(anyCollection());
         verify(view).setTraceEvents(same(events));
         verifyNoMoreInteractions(view);
+    }
+
+    @Test
+    public void handleParseNodeShowTest()
+    {
+        final ParseNode node = mock(ParseNode.class);
+
+        final Position position = new Position(12, 12);
+        when(buffer.getPosition(anyInt())).thenReturn(position);
+        when(buffer.extract(anyInt(), anyInt())).thenReturn("");
+
+        presenter.handleParseNodeShow(node);
+
+        //noinspection unchecked
+        verify(view).highlightText(anyList(), same(position));
     }
 }

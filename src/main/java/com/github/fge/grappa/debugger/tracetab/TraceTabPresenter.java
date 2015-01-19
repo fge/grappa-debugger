@@ -45,10 +45,9 @@ public class TraceTabPresenter
 
     void handleParseNodeShow(final ParseNode node)
     {
-        final int start = node.getStart();
-        final Position pos = buffer.getPosition(start);
-        final int line = pos.getLine();
-        final int column = pos.getColumn();
+        final Position position = buffer.getPosition(node.getStart());
+        final int line = position.getLine();
+        final int column = position.getColumn();
         final boolean success = node.isSuccess();
 
         final StringBuilder sb = new StringBuilder("Match information:\n");
@@ -60,14 +59,14 @@ public class TraceTabPresenter
             .append(Strings.repeat(" ", column - 1)).append("^\n----\n");
         if (success) {
             sb.append("Match SUCCESS; text matched:\n<")
-                .append(buffer.extract(start, node.getEnd()))
+                .append(buffer.extract(node.getStart(), node.getEnd()))
                 .append('>');
         } else {
             sb.append("Match FAILED");
         }
         view.setParseNodeDetails(sb.toString());
         final List<String> fragments = getFragments(node);
-        view.highlightText(fragments);
+        view.highlightText(fragments, position);
     }
 
     @VisibleForTesting

@@ -7,6 +7,7 @@ import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -15,6 +16,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import org.parboiled.support.Position;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -39,6 +42,8 @@ public final class DefaultTraceTabView
     };
 
     private final TraceTabUi ui;
+
+    private int nrLines;
 
     public DefaultTraceTabView(final TraceTabUi ui)
     {
@@ -178,7 +183,8 @@ public final class DefaultTraceTabView
     @Override
     public void setInputTextInfo(final InputTextInfo textInfo)
     {
-        ui.textInfo.setText("Input text: " + textInfo.getNrLines()  + " lines, "
+        nrLines = textInfo.getNrLines();
+        ui.textInfo.setText("Input text: " + nrLines  + " lines, "
             + textInfo.getNrChars() + " characters, "
             + textInfo.getNrCodePoints() + " code points");
     }
@@ -202,12 +208,18 @@ public final class DefaultTraceTabView
     }
 
     @Override
-    public void highlightText(final List<String> fragments)
+    public void highlightText(final List<String> fragments,
+        final Position position)
     {
+        final TextFlow inputText = ui.inputText;
         final List<Text> list = new ArrayList<>(3);
 
         Text text;
         String fragment;
+
+        text = (Text) inputText.getChildren().get(0);
+        final double lineHeight = text.getFont().getSize()
+            + text.getLineSpacing() + inputText.getLineSpacing();
 
         // Before match
         fragment = fragments.get(0);
@@ -233,7 +245,13 @@ public final class DefaultTraceTabView
             list.add(text);
         }
 
-        ui.inputText.getChildren().setAll(list);
+        inputText.getChildren().setAll(list);
+
+        final ScrollPane scroll = ui.inputTextScroll;
+        double line = position.getLine();
+        if (line != nrLines)
+            line--;
+        scroll.setVvalue(line / nrLines);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,
