@@ -80,7 +80,7 @@ public class TraceTabPresenter
         final List<String> ret = new ArrayList<>(3);
         ret.add(buffer.extract(0, start));
         final String match = buffer.extract(Math.min(start, length), end);
-        ret.add(match.isEmpty() ? "" : '<' + match + '>');
+        ret.add(match.isEmpty() ? "" : '\u21fe' + match + '\u21fd');
         ret.add(buffer.extract(Math.min(end, length), length));
 
         return ret;
