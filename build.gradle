@@ -56,7 +56,7 @@ targetCompatibility = "1.8"; // defaults to sourceCompatibility
 dependencies {
     provided(group: "com.google.code.findbugs", name: "jsr305",
         version: "3.0.0");
-    compile(group: "com.github.parboiled1", name: "grappa",
+    compile(group: "com.github.fge", name: "grappa",
         version: "2.0.0-alpha.1");
     compile(group: "org.controlsfx", name: "openjfx-dialogs",
         version: "1.0.2");
