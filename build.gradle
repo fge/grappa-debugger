@@ -107,12 +107,6 @@ task libJar(type: Jar, dependsOn: jar) {
     }
 }
 
-jar {
-    manifest {
-        attributes("Main-Class": "com.github.fge.grappa.debugger.GrappaDebugger");
-    }
-}
-
 /*
  * Necessary to generate the source and javadoc jars
  */
