@@ -4,6 +4,7 @@ import com.github.fge.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.RuleStatistics;
 import com.github.parboiled1.grappa.trace.TraceEvent;
+import com.github.parboiled1.grappa.trace.TraceEventType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Tab;
@@ -58,6 +59,29 @@ public final class DefaultTraceTabView
         bindColumn(ui.eventPath, "path");
         bindColumn(ui.eventRule, "matcher");
         bindColumn(ui.eventType, "type");
+        ui.eventType.setCellFactory(
+            param -> new TableCell<TraceEvent, TraceEventType>()
+            {
+                @Override
+                protected void updateItem(final TraceEventType item,
+                    final boolean empty)
+                {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        return;
+                    }
+                    final Text text = new Text(item.name());
+                    switch (item) {
+                        case MATCH_FAILURE:
+                            text.setFill(Color.RED);
+                            break;
+                        case MATCH_SUCCESS:
+                            text.setFill(Color.GREEN);
+                    }
+                    setGraphic(text);
+                }
+            });
 
         /*
          * Statistics
