@@ -22,16 +22,15 @@ public final class ParseTreeBuilder
         return rootNode;
     }
 
-    // TODO: this assumes that the events list is never empty
-    // (but OTOH this is assumed never to be called if this is the case)
     @SuppressWarnings({ "AutoBoxing", "TypeMayBeWeakened" })
     private static ParseNode process(@Untainted final List<TraceEvent> events)
     {
         final Map<Integer, ParseNode> nodes = new HashMap<>();
 
-        nodes.put(-1, new ParseNode("WTF", Integer.MIN_VALUE));
+        nodes.put(-1, new ParseNode("WTF", Integer.MIN_VALUE, 0));
 
         int level;
+        long nanos = 0L;
         TraceEventType type;
         ParseNode node;
 
@@ -40,14 +39,17 @@ public final class ParseTreeBuilder
             type = event.getType();
 
             if (type == TraceEventType.BEFORE_MATCH) {
-                node = new ParseNode(event.getMatcher(), event.getIndex());
+                node = new ParseNode(event.getMatcher(), event.getIndex(),
+                    level);
                 nodes.put(level, node);
+                nanos = event.getNanoseconds();
                 continue;
             }
 
             node = nodes.get(level);
             node.setEnd(event.getIndex());
             node.setSuccess(type == TraceEventType.MATCH_SUCCESS);
+            node.setNanos(event.getNanoseconds() - nanos);
             nodes.get(level - 1).addChild(node);
         }
 

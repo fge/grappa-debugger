@@ -26,6 +26,24 @@ public class TraceTabUi
     TreeView<ParseNode> parseTree;
 
     @FXML
+    Label parseNodeLevel;
+
+    @FXML
+    Label parseNodeRuleName;
+
+    @FXML
+    Label parseNodeStatus;
+
+    @FXML
+    Label parseNodeStart;
+
+    @FXML
+    Label parseNodeEnd;
+
+    @FXML
+    Label parseNodeTime;
+
+    @FXML
     TextArea parseNodeDetails;
 
     @FXML

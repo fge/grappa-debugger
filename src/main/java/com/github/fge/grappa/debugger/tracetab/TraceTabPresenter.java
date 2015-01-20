@@ -65,6 +65,7 @@ public class TraceTabPresenter
         } else {
             sb.append("Match FAILED");
         }
+        view.fillParseNodeDetails(node);
         view.setParseNodeDetails(sb.toString());
         final List<String> fragments = getFragments(node);
         view.highlightText(fragments, position, success);

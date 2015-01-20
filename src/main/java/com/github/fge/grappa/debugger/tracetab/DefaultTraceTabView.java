@@ -208,6 +208,12 @@ public final class DefaultTraceTabView
     }
 
     @Override
+    public void fillParseNodeDetails(final ParseNode node)
+    {
+        // TODO
+    }
+
+    @Override
     public void highlightText(final List<String> fragments,
         final Position position, final boolean success)
     {

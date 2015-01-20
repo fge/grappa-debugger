@@ -25,6 +25,8 @@ public interface TraceTabView
 
     void setParseNodeDetails(String text);
 
+    void fillParseNodeDetails(ParseNode node);
+
     void highlightText(List<String> fragments, Position position,
         boolean success);
 }

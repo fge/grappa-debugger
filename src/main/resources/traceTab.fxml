@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.control.TitledPane?>
 
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.tracetab.TraceTabUi">
@@ -24,8 +25,51 @@
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                 <TreeView fx:id="parseTree" editable="false"/>
                 <!-- TODO: replace with something else -->
-                <TextArea fx:id="parseNodeDetails" editable="false"
-                    style="-fx-font-family: monospace"/>
+                <TitledPane collapsible="true" text="Node information">
+                    <TextArea fx:id="parseNodeDetails" editable="false"
+                        style="-fx-font-family: monospace" visible="false"/>
+                    <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
+                        <padding>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </padding>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES"/>
+                            <ColumnConstraints hgrow="SOMETIMES"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                        </rowConstraints>
+                        <Label text="Depth:" GridPane.rowIndex="0"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeLevel" GridPane.rowIndex="0"
+                            GridPane.columnIndex="1"/>
+                        <Label text="Matcher name:" GridPane.rowIndex="1"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeRuleName" GridPane.rowIndex="1"
+                            GridPane.columnIndex="1"/>
+                        <Label text="Status:" GridPane.rowIndex="2"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeStatus" GridPane.rowIndex="2"
+                            GridPane.columnIndex="1"/>
+                        <Label text="Starting position:" GridPane.rowIndex="3"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeStart" GridPane.rowIndex="3"
+                            GridPane.columnIndex="1"/>
+                        <Label text="Ending position:" GridPane.rowIndex="4"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeEnd" GridPane.rowIndex="4"
+                            GridPane.columnIndex="1"/>
+                        <Label text="Time spent:" GridPane.rowIndex="5"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeTime" GridPane.rowIndex="5"
+                            GridPane.columnIndex="1"/>
+                    </GridPane>
+                </TitledPane>
             </SplitPane>
             <BorderPane>
                 <top>

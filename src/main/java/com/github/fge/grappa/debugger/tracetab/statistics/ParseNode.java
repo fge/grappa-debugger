@@ -13,14 +13,19 @@ public class ParseNode
     private final String ruleName;
     private boolean success;
     private final int start;
+    private final int level;
+
     private int end;
+    private long nanos;
 
     private final List<ParseNode> children = new ArrayList<>();
 
-    public ParseNode(final String ruleName, final int start)
+    public ParseNode(final String ruleName, final int start,
+        final int level)
     {
         this.ruleName = ruleName;
         this.start = start;
+        this.level = level;
     }
 
     void setSuccess(final boolean success)
@@ -33,6 +38,11 @@ public class ParseNode
         this.end = end;
     }
 
+    void setNanos(final long nanos)
+    {
+        this.nanos = nanos;
+    }
+
     public String getRuleName()
     {
         return ruleName;
@@ -41,6 +51,11 @@ public class ParseNode
     public boolean isSuccess()
     {
         return success;
+    }
+
+    public int getLevel()
+    {
+        return level;
     }
 
     public int getStart()
