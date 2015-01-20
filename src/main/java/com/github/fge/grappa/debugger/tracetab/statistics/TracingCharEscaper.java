@@ -9,7 +9,7 @@ public final class TracingCharEscaper
     extends ArrayBasedCharEscaper
 {
     private static final Map<Character, String> ESCAPE_MAP
-        = ImmutableMap.<Character, String>builder().put('\r', "\\r")
+        = ImmutableMap.<Character, String>builder().put('\r', "\\r\r")
         .put('\n', "\\n\n").build();
 
     public TracingCharEscaper()

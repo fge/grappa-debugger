@@ -108,21 +108,6 @@ public final class DefaultTraceTabView
                     setText(empty ? null : String.format("%.2f%%", item));
                 }
             });
-        bindColumn(ui.statsTotalTime, "totalTime");
-        setDisplayNanos(ui.statsTotalTime);
-        ui.statsAvgTime.setCellValueFactory(
-            param -> new SimpleObjectProperty<Long>()
-            {
-                @SuppressWarnings("AutoBoxing")
-                @Override
-                public Long get()
-                {
-                    final RuleStatistics stats = param.getValue();
-                    return stats.getTotalTime() / stats.getNrInvocations();
-                }
-            }
-        );
-        setDisplayNanos(ui.statsAvgTime);
     }
 
     @Override
