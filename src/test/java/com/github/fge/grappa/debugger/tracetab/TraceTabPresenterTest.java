@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyCollection;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
@@ -95,6 +96,6 @@ public class TraceTabPresenterTest
         presenter.handleParseNodeShow(node);
 
         //noinspection unchecked
-        verify(view).highlightText(anyList(), same(position));
+        verify(view).highlightText(anyList(), same(position), anyBoolean());
     }
 }

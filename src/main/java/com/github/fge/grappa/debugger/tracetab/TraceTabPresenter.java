@@ -70,7 +70,7 @@ public class TraceTabPresenter
         }
         view.setParseNodeDetails(sb.toString());
         final List<String> fragments = getFragments(node);
-        view.highlightText(fragments, position);
+        view.highlightText(fragments, position, success);
     }
 
     @VisibleForTesting
@@ -83,9 +83,13 @@ public class TraceTabPresenter
         final List<String> ret = new ArrayList<>(3);
         ret.add(buffer.extract(0, start));
         final String match = buffer.extract(Math.min(start, length), end);
-        ret.add(match.isEmpty()
-            ? ""
-            : '\u21fe' + ESCAPER.escape(match) + '\u21fd');
+        final String displayed;
+        if (node.isSuccess())
+            displayed = match.isEmpty() ? "\u2205"
+                : '\u21fe' + ESCAPER.escape(match) + '\u21fd';
+        else
+            displayed = "\u2612";
+        ret.add(displayed);
         ret.add(buffer.extract(Math.min(end, length), length));
 
         return ret;

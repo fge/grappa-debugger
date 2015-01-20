@@ -41,7 +41,6 @@ public class AlertFactory
             final StringWriter sw = new StringWriter();
             final PrintWriter pw = new PrintWriter(sw);
         ) {
-            // Create expandable Exception.
             ex.printStackTrace(pw);
             textArea.setText(sw.toString());
         } catch (IOException ignored) {

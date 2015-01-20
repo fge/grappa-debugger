@@ -209,7 +209,7 @@ public final class DefaultTraceTabView
 
     @Override
     public void highlightText(final List<String> fragments,
-        final Position position)
+        final Position position, final boolean success)
     {
         final TextFlow inputText = ui.inputText;
         final List<Text> list = new ArrayList<>(3);
@@ -231,9 +231,10 @@ public final class DefaultTraceTabView
 
         // Match
         fragment = fragments.get(1);
+        // NOTE: cannot happen
         if (!fragment.isEmpty()) {
             text = new Text(fragment);
-            text.setFill(Color.RED);
+            text.setFill(success ? Color.GREEN : Color.RED);
             text.setUnderline(true);
             list.add(text);
         }

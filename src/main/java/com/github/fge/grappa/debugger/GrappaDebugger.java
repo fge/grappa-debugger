@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: implement default exception handling
 public final class GrappaDebugger
     extends Application
     implements BaseWindowFactory
@@ -91,4 +90,5 @@ public final class GrappaDebugger
     {
         windows.remove(presenter).close();
     }
+
 }
