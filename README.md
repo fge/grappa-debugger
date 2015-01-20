@@ -4,15 +4,7 @@ This project is licensed under both LGPLv3 and ASL 2.0. See file LICENSE for mor
 
 This project has been developed with the latest Oracle JDK, that is 1.8u25. It requires JavaFX 8.
 
-The current version is **0.1.0**:
-
-```groovy
-dependencies {
-    compile(group: "com.github.fge", name: "grappa-debugger", version: "0.1.0");
-}
-```
-
-You can download a self contained jar with a main on
+The current version is **0.1.0**. You can download a self contained jar with a main on
 [Bintray](https://bintray.com/fge/maven/grappa-debugger/view).
 
 ## What this is
