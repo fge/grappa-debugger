@@ -23,7 +23,6 @@ import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class TraceTabPresenterTest
@@ -45,23 +44,10 @@ public class TraceTabPresenterTest
         presenter.setView(view);
     }
 
+    // FIXME: too complicated
     @SuppressWarnings({ "unchecked", "AutoBoxing" })
     @Test
-    public void loadTraceWithEmptyEvents()
-    {
-        final List<TraceEvent> events = mock(List.class);
-        when(events.isEmpty()).thenReturn(true);
-
-        when(model.getTraceEvents()).thenReturn(events);
-
-        presenter.loadTrace();
-
-        verifyZeroInteractions(view);
-    }
-
-    @SuppressWarnings({ "unchecked", "AutoBoxing" })
-    @Test
-    public void loadTraceWithNonEmptyEvents()
+    public void loadTraceTest()
     {
         final long fakeDate = 87238987982713987L;
         final TraceEvent fakeEvent = new TraceEvent(TraceEventType.BEFORE_MATCH,

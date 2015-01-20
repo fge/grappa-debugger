@@ -13,6 +13,7 @@ import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Untainted;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,6 +84,7 @@ public final class DefaultTraceTabModel
         return buffer;
     }
 
+    @Untainted
     @Nonnull
     @Override
     public List<TraceEvent> getTraceEvents()
@@ -144,7 +146,8 @@ public final class DefaultTraceTabModel
     private static List<TraceEvent> relativize(final List<TraceEvent> events)
     {
         if (events.isEmpty())
-            return Collections.emptyList();
+            throw new IllegalStateException("illegal trace file: "
+                + "no recorded events");
 
         final long startTime = events.get(0).getNanoseconds();
 

@@ -36,9 +36,6 @@ public class TraceTabPresenter
     {
         final List<TraceEvent> events = model.getTraceEvents();
 
-        if (events.isEmpty())
-            return;
-
         view.setParseDate(model.getTrace().getStartDate());
         view.setTraceEvents(events);
         view.setStatistics(model.getRuleStats());
