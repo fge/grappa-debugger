@@ -95,7 +95,9 @@ public class TraceTabPresenterTest
 
         presenter.handleParseNodeShow(node);
 
+        verify(view).setParseNodeDetails(anyString());
         //noinspection unchecked
         verify(view).highlightText(anyList(), same(position), anyBoolean());
+        verifyNoMoreInteractions(view);
     }
 }
