@@ -81,7 +81,7 @@ public class TraceTabPresenterTest
 
         presenter.handleParseNodeShow(node);
 
-        verify(view).fillParseNodeDetails(same(node));
+        verify(view).fillParseNodeDetails(same(node), any(InputBuffer.class));
         verify(view).setParseNodeDetails(anyString());
         //noinspection unchecked
         verify(view).highlightText(anyList(), same(position), anyBoolean());

@@ -3,6 +3,7 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.RuleStatistics;
+import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import org.parboiled.support.Position;
 
@@ -25,7 +26,7 @@ public interface TraceTabView
 
     void setParseNodeDetails(String text);
 
-    void fillParseNodeDetails(ParseNode node);
+    void fillParseNodeDetails(ParseNode node, InputBuffer buffer);
 
     void highlightText(List<String> fragments, Position position,
         boolean success);

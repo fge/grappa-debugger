@@ -67,7 +67,7 @@ public final class DefaultTraceTabModel
         traceEvents = relativize(events);
         textInfo = new InputTextInfo(buffer);
         ruleStats = collectStatistics(events);
-        rootNode = new ParseTreeBuilder(traceEvents).getRootNode();
+        rootNode = new ParseTreeBuilder(events).getRootNode();
     }
 
     @Nonnull
@@ -128,7 +128,7 @@ public final class DefaultTraceTabModel
                 sb.append(buf, 0, nrChars);
         }
 
-        return new CharSequenceInputBuffer(sb);
+        return new CharSequenceInputBuffer(sb.toString());
     }
 
     private ParsingRunTrace loadTrace(final FileSystem zipfs)

@@ -68,6 +68,11 @@ public class ParseNode
         return end;
     }
 
+    public long getNanos()
+    {
+        return nanos;
+    }
+
     public List<ParseNode> getChildren()
     {
         return Collections.unmodifiableList(children);

@@ -3,6 +3,8 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.debugger.tracetab.statistics.InputTextInfo;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.RuleStatistics;
+import com.github.fge.grappa.debugger.tracetab.statistics.Utils;
+import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 import javafx.beans.property.SimpleObjectProperty;
@@ -25,22 +27,10 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.LongFunction;
 
 public final class DefaultTraceTabView
     implements TraceTabView
 {
-    private static final LongFunction<String> NANOS_TO_STRING = nanos -> {
-        long value = nanos;
-        final long nrNanoseconds = value % 1000;
-        value /= 1000;
-        final long nrMicroseconds = value % 1000;
-        value /= 1000;
-
-        return String.format("%d ms, %03d.%03d µs", value, nrMicroseconds,
-            nrNanoseconds);
-    };
-
     private final TraceTabUi ui;
 
     private int nrLines;
@@ -147,7 +137,7 @@ public final class DefaultTraceTabView
         tab.setText(newText);
 
         final long nanos = events.get(size - 1).getNanoseconds();
-        ui.totalParseTime.setText(NANOS_TO_STRING.apply(nanos));
+        ui.totalParseTime.setText(Utils.nanosToString(nanos));
     }
 
     @Override
@@ -207,10 +197,34 @@ public final class DefaultTraceTabView
         ui.parseNodeDetails.setText(text);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Override
-    public void fillParseNodeDetails(final ParseNode node)
+    public void fillParseNodeDetails(final ParseNode node,
+        final InputBuffer buffer)
     {
-        // TODO
+        final boolean success = node.isSuccess();
+        Position position;
+
+        ui.parseNodeLevel.setText(String.valueOf(node.getLevel()));
+
+        ui.parseNodeRuleName.setText(node.getRuleName());
+
+        if (success) {
+            ui.parseNodeStatus.setText("SUCCESS");
+            ui.parseNodeStatus.setTextFill(Color.GREEN);
+        } else {
+            ui.parseNodeStatus.setText("FAILURE");
+            ui.parseNodeStatus.setTextFill(Color.RED);
+        }
+
+        position = buffer.getPosition(node.getStart());
+        ui.parseNodeStart.setText(String.format("line %d, column %d",
+            position.getLine(), position.getColumn()));
+        position = buffer.getPosition(node.getEnd());
+        ui.parseNodeEnd.setText(String.format("line %d, column %d",
+            position.getLine(), position.getColumn()));
+
+        ui.parseNodeTime.setText(Utils.nanosToString(node.getNanos()));
     }
 
     @Override
@@ -276,7 +290,7 @@ public final class DefaultTraceTabView
             {
                 super.updateItem(item, empty);
                 //noinspection AutoUnboxing
-                setText(empty ? null : NANOS_TO_STRING.apply(item));
+                setText(empty ? null : Utils.nanosToString(item));
             }
         });
     }

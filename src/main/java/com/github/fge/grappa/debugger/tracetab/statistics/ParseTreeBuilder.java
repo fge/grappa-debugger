@@ -26,11 +26,11 @@ public final class ParseTreeBuilder
     private static ParseNode process(@Untainted final List<TraceEvent> events)
     {
         final Map<Integer, ParseNode> nodes = new HashMap<>();
+        final Map<Integer, Long> times = new HashMap<>();
 
         nodes.put(-1, new ParseNode("WTF", Integer.MIN_VALUE, 0));
 
         int level;
-        long nanos = 0L;
         TraceEventType type;
         ParseNode node;
 
@@ -42,14 +42,15 @@ public final class ParseTreeBuilder
                 node = new ParseNode(event.getMatcher(), event.getIndex(),
                     level);
                 nodes.put(level, node);
-                nanos = event.getNanoseconds();
+                times.put(level, event.getNanoseconds());
                 continue;
             }
 
             node = nodes.get(level);
             node.setEnd(event.getIndex());
             node.setSuccess(type == TraceEventType.MATCH_SUCCESS);
-            node.setNanos(event.getNanoseconds() - nanos);
+            //noinspection AutoUnboxing
+            node.setNanos(event.getNanoseconds() - times.get(level));
             nodes.get(level - 1).addChild(node);
         }
 
