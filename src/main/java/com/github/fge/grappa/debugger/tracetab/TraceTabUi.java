@@ -77,18 +77,6 @@ public class TraceTabUi
     Label totalParseTime;
 
     /*
-     * Input text information
-     */
-    @FXML
-    Label inputNrChars;
-
-    @FXML
-    Label inputNrCodePoints;
-
-    @FXML
-    Label inputNrLines;
-
-    /*
      * Statistics table
      */
     @FXML

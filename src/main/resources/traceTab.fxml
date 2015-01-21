@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -131,32 +130,11 @@
                     <Label fx:id="totalParseTime" GridPane.rowIndex="5"
                         GridPane.columnIndex="1"/>
                 </GridPane>
-                <GridPane>
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES"/>
-                        <ColumnConstraints hgrow="SOMETIMES"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <Label text="Input: number of characters:"
-                        GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <Label fx:id="inputNrChars" GridPane.rowIndex="0"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Input: number of code points:"
-                        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <Label fx:id="inputNrCodePoints" GridPane.rowIndex="1"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Input: number of lines:" GridPane.rowIndex="2"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="inputNrLines" GridPane.rowIndex="2"
-                        GridPane.columnIndex="1"/>
-                </GridPane>
+                <BorderPane>
+                    <center>
+                        <Label text="No information"/>
+                    </center>
+                </BorderPane>
             </SplitPane>
             <TableView fx:id="stats">
                 <columns>
