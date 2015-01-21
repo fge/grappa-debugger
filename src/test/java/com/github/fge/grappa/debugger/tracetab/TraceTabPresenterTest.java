@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab;
 
-import com.github.fge.grappa.debugger.tracetab.statistics.InputTextInfo;
+import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;

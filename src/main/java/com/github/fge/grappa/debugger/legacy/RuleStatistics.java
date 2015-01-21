@@ -1,10 +1,9 @@
-package com.github.fge.grappa.debugger.tracetab.statistics;
+package com.github.fge.grappa.debugger.legacy;
 
 public final class RuleStatistics
 {
     private final String ruleName;
     private int nrInvocations = 0;
-    private long totalTime = 0L;
     private int nrSuccesses = 0;
 
     public RuleStatistics(final String ruleName)
@@ -22,20 +21,14 @@ public final class RuleStatistics
         return nrInvocations;
     }
 
-    public long getTotalTime()
-    {
-        return totalTime;
-    }
-
     public int getNrSuccesses()
     {
         return nrSuccesses;
     }
 
-    public void addInvocation(final long time, final boolean success)
+    public void addInvocation(final boolean success)
     {
         nrInvocations++;
-        totalTime += time;
         if (success)
             nrSuccesses++;
     }

@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.tracetab.statistics;
+package com.github.fge.grappa.debugger.legacy;
 
 import com.github.fge.grappa.debugger.internal.NonFinalForTesting;
 import com.github.parboiled1.grappa.buffers.InputBuffer;

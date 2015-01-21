@@ -2,10 +2,10 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.grappa.debugger.tracetab.statistics.InputTextInfo;
+import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseTreeBuilder;
-import com.github.fge.grappa.debugger.tracetab.statistics.RuleStatistics;
+import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.parboiled1.grappa.buffers.CharSequenceInputBuffer;
 import com.github.parboiled1.grappa.buffers.InputBuffer;
 import com.github.parboiled1.grappa.trace.ParsingRunTrace;
@@ -22,10 +22,8 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,28 +165,23 @@ public final class DefaultTraceTabModel
     private static Collection<RuleStatistics> collectStatistics(
         final Iterable<TraceEvent> events)
     {
-        final Deque<TraceEvent> eventStack = new ArrayDeque<>();
         final Map<String, RuleStatistics> statistics = new LinkedHashMap<>();
 
         TraceEventType type;
-        long nanos;
         String matcher;
 
         for (final TraceEvent event: events) {
             type = event.getType();
-            nanos = event.getNanoseconds();
             matcher = event.getMatcher();
 
             if (type == TraceEventType.BEFORE_MATCH) {
-                eventStack.push(event);
                 statistics.computeIfAbsent(matcher, RuleStatistics::new);
                 continue;
             }
 
             final boolean success = type == TraceEventType.MATCH_SUCCESS;
-            final TraceEvent startEvent = eventStack.pop();
             final RuleStatistics stats = statistics.get(matcher);
-            stats.addInvocation(nanos - startEvent.getNanoseconds(), success);
+            stats.addInvocation(success);
         }
 
         return statistics.values();

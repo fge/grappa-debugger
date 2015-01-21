@@ -18,7 +18,6 @@ package com.github.fge.grappa.debugger.legacy;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
