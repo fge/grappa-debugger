@@ -47,8 +47,10 @@ apply(plugin: "info.solidsoft.pitest");
 group = "com.github.fge";
 version = "0.1.0";
 description = "GUI application to debug grappa parsers";
-sourceCompatibility = "1.8";
-targetCompatibility = "1.8"; // defaults to sourceCompatibility
+
+def javaVersion = JavaVersion.VERSION_1_8;
+sourceCompatibility = javaVersion;
+targetCompatibility = javaVersion; // defaults to sourceCompatibility
 
 /*
  * List of dependencies
@@ -78,6 +80,15 @@ repositories {
     mavenCentral();
     mavenLocal();
 }
+
+task enforceVersion << {
+    def foundVersion = JavaVersion.current();
+    if (foundVersion != javaVersion)
+        throw new IllegalStateException("Wrong java version; required is " +
+            javaVersion + ", but found " + foundVersion);
+}
+
+compileJava.dependsOn(enforceVersion);
 
 /*
  * Necessary! Otherwise TestNG will not be used...
