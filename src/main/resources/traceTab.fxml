@@ -18,7 +18,7 @@
 <?import javafx.scene.control.TitledPane?>
 
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.github.fge.grappa.debugger.tracetab.TraceTabUi">
+    fx:controller="com.github.fge.grappa.debugger.tracetab.TraceTabGui">
     <Tab text="Parse tree" closable="false">
         <SplitPane dividerPositions="0.5">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">

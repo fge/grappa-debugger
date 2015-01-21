@@ -28,33 +28,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class DefaultTraceTabView
-    implements TraceTabView
+public final class JavafxTraceTabGuiController
+    implements TraceTabGuiController
 {
-    private final TraceTabUi ui;
+    private final TraceTabGui gui;
 
     private int nrLines;
 
-    public DefaultTraceTabView(final TraceTabUi ui)
+    public JavafxTraceTabGuiController(final TraceTabGui gui)
     {
-        this.ui = ui;
+        this.gui = gui;
 
         /*
          * Parse tree
          */
-        ui.parseTree.setCellFactory(param -> new ParseNodeCell(ui));
+        gui.parseTree.setCellFactory(param -> new ParseNodeCell(gui));
 
         /*
          * Trace events
          */
-        bindColumn(ui.eventTime, "nanoseconds");
-        setDisplayNanos(ui.eventTime);
-        bindColumn(ui.eventDepth, "level");
-        bindColumn(ui.eventIndex, "index");
-        bindColumn(ui.eventPath, "path");
-        bindColumn(ui.eventRule, "matcher");
-        bindColumn(ui.eventType, "type");
-        ui.eventType.setCellFactory(
+        bindColumn(gui.eventTime, "nanoseconds");
+        setDisplayNanos(gui.eventTime);
+        bindColumn(gui.eventDepth, "level");
+        bindColumn(gui.eventIndex, "index");
+        bindColumn(gui.eventPath, "path");
+        bindColumn(gui.eventRule, "matcher");
+        bindColumn(gui.eventType, "type");
+        gui.eventType.setCellFactory(
             param -> new TableCell<TraceEvent, TraceEventType>()
             {
                 @Override
@@ -81,10 +81,10 @@ public final class DefaultTraceTabView
         /*
          * Statistics
          */
-        bindColumn(ui.statsRule, "ruleName");
-        bindColumn(ui.statsInvocations, "nrInvocations");
-        bindColumn(ui.statsSuccess, "nrSuccesses");
-        ui.statsSuccessRate.setCellValueFactory(
+        bindColumn(gui.statsRule, "ruleName");
+        bindColumn(gui.statsInvocations, "nrInvocations");
+        bindColumn(gui.statsSuccess, "nrSuccesses");
+        gui.statsSuccessRate.setCellValueFactory(
             param -> new SimpleObjectProperty<Double>()
             {
                 @SuppressWarnings("AutoBoxing")
@@ -97,7 +97,7 @@ public final class DefaultTraceTabView
                         / stats.getNrInvocations();
                 }
             });
-        ui.statsSuccessRate.setCellFactory(
+        gui.statsSuccessRate.setCellFactory(
             param -> new TableCell<RuleStatistics, Double>()
             {
                 @Override
@@ -113,8 +113,8 @@ public final class DefaultTraceTabView
     @Override
     public void setTraceEvents(final List<TraceEvent> events)
     {
-        ui.events.getItems().setAll(events);
-        final Tab tab = ui.eventsTab;
+        gui.events.getItems().setAll(events);
+        final Tab tab = gui.eventsTab;
         final int size = events.size();
         @SuppressWarnings("AutoBoxing")
         final String newText = String.format("%s (%d)", tab.getText(), size);
@@ -122,14 +122,14 @@ public final class DefaultTraceTabView
         tab.setText(newText);
 
         final long nanos = events.get(size - 1).getNanoseconds();
-        ui.totalParseTime.setText(Utils.nanosToString(nanos));
+        gui.totalParseTime.setText(Utils.nanosToString(nanos));
     }
 
     @Override
     public void setStatistics(final Collection<RuleStatistics> values)
     {
-        ui.nrRules.setText(String.valueOf(values.size()));
-        ui.stats.getItems().setAll(values);
+        gui.nrRules.setText(String.valueOf(values.size()));
+        gui.stats.getItems().setAll(values);
 
         int totalInvocations = 0;
         int totalSuccesses = 0;
@@ -140,9 +140,9 @@ public final class DefaultTraceTabView
         }
 
         final double pct = 100.0 * totalSuccesses / totalInvocations;
-        ui.totalInvocations.setText(String.valueOf(totalInvocations));
-        ui.totalSuccess.setText(String.valueOf(totalSuccesses));
-        ui.totalSuccessRate.setText(String.format("%.02f%%", pct));
+        gui.totalInvocations.setText(String.valueOf(totalInvocations));
+        gui.totalSuccess.setText(String.valueOf(totalSuccesses));
+        gui.totalSuccessRate.setText(String.format("%.02f%%", pct));
     }
 
     @Override
@@ -152,28 +152,29 @@ public final class DefaultTraceTabView
         // TODO: record tz info in the JSON
         final LocalDateTime time
             = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        ui.parseDate.setText(time.toString());
+        gui.parseDate.setText(time.toString());
     }
 
     @Override
     public void setInputTextInfo(final InputTextInfo textInfo)
     {
         nrLines = textInfo.getNrLines();
-        ui.textInfo.setText("Input text: " + nrLines  + " lines, "
-            + textInfo.getNrChars() + " characters, "
-            + textInfo.getNrCodePoints() + " code points");
+        gui.textInfo.setText(
+            "Input text: " + nrLines + " lines, " + textInfo.getNrChars()
+                + " characters, " + textInfo.getNrCodePoints()
+                + " code points");
     }
 
     @Override
     public void setInputText(final String inputText)
     {
-        ui.inputText.getChildren().setAll(new Text(inputText));
+        gui.inputText.getChildren().setAll(new Text(inputText));
     }
 
     @Override
     public void setParseTree(final ParseNode node)
     {
-        ui.parseTree.setRoot(buildTree(node));
+        gui.parseTree.setRoot(buildTree(node));
     }
 
     @SuppressWarnings("AutoBoxing")
@@ -184,33 +185,33 @@ public final class DefaultTraceTabView
         final boolean success = node.isSuccess();
         Position position;
 
-        ui.parseNodeLevel.setText(String.valueOf(node.getLevel()));
+        gui.parseNodeLevel.setText(String.valueOf(node.getLevel()));
 
-        ui.parseNodeRuleName.setText(node.getRuleName());
+        gui.parseNodeRuleName.setText(node.getRuleName());
 
         if (success) {
-            ui.parseNodeStatus.setText("SUCCESS");
-            ui.parseNodeStatus.setTextFill(Color.GREEN);
+            gui.parseNodeStatus.setText("SUCCESS");
+            gui.parseNodeStatus.setTextFill(Color.GREEN);
         } else {
-            ui.parseNodeStatus.setText("FAILURE");
-            ui.parseNodeStatus.setTextFill(Color.RED);
+            gui.parseNodeStatus.setText("FAILURE");
+            gui.parseNodeStatus.setTextFill(Color.RED);
         }
 
         position = buffer.getPosition(node.getStart());
-        ui.parseNodeStart.setText(String.format("line %d, column %d",
+        gui.parseNodeStart.setText(String.format("line %d, column %d",
             position.getLine(), position.getColumn()));
         position = buffer.getPosition(node.getEnd());
-        ui.parseNodeEnd.setText(String.format("line %d, column %d",
+        gui.parseNodeEnd.setText(String.format("line %d, column %d",
             position.getLine(), position.getColumn()));
 
-        ui.parseNodeTime.setText(Utils.nanosToString(node.getNanos()));
+        gui.parseNodeTime.setText(Utils.nanosToString(node.getNanos()));
     }
 
     @Override
     public void highlightText(final List<String> fragments,
         final Position position, final boolean success)
     {
-        final TextFlow inputText = ui.inputText;
+        final TextFlow inputText = gui.inputText;
         final List<Text> list = new ArrayList<>(3);
 
         Text text;
@@ -247,7 +248,7 @@ public final class DefaultTraceTabView
 
         inputText.getChildren().setAll(list);
 
-        final ScrollPane scroll = ui.inputTextScroll;
+        final ScrollPane scroll = gui.inputTextScroll;
         double line = position.getLine();
         if (line != nrLines)
             line--;
@@ -277,7 +278,7 @@ public final class DefaultTraceTabView
     private static final class ParseNodeCell
         extends TreeCell<ParseNode>
     {
-        private ParseNodeCell(final TraceTabUi ui)
+        private ParseNodeCell(final TraceTabGui ui)
         {
             setEditable(false);
             setOnMouseClicked(event -> {

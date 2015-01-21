@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
+import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.parboiled1.grappa.trace.TraceEvent;
 import com.github.parboiled1.grappa.trace.TraceEventType;
 import javafx.fxml.FXML;
@@ -11,11 +11,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
-public class TraceTabUi
+public class TraceTabGui
 {
     private TraceTabPresenter presenter;
 
@@ -42,9 +41,6 @@ public class TraceTabUi
 
     @FXML
     Label parseNodeTime;
-
-    @FXML
-    TextArea parseNodeDetails;
 
     @FXML
     Label textInfo;

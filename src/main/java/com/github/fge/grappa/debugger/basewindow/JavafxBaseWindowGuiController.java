@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
-import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabView;
+import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabGuiController;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
-import com.github.fge.grappa.debugger.tracetab.TraceTabUi;
-import com.github.fge.grappa.debugger.tracetab.TraceTabView;
+import com.github.fge.grappa.debugger.tracetab.TraceTabGui;
+import com.github.fge.grappa.debugger.tracetab.TraceTabGuiController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
@@ -15,29 +15,29 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public final class DefaultBaseWindowView
-    implements BaseWindowView
+public final class JavafxBaseWindowGuiController
+    implements BaseWindowGuiController
 {
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
     private static final URL TRACE_TAB_FXML;
 
     static {
-        TRACE_TAB_FXML = BaseWindowView.class.getResource("/traceTab.fxml");
+        TRACE_TAB_FXML = BaseWindowGuiController.class.getResource("/traceTab.fxml");
         if (TRACE_TAB_FXML == null)
             throw new ExceptionInInitializerError("failed to load tab fxml");
     }
 
     private final Stage stage;
     private final AlertFactory alertFactory;
-    private final BaseWindowUi ui;
+    private final BaseWindowGui gui;
 
-    public DefaultBaseWindowView(final Stage stage,
-        final AlertFactory alertFactory, final BaseWindowUi ui)
+    public JavafxBaseWindowGuiController(final Stage stage,
+        final AlertFactory alertFactory, final BaseWindowGui gui)
     {
         this.stage = stage;
         this.alertFactory = alertFactory;
-        this.ui = ui;
+        this.gui = gui;
     }
 
     @Override
@@ -52,10 +52,10 @@ public final class DefaultBaseWindowView
                 "Unable to create tab", oops);
             return;
         }
-        ui.pane.setCenter(pane);
-        final TraceTabUi tabUi = loader.getController();
-        final TraceTabView view = new DefaultTraceTabView(tabUi);
-        presenter.setView(view);
+        gui.pane.setCenter(pane);
+        final TraceTabGui tabUi = loader.getController();
+        final TraceTabGuiController view = new JavafxTraceTabGuiController(tabUi);
+        presenter.setGuiController(view);
         tabUi.init(presenter);
     }
 
@@ -83,6 +83,6 @@ public final class DefaultBaseWindowView
     @Override
     public void setLabelText(final String text)
     {
-        ui.label.setText(text);
+        gui.label.setText(text);
     }
 }

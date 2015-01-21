@@ -23,22 +23,22 @@ import static org.mockito.Mockito.when;
 public class BaseWindowPresenterTest
 {
     private BaseWindowFactory factory;
-    private BaseWindowView view;
+    private BaseWindowGuiController guiController;
     private BaseWindowPresenter presenter;
 
     @BeforeMethod
     public void init()
     {
         factory = mock(BaseWindowFactory.class);
-        view = mock(BaseWindowView.class);
-        presenter = spy(new BaseWindowPresenter(factory, view));
+        guiController = mock(BaseWindowGuiController.class);
+        presenter = spy(new BaseWindowPresenter(factory, guiController));
     }
 
     @Test
     public void handleCloseWindowTest()
     {
         presenter.handleCloseWindow();
-        verifyZeroInteractions(view);
+        verifyZeroInteractions(guiController);
         verify(factory).close(presenter);
     }
 
@@ -46,20 +46,20 @@ public class BaseWindowPresenterTest
     public void handleNewWindowTest()
     {
         presenter.handleNewWindow();
-        verifyZeroInteractions(view);
+        verifyZeroInteractions(guiController);
         verify(factory).createWindow();
     }
 
     @Test
     public void handleLoadFileNoFileTest()
     {
-        when(view.chooseFile()).thenReturn(null);
+        when(guiController.chooseFile()).thenReturn(null);
 
         presenter.handleLoadFile();
 
-        final InOrder inOrder = inOrder(factory, view);
+        final InOrder inOrder = inOrder(factory, guiController);
 
-        inOrder.verify(view).chooseFile();
+        inOrder.verify(guiController).chooseFile();
         inOrder.verifyNoMoreInteractions();
     }
 
@@ -71,17 +71,17 @@ public class BaseWindowPresenterTest
         final Path path = mock(Path.class);
         final TraceTabPresenter tabPresenter = mock(TraceTabPresenter.class);
 
-        when(view.chooseFile()).thenReturn(file);
+        when(guiController.chooseFile()).thenReturn(file);
         when(file.toPath()).thenReturn(path);
         doReturn(tabPresenter).when(presenter).loadFile(same(path));
 
         presenter.handleLoadFile();
 
-        final InOrder inOrder = inOrder(factory, view, tabPresenter);
-        inOrder.verify(view).chooseFile();
-        inOrder.verify(view).injectTab(same(tabPresenter));
+        final InOrder inOrder = inOrder(factory, guiController, tabPresenter);
+        inOrder.verify(guiController).chooseFile();
+        inOrder.verify(guiController).injectTab(same(tabPresenter));
         inOrder.verify(tabPresenter).loadTrace();
-        inOrder.verify(view).setWindowTitle(anyString());
+        inOrder.verify(guiController).setWindowTitle(anyString());
         inOrder.verifyNoMoreInteractions();
     }
 }

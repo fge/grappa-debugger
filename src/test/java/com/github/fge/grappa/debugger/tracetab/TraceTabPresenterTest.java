@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 public class TraceTabPresenterTest
 {
-    private TraceTabView view;
+    private TraceTabGuiController guiController;
     private TraceTabModel model;
     private TraceTabPresenter presenter;
     private InputBuffer buffer;
@@ -36,12 +36,12 @@ public class TraceTabPresenterTest
     @BeforeMethod
     public void init()
     {
-        view = mock(TraceTabView.class);
+        guiController = mock(TraceTabGuiController.class);
         model = mock(TraceTabModel.class);
         buffer = mock(InputBuffer.class);
         when(model.getInputBuffer()).thenReturn(buffer);
         presenter = new TraceTabPresenter(model);
-        presenter.setView(view);
+        presenter.setGuiController(guiController);
     }
 
     // FIXME: too complicated
@@ -61,13 +61,13 @@ public class TraceTabPresenterTest
 
         presenter.loadTrace();
 
-        verify(view).setInputText(anyString());
-        verify(view).setInputTextInfo(any(InputTextInfo.class));
-        verify(view).setParseDate(fakeDate);
-        verify(view).setParseTree(any(ParseNode.class));
-        verify(view).setStatistics(anyCollection());
-        verify(view).setTraceEvents(same(events));
-        verifyNoMoreInteractions(view);
+        verify(guiController).setInputText(anyString());
+        verify(guiController).setInputTextInfo(any(InputTextInfo.class));
+        verify(guiController).setParseDate(fakeDate);
+        verify(guiController).setParseTree(any(ParseNode.class));
+        verify(guiController).setStatistics(anyCollection());
+        verify(guiController).setTraceEvents(same(events));
+        verifyNoMoreInteractions(guiController);
     }
 
     @Test
@@ -81,9 +81,11 @@ public class TraceTabPresenterTest
 
         presenter.handleParseNodeShow(node);
 
-        verify(view).fillParseNodeDetails(same(node), any(InputBuffer.class));
+        verify(guiController).fillParseNodeDetails(same(node),
+            any(InputBuffer.class));
         //noinspection unchecked
-        verify(view).highlightText(anyList(), same(position), anyBoolean());
-        verifyNoMoreInteractions(view);
+        verify(guiController).highlightText(anyList(), same(position),
+            anyBoolean());
+        verifyNoMoreInteractions(guiController);
     }
 }
