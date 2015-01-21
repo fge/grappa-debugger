@@ -24,10 +24,7 @@
         <SplitPane dividerPositions="0.5">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                 <TreeView fx:id="parseTree" editable="false"/>
-                <!-- TODO: replace with something else -->
                 <TitledPane collapsible="true" text="Node information">
-                    <TextArea fx:id="parseNodeDetails" editable="false"
-                        style="-fx-font-family: monospace" visible="false"/>
                     <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
                         <padding>
                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

@@ -176,12 +176,6 @@ public final class DefaultTraceTabView
         ui.parseTree.setRoot(buildTree(node));
     }
 
-    @Override
-    public void setParseNodeDetails(final String text)
-    {
-        ui.parseNodeDetails.setText(text);
-    }
-
     @SuppressWarnings("AutoBoxing")
     @Override
     public void fillParseNodeDetails(final ParseNode node,
