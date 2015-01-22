@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -82,6 +84,32 @@ public class BaseWindowPresenterTest
         inOrder.verify(guiController).injectTab(same(tabPresenter));
         inOrder.verify(tabPresenter).loadTrace();
         inOrder.verify(guiController).setWindowTitle(anyString());
+        inOrder.verifyNoMoreInteractions();
+
+        assertThat(presenter.tabPresenter).isSameAs(tabPresenter);
+    }
+
+    @Test(dependsOnMethods = "handleLoadFileWithFileTest")
+    public void handleLoadFileTwiceTest()
+        throws IOException
+    {
+        final BaseWindowPresenter otherPresenter
+            = mock(BaseWindowPresenter.class);
+        final TraceTabPresenter tabPresenter = mock(TraceTabPresenter.class);
+
+        when(factory.createWindow()).thenReturn(otherPresenter);
+        doNothing().when(otherPresenter).handleLoadFile();
+
+        presenter.tabPresenter = tabPresenter;
+
+        presenter.handleLoadFile();
+
+        verifyZeroInteractions(guiController, tabPresenter);
+
+        final InOrder inOrder = inOrder(factory, otherPresenter);
+
+        inOrder.verify(factory).createWindow();
+        inOrder.verify(otherPresenter).handleLoadFile();
         inOrder.verifyNoMoreInteractions();
     }
 }

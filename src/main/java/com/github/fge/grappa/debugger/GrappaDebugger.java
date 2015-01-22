@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -52,12 +53,13 @@ public final class GrappaDebugger
     }
 
     @Override
-    public void createWindow()
+    @Nullable
+    public BaseWindowPresenter createWindow()
     {
-        createWindow(new Stage());
+        return createWindow(new Stage());
     }
 
-    private void createWindow(final Stage stage)
+    private BaseWindowPresenter createWindow(final Stage stage)
     {
         final FXMLLoader loader = new FXMLLoader(BASE_WINDOW_FXML);
         final Pane pane;
@@ -66,7 +68,7 @@ public final class GrappaDebugger
         } catch (IOException e) {
             alertFactory.showError("Window creation error",
                 "Unable to create window", e);
-            return;
+            return null;
         }
 
         final BaseWindowGui ui = loader.getController();
@@ -83,6 +85,8 @@ public final class GrappaDebugger
         windows.put(presenter, stage);
 
         stage.show();
+
+        return presenter;
     }
 
     @Override

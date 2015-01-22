@@ -15,6 +15,9 @@ public class BaseWindowPresenter
     private final BaseWindowFactory windowFactory;
     private final BaseWindowGuiController guiController;
 
+    @VisibleForTesting
+    TraceTabPresenter tabPresenter;
+
     public BaseWindowPresenter(final BaseWindowFactory windowFactory,
         final BaseWindowGuiController guiController)
     {
@@ -34,28 +37,37 @@ public class BaseWindowPresenter
 
     public void handleLoadFile()
     {
+        if (tabPresenter != null) {
+            final BaseWindowPresenter window = windowFactory.createWindow();
+            if (window != null)
+                window.handleLoadFile();
+            return;
+        }
+
         final File file = guiController.chooseFile();
 
         if (file == null)
             return;
 
-        final TraceTabPresenter presenter;
+        final TraceTabPresenter newTabPresenter;
         final Path path = file.toPath();
 
         guiController.setLabelText("Please wait...");
 
         try {
-            presenter = loadFile(path);
+            newTabPresenter = loadFile(path);
         } catch (IOException e) {
             guiController.showError("Trace file error",
                 "Unable to load trace file", e);
             return;
         }
 
-        guiController.injectTab(presenter);
-        presenter.loadTrace();
+        guiController.injectTab(newTabPresenter);
+        newTabPresenter.loadTrace();
         guiController.setWindowTitle("Grappa debugger: "
             + path.toAbsolutePath());
+
+        tabPresenter = newTabPresenter;
     }
 
     @VisibleForTesting
