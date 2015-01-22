@@ -2,8 +2,8 @@ package com.github.fge.grappa.debugger;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.basewindow.BaseWindowDisplay;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowView;
 import com.github.fge.grappa.debugger.basewindow.BaseWindowPresenter;
+import com.github.fge.grappa.debugger.basewindow.BaseWindowView;
 import com.github.fge.grappa.debugger.basewindow.JavafxBaseWindowView;
 import javafx.application.Application;
 import javafx.application.Platform;

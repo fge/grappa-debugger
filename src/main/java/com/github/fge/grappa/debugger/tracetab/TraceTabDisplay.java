@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.legacy.tracetab;
+package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
@@ -14,9 +14,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
-public class LegacyTraceTabDisplay
+public class TraceTabDisplay
 {
-    private LegacyTraceTabPresenter presenter;
+    private TraceTabPresenter presenter;
 
     /*
      * Tree tab
@@ -120,7 +120,7 @@ public class LegacyTraceTabDisplay
     @FXML
     TableColumn<LegacyTraceEvent, String> eventPath;
 
-    public void init(final LegacyTraceTabPresenter presenter)
+    public void init(final TraceTabPresenter presenter)
     {
         this.presenter = presenter;
     }

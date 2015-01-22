@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.BaseWindowFactory;
-import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -69,7 +69,8 @@ public class BaseWindowPresenterTest
         throws IOException
     {
         final Path path = mock(Path.class);
-        final TraceTabPresenter tabPresenter = mock(TraceTabPresenter.class);
+        final LegacyTraceTabPresenter
+            tabPresenter = mock(LegacyTraceTabPresenter.class);
 
         when(view.chooseFile()).thenReturn(path);
         doReturn(tabPresenter).when(presenter).loadFile(same(path));
@@ -92,7 +93,8 @@ public class BaseWindowPresenterTest
     {
         final BaseWindowPresenter otherPresenter
             = mock(BaseWindowPresenter.class);
-        final TraceTabPresenter tabPresenter = mock(TraceTabPresenter.class);
+        final LegacyTraceTabPresenter
+            tabPresenter = mock(LegacyTraceTabPresenter.class);
 
         when(factory.createWindow()).thenReturn(otherPresenter);
         doNothing().when(otherPresenter).handleLoadFile();

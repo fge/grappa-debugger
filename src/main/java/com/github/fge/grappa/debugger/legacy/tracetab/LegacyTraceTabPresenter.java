@@ -12,7 +12,7 @@ import org.parboiled.support.Position;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TraceTabPresenter
+public class LegacyTraceTabPresenter
 {
     private static final CharEscaper ESCAPER = new TracingCharEscaper();
 
@@ -21,7 +21,7 @@ public class TraceTabPresenter
 
     private LegacyTraceTabView view;
 
-    public TraceTabPresenter(final LegacyTraceTabModel model)
+    public LegacyTraceTabPresenter(final LegacyTraceTabModel model)
     {
         this.model = model;
         buffer = model.getInputBuffer();

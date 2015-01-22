@@ -4,7 +4,7 @@ import com.github.fge.grappa.debugger.BaseWindowFactory;
 import com.github.fge.grappa.debugger.legacy.tracetab
     .DefaultLegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
-import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class BaseWindowPresenter
     private final BaseWindowView view;
 
     @VisibleForTesting
-    TraceTabPresenter tabPresenter;
+    LegacyTraceTabPresenter tabPresenter;
 
     public BaseWindowPresenter(final BaseWindowFactory windowFactory,
         final BaseWindowView view)
@@ -57,7 +57,7 @@ public class BaseWindowPresenter
         if (path == null)
             return;
 
-        final TraceTabPresenter newTabPresenter;
+        final LegacyTraceTabPresenter newTabPresenter;
 
         view.setLabelText("Please wait...");
 
@@ -78,7 +78,7 @@ public class BaseWindowPresenter
     }
 
     @VisibleForTesting
-    TraceTabPresenter loadFile(final Path path)
+    LegacyTraceTabPresenter loadFile(final Path path)
         throws IOException
     {
         final URI uri = URI.create("jar:" + path.toUri());
@@ -88,7 +88,7 @@ public class BaseWindowPresenter
         ) {
             final LegacyTraceTabModel model
                 = new DefaultLegacyTraceTabModel(zipfs);
-            return new TraceTabPresenter(model);
+            return new LegacyTraceTabPresenter(model);
         }
     }
 }

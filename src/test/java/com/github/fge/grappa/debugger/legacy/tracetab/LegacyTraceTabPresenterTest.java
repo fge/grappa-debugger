@@ -25,11 +25,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-public class TraceTabPresenterTest
+public class LegacyTraceTabPresenterTest
 {
     private LegacyTraceTabView view;
     private LegacyTraceTabModel model;
-    private TraceTabPresenter presenter;
+    private LegacyTraceTabPresenter presenter;
     private InputBuffer buffer;
 
     @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class TraceTabPresenterTest
         model = mock(LegacyTraceTabModel.class);
         buffer = mock(InputBuffer.class);
         when(model.getInputBuffer()).thenReturn(buffer);
-        presenter = new TraceTabPresenter(model);
+        presenter = new LegacyTraceTabPresenter(model);
         presenter.setView(view);
     }
 

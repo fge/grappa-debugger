@@ -11,13 +11,13 @@ import static org.mockito.Mockito.verify;
 
 public class LegacyTraceTabDisplayTest
 {
-    private TraceTabPresenter presenter;
+    private LegacyTraceTabPresenter presenter;
     private LegacyTraceTabDisplay display;
 
     @BeforeMethod
     public void init()
     {
-        presenter = mock(TraceTabPresenter.class);
+        presenter = mock(LegacyTraceTabPresenter.class);
         display = new LegacyTraceTabDisplay();
         display.init(presenter);
     }

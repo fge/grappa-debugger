@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.basewindow;
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.legacy.tracetab.JavafxLegacyTraceTabView;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay;
-import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -44,7 +44,7 @@ public final class JavafxBaseWindowView
     }
 
     @Override
-    public void injectTab(final TraceTabPresenter presenter)
+    public void injectTab(final LegacyTraceTabPresenter presenter)
     {
         final FXMLLoader loader = new FXMLLoader(TRACE_TAB_FXML);
         final Node pane;

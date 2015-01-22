@@ -1,12 +1,12 @@
 package com.github.fge.grappa.debugger.basewindow;
 
-import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 
 import java.nio.file.Path;
 
 public interface BaseWindowView
 {
-    void injectTab(TraceTabPresenter presenter);
+    void injectTab(LegacyTraceTabPresenter presenter);
 
     Path chooseFile();
 
