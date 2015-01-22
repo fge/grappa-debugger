@@ -28,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @SuppressWarnings("TypeMayBeWeakened")
 @ParametersAreNonnullByDefault
-public final class TraceEvent
+public final class LegacyTraceEvent
 {
     private final TraceEventType type;
     private long nanoseconds;
@@ -38,31 +38,31 @@ public final class TraceEvent
     private final int level;
 
     @SuppressWarnings("ConstantConditions")
-    public static TraceEvent before(final MatcherContext<?> context)
+    public static LegacyTraceEvent before(final MatcherContext<?> context)
     {
-        return new TraceEvent(TraceEventType.BEFORE_MATCH,
+        return new LegacyTraceEvent(TraceEventType.BEFORE_MATCH,
             context.getCurrentIndex(), context.getMatcher().toString(),
             context.getPath().toString(), context.getLevel());
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static TraceEvent failure(final MatcherContext<?> context)
+    public static LegacyTraceEvent failure(final MatcherContext<?> context)
     {
-        return new TraceEvent(TraceEventType.MATCH_FAILURE,
+        return new LegacyTraceEvent(TraceEventType.MATCH_FAILURE,
             context.getCurrentIndex(), context.getMatcher().toString(),
             context.getPath().toString(), context.getLevel());
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static TraceEvent success(final MatcherContext<?> context)
+    public static LegacyTraceEvent success(final MatcherContext<?> context)
     {
-        return new TraceEvent(TraceEventType.MATCH_SUCCESS,
+        return new LegacyTraceEvent(TraceEventType.MATCH_SUCCESS,
             context.getCurrentIndex(), context.getMatcher().toString(),
             context.getPath().toString(), context.getLevel());
     }
 
     @JsonCreator
-    public TraceEvent(@JsonProperty("type") final TraceEventType type,
+    public LegacyTraceEvent(@JsonProperty("type") final TraceEventType type,
         @JsonProperty("nanoseconds") final long nanoseconds,
         @JsonProperty("index") final int index,
         @JsonProperty("matcher") final String matcher,
@@ -78,7 +78,7 @@ public final class TraceEvent
     }
 
     @JsonIgnore
-    private TraceEvent(final TraceEventType type, final int index,
+    private LegacyTraceEvent(final TraceEventType type, final int index,
         final String matcher, final String path, final int level)
     {
         this.type = type;
@@ -90,7 +90,7 @@ public final class TraceEvent
 
     @JsonIgnore
     @SuppressWarnings("ConstantConditions")
-    public TraceEvent(final TraceEventType type,
+    public LegacyTraceEvent(final TraceEventType type,
         final MatcherContext<?> context)
     {
         nanoseconds = System.nanoTime();

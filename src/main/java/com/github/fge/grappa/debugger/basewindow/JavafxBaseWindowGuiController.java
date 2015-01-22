@@ -2,9 +2,9 @@ package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabGuiController;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import com.github.fge.grappa.debugger.tracetab.TraceTabGui;
 import com.github.fge.grappa.debugger.tracetab.TraceTabGuiController;
+import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
@@ -18,12 +18,14 @@ import java.net.URL;
 public final class JavafxBaseWindowGuiController
     implements BaseWindowGuiController
 {
+    private static final Class<BaseWindowGuiController> MYSELF
+        = BaseWindowGuiController.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
     private static final URL TRACE_TAB_FXML;
 
     static {
-        TRACE_TAB_FXML = BaseWindowGuiController.class.getResource("/traceTab.fxml");
+        TRACE_TAB_FXML = MYSELF.getResource("/traceTab.fxml");
         if (TRACE_TAB_FXML == null)
             throw new ExceptionInInitializerError("failed to load tab fxml");
     }
@@ -48,8 +50,8 @@ public final class JavafxBaseWindowGuiController
         try {
             pane = loader.load();
         } catch (IOException oops) {
-            alertFactory.showError("Tab creation error",
-                "Unable to create tab", oops);
+            alertFactory.showError("Tab creation error", "Unable to create tab",
+                oops);
             return;
         }
         gui.pane.setCenter(pane);

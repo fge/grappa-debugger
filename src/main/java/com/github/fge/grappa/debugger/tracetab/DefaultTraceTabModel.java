@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
+import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.legacy.TraceEvent;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseTreeBuilder;
 import com.github.fge.grappa.trace.TraceEventType;
@@ -44,7 +44,7 @@ public final class DefaultTraceTabModel
     private final ParsingRunTrace trace;
     private final InputBuffer buffer;
 
-    private final List<TraceEvent> traceEvents;
+    private final List<LegacyTraceEvent> traceEvents;
     private final InputTextInfo textInfo;
     private final Collection<RuleStatistics> ruleStats;
     private final ParseNode rootNode;
@@ -61,7 +61,7 @@ public final class DefaultTraceTabModel
             buffer = loadBuffer(zipfs);
         }
 
-        final List<TraceEvent> events = trace.getEvents();
+        final List<LegacyTraceEvent> events = trace.getEvents();
         traceEvents = relativize(events);
         textInfo = new InputTextInfo(buffer);
         ruleStats = collectStatistics(events);
@@ -85,7 +85,7 @@ public final class DefaultTraceTabModel
     @Untainted
     @Nonnull
     @Override
-    public List<TraceEvent> getTraceEvents()
+    public List<LegacyTraceEvent> getTraceEvents()
     {
         return Collections.unmodifiableList(traceEvents);
     }
@@ -141,7 +141,8 @@ public final class DefaultTraceTabModel
         }
     }
 
-    private static List<TraceEvent> relativize(final List<TraceEvent> events)
+    private static List<LegacyTraceEvent> relativize(
+        final List<LegacyTraceEvent> events)
     {
         if (events.isEmpty())
             throw new IllegalStateException("illegal trace file: "
@@ -154,23 +155,23 @@ public final class DefaultTraceTabModel
             .collect(Collectors.toList());
     }
 
-    private static TraceEvent timeRelative(final TraceEvent orig,
+    private static LegacyTraceEvent timeRelative(final LegacyTraceEvent orig,
         final long startTime)
     {
-        return new TraceEvent(orig.getType(), orig.getNanoseconds() - startTime,
-            orig.getIndex(), orig.getMatcher(), orig.getPath(),
-            orig.getLevel());
+        return new LegacyTraceEvent(orig.getType(),
+            orig.getNanoseconds() - startTime, orig.getIndex(),
+            orig.getMatcher(), orig.getPath(), orig.getLevel());
     }
 
     private static Collection<RuleStatistics> collectStatistics(
-        final Iterable<TraceEvent> events)
+        final Iterable<LegacyTraceEvent> events)
     {
         final Map<String, RuleStatistics> statistics = new LinkedHashMap<>();
 
         TraceEventType type;
         String matcher;
 
-        for (final TraceEvent event: events) {
+        for (final LegacyTraceEvent event: events) {
             type = event.getType();
             matcher = event.getMatcher();
 

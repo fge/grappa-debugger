@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.TraceEvent;
+import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.TracingCharEscaper;
 import com.google.common.annotations.VisibleForTesting;
@@ -34,7 +34,7 @@ public class TraceTabPresenter
 
     public void loadTrace()
     {
-        final List<TraceEvent> events = model.getTraceEvents();
+        final List<LegacyTraceEvent> events = model.getTraceEvents();
 
         guiController.setParseDate(model.getTrace().getStartDate());
         guiController.setTraceEvents(events);

@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
+import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.legacy.TraceEvent;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import javafx.fxml.FXML;
@@ -100,25 +100,25 @@ public class TraceTabGui
      * Events table
      */
     @FXML
-    TableView<TraceEvent> events;
+    TableView<LegacyTraceEvent> events;
 
     @FXML
-    TableColumn<TraceEvent, Long> eventTime;
+    TableColumn<LegacyTraceEvent, Long> eventTime;
 
     @FXML
-    TableColumn<TraceEvent, String> eventRule;
+    TableColumn<LegacyTraceEvent, String> eventRule;
 
     @FXML
-    TableColumn<TraceEvent, Integer> eventIndex;
+    TableColumn<LegacyTraceEvent, Integer> eventIndex;
 
     @FXML
-    TableColumn<TraceEvent, TraceEventType> eventType;
+    TableColumn<LegacyTraceEvent, TraceEventType> eventType;
 
     @FXML
-    TableColumn<TraceEvent, Integer> eventDepth;
+    TableColumn<LegacyTraceEvent, Integer> eventDepth;
 
     @FXML
-    TableColumn<TraceEvent, String> eventPath;
+    TableColumn<LegacyTraceEvent, String> eventPath;
 
     public void init(final TraceTabPresenter presenter)
     {

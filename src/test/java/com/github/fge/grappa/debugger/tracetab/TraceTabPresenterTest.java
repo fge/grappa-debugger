@@ -2,8 +2,8 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
+import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
-import com.github.fge.grappa.debugger.legacy.TraceEvent;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import org.parboiled.support.Position;
@@ -50,9 +50,9 @@ public class TraceTabPresenterTest
     public void loadTraceTest()
     {
         final long fakeDate = 87238987982713987L;
-        final TraceEvent fakeEvent = new TraceEvent(TraceEventType.BEFORE_MATCH,
-            0L, 0, "", "", 0);
-        final List<TraceEvent> events = Collections.singletonList(fakeEvent);
+        final LegacyTraceEvent fakeEvent =
+            new LegacyTraceEvent(TraceEventType.BEFORE_MATCH, 0L, 0, "", "", 0);
+        final List<LegacyTraceEvent> events = Collections.singletonList(fakeEvent);
 
         final ParsingRunTrace trace = new ParsingRunTrace(fakeDate, events);
 

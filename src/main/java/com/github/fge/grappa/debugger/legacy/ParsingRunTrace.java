@@ -25,11 +25,11 @@ import java.util.List;
 public final class ParsingRunTrace
 {
     private final long startDate;
-    private final List<TraceEvent> events;
+    private final List<LegacyTraceEvent> events;
 
     @JsonCreator
     public ParsingRunTrace(@JsonProperty("startDate") final long startDate,
-        @JsonProperty("events") final List<TraceEvent> events)
+        @JsonProperty("events") final List<LegacyTraceEvent> events)
     {
         this.startDate = startDate;
         this.events = ImmutableList.copyOf(events);
@@ -40,7 +40,7 @@ public final class ParsingRunTrace
         return startDate;
     }
 
-    public List<TraceEvent> getEvents()
+    public List<LegacyTraceEvent> getEvents()
     {
         return events;
     }

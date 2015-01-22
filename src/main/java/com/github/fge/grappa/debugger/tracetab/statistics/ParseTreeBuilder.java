@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab.statistics;
 
 
-import com.github.fge.grappa.debugger.legacy.TraceEvent;
+import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Untainted;
@@ -13,7 +13,7 @@ public final class ParseTreeBuilder
 {
     private final ParseNode rootNode;
 
-    public ParseTreeBuilder(final List<TraceEvent> events)
+    public ParseTreeBuilder(final List<LegacyTraceEvent> events)
     {
         rootNode = process(events);
     }
@@ -24,7 +24,8 @@ public final class ParseTreeBuilder
     }
 
     @SuppressWarnings({ "AutoBoxing", "TypeMayBeWeakened" })
-    private static ParseNode process(@Untainted final List<TraceEvent> events)
+    private static ParseNode process(
+        @Untainted final List<LegacyTraceEvent> events)
     {
         final Map<Integer, ParseNode> nodes = new HashMap<>();
         final Map<Integer, Long> times = new HashMap<>();
@@ -35,7 +36,7 @@ public final class ParseTreeBuilder
         TraceEventType type;
         ParseNode node;
 
-        for (final TraceEvent event: events) {
+        for (final LegacyTraceEvent event: events) {
             level = event.getLevel();
             type = event.getType();
 

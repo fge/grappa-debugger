@@ -2,8 +2,8 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
+import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.legacy.TraceEvent;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEventType;
@@ -55,7 +55,7 @@ public final class JavafxTraceTabGuiController
         bindColumn(gui.eventRule, "matcher");
         bindColumn(gui.eventType, "type");
         gui.eventType.setCellFactory(
-            param -> new TableCell<TraceEvent, TraceEventType>()
+            param -> new TableCell<LegacyTraceEvent, TraceEventType>()
             {
                 @Override
                 protected void updateItem(final TraceEventType item,
@@ -111,7 +111,7 @@ public final class JavafxTraceTabGuiController
     }
 
     @Override
-    public void setTraceEvents(final List<TraceEvent> events)
+    public void setTraceEvents(final List<LegacyTraceEvent> events)
     {
         gui.events.getItems().setAll(events);
         final Tab tab = gui.eventsTab;
