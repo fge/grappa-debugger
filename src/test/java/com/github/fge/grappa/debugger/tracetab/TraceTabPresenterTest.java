@@ -52,7 +52,8 @@ public class TraceTabPresenterTest
         final long fakeDate = 87238987982713987L;
         final LegacyTraceEvent fakeEvent =
             new LegacyTraceEvent(TraceEventType.BEFORE_MATCH, 0L, 0, "", "", 0);
-        final List<LegacyTraceEvent> events = Collections.singletonList(fakeEvent);
+        final List<LegacyTraceEvent> events
+            = Collections.singletonList(fakeEvent);
 
         final ParsingRunTrace trace = new ParsingRunTrace(fakeDate, events);
 

@@ -90,5 +90,4 @@ public final class GrappaDebugger
     {
         windows.remove(presenter).close();
     }
-
 }
