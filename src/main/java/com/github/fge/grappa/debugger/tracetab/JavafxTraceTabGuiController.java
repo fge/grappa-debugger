@@ -1,12 +1,12 @@
 package com.github.fge.grappa.debugger.tracetab;
 
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
+import com.github.fge.grappa.debugger.legacy.TraceEvent;
+import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.Utils;
-import com.github.parboiled1.grappa.buffers.InputBuffer;
-import com.github.parboiled1.grappa.trace.TraceEvent;
-import com.github.parboiled1.grappa.trace.TraceEventType;
+import com.github.fge.grappa.trace.TraceEventType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ScrollPane;

@@ -19,7 +19,7 @@ package com.github.fge.grappa.debugger.legacy;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.parboiled1.grappa.trace.TraceEventType;
+import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.base.MoreObjects;
 import org.parboiled.MatcherContext;
 

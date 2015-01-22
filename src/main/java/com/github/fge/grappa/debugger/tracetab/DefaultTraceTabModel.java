@@ -2,15 +2,15 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
+import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
+import com.github.fge.grappa.debugger.legacy.RuleStatistics;
+import com.github.fge.grappa.debugger.legacy.TraceEvent;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.statistics.ParseTreeBuilder;
-import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.parboiled1.grappa.buffers.CharSequenceInputBuffer;
-import com.github.parboiled1.grappa.buffers.InputBuffer;
-import com.github.parboiled1.grappa.trace.ParsingRunTrace;
-import com.github.parboiled1.grappa.trace.TraceEvent;
-import com.github.parboiled1.grappa.trace.TraceEventType;
+import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Untainted;

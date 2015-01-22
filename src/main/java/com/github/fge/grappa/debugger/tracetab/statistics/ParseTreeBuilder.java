@@ -1,7 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab.statistics;
 
-import com.github.parboiled1.grappa.trace.TraceEvent;
-import com.github.parboiled1.grappa.trace.TraceEventType;
+
+import com.github.fge.grappa.debugger.legacy.TraceEvent;
+import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Untainted;
 import java.util.HashMap;
