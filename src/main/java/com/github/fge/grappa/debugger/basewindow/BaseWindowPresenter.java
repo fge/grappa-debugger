@@ -1,16 +1,25 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.BaseWindowFactory;
-import com.github.fge.grappa.debugger.legacy.tracetab.DefaultLegacyTraceTabModel;
+import com.github.fge.grappa.debugger.legacy.tracetab
+    .DefaultLegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Map;
 
 public class BaseWindowPresenter
 {
+    private static final Map<String, ?> ZIPFS_ENV
+        = Collections.singletonMap("readonly", "true");
+
     private final BaseWindowFactory windowFactory;
     private final BaseWindowView view;
 
@@ -72,7 +81,14 @@ public class BaseWindowPresenter
     TraceTabPresenter loadFile(final Path path)
         throws IOException
     {
-        final LegacyTraceTabModel model = new DefaultLegacyTraceTabModel(path.toRealPath());
-        return new TraceTabPresenter(model);
+        final URI uri = URI.create("jar:" + path.toUri());
+
+        try (
+            final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
+        ) {
+            final LegacyTraceTabModel model
+                = new DefaultLegacyTraceTabModel(zipfs);
+            return new TraceTabPresenter(model);
+        }
     }
 }

@@ -17,9 +17,7 @@ import javax.annotation.Untainted;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -33,8 +31,6 @@ import java.util.stream.Collectors;
 public final class DefaultLegacyTraceTabModel
     implements LegacyTraceTabModel
 {
-    private static final Map<String, ?> ENV
-        = Collections.singletonMap("readonly", "true");
     private static final ObjectMapper MAPPER = new ObjectMapper()
         .disable(Feature.AUTO_CLOSE_TARGET);
     private static final int BUFSIZE = 16384;
@@ -49,17 +45,11 @@ public final class DefaultLegacyTraceTabModel
     private final Collection<RuleStatistics> ruleStats;
     private final ParseNode rootNode;
 
-    public DefaultLegacyTraceTabModel(final Path zipPath)
+    public DefaultLegacyTraceTabModel(final FileSystem zipfs)
         throws IOException
     {
-        final URI uri = URI.create("jar:" + zipPath.toUri());
-
-        try (
-            final FileSystem zipfs = FileSystems.newFileSystem(uri, ENV);
-        ) {
-            trace = loadTrace(zipfs);
-            buffer = loadBuffer(zipfs);
-        }
+        trace = loadTrace(zipfs);
+        buffer = loadBuffer(zipfs);
 
         final List<LegacyTraceEvent> events = trace.getEvents();
         traceEvents = relativize(events);
