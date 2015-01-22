@@ -23,7 +23,16 @@
     <Tab text="Parse tree" closable="false">
         <SplitPane dividerPositions="0.5">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
-                <TreeView fx:id="parseTree" editable="false"/>
+                <BorderPane>
+                    <top>
+                        <ToolBar>
+                            <Label text="Parse tree"/>
+                        </ToolBar>
+                    </top>
+                    <center>
+                        <TreeView fx:id="parseTree" editable="false"/>
+                    </center>
+                </BorderPane>
                 <TitledPane collapsible="true" text="Node information">
                     <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
                         <padding>
