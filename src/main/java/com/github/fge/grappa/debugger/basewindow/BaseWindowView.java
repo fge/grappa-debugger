@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.basewindow;
 
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
 
 import java.nio.file.Path;
 

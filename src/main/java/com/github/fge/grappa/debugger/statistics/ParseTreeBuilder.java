@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.tracetab.statistics;
+package com.github.fge.grappa.debugger.statistics;
 
 
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;

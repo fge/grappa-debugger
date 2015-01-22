@@ -1,11 +1,11 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
-import com.github.fge.grappa.debugger.tracetab.statistics.Utils;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEventType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -28,14 +28,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class JavafxTraceTabView
-    implements TraceTabView
+public final class JavafxLegacyTraceTabView
+    implements LegacyTraceTabView
 {
-    private final TraceTabDisplay display;
+    private final LegacyTraceTabDisplay display;
 
     private int nrLines;
 
-    public JavafxTraceTabView(final TraceTabDisplay display)
+    public JavafxLegacyTraceTabView(final LegacyTraceTabDisplay display)
     {
         this.display = display;
 
@@ -278,7 +278,7 @@ public final class JavafxTraceTabView
     private static final class ParseNodeCell
         extends TreeCell<ParseNode>
     {
-        private ParseNodeCell(final TraceTabDisplay ui)
+        private ParseNodeCell(final LegacyTraceTabDisplay ui)
         {
             setEditable(false);
             setOnMouseClicked(event -> {

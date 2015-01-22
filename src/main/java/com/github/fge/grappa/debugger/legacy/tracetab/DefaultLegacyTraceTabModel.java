@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,8 +8,8 @@ import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseTreeBuilder;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.ParseTreeBuilder;
 import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Nonnull;
@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @NotThreadSafe
-public final class DefaultTraceTabModel
-    implements TraceTabModel
+public final class DefaultLegacyTraceTabModel
+    implements LegacyTraceTabModel
 {
     private static final Map<String, ?> ENV
         = Collections.singletonMap("readonly", "true");
@@ -49,7 +49,7 @@ public final class DefaultTraceTabModel
     private final Collection<RuleStatistics> ruleStats;
     private final ParseNode rootNode;
 
-    public DefaultTraceTabModel(final Path zipPath)
+    public DefaultLegacyTraceTabModel(final Path zipPath)
         throws IOException
     {
         final URI uri = URI.create("jar:" + zipPath.toUri());

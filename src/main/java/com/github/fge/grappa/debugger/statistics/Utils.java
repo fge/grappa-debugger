@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.tracetab.statistics;
+package com.github.fge.grappa.debugger.statistics;
 
 public final class Utils
 {

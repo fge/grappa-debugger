@@ -1,6 +1,6 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -9,16 +9,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
-public class TraceTabDisplayTest
+public class LegacyTraceTabDisplayTest
 {
     private TraceTabPresenter presenter;
-    private TraceTabDisplay display;
+    private LegacyTraceTabDisplay display;
 
     @BeforeMethod
     public void init()
     {
         presenter = mock(TraceTabPresenter.class);
-        display = new TraceTabDisplay();
+        display = new LegacyTraceTabDisplay();
         display.init(presenter);
     }
 

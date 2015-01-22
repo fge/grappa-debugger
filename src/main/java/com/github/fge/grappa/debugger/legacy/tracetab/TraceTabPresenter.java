@@ -1,9 +1,9 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
-import com.github.fge.grappa.debugger.tracetab.statistics.TracingCharEscaper;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import com.google.common.escape.CharEscaper;
@@ -16,18 +16,18 @@ public class TraceTabPresenter
 {
     private static final CharEscaper ESCAPER = new TracingCharEscaper();
 
-    private final TraceTabModel model;
+    private final LegacyTraceTabModel model;
     private final InputBuffer buffer;
 
-    private TraceTabView view;
+    private LegacyTraceTabView view;
 
-    public TraceTabPresenter(final TraceTabModel model)
+    public TraceTabPresenter(final LegacyTraceTabModel model)
     {
         this.model = model;
         buffer = model.getInputBuffer();
     }
 
-    public void setView(final TraceTabView view)
+    public void setView(final LegacyTraceTabView view)
     {
         this.view = view;
     }

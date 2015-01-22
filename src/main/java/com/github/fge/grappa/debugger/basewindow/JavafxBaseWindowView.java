@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
-import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
-import com.github.fge.grappa.debugger.tracetab.TraceTabDisplay;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
-import com.github.fge.grappa.debugger.tracetab.TraceTabView;
+import com.github.fge.grappa.debugger.legacy.tracetab.JavafxLegacyTraceTabView;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay;
+import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
@@ -26,7 +26,7 @@ public final class JavafxBaseWindowView
     private static final URL TRACE_TAB_FXML;
 
     static {
-        TRACE_TAB_FXML = MYSELF.getResource("/traceTab.fxml");
+        TRACE_TAB_FXML = MYSELF.getResource("/legacyTraceTab.fxml");
         if (TRACE_TAB_FXML == null)
             throw new ExceptionInInitializerError("failed to load tab fxml");
     }
@@ -56,8 +56,8 @@ public final class JavafxBaseWindowView
             return;
         }
         display.pane.setCenter(pane);
-        final TraceTabDisplay tabUi = loader.getController();
-        final TraceTabView view = new JavafxTraceTabView(tabUi);
+        final LegacyTraceTabDisplay tabUi = loader.getController();
+        final LegacyTraceTabView view = new JavafxLegacyTraceTabView(tabUi);
         presenter.setView(view);
         tabUi.init(presenter);
     }

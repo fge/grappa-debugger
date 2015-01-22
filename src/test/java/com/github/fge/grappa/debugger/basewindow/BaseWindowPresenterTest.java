@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.BaseWindowFactory;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

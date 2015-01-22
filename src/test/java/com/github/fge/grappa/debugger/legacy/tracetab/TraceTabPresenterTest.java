@@ -1,10 +1,10 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import org.parboiled.support.Position;
 import org.testng.annotations.BeforeMethod;
@@ -27,8 +27,8 @@ import static org.mockito.Mockito.when;
 
 public class TraceTabPresenterTest
 {
-    private TraceTabView view;
-    private TraceTabModel model;
+    private LegacyTraceTabView view;
+    private LegacyTraceTabModel model;
     private TraceTabPresenter presenter;
     private InputBuffer buffer;
 
@@ -36,8 +36,8 @@ public class TraceTabPresenterTest
     @BeforeMethod
     public void init()
     {
-        view = mock(TraceTabView.class);
-        model = mock(TraceTabModel.class);
+        view = mock(LegacyTraceTabView.class);
+        model = mock(LegacyTraceTabModel.class);
         buffer = mock(InputBuffer.class);
         when(model.getInputBuffer()).thenReturn(buffer);
         presenter = new TraceTabPresenter(model);

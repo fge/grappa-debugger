@@ -1,16 +1,16 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
 import org.parboiled.support.Position;
 
 import java.util.Collection;
 import java.util.List;
 
-public interface TraceTabView
+public interface LegacyTraceTabView
 {
     void setTraceEvents(List<LegacyTraceEvent> events);
 

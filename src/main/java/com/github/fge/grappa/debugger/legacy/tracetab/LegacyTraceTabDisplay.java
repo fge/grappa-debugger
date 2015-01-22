@@ -1,9 +1,9 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.tracetab.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,7 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
-public class TraceTabDisplay
+public class LegacyTraceTabDisplay
 {
     private TraceTabPresenter presenter;
 

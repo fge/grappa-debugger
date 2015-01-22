@@ -1,9 +1,9 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.BaseWindowFactory;
-import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
-import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.legacy.tracetab.DefaultLegacyTraceTabModel;
+import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
+import com.github.fge.grappa.debugger.legacy.tracetab.TraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class BaseWindowPresenter
     TraceTabPresenter loadFile(final Path path)
         throws IOException
     {
-        final TraceTabModel model = new DefaultTraceTabModel(path.toRealPath());
+        final LegacyTraceTabModel model = new DefaultLegacyTraceTabModel(path.toRealPath());
         return new TraceTabPresenter(model);
     }
 }
