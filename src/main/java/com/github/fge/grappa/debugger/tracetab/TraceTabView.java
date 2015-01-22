@@ -10,7 +10,7 @@ import org.parboiled.support.Position;
 import java.util.Collection;
 import java.util.List;
 
-public interface TraceTabGuiController
+public interface TraceTabView
 {
     void setTraceEvents(List<LegacyTraceEvent> events);
 

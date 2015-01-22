@@ -4,7 +4,7 @@ import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 
 import java.io.File;
 
-public interface BaseWindowGuiController
+public interface BaseWindowView
 {
     void injectTab(TraceTabPresenter presenter);
 

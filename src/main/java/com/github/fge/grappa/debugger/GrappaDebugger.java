@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowGui;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowGuiController;
+import com.github.fge.grappa.debugger.basewindow.BaseWindowDisplay;
+import com.github.fge.grappa.debugger.basewindow.BaseWindowView;
 import com.github.fge.grappa.debugger.basewindow.BaseWindowPresenter;
-import com.github.fge.grappa.debugger.basewindow.JavafxBaseWindowGuiController;
+import com.github.fge.grappa.debugger.basewindow.JavafxBaseWindowView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -71,9 +71,9 @@ public final class GrappaDebugger
             return null;
         }
 
-        final BaseWindowGui ui = loader.getController();
-        final BaseWindowGuiController view
-            = new JavafxBaseWindowGuiController(stage, alertFactory, ui);
+        final BaseWindowDisplay ui = loader.getController();
+        final BaseWindowView view
+            = new JavafxBaseWindowView(stage, alertFactory, ui);
         final BaseWindowPresenter presenter
             = new BaseWindowPresenter(this, view);
 

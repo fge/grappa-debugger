@@ -13,16 +13,16 @@ import java.nio.file.Path;
 public class BaseWindowPresenter
 {
     private final BaseWindowFactory windowFactory;
-    private final BaseWindowGuiController guiController;
+    private final BaseWindowView view;
 
     @VisibleForTesting
     TraceTabPresenter tabPresenter;
 
     public BaseWindowPresenter(final BaseWindowFactory windowFactory,
-        final BaseWindowGuiController guiController)
+        final BaseWindowView view)
     {
         this.windowFactory = windowFactory;
-        this.guiController = guiController;
+        this.view = view;
     }
 
     public void handleCloseWindow()
@@ -44,7 +44,7 @@ public class BaseWindowPresenter
             return;
         }
 
-        final File file = guiController.chooseFile();
+        final File file = view.chooseFile();
 
         if (file == null)
             return;
@@ -52,20 +52,20 @@ public class BaseWindowPresenter
         final TraceTabPresenter newTabPresenter;
         final Path path = file.toPath();
 
-        guiController.setLabelText("Please wait...");
+        view.setLabelText("Please wait...");
 
         try {
             newTabPresenter = loadFile(path);
         } catch (IOException e) {
-            guiController.showError("Trace file error",
+            view.showError("Trace file error",
                 "Unable to load trace file", e);
             return;
         }
 
-        guiController.injectTab(newTabPresenter);
+        view.injectTab(newTabPresenter);
         newTabPresenter.loadTrace();
-        guiController.setWindowTitle("Grappa debugger: "
-            + path.toAbsolutePath());
+        view.setWindowTitle(
+            "Grappa debugger: " + path.toAbsolutePath());
 
         tabPresenter = newTabPresenter;
     }

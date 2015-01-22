@@ -9,17 +9,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
-public class TraceTabGuiTest
+public class TraceTabDisplayTest
 {
     private TraceTabPresenter presenter;
-    private TraceTabGui gui;
+    private TraceTabDisplay display;
 
     @BeforeMethod
     public void init()
     {
         presenter = mock(TraceTabPresenter.class);
-        gui = new TraceTabGui();
-        gui.init(presenter);
+        display = new TraceTabDisplay();
+        display.init(presenter);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class TraceTabGuiTest
     {
         final ParseNode node = mock(ParseNode.class);
 
-        gui.parseNodeShowEvent(node);
+        display.parseNodeShowEvent(node);
         verify(presenter, only()).handleParseNodeShow(same(node));
     }
 }

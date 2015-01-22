@@ -14,7 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
-public class TraceTabGui
+public class TraceTabDisplay
 {
     private TraceTabPresenter presenter;
 

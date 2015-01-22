@@ -19,7 +19,7 @@ public class TraceTabPresenter
     private final TraceTabModel model;
     private final InputBuffer buffer;
 
-    private TraceTabGuiController guiController;
+    private TraceTabView view;
 
     public TraceTabPresenter(final TraceTabModel model)
     {
@@ -27,21 +27,21 @@ public class TraceTabPresenter
         buffer = model.getInputBuffer();
     }
 
-    public void setGuiController(final TraceTabGuiController guiController)
+    public void setView(final TraceTabView view)
     {
-        this.guiController = guiController;
+        this.view = view;
     }
 
     public void loadTrace()
     {
         final List<LegacyTraceEvent> events = model.getTraceEvents();
 
-        guiController.setParseDate(model.getTrace().getStartDate());
-        guiController.setTraceEvents(events);
-        guiController.setStatistics(model.getRuleStats());
-        guiController.setInputTextInfo(model.getInputTextInfo());
-        guiController.setInputText(buffer.extract(0, buffer.length()));
-        guiController.setParseTree(model.getParseTreeRoot());
+        view.setParseDate(model.getTrace().getStartDate());
+        view.setTraceEvents(events);
+        view.setStatistics(model.getRuleStats());
+        view.setInputTextInfo(model.getInputTextInfo());
+        view.setInputText(buffer.extract(0, buffer.length()));
+        view.setParseTree(model.getParseTreeRoot());
     }
 
     void handleParseNodeShow(final ParseNode node)
@@ -65,9 +65,9 @@ public class TraceTabPresenter
         } else {
             sb.append("Match FAILED");
         }
-        guiController.fillParseNodeDetails(node, buffer);
+        view.fillParseNodeDetails(node, buffer);
         final List<String> fragments = getFragments(node);
-        guiController.highlightText(fragments, position, success);
+        view.highlightText(fragments, position, success);
     }
 
     @VisibleForTesting

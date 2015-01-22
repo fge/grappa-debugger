@@ -1,9 +1,9 @@
 package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
-import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabGuiController;
-import com.github.fge.grappa.debugger.tracetab.TraceTabGui;
-import com.github.fge.grappa.debugger.tracetab.TraceTabGuiController;
+import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
+import com.github.fge.grappa.debugger.tracetab.TraceTabDisplay;
+import com.github.fge.grappa.debugger.tracetab.TraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,11 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public final class JavafxBaseWindowGuiController
-    implements BaseWindowGuiController
+public final class JavafxBaseWindowView
+    implements BaseWindowView
 {
-    private static final Class<BaseWindowGuiController> MYSELF
-        = BaseWindowGuiController.class;
+    private static final Class<BaseWindowView> MYSELF
+        = BaseWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
     private static final URL TRACE_TAB_FXML;
@@ -32,14 +32,14 @@ public final class JavafxBaseWindowGuiController
 
     private final Stage stage;
     private final AlertFactory alertFactory;
-    private final BaseWindowGui gui;
+    private final BaseWindowDisplay display;
 
-    public JavafxBaseWindowGuiController(final Stage stage,
-        final AlertFactory alertFactory, final BaseWindowGui gui)
+    public JavafxBaseWindowView(final Stage stage,
+        final AlertFactory alertFactory, final BaseWindowDisplay display)
     {
         this.stage = stage;
         this.alertFactory = alertFactory;
-        this.gui = gui;
+        this.display = display;
     }
 
     @Override
@@ -54,10 +54,10 @@ public final class JavafxBaseWindowGuiController
                 oops);
             return;
         }
-        gui.pane.setCenter(pane);
-        final TraceTabGui tabUi = loader.getController();
-        final TraceTabGuiController view = new JavafxTraceTabGuiController(tabUi);
-        presenter.setGuiController(view);
+        display.pane.setCenter(pane);
+        final TraceTabDisplay tabUi = loader.getController();
+        final TraceTabView view = new JavafxTraceTabView(tabUi);
+        presenter.setView(view);
         tabUi.init(presenter);
     }
 
@@ -85,6 +85,6 @@ public final class JavafxBaseWindowGuiController
     @Override
     public void setLabelText(final String text)
     {
-        gui.label.setText(text);
+        display.label.setText(text);
     }
 }

@@ -28,33 +28,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class JavafxTraceTabGuiController
-    implements TraceTabGuiController
+public final class JavafxTraceTabView
+    implements TraceTabView
 {
-    private final TraceTabGui gui;
+    private final TraceTabDisplay display;
 
     private int nrLines;
 
-    public JavafxTraceTabGuiController(final TraceTabGui gui)
+    public JavafxTraceTabView(final TraceTabDisplay display)
     {
-        this.gui = gui;
+        this.display = display;
 
         /*
          * Parse tree
          */
-        gui.parseTree.setCellFactory(param -> new ParseNodeCell(gui));
+        display.parseTree.setCellFactory(param -> new ParseNodeCell(display));
 
         /*
          * Trace events
          */
-        bindColumn(gui.eventTime, "nanoseconds");
-        setDisplayNanos(gui.eventTime);
-        bindColumn(gui.eventDepth, "level");
-        bindColumn(gui.eventIndex, "index");
-        bindColumn(gui.eventPath, "path");
-        bindColumn(gui.eventRule, "matcher");
-        bindColumn(gui.eventType, "type");
-        gui.eventType.setCellFactory(
+        bindColumn(display.eventTime, "nanoseconds");
+        setDisplayNanos(display.eventTime);
+        bindColumn(display.eventDepth, "level");
+        bindColumn(display.eventIndex, "index");
+        bindColumn(display.eventPath, "path");
+        bindColumn(display.eventRule, "matcher");
+        bindColumn(display.eventType, "type");
+        display.eventType.setCellFactory(
             param -> new TableCell<LegacyTraceEvent, TraceEventType>()
             {
                 @Override
@@ -81,10 +81,10 @@ public final class JavafxTraceTabGuiController
         /*
          * Statistics
          */
-        bindColumn(gui.statsRule, "ruleName");
-        bindColumn(gui.statsInvocations, "nrInvocations");
-        bindColumn(gui.statsSuccess, "nrSuccesses");
-        gui.statsSuccessRate.setCellValueFactory(
+        bindColumn(display.statsRule, "ruleName");
+        bindColumn(display.statsInvocations, "nrInvocations");
+        bindColumn(display.statsSuccess, "nrSuccesses");
+        display.statsSuccessRate.setCellValueFactory(
             param -> new SimpleObjectProperty<Double>()
             {
                 @SuppressWarnings("AutoBoxing")
@@ -97,7 +97,7 @@ public final class JavafxTraceTabGuiController
                         / stats.getNrInvocations();
                 }
             });
-        gui.statsSuccessRate.setCellFactory(
+        display.statsSuccessRate.setCellFactory(
             param -> new TableCell<RuleStatistics, Double>()
             {
                 @Override
@@ -113,8 +113,8 @@ public final class JavafxTraceTabGuiController
     @Override
     public void setTraceEvents(final List<LegacyTraceEvent> events)
     {
-        gui.events.getItems().setAll(events);
-        final Tab tab = gui.eventsTab;
+        display.events.getItems().setAll(events);
+        final Tab tab = display.eventsTab;
         final int size = events.size();
         @SuppressWarnings("AutoBoxing")
         final String newText = String.format("%s (%d)", tab.getText(), size);
@@ -122,14 +122,14 @@ public final class JavafxTraceTabGuiController
         tab.setText(newText);
 
         final long nanos = events.get(size - 1).getNanoseconds();
-        gui.totalParseTime.setText(Utils.nanosToString(nanos));
+        display.totalParseTime.setText(Utils.nanosToString(nanos));
     }
 
     @Override
     public void setStatistics(final Collection<RuleStatistics> values)
     {
-        gui.nrRules.setText(String.valueOf(values.size()));
-        gui.stats.getItems().setAll(values);
+        display.nrRules.setText(String.valueOf(values.size()));
+        display.stats.getItems().setAll(values);
 
         int totalInvocations = 0;
         int totalSuccesses = 0;
@@ -140,9 +140,9 @@ public final class JavafxTraceTabGuiController
         }
 
         final double pct = 100.0 * totalSuccesses / totalInvocations;
-        gui.totalInvocations.setText(String.valueOf(totalInvocations));
-        gui.totalSuccess.setText(String.valueOf(totalSuccesses));
-        gui.totalSuccessRate.setText(String.format("%.02f%%", pct));
+        display.totalInvocations.setText(String.valueOf(totalInvocations));
+        display.totalSuccess.setText(String.valueOf(totalSuccesses));
+        display.totalSuccessRate.setText(String.format("%.02f%%", pct));
     }
 
     @Override
@@ -152,14 +152,14 @@ public final class JavafxTraceTabGuiController
         // TODO: record tz info in the JSON
         final LocalDateTime time
             = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        gui.parseDate.setText(time.toString());
+        display.parseDate.setText(time.toString());
     }
 
     @Override
     public void setInputTextInfo(final InputTextInfo textInfo)
     {
         nrLines = textInfo.getNrLines();
-        gui.textInfo.setText(
+        display.textInfo.setText(
             "Input text: " + nrLines + " lines, " + textInfo.getNrChars()
                 + " characters, " + textInfo.getNrCodePoints()
                 + " code points");
@@ -168,13 +168,13 @@ public final class JavafxTraceTabGuiController
     @Override
     public void setInputText(final String inputText)
     {
-        gui.inputText.getChildren().setAll(new Text(inputText));
+        display.inputText.getChildren().setAll(new Text(inputText));
     }
 
     @Override
     public void setParseTree(final ParseNode node)
     {
-        gui.parseTree.setRoot(buildTree(node));
+        display.parseTree.setRoot(buildTree(node));
     }
 
     @SuppressWarnings("AutoBoxing")
@@ -185,33 +185,33 @@ public final class JavafxTraceTabGuiController
         final boolean success = node.isSuccess();
         Position position;
 
-        gui.parseNodeLevel.setText(String.valueOf(node.getLevel()));
+        display.parseNodeLevel.setText(String.valueOf(node.getLevel()));
 
-        gui.parseNodeRuleName.setText(node.getRuleName());
+        display.parseNodeRuleName.setText(node.getRuleName());
 
         if (success) {
-            gui.parseNodeStatus.setText("SUCCESS");
-            gui.parseNodeStatus.setTextFill(Color.GREEN);
+            display.parseNodeStatus.setText("SUCCESS");
+            display.parseNodeStatus.setTextFill(Color.GREEN);
         } else {
-            gui.parseNodeStatus.setText("FAILURE");
-            gui.parseNodeStatus.setTextFill(Color.RED);
+            display.parseNodeStatus.setText("FAILURE");
+            display.parseNodeStatus.setTextFill(Color.RED);
         }
 
         position = buffer.getPosition(node.getStart());
-        gui.parseNodeStart.setText(String.format("line %d, column %d",
+        display.parseNodeStart.setText(String.format("line %d, column %d",
             position.getLine(), position.getColumn()));
         position = buffer.getPosition(node.getEnd());
-        gui.parseNodeEnd.setText(String.format("line %d, column %d",
+        display.parseNodeEnd.setText(String.format("line %d, column %d",
             position.getLine(), position.getColumn()));
 
-        gui.parseNodeTime.setText(Utils.nanosToString(node.getNanos()));
+        display.parseNodeTime.setText(Utils.nanosToString(node.getNanos()));
     }
 
     @Override
     public void highlightText(final List<String> fragments,
         final Position position, final boolean success)
     {
-        final TextFlow inputText = gui.inputText;
+        final TextFlow inputText = display.inputText;
         final List<Text> list = new ArrayList<>(3);
 
         Text text;
@@ -248,7 +248,7 @@ public final class JavafxTraceTabGuiController
 
         inputText.getChildren().setAll(list);
 
-        final ScrollPane scroll = gui.inputTextScroll;
+        final ScrollPane scroll = display.inputTextScroll;
         double line = position.getLine();
         if (line != nrLines)
             line--;
@@ -278,7 +278,7 @@ public final class JavafxTraceTabGuiController
     private static final class ParseNodeCell
         extends TreeCell<ParseNode>
     {
-        private ParseNodeCell(final TraceTabGui ui)
+        private ParseNodeCell(final TraceTabDisplay ui)
         {
             setEditable(false);
             setOnMouseClicked(event -> {

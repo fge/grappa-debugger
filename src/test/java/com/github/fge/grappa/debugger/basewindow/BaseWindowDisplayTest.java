@@ -7,39 +7,39 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class BaseWindowGuiTest
+public class BaseWindowDisplayTest
 {
     private BaseWindowPresenter presenter;
-    private BaseWindowGui gui;
+    private BaseWindowDisplay display;
     private ActionEvent event;
 
     @BeforeClass
     public void init()
     {
         presenter = mock(BaseWindowPresenter.class);
-        gui = new BaseWindowGui();
-        gui.init(presenter);
+        display = new BaseWindowDisplay();
+        display.init(presenter);
         event = mock(ActionEvent.class);
     }
 
     @Test
     public void closeWindowEventTest()
     {
-        gui.closeWindowEvent(event);
+        display.closeWindowEvent(event);
         verify(presenter).handleCloseWindow();
     }
 
     @Test
     public void newWindowEventTest()
     {
-        gui.newWindowEvent(event);
+        display.newWindowEvent(event);
         verify(presenter).handleNewWindow();
     }
 
     @Test
     public void loadFileEventTest()
     {
-        gui.loadFileEvent(event);
+        display.loadFileEvent(event);
         verify(presenter).handleLoadFile();
     }
 }

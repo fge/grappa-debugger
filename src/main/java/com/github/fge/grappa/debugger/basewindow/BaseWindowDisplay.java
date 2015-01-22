@@ -8,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
-public class BaseWindowGui
+public class BaseWindowDisplay
 {
     private BaseWindowPresenter presenter;
 
