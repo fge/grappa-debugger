@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -44,13 +43,12 @@ public class BaseWindowPresenter
             return;
         }
 
-        final File file = view.chooseFile();
+        final Path path = view.chooseFile();
 
-        if (file == null)
+        if (path == null)
             return;
 
         final TraceTabPresenter newTabPresenter;
-        final Path path = file.toPath();
 
         view.setLabelText("Please wait...");
 

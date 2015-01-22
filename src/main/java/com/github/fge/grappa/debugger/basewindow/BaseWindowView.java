@@ -2,13 +2,13 @@ package com.github.fge.grappa.debugger.basewindow;
 
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 
-import java.io.File;
+import java.nio.file.Path;
 
 public interface BaseWindowView
 {
     void injectTab(TraceTabPresenter presenter);
 
-    File chooseFile();
+    Path chooseFile();
 
     void setWindowTitle(String windowTitle);
 

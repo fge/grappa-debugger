@@ -3,8 +3,8 @@ package com.github.fge.grappa.debugger.basewindow;
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabDisplay;
-import com.github.fge.grappa.debugger.tracetab.TraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.tracetab.TraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 
 public final class JavafxBaseWindowView
     implements BaseWindowView
@@ -62,11 +63,12 @@ public final class JavafxBaseWindowView
     }
 
     @Override
-    public File chooseFile()
+    public Path chooseFile()
     {
         final FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().add(ZIP_FILES);
-        return chooser.showOpenDialog(stage);
+        final File file = chooser.showOpenDialog(stage);
+        return file == null ? null : file.toPath();
     }
 
     @Override

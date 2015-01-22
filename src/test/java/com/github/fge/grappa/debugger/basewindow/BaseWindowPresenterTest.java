@@ -6,7 +6,6 @@ import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -69,12 +68,10 @@ public class BaseWindowPresenterTest
     public void handleLoadFileWithFileTest()
         throws IOException
     {
-        final File file = mock(File.class);
         final Path path = mock(Path.class);
         final TraceTabPresenter tabPresenter = mock(TraceTabPresenter.class);
 
-        when(view.chooseFile()).thenReturn(file);
-        when(file.toPath()).thenReturn(path);
+        when(view.chooseFile()).thenReturn(path);
         doReturn(tabPresenter).when(presenter).loadFile(same(path));
 
         presenter.handleLoadFile();
