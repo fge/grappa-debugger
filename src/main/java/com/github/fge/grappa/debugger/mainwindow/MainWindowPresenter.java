@@ -45,35 +45,43 @@ public class MainWindowPresenter
 
     public void handleLoadFile()
     {
-        if (tabPresenter != null) {
-            final MainWindowPresenter window = windowFactory.createWindow();
-            if (window != null)
-                window.handleLoadFile();
-            return;
-        }
+        final LegacyTraceTabPresenter newTabPresenter;
 
         final Path path = view.chooseFile();
 
         if (path == null)
             return;
 
-        final LegacyTraceTabPresenter newTabPresenter;
+        MainWindowPresenter window = this;
 
+        if (tabPresenter != null) {
+            window = windowFactory.createWindow();
+            if (window == null)
+                return;
+        }
+
+        window.loadPresenter(path);
+    }
+
+    @VisibleForTesting
+    void loadPresenter(final Path path)
+    {
         view.setLabelText("Please wait...");
 
+        final LegacyTraceTabPresenter tabPresenter;
+
         try {
-            newTabPresenter = loadFile(path);
+            tabPresenter = loadFile(path);
         } catch (IOException e) {
-            view.showError("Trace file error",
-                "Unable to load trace file", e);
+            view.showError("Trace file error", "Unable to load trace file", e);
             return;
         }
 
-        view.injectTab(newTabPresenter);
-        newTabPresenter.loadTrace();
+        view.injectTab(tabPresenter);
+        tabPresenter.loadTrace();
         view.setWindowTitle("Grappa debugger: " + path.toAbsolutePath());
 
-        tabPresenter = newTabPresenter;
+        this.tabPresenter = tabPresenter;
     }
 
     @VisibleForTesting

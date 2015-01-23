@@ -16,6 +16,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -91,24 +92,22 @@ public class MainWindowPresenterTest
     public void handleLoadFileTwiceTest()
         throws IOException
     {
+        final Path path = mock(Path.class);
+
+        when(view.chooseFile()).thenReturn(path);
+
+        presenter.tabPresenter = mock(LegacyTraceTabPresenter.class);
+
         final MainWindowPresenter otherPresenter
             = mock(MainWindowPresenter.class);
-        final LegacyTraceTabPresenter
-            tabPresenter = mock(LegacyTraceTabPresenter.class);
+        doNothing().when(otherPresenter).loadPresenter(same(path));
 
         when(factory.createWindow()).thenReturn(otherPresenter);
-        doNothing().when(otherPresenter).handleLoadFile();
-
-        presenter.tabPresenter = tabPresenter;
 
         presenter.handleLoadFile();
 
-        verifyZeroInteractions(view, tabPresenter);
-
-        final InOrder inOrder = inOrder(factory, otherPresenter);
-
-        inOrder.verify(factory).createWindow();
-        inOrder.verify(otherPresenter).handleLoadFile();
-        inOrder.verifyNoMoreInteractions();
+        verify(view, only()).chooseFile();
+        verify(factory).createWindow();
+        verify(otherPresenter).loadPresenter(same(path));
     }
 }
