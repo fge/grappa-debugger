@@ -116,6 +116,7 @@
                         <RowConstraints vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <Label text="Date:" GridPane.rowIndex="0"
                         GridPane.columnIndex="0"/>
@@ -140,6 +141,10 @@
                     <Label text="Total parse time:" GridPane.rowIndex="5"
                         GridPane.columnIndex="0"/>
                     <Label fx:id="totalParseTime" GridPane.rowIndex="5"
+                        GridPane.columnIndex="1"/>
+                    <Label text="Parse tree depth:" GridPane.rowIndex="6"
+                        GridPane.columnIndex="0"/>
+                    <Label fx:id="treeDepth" GridPane.rowIndex="6"
                         GridPane.columnIndex="1"/>
                 </GridPane>
                 <StackPane>

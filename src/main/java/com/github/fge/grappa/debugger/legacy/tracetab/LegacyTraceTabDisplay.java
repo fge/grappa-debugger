@@ -77,6 +77,8 @@ public class LegacyTraceTabDisplay
     @FXML
     Label totalParseTime;
 
+    @FXML
+    Label treeDepth;
     /*
      * Statistics table
      */

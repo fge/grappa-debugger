@@ -34,6 +34,7 @@ public final class JavafxLegacyTraceTabView
     private final LegacyTraceTabDisplay display;
 
     private int nrLines;
+    private int treeDepth = 0;
 
     public JavafxLegacyTraceTabView(final LegacyTraceTabDisplay display)
     {
@@ -175,6 +176,7 @@ public final class JavafxLegacyTraceTabView
     public void setParseTree(final ParseNode node)
     {
         display.parseTree.setRoot(buildTree(node));
+        display.treeDepth.setText(String.valueOf(treeDepth));
     }
 
     @SuppressWarnings("AutoBoxing")
@@ -306,25 +308,28 @@ public final class JavafxLegacyTraceTabView
         }
     }
 
-    private static TreeItem<ParseNode> buildTree(final ParseNode root)
+    private TreeItem<ParseNode> buildTree(final ParseNode root)
     {
         final TreeItem<ParseNode> ret = new TreeItem<>(root);
 
-        addChildren(ret, root);
+        addChildren(ret, root, 0);
 
         return ret;
     }
 
-    private static void addChildren(final TreeItem<ParseNode> item,
-        final ParseNode parent)
+    private void addChildren(final TreeItem<ParseNode> item,
+        final ParseNode parent, final int depth)
     {
+        if (depth > treeDepth)
+            treeDepth = depth;
+
         TreeItem<ParseNode> childItem;
         final List<TreeItem<ParseNode>> childrenItems
             = FXCollections.observableArrayList();
 
         for (final ParseNode node: parent.getChildren()) {
             childItem = new TreeItem<>(node);
-            addChildren(childItem, node);
+            addChildren(childItem, node, depth + 1);
             childrenItems.add(childItem);
         }
 
