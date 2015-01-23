@@ -1,8 +1,7 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.legacy.tracetab
-    .DefaultLegacyTraceTabModel;
+import com.github.fge.grappa.debugger.legacy.tracetab.DefaultLegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
@@ -56,8 +55,6 @@ public class MainWindowPresenter
 
     public void handleLoadFile()
     {
-        final LegacyTraceTabPresenter newTabPresenter;
-
         final Path path = view.chooseFile();
 
         if (path == null)
@@ -85,18 +82,19 @@ public class MainWindowPresenter
             try {
                 tabPresenter = loadFile(path);
             } catch (IOException e) {
-                Platform.runLater(() -> {
-                    view.showError("Trace file error",
-                        "Unable to load trace file", e);
-                    view.setLabelText("Please load a trace file "
-                        + "(File -> Load file)");
-                });
+                Platform.runLater(() -> handleLoadFileError(e));
                 return;
             }
 
             this.tabPresenter = tabPresenter;
             Platform.runLater(() -> doLoadTab(path, tabPresenter));
         });
+    }
+
+    private void handleLoadFileError(final IOException e)
+    {
+        view.showError("Trace file error", "Unable to load trace file", e);
+        view.setLabelText("Please load a trace file (File -> Load file)");
     }
 
     // TODO: actually test it. Meh.
