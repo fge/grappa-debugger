@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.TextFlow?>
 
+<?import javafx.scene.control.Button?>
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay">
     <Tab text="Parse tree" closable="false">
@@ -26,7 +27,8 @@
                 <BorderPane>
                     <top>
                         <ToolBar>
-                            <Label text="Parse tree"/>
+                            <Button fx:id="treeExpand" text="Expand tree"
+                                onMouseClicked="#expandParseTreeEvent"/>
                         </ToolBar>
                     </top>
                     <center>

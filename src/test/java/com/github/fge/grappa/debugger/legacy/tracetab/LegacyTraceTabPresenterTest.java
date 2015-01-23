@@ -21,6 +21,7 @@ import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -88,5 +89,13 @@ public class LegacyTraceTabPresenterTest
         verify(view).highlightText(anyList(), same(position),
             anyBoolean());
         verifyNoMoreInteractions(view);
+    }
+
+    @Test
+    public void handleExpandParseTreeTest()
+    {
+        presenter.handleExpandParseTree();
+
+        verify(view, only()).expandParseTree();
     }
 }

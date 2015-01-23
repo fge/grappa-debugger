@@ -28,4 +28,6 @@ public interface LegacyTraceTabView
 
     void highlightText(List<String> fragments, Position position,
         boolean success);
+
+    void expandParseTree();
 }

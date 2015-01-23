@@ -4,8 +4,6 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Strings;
 import com.google.common.escape.CharEscaper;
 import org.parboiled.support.Position;
 
@@ -47,31 +45,16 @@ public class LegacyTraceTabPresenter
     void handleParseNodeShow(final ParseNode node)
     {
         final Position position = buffer.getPosition(node.getStart());
-        final int line = position.getLine();
-        final int column = position.getColumn();
         final boolean success = node.isSuccess();
 
-        final StringBuilder sb = new StringBuilder("Match information:\n");
-        sb.append("Matcher: ").append(node.getRuleName());
-        sb.append("\nStarting position: line ").append(line)
-            .append(", column ").append(column)
-            .append("\n----\n").append(buffer.extractLine(line))
-            .append('\n')
-            .append(Strings.repeat(" ", column - 1)).append("^\n----\n");
-        if (success) {
-            sb.append("Match SUCCESS; text matched:\n<")
-                .append(buffer.extract(node.getStart(), node.getEnd()))
-                .append('>');
-        } else {
-            sb.append("Match FAILED");
-        }
         view.fillParseNodeDetails(node, buffer);
-        final List<String> fragments = getFragments(node);
+        final List<String> fragments = success
+            ? getSuccesfulMatchFragments(node)
+            : getFailedMatchFragments(node);
         view.highlightText(fragments, position, success);
     }
 
-    @VisibleForTesting
-    List<String> getFragments(final ParseNode node)
+    private List<String> getFragments(final ParseNode node)
     {
         final int length = buffer.length();
         final int start = node.getStart();
@@ -90,5 +73,42 @@ public class LegacyTraceTabPresenter
         ret.add(buffer.extract(Math.min(end, length), length));
 
         return ret;
+    }
+
+    private List<String> getSuccesfulMatchFragments(final ParseNode node)
+    {
+        final int length = buffer.length();
+        final int start = Math.min(length, node.getStart());
+        final int end = Math.min(length, node.getEnd());
+
+        final List<String> ret = new ArrayList<>(3);
+        ret.add(buffer.extract(0, start));
+
+        final String match = buffer.extract(start, end);
+        ret.add(match.isEmpty() ? "\u2205"
+            : '\u21fe' + ESCAPER.escape(match) + '\u21fd');
+
+        ret.add(buffer.extract(end, length));
+
+        return ret;
+    }
+
+    private List<String> getFailedMatchFragments(final ParseNode node)
+    {
+        final int length = buffer.length();
+        final int end = Math.min(length, node.getEnd());
+
+        final List<String> ret = new ArrayList<>(3);
+
+        ret.add(buffer.extract(0, end));
+        ret.add("\u2612");
+        ret.add(buffer.extract(end, length));
+
+        return ret;
+    }
+
+    public void handleExpandParseTree()
+    {
+        view.expandParseTree();
     }
 }

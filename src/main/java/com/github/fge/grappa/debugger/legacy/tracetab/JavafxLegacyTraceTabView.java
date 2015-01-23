@@ -217,10 +217,6 @@ public final class JavafxLegacyTraceTabView
         Text text;
         String fragment;
 
-        text = (Text) inputText.getChildren().get(0);
-        final double lineHeight = text.getFont().getSize()
-            + text.getLineSpacing() + inputText.getLineSpacing();
-
         // Before match
         fragment = fragments.get(0);
         if (!fragment.isEmpty()) {
@@ -253,6 +249,20 @@ public final class JavafxLegacyTraceTabView
         if (line != nrLines)
             line--;
         scroll.setVvalue(line / nrLines);
+    }
+
+    @Override
+    public void expandParseTree()
+    {
+        final TreeItem<ParseNode> root = display.parseTree.getRoot();
+
+        doExpand(root);
+    }
+
+    private static void doExpand(final TreeItem<ParseNode> item)
+    {
+        item.getChildren().forEach(JavafxLegacyTraceTabView::doExpand);
+        item.setExpanded(true);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,

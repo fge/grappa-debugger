@@ -5,7 +5,9 @@ import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -21,6 +23,9 @@ public class LegacyTraceTabDisplay
     /*
      * Tree tab
      */
+    @FXML
+    Button treeExpand;
+
     @FXML
     TreeView<ParseNode> parseTree;
 
@@ -123,6 +128,12 @@ public class LegacyTraceTabDisplay
     public void init(final LegacyTraceTabPresenter presenter)
     {
         this.presenter = presenter;
+    }
+
+    @FXML
+    void expandParseTreeEvent(final Event event)
+    {
+        presenter.handleExpandParseTree();
     }
 
     @NotFXML

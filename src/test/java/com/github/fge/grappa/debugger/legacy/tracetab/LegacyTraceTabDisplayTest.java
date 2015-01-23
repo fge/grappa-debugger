@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.debugger.statistics.ParseNode;
+import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -20,6 +21,15 @@ public class LegacyTraceTabDisplayTest
         presenter = mock(LegacyTraceTabPresenter.class);
         display = new LegacyTraceTabDisplay();
         display.init(presenter);
+    }
+
+    @Test
+    public void expandParseTreeEventTest()
+    {
+        final Event event = mock(Event.class);
+
+        display.expandParseTreeEvent(event);
+        verify(presenter).handleExpandParseTree();
     }
 
     @Test
