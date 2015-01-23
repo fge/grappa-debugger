@@ -8,6 +8,8 @@ import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEventType;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -290,12 +292,22 @@ public final class JavafxLegacyTraceTabView
     private static final class ParseNodeCell
         extends TreeCell<ParseNode>
     {
-        private ParseNodeCell(final LegacyTraceTabDisplay ui)
+        private ParseNodeCell(final LegacyTraceTabDisplay display)
         {
             setEditable(false);
-            setOnMouseClicked(event -> {
-                final ParseNode node = getItem();
-                ui.parseNodeShowEvent(node);
+            selectedProperty().addListener(new ChangeListener<Boolean>()
+            {
+                @Override
+                public void changed(
+                    final ObservableValue<? extends Boolean> observable,
+                    final Boolean oldValue, final Boolean newValue)
+                {
+                    if (!newValue)
+                        return;
+                    final ParseNode node = getItem();
+                    if (node != null)
+                        display.parseNodeShowEvent(node);
+                }
             });
         }
 
