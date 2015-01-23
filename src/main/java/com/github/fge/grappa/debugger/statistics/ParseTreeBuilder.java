@@ -12,6 +12,7 @@ import java.util.Map;
 public final class ParseTreeBuilder
 {
     private final ParseNode rootNode;
+    private int nrEmptyMatches = 0;
 
     public ParseTreeBuilder(final List<LegacyTraceEvent> events)
     {
@@ -23,9 +24,13 @@ public final class ParseTreeBuilder
         return rootNode;
     }
 
+    public int getNrEmptyMatches()
+    {
+        return nrEmptyMatches;
+    }
+
     @SuppressWarnings({ "AutoBoxing", "TypeMayBeWeakened" })
-    private static ParseNode process(
-        @Untainted final List<LegacyTraceEvent> events)
+    private ParseNode process(@Untainted final List<LegacyTraceEvent> events)
     {
         final Map<Integer, ParseNode> nodes = new HashMap<>();
         final Map<Integer, Long> times = new HashMap<>();
@@ -50,7 +55,10 @@ public final class ParseTreeBuilder
 
             node = nodes.get(level);
             node.setEnd(event.getIndex());
-            node.setSuccess(type == TraceEventType.MATCH_SUCCESS);
+            final boolean success = type == TraceEventType.MATCH_SUCCESS;
+            node.setSuccess(success);
+            if (success && node.getStart() == node.getEnd())
+                nrEmptyMatches++;
             //noinspection AutoUnboxing
             node.setNanos(event.getNanoseconds() - times.get(level));
             nodes.get(level - 1).addChild(node);
