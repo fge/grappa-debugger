@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowDisplay;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowPresenter;
-import com.github.fge.grappa.debugger.basewindow.BaseWindowView;
-import com.github.fge.grappa.debugger.basewindow.JavafxBaseWindowView;
+import com.github.fge.grappa.debugger.mainwindow.JavafxMainWindowView;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowDisplay;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -20,12 +20,12 @@ import java.util.Map;
 
 public final class GrappaDebugger
     extends Application
-    implements BaseWindowFactory
+    implements MainWindowFactory
 {
     private static final URL BASE_WINDOW_FXML;
 
     static {
-        BASE_WINDOW_FXML = GrappaDebugger.class.getResource("/baseWindow.fxml");
+        BASE_WINDOW_FXML = GrappaDebugger.class.getResource("/mainWindow.fxml");
         if (BASE_WINDOW_FXML == null)
             throw new ExceptionInInitializerError("unable to load base window"
                 + " fxml");
@@ -33,7 +33,7 @@ public final class GrappaDebugger
 
     private final AlertFactory alertFactory = new AlertFactory();
 
-    private final Map<BaseWindowPresenter, Stage> windows = new HashMap<>();
+    private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 
     @Override
     public void start(final Stage primaryStage)
@@ -54,12 +54,12 @@ public final class GrappaDebugger
 
     @Override
     @Nullable
-    public BaseWindowPresenter createWindow()
+    public MainWindowPresenter createWindow()
     {
         return createWindow(new Stage());
     }
 
-    private BaseWindowPresenter createWindow(final Stage stage)
+    private MainWindowPresenter createWindow(final Stage stage)
     {
         final FXMLLoader loader = new FXMLLoader(BASE_WINDOW_FXML);
         final Pane pane;
@@ -71,11 +71,11 @@ public final class GrappaDebugger
             return null;
         }
 
-        final BaseWindowDisplay ui = loader.getController();
-        final BaseWindowView view
-            = new JavafxBaseWindowView(stage, alertFactory, ui);
-        final BaseWindowPresenter presenter
-            = new BaseWindowPresenter(this, view);
+        final MainWindowDisplay ui = loader.getController();
+        final MainWindowView view
+            = new JavafxMainWindowView(stage, alertFactory, ui);
+        final MainWindowPresenter presenter
+            = new MainWindowPresenter(this, view);
 
         ui.init(presenter);
 
@@ -90,7 +90,7 @@ public final class GrappaDebugger
     }
 
     @Override
-    public void close(final BaseWindowPresenter presenter)
+    public void close(final MainWindowPresenter presenter)
     {
         windows.remove(presenter).close();
     }

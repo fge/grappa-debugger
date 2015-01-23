@@ -1,6 +1,6 @@
-package com.github.fge.grappa.debugger.basewindow;
+package com.github.fge.grappa.debugger.mainwindow;
 
-import com.github.fge.grappa.debugger.BaseWindowFactory;
+import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
@@ -21,18 +21,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-public class BaseWindowPresenterTest
+public class MainWindowPresenterTest
 {
-    private BaseWindowFactory factory;
-    private BaseWindowView view;
-    private BaseWindowPresenter presenter;
+    private MainWindowFactory factory;
+    private MainWindowView view;
+    private MainWindowPresenter presenter;
 
     @BeforeMethod
     public void init()
     {
-        factory = mock(BaseWindowFactory.class);
-        view = mock(BaseWindowView.class);
-        presenter = spy(new BaseWindowPresenter(factory, view));
+        factory = mock(MainWindowFactory.class);
+        view = mock(MainWindowView.class);
+        presenter = spy(new MainWindowPresenter(factory, view));
     }
 
     @Test
@@ -91,8 +91,8 @@ public class BaseWindowPresenterTest
     public void handleLoadFileTwiceTest()
         throws IOException
     {
-        final BaseWindowPresenter otherPresenter
-            = mock(BaseWindowPresenter.class);
+        final MainWindowPresenter otherPresenter
+            = mock(MainWindowPresenter.class);
         final LegacyTraceTabPresenter
             tabPresenter = mock(LegacyTraceTabPresenter.class);
 

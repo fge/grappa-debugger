@@ -1,6 +1,6 @@
-package com.github.fge.grappa.debugger.basewindow;
+package com.github.fge.grappa.debugger.mainwindow;
 
-import com.github.fge.grappa.debugger.BaseWindowFactory;
+import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.legacy.tracetab
     .DefaultLegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
@@ -15,19 +15,19 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 
-public class BaseWindowPresenter
+public class MainWindowPresenter
 {
     private static final Map<String, ?> ZIPFS_ENV
         = Collections.singletonMap("readonly", "true");
 
-    private final BaseWindowFactory windowFactory;
-    private final BaseWindowView view;
+    private final MainWindowFactory windowFactory;
+    private final MainWindowView view;
 
     @VisibleForTesting
     LegacyTraceTabPresenter tabPresenter;
 
-    public BaseWindowPresenter(final BaseWindowFactory windowFactory,
-        final BaseWindowView view)
+    public MainWindowPresenter(final MainWindowFactory windowFactory,
+        final MainWindowView view)
     {
         this.windowFactory = windowFactory;
         this.view = view;
@@ -46,7 +46,7 @@ public class BaseWindowPresenter
     public void handleLoadFile()
     {
         if (tabPresenter != null) {
-            final BaseWindowPresenter window = windowFactory.createWindow();
+            final MainWindowPresenter window = windowFactory.createWindow();
             if (window != null)
                 window.handleLoadFile();
             return;
@@ -71,8 +71,7 @@ public class BaseWindowPresenter
 
         view.injectTab(newTabPresenter);
         newTabPresenter.loadTrace();
-        view.setWindowTitle(
-            "Grappa debugger: " + path.toAbsolutePath());
+        view.setWindowTitle("Grappa debugger: " + path.toAbsolutePath());
 
         tabPresenter = newTabPresenter;
     }

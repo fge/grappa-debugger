@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.basewindow;
+package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import javafx.event.ActionEvent;
@@ -8,9 +8,9 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
-public class BaseWindowDisplay
+public class MainWindowDisplay
 {
-    private BaseWindowPresenter presenter;
+    private MainWindowPresenter presenter;
 
     @FXML
     BorderPane pane;
@@ -18,7 +18,7 @@ public class BaseWindowDisplay
     @FXML
     Label label;
 
-    public void init(final BaseWindowPresenter presenter)
+    public void init(final MainWindowPresenter presenter)
     {
         this.presenter = presenter;
     }

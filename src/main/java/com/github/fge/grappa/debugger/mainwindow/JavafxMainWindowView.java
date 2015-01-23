@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.basewindow;
+package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.alert.AlertFactory;
 import com.github.fge.grappa.debugger.legacy.tracetab.JavafxLegacyTraceTabView;
@@ -16,11 +16,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 
-public final class JavafxBaseWindowView
-    implements BaseWindowView
+public final class JavafxMainWindowView
+    implements MainWindowView
 {
-    private static final Class<BaseWindowView> MYSELF
-        = BaseWindowView.class;
+    private static final Class<MainWindowView> MYSELF
+        = MainWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
     private static final URL TRACE_TAB_FXML;
@@ -33,10 +33,10 @@ public final class JavafxBaseWindowView
 
     private final Stage stage;
     private final AlertFactory alertFactory;
-    private final BaseWindowDisplay display;
+    private final MainWindowDisplay display;
 
-    public JavafxBaseWindowView(final Stage stage,
-        final AlertFactory alertFactory, final BaseWindowDisplay display)
+    public JavafxMainWindowView(final Stage stage,
+        final AlertFactory alertFactory, final MainWindowDisplay display)
     {
         this.stage = stage;
         this.alertFactory = alertFactory;

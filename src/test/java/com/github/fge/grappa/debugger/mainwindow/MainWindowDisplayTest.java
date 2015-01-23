@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.basewindow;
+package com.github.fge.grappa.debugger.mainwindow;
 
 import javafx.event.ActionEvent;
 import org.testng.annotations.BeforeClass;
@@ -7,17 +7,17 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class BaseWindowDisplayTest
+public class MainWindowDisplayTest
 {
-    private BaseWindowPresenter presenter;
-    private BaseWindowDisplay display;
+    private MainWindowPresenter presenter;
+    private MainWindowDisplay display;
     private ActionEvent event;
 
     @BeforeClass
     public void init()
     {
-        presenter = mock(BaseWindowPresenter.class);
-        display = new BaseWindowDisplay();
+        presenter = mock(MainWindowPresenter.class);
+        display = new MainWindowDisplay();
         display.init(presenter);
         event = mock(ActionEvent.class);
     }
