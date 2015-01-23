@@ -9,11 +9,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
@@ -70,22 +67,14 @@ public class MainWindowPresenterTest
         throws IOException
     {
         final Path path = mock(Path.class);
-        final LegacyTraceTabPresenter
-            tabPresenter = mock(LegacyTraceTabPresenter.class);
 
         when(view.chooseFile()).thenReturn(path);
-        doReturn(tabPresenter).when(presenter).loadFile(same(path));
+        doNothing().when(presenter).loadPresenter(same(path));
 
         presenter.handleLoadFile();
 
-        final InOrder inOrder = inOrder(factory, view, tabPresenter);
-        inOrder.verify(view).chooseFile();
-        inOrder.verify(view).injectTab(same(tabPresenter));
-        inOrder.verify(tabPresenter).loadTrace();
-        inOrder.verify(view).setWindowTitle(anyString());
-        inOrder.verifyNoMoreInteractions();
-
-        assertThat(presenter.tabPresenter).isSameAs(tabPresenter);
+        verify(view, only()).chooseFile();
+        verify(presenter).loadPresenter(same(path));
     }
 
     @Test(dependsOnMethods = "handleLoadFileWithFileTest")

@@ -6,6 +6,8 @@ import com.github.fge.grappa.debugger.legacy.tracetab
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,11 +16,20 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 public class MainWindowPresenter
 {
+    private static final ThreadFactory THREAD_FACTORY
+        = new ThreadFactoryBuilder().setNameFormat("grappa-debugger-main-%d")
+            .setDaemon(true).build();
     private static final Map<String, ?> ZIPFS_ENV
         = Collections.singletonMap("readonly", "true");
+
+    private final ExecutorService executor
+        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
     private final MainWindowFactory windowFactory;
     private final MainWindowView view;
@@ -68,20 +79,28 @@ public class MainWindowPresenter
     {
         view.setLabelText("Please wait...");
 
-        final LegacyTraceTabPresenter tabPresenter;
+        executor.submit(() -> {
+            final LegacyTraceTabPresenter tabPresenter;
 
-        try {
-            tabPresenter = loadFile(path);
-        } catch (IOException e) {
-            view.showError("Trace file error", "Unable to load trace file", e);
-            return;
-        }
+            try {
+                tabPresenter = loadFile(path);
+            } catch (IOException e) {
+                Platform.runLater(() -> view.showError("Trace file error",
+                    "Unable to load trace file", e));
+                return;
+            }
 
+            this.tabPresenter = tabPresenter;
+            Platform.runLater(() -> doLoadTab(path, tabPresenter));
+        });
+    }
+
+    private void doLoadTab(final Path path,
+        final LegacyTraceTabPresenter tabPresenter)
+    {
         view.injectTab(tabPresenter);
         tabPresenter.loadTrace();
         view.setWindowTitle("Grappa debugger: " + path.toAbsolutePath());
-
-        this.tabPresenter = tabPresenter;
     }
 
     @VisibleForTesting
