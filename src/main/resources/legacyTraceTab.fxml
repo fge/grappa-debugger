@@ -100,12 +100,15 @@
     </Tab>
     <Tab text="Statistics" closable="false">
         <SplitPane orientation="VERTICAL" dividerPositions="0.5">
-            <SplitPane orientation="HORIZONTAL" dividerPositions="0.5">
+            <TitledPane text="General statistics" expanded="true"
+                collapsible="true">
                 <GridPane gridLinesVisible="false">
                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        <Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
                     </padding>
                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
                         <ColumnConstraints hgrow="SOMETIMES"/>
                         <ColumnConstraints hgrow="SOMETIMES"/>
                     </columnConstraints>
@@ -114,43 +117,116 @@
                         <RowConstraints vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                        <RowConstraints vgrow="SOMETIMES"/>
                     </rowConstraints>
+
+                    <!-- First column -->
                     <Label text="Date:" GridPane.rowIndex="0"
-                        GridPane.columnIndex="0"/>
+                        GridPane.columnIndex="0">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
                     <Label fx:id="parseDate" GridPane.rowIndex="0"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Number of rules:" GridPane.rowIndex="1"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="nrRules" GridPane.rowIndex="1"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Total rule invocations:" GridPane.rowIndex="2"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="totalInvocations" GridPane.rowIndex="2"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Successful rules:" GridPane.rowIndex="3"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="totalSuccess" GridPane.rowIndex="3"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Global success rate:" GridPane.rowIndex="4"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="totalSuccessRate" GridPane.rowIndex="4"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Total parse time:" GridPane.rowIndex="5"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="totalParseTime" GridPane.rowIndex="5"
-                        GridPane.columnIndex="1"/>
-                    <Label text="Parse tree depth:" GridPane.rowIndex="6"
-                        GridPane.columnIndex="0"/>
-                    <Label fx:id="treeDepth" GridPane.rowIndex="6"
-                        GridPane.columnIndex="1"/>
+                        GridPane.columnIndex="1">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+
+                    <Label text="Total parse time:" GridPane.rowIndex="1"
+                        GridPane.columnIndex="0">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="totalParseTime" GridPane.rowIndex="1"
+                        GridPane.columnIndex="1">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+
+                    <Label text="Parse tree depth:" GridPane.rowIndex="2"
+                        GridPane.columnIndex="0">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="treeDepth" GridPane.rowIndex="2"
+                        GridPane.columnIndex="1">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+
+                    <!-- Second column -->
+                    <Label text="Number of rules:" GridPane.rowIndex="0"
+                        GridPane.columnIndex="2">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="nrRules" GridPane.rowIndex="0"
+                        GridPane.columnIndex="3">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+
+                    <Label text="Total rule invocations:" GridPane.rowIndex="1"
+                        GridPane.columnIndex="2">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="totalInvocations" GridPane.rowIndex="1"
+                        GridPane.columnIndex="3">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+
+                    <Label text="Successful rules:" GridPane.rowIndex="2"
+                        GridPane.columnIndex="2">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="totalSuccess" GridPane.rowIndex="2"
+                        GridPane.columnIndex="3">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+
+                    <Label text="Global success rate:" GridPane.rowIndex="3"
+                        GridPane.columnIndex="2">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="totalSuccessRate" GridPane.rowIndex="3"
+                        GridPane.columnIndex="3">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" left="5.0"
+                                right="5.0"/>
+                        </padding>
+                    </Label>
                 </GridPane>
-                <StackPane>
-                    <Label text="No information"/>
-                </StackPane>
-            </SplitPane>
+            </TitledPane>
             <TableView fx:id="stats">
                 <columns>
                     <TableColumn fx:id="statsRule" text="Rule"/>
