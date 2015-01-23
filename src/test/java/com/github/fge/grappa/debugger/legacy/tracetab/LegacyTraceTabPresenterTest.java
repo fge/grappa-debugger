@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
@@ -18,7 +17,6 @@ import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyCollection;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
@@ -63,8 +61,7 @@ public class LegacyTraceTabPresenterTest
 
         presenter.loadTrace();
 
-        verify(view).setInputText(anyString());
-        verify(view).setInputTextInfo(any(InputTextInfo.class));
+        verify(view).setInputBuffer(any(InputBuffer.class));
         verify(view).setParseDate(fakeDate);
         verify(view).setParseTree(any(ParseNode.class));
         verify(view).setStatistics(anyCollection());
@@ -83,11 +80,9 @@ public class LegacyTraceTabPresenterTest
 
         presenter.handleParseNodeShow(node);
 
-        verify(view).fillParseNodeDetails(same(node),
-            any(InputBuffer.class));
+        verify(view).fillParseNodeDetails(same(node));
         //noinspection unchecked
-        verify(view).highlightText(anyList(), same(position),
-            anyBoolean());
+        verify(view).highlightText(anyList(), same(position), anyBoolean());
         verifyNoMoreInteractions(view);
     }
 

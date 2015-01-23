@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
@@ -35,7 +34,7 @@ public final class JavafxLegacyTraceTabView
 {
     private final LegacyTraceTabDisplay display;
 
-    private int nrLines;
+    private InputBuffer buffer;
     private int treeDepth = 0;
 
     public JavafxLegacyTraceTabView(final LegacyTraceTabDisplay display)
@@ -96,8 +95,8 @@ public final class JavafxLegacyTraceTabView
                 {
                     final RuleStatistics stats = param.getValue();
                     //noinspection AutoBoxing
-                    return 100.0 * stats.getNrSuccesses()
-                        / stats.getNrInvocations();
+                    return 100.0 * stats.getNrSuccesses() / stats
+                        .getNrInvocations();
                 }
             });
         display.statsSuccessRate.setCellFactory(
@@ -159,17 +158,15 @@ public final class JavafxLegacyTraceTabView
     }
 
     @Override
-    public void setInputTextInfo(final InputTextInfo textInfo)
+    public void setInputBuffer(final InputBuffer buffer)
     {
-        nrLines = textInfo.getNrLines();
-        display.textInfo.setText(nrLines + " lines, " + textInfo.getNrChars()
-            + " characters, " + textInfo.getNrCodePoints() + " code points");
-    }
-
-    @Override
-    public void setInputText(final String inputText)
-    {
-        display.inputText.getChildren().setAll(new Text(inputText));
+        final int nrLines = buffer.getLineCount();
+        final int nrChars = buffer.length();
+        final String text = buffer.extract(0, nrChars);
+        final int nrCodePoints = text.codePointCount(0, nrChars);
+        display.inputText.getChildren().setAll(new Text(text));
+        display.textInfo.setText(nrLines + " lines, " + nrChars
+            + " characters, " + nrCodePoints + " code points");
     }
 
     @Override
@@ -181,8 +178,7 @@ public final class JavafxLegacyTraceTabView
 
     @SuppressWarnings("AutoBoxing")
     @Override
-    public void fillParseNodeDetails(final ParseNode node,
-        final InputBuffer buffer)
+    public void fillParseNodeDetails(final ParseNode node)
     {
         final boolean success = node.isSuccess();
         Position position;
@@ -247,6 +243,7 @@ public final class JavafxLegacyTraceTabView
         inputText.getChildren().setAll(list);
 
         final ScrollPane scroll = display.inputTextScroll;
+        final int nrLines = buffer.getLineCount();
         double line = position.getLine();
         if (line != nrLines)
             line--;

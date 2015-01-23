@@ -37,8 +37,7 @@ public class LegacyTraceTabPresenter
         view.setParseDate(model.getTrace().getStartDate());
         view.setTraceEvents(events);
         view.setStatistics(model.getRuleStats());
-        view.setInputTextInfo(model.getInputTextInfo());
-        view.setInputText(buffer.extract(0, buffer.length()));
+        view.setInputBuffer(buffer);
         view.setParseTree(model.getParseTreeRoot());
     }
 
@@ -47,7 +46,7 @@ public class LegacyTraceTabPresenter
         final Position position = buffer.getPosition(node.getStart());
         final boolean success = node.isSuccess();
 
-        view.fillParseNodeDetails(node, buffer);
+        view.fillParseNodeDetails(node);
         final List<String> fragments = success
             ? getSuccesfulMatchFragments(node)
             : getFailedMatchFragments(node);

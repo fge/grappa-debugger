@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
@@ -18,13 +17,11 @@ public interface LegacyTraceTabView
 
     void setParseDate(long startDate);
 
-    void setInputTextInfo(InputTextInfo textInfo);
-
-    void setInputText(String inputText);
+    void setInputBuffer(final InputBuffer buffer);
 
     void setParseTree(ParseNode node);
 
-    void fillParseNodeDetails(ParseNode node, InputBuffer buffer);
+    void fillParseNodeDetails(ParseNode node);
 
     void highlightText(List<String> fragments, Position position,
         boolean success);
