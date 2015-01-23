@@ -85,8 +85,12 @@ public class MainWindowPresenter
             try {
                 tabPresenter = loadFile(path);
             } catch (IOException e) {
-                Platform.runLater(() -> view.showError("Trace file error",
-                    "Unable to load trace file", e));
+                Platform.runLater(() -> {
+                    view.showError("Trace file error",
+                        "Unable to load trace file", e);
+                    view.setLabelText("Please load a trace file "
+                        + "(File -> Load file)");
+                });
                 return;
             }
 
@@ -95,7 +99,9 @@ public class MainWindowPresenter
         });
     }
 
-    private void doLoadTab(final Path path,
+    // TODO: actually test it. Meh.
+    @VisibleForTesting
+    void doLoadTab(final Path path,
         final LegacyTraceTabPresenter tabPresenter)
     {
         view.injectTab(tabPresenter);
