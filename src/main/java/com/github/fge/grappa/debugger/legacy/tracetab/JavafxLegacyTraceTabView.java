@@ -8,10 +8,13 @@ import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.escape.CharEscaper;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -28,11 +31,20 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 public final class JavafxLegacyTraceTabView
     implements LegacyTraceTabView
 {
+    private static final ThreadFactory THREAD_FACTORY
+        = new ThreadFactoryBuilder().setDaemon(true)
+            .setNameFormat("tree-expand-%d").build();
     private static final CharEscaper ESCAPER = new TracingCharEscaper();
+
+    private final ExecutorService executor
+        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
     private final LegacyTraceTabDisplay display;
 
@@ -214,8 +226,20 @@ public final class JavafxLegacyTraceTabView
     public void expandParseTree()
     {
         final TreeItem<ParseNode> root = display.parseTree.getRoot();
+        final ParseNode node = root.getValue();
+        final Button button = display.treeExpand;
 
-        doExpand(root);
+        button.setDisable(true);
+        button.setText("Please wait...");
+
+        executor.submit(() -> {
+            final TreeItem<ParseNode> newRoot = buildTree(node, true);
+            Platform.runLater(() -> {
+                display.parseTree.setRoot(newRoot);
+                button.setText("Expand tree");
+                button.setDisable(false);
+            });
+        });
     }
 
     @Override
@@ -352,15 +376,21 @@ public final class JavafxLegacyTraceTabView
 
     private TreeItem<ParseNode> buildTree(final ParseNode root)
     {
+        return buildTree(root, false);
+    }
+
+    private TreeItem<ParseNode> buildTree(final ParseNode root,
+        final boolean expanded)
+    {
         final TreeItem<ParseNode> ret = new TreeItem<>(root);
 
-        addChildren(ret, root);
+        addChildren(ret, root, expanded);
 
         return ret;
     }
 
     private void addChildren(final TreeItem<ParseNode> item,
-        final ParseNode parent)
+        final ParseNode parent, final boolean expanded)
     {
         final int depth = parent.getLevel();
         if (depth > treeDepth)
@@ -372,10 +402,11 @@ public final class JavafxLegacyTraceTabView
 
         for (final ParseNode node: parent.getChildren()) {
             childItem = new TreeItem<>(node);
-            addChildren(childItem, node);
+            addChildren(childItem, node, expanded);
             childrenItems.add(childItem);
         }
 
         item.getChildren().setAll(childrenItems);
+        item.setExpanded(expanded);
     }
 }
