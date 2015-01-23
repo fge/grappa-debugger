@@ -5,7 +5,6 @@ import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
-import org.parboiled.support.Position;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -13,10 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyCollection;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
@@ -69,21 +65,40 @@ public class LegacyTraceTabPresenterTest
         verifyNoMoreInteractions(view);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test
-    public void handleParseNodeShowTest()
+    public void handleParseNodeShowSuccessTest()
     {
         final ParseNode node = mock(ParseNode.class);
+        final int start = 4;
+        final int end = 7;
 
-        final Position position = new Position(12, 12);
-        when(buffer.getPosition(anyInt())).thenReturn(position);
-        when(buffer.extract(anyInt(), anyInt())).thenReturn("");
+        when(node.isSuccess()).thenReturn(true);
+        when(node.getStart()).thenReturn(start);
+        when(node.getEnd()).thenReturn(end);
 
         presenter.handleParseNodeShow(node);
 
         verify(view).fillParseNodeDetails(same(node));
-        //noinspection unchecked
-        verify(view).highlightText(anyList(), same(position), anyBoolean());
+        verify(view).highlightSuccess(start, end);
         verifyNoMoreInteractions(view);
+    }
+
+    @SuppressWarnings("AutoBoxing")
+    @Test
+    public void handleParseNodeShowFailureTest()
+    {
+        final ParseNode node = mock(ParseNode.class);
+        final int end = 20;
+
+        // This is the default but let's make it explicit
+        when(node.isSuccess()).thenReturn(false);
+        when(node.getEnd()).thenReturn(end);
+
+        presenter.handleParseNodeShow(node);
+
+        verify(view).fillParseNodeDetails(same(node));
+        verify(view).highlightFailure(end);
     }
 
     @Test

@@ -4,7 +4,6 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
-import org.parboiled.support.Position;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +22,9 @@ public interface LegacyTraceTabView
 
     void fillParseNodeDetails(ParseNode node);
 
-    void highlightText(List<String> fragments, Position position,
-        boolean success);
-
     void expandParseTree();
+
+    void highlightSuccess(int start, int end);
+
+    void highlightFailure(int end);
 }

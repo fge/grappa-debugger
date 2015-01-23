@@ -4,13 +4,14 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEventType;
+import com.google.common.escape.CharEscaper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -19,7 +20,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import org.parboiled.support.Position;
 
 import java.time.Instant;
@@ -32,6 +32,8 @@ import java.util.List;
 public final class JavafxLegacyTraceTabView
     implements LegacyTraceTabView
 {
+    private static final CharEscaper ESCAPER = new TracingCharEscaper();
+
     private final LegacyTraceTabDisplay display;
 
     private InputBuffer buffer;
@@ -206,17 +208,24 @@ public final class JavafxLegacyTraceTabView
     }
 
     @Override
-    public void highlightText(final List<String> fragments,
-        final Position position, final boolean success)
+    public void expandParseTree()
     {
-        final TextFlow inputText = display.inputText;
+        final TreeItem<ParseNode> root = display.parseTree.getRoot();
+
+        doExpand(root);
+    }
+
+    @Override
+    public void highlightSuccess(final int start, final int end)
+    {
+        final int length = buffer.length();
         final List<Text> list = new ArrayList<>(3);
 
-        Text text;
         String fragment;
+        Text text;
 
         // Before match
-        fragment = fragments.get(0);
+        fragment = buffer.extract(0, start);
         if (!fragment.isEmpty()) {
             text = new Text(fragment);
             text.setFill(Color.GRAY);
@@ -224,38 +233,61 @@ public final class JavafxLegacyTraceTabView
         }
 
         // Match
-        fragment = fragments.get(1);
-        // NOTE: cannot happen
-        if (!fragment.isEmpty()) {
-            text = new Text(fragment);
-            text.setFill(success ? Color.GREEN : Color.RED);
-            text.setUnderline(true);
-            list.add(text);
-        }
+        fragment = buffer.extract(start, end);
+        text = new Text(fragment.isEmpty() ? "\u2205"
+            : '\u21fe' + ESCAPER.escape(fragment) + '\u21fd');
+        text.setFill(Color.GREEN);
+        text.setUnderline(true);
+        list.add(text);
 
         // After match
-        fragment = fragments.get(2);
+        fragment = buffer.extract(end, length);
         if (!fragment.isEmpty()) {
             text = new Text(fragment);
             list.add(text);
         }
 
-        inputText.getChildren().setAll(list);
-
-        final ScrollPane scroll = display.inputTextScroll;
-        final int nrLines = buffer.getLineCount();
-        double line = position.getLine();
-        if (line != nrLines)
-            line--;
-        scroll.setVvalue(line / nrLines);
+        display.inputText.getChildren().setAll(list);
+        setScroll(start);
     }
 
     @Override
-    public void expandParseTree()
+    public void highlightFailure(final int end)
     {
-        final TreeItem<ParseNode> root = display.parseTree.getRoot();
+        final int length = buffer.length();
+        final List<Text> list = new ArrayList<>(3);
 
-        doExpand(root);
+        String fragment;
+        Text text;
+
+        fragment = buffer.extract(0, end);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragment);
+            text.setFill(Color.GRAY);
+            list.add(text);
+        }
+
+        text = new Text("\u2612");
+        text.setFill(Color.RED);
+        text.setUnderline(true);
+        list.add(text);
+
+        fragment = buffer.extract(end, length);
+        if (!fragment.isEmpty())
+            list.add(new Text(fragment));
+
+        display.inputText.getChildren().setAll(list);
+        setScroll(end);
+    }
+
+    private void setScroll(final int index)
+    {
+        final Position position = buffer.getPosition(index);
+        double line = position.getLine();
+        final double nrLines = buffer.getLineCount();
+        if (line != nrLines)
+            line--;
+        display.inputTextScroll.setVvalue(line / nrLines);
     }
 
     private static void doExpand(final TreeItem<ParseNode> item)
