@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
@@ -21,9 +20,6 @@ public interface LegacyTraceTabModel
 
     @Nonnull
     List<LegacyTraceEvent> getTraceEvents();
-
-    @Nonnull
-    InputTextInfo getInputTextInfo();
 
     @Nonnull
     Collection<RuleStatistics> getRuleStats();

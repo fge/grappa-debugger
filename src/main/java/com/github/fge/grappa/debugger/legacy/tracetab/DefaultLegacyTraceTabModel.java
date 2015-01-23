@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.InputTextInfo;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
@@ -41,7 +40,6 @@ public final class DefaultLegacyTraceTabModel
     private final InputBuffer buffer;
 
     private final List<LegacyTraceEvent> traceEvents;
-    private final InputTextInfo textInfo;
     private final Collection<RuleStatistics> ruleStats;
     private final ParseNode rootNode;
 
@@ -53,7 +51,6 @@ public final class DefaultLegacyTraceTabModel
 
         final List<LegacyTraceEvent> events = trace.getEvents();
         traceEvents = relativize(events);
-        textInfo = new InputTextInfo(buffer);
         ruleStats = collectStatistics(events);
         rootNode = new ParseTreeBuilder(events).getRootNode();
     }
@@ -78,13 +75,6 @@ public final class DefaultLegacyTraceTabModel
     public List<LegacyTraceEvent> getTraceEvents()
     {
         return Collections.unmodifiableList(traceEvents);
-    }
-
-    @Nonnull
-    @Override
-    public InputTextInfo getInputTextInfo()
-    {
-        return textInfo;
     }
 
     @Nonnull
