@@ -7,6 +7,7 @@ import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -79,6 +80,10 @@ public class LegacyTraceTabDisplay
 
     @FXML
     Label treeDepth;
+
+    @FXML
+    PieChart matchChart;
+
     /*
      * Statistics table
      */
