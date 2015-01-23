@@ -54,27 +54,6 @@ public class LegacyTraceTabPresenter
         view.highlightText(fragments, position, success);
     }
 
-    private List<String> getFragments(final ParseNode node)
-    {
-        final int length = buffer.length();
-        final int start = node.getStart();
-        final int end = node.getEnd();
-
-        final List<String> ret = new ArrayList<>(3);
-        ret.add(buffer.extract(0, start));
-        final String match = buffer.extract(Math.min(start, length), end);
-        final String displayed;
-        if (node.isSuccess())
-            displayed = match.isEmpty() ? "\u2205"
-                : '\u21fe' + ESCAPER.escape(match) + '\u21fd';
-        else
-            displayed = "\u2612";
-        ret.add(displayed);
-        ret.add(buffer.extract(Math.min(end, length), length));
-
-        return ret;
-    }
-
     private List<String> getSuccesfulMatchFragments(final ParseNode node)
     {
         final int length = buffer.length();
