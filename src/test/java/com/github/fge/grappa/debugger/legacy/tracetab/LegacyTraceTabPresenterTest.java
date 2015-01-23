@@ -73,6 +73,7 @@ public class LegacyTraceTabPresenterTest
         final int start = 4;
         final int end = 7;
 
+        when(buffer.length()).thenReturn(20);
         when(node.isSuccess()).thenReturn(true);
         when(node.getStart()).thenReturn(start);
         when(node.getEnd()).thenReturn(end);
@@ -89,8 +90,9 @@ public class LegacyTraceTabPresenterTest
     public void handleParseNodeShowFailureTest()
     {
         final ParseNode node = mock(ParseNode.class);
-        final int end = 20;
+        final int end = 21;
 
+        when(buffer.length()).thenReturn(20);
         // This is the default but let's make it explicit
         when(node.isSuccess()).thenReturn(false);
         when(node.getEnd()).thenReturn(end);
@@ -98,7 +100,7 @@ public class LegacyTraceTabPresenterTest
         presenter.handleParseNodeShow(node);
 
         verify(view).fillParseNodeDetails(same(node));
-        verify(view).highlightFailure(end);
+        verify(view).highlightFailure(20);
     }
 
     @Test

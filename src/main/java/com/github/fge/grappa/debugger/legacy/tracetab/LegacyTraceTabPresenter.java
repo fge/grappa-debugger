@@ -3,15 +3,11 @@ package com.github.fge.grappa.debugger.legacy.tracetab;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
-import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
-import com.google.common.escape.CharEscaper;
 
 import java.util.List;
 
 public class LegacyTraceTabPresenter
 {
-    private static final CharEscaper ESCAPER = new TracingCharEscaper();
-
     private final LegacyTraceTabModel model;
     private final InputBuffer buffer;
 
@@ -41,11 +37,15 @@ public class LegacyTraceTabPresenter
 
     void handleParseNodeShow(final ParseNode node)
     {
+        final int length = buffer.length();
+        final int start = Math.min(node.getStart(), length);
+        final int end = Math.min(node.getEnd(), length);
+
         view.fillParseNodeDetails(node);
         if (node.isSuccess())
-            view.highlightSuccess(node.getStart(), node.getEnd());
+            view.highlightSuccess(start, end);
         else
-            view.highlightFailure(node.getEnd());
+            view.highlightFailure(end);
     }
 
     public void handleExpandParseTree()

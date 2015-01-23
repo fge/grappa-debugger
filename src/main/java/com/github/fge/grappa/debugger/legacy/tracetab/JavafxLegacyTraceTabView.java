@@ -162,10 +162,13 @@ public final class JavafxLegacyTraceTabView
     @Override
     public void setInputBuffer(final InputBuffer buffer)
     {
+        this.buffer = buffer;
+
         final int nrLines = buffer.getLineCount();
         final int nrChars = buffer.length();
         final String text = buffer.extract(0, nrChars);
         final int nrCodePoints = text.codePointCount(0, nrChars);
+
         display.inputText.getChildren().setAll(new Text(text));
         display.textInfo.setText(nrLines + " lines, " + nrChars
             + " characters, " + nrCodePoints + " code points");
