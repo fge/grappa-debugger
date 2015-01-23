@@ -162,10 +162,8 @@ public final class JavafxLegacyTraceTabView
     public void setInputTextInfo(final InputTextInfo textInfo)
     {
         nrLines = textInfo.getNrLines();
-        display.textInfo.setText(
-            "Input text: " + nrLines + " lines, " + textInfo.getNrChars()
-                + " characters, " + textInfo.getNrCodePoints()
-                + " code points");
+        display.textInfo.setText(nrLines + " lines, " + textInfo.getNrChars()
+            + " characters, " + textInfo.getNrCodePoints() + " code points");
     }
 
     @Override
@@ -324,14 +322,15 @@ public final class JavafxLegacyTraceTabView
     {
         final TreeItem<ParseNode> ret = new TreeItem<>(root);
 
-        addChildren(ret, root, 0);
+        addChildren(ret, root);
 
         return ret;
     }
 
     private void addChildren(final TreeItem<ParseNode> item,
-        final ParseNode parent, final int depth)
+        final ParseNode parent)
     {
+        final int depth = parent.getLevel();
         if (depth > treeDepth)
             treeDepth = depth;
 
@@ -341,7 +340,7 @@ public final class JavafxLegacyTraceTabView
 
         for (final ParseNode node: parent.getChildren()) {
             childItem = new TreeItem<>(node);
-            addChildren(childItem, node, depth + 1);
+            addChildren(childItem, node);
             childrenItems.add(childItem);
         }
 
