@@ -26,4 +26,6 @@ public interface LegacyTraceTabModel
 
     @Nonnull
     ParseNode getParseTreeRoot();
+
+    int getNrEmptyMatches();
 }

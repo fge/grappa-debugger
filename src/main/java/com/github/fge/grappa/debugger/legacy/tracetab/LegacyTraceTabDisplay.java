@@ -67,20 +67,14 @@ public class LegacyTraceTabDisplay
     Label nrRules;
 
     @FXML
-    Label totalInvocations;
-
-    @FXML
-    Label totalSuccess;
-
-    @FXML
-    Label totalSuccessRate;
-
-    @FXML
     Label totalParseTime;
 
     @FXML
     Label treeDepth;
 
+    /*
+     * Chart
+     */
     @FXML
     PieChart matchChart;
 

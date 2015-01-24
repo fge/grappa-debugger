@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollection;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
@@ -60,7 +61,7 @@ public class LegacyTraceTabPresenterTest
         verify(view).setInputBuffer(any(InputBuffer.class));
         verify(view).setParseDate(fakeDate);
         verify(view).setParseTree(any(ParseNode.class));
-        verify(view).setStatistics(anyCollection());
+        verify(view).setStatistics(anyCollection(), anyInt());
         verify(view).setTraceEvents(same(events));
         verifyNoMoreInteractions(view);
     }

@@ -12,7 +12,7 @@ public interface LegacyTraceTabView
 {
     void setTraceEvents(List<LegacyTraceEvent> events);
 
-    void setStatistics(Collection<RuleStatistics> values);
+    void setStatistics(Collection<RuleStatistics> values, int nrEmptyMatches);
 
     void setParseDate(long startDate);
 

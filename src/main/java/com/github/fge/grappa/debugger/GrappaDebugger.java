@@ -79,7 +79,7 @@ public final class GrappaDebugger
 
         ui.init(presenter);
 
-        stage.setScene(new Scene(pane));
+        stage.setScene(new Scene(pane, 1024, 768));
         stage.setTitle("Grappa debugger");
 
         windows.put(presenter, stage);

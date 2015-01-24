@@ -42,6 +42,7 @@ public final class DefaultLegacyTraceTabModel
     private final List<LegacyTraceEvent> traceEvents;
     private final Collection<RuleStatistics> ruleStats;
     private final ParseNode rootNode;
+    private final int nrEmptyMatches;
 
     public DefaultLegacyTraceTabModel(final FileSystem zipfs)
         throws IOException
@@ -52,7 +53,9 @@ public final class DefaultLegacyTraceTabModel
         final List<LegacyTraceEvent> events = trace.getEvents();
         traceEvents = relativize(events);
         ruleStats = collectStatistics(events);
-        rootNode = new ParseTreeBuilder(events).getRootNode();
+        final ParseTreeBuilder parseTreeBuilder = new ParseTreeBuilder(events);
+        rootNode = parseTreeBuilder.getRootNode();
+        nrEmptyMatches = parseTreeBuilder.getNrEmptyMatches();
     }
 
     @Nonnull
@@ -89,6 +92,12 @@ public final class DefaultLegacyTraceTabModel
     public ParseNode getParseTreeRoot()
     {
         return rootNode;
+    }
+
+    @Override
+    public int getNrEmptyMatches()
+    {
+        return nrEmptyMatches;
     }
 
     private InputBuffer loadBuffer(final FileSystem zipfs)

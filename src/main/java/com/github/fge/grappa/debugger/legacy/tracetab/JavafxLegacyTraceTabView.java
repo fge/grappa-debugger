@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
@@ -141,8 +142,10 @@ public final class JavafxLegacyTraceTabView
         display.totalParseTime.setText(Utils.nanosToString(nanos));
     }
 
+    @SuppressWarnings({ "TypeMayBeWeakened", "AutoBoxing" })
     @Override
-    public void setStatistics(final Collection<RuleStatistics> values)
+    public void setStatistics(final Collection<RuleStatistics> values,
+        final int nrEmptyMatches)
     {
         display.nrRules.setText(String.valueOf(values.size()));
         display.stats.getItems().setAll(values);
@@ -155,10 +158,40 @@ public final class JavafxLegacyTraceTabView
             totalSuccesses += stats.getNrSuccesses();
         }
 
-        final double pct = 100.0 * totalSuccesses / totalInvocations;
-        display.totalInvocations.setText(String.valueOf(totalInvocations));
-        display.totalSuccess.setText(String.valueOf(totalSuccesses));
-        display.totalSuccessRate.setText(String.format("%.02f%%", pct));
+        final List<Data> list = new ArrayList<>(3);
+
+        int nr;
+        double percent;
+        String fmt;
+
+        /*
+         * Failures
+         */
+        nr = totalInvocations - totalSuccesses;
+        percent = 100.0 * nr / totalInvocations;
+        fmt = String.format("Failures (%d - %.02f%%)", nr, percent);
+        list.add(new Data(fmt, percent));
+
+        /*
+         * Empty
+         */
+        nr = nrEmptyMatches;
+        percent = 100.0 * nr / totalInvocations;
+        fmt = String.format("Empty matches (%d - %.02f%%)", nr, percent);
+        list.add(new Data(fmt, percent));
+
+        /*
+         * Non empty
+         */
+        nr = totalSuccesses - nrEmptyMatches;
+        percent = 100.0 * nr / totalInvocations;
+        fmt = String.format("Non empty matches (%d; %.02f%%)", nr, percent);
+        list.add(new Data(fmt, percent));
+
+        display.matchChart.getData().setAll(list);
+
+        fmt = String.format("Rule rundown (%d total)", totalInvocations);
+        display.matchChart.setTitle(fmt);
     }
 
     @Override
