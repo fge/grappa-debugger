@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger;
 
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface MainWindowFactory
@@ -9,5 +10,5 @@ public interface MainWindowFactory
     @Nullable
     MainWindowPresenter createWindow();
 
-    void close(MainWindowPresenter presenter);
+    void close(@Nonnull MainWindowPresenter presenter);
 }

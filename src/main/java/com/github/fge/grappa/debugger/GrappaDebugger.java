@@ -12,11 +12,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class GrappaDebugger
     extends Application
@@ -90,8 +92,9 @@ public final class GrappaDebugger
     }
 
     @Override
-    public void close(final MainWindowPresenter presenter)
+    public void close(@Nonnull final MainWindowPresenter presenter)
     {
+        Objects.requireNonNull(presenter);
         windows.remove(presenter).close();
     }
 }

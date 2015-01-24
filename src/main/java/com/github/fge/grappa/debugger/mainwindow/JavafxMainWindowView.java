@@ -19,8 +19,7 @@ import java.nio.file.Path;
 public final class JavafxMainWindowView
     implements MainWindowView
 {
-    private static final Class<MainWindowView> MYSELF
-        = MainWindowView.class;
+    private static final Class<MainWindowView> MYSELF = MainWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
     private static final URL TRACE_TAB_FXML;
@@ -47,19 +46,19 @@ public final class JavafxMainWindowView
     public void injectTab(final LegacyTraceTabPresenter presenter)
     {
         final FXMLLoader loader = new FXMLLoader(TRACE_TAB_FXML);
-        final Node pane;
+        final Node node;
         try {
-            pane = loader.load();
+            node = loader.load();
         } catch (IOException oops) {
-            alertFactory.showError("Tab creation error", "Unable to create tab",
-                oops);
+            showError("Tab creation error", "Unable to create tab", oops);
             return;
         }
-        display.pane.setCenter(pane);
-        final LegacyTraceTabDisplay tabUi = loader.getController();
-        final LegacyTraceTabView view = new JavafxLegacyTraceTabView(tabUi);
+        display.pane.setCenter(node);
+        final LegacyTraceTabDisplay tabDisplay = loader.getController();
+        final LegacyTraceTabView view =
+            new JavafxLegacyTraceTabView(tabDisplay);
         presenter.setView(view);
-        tabUi.init(presenter);
+        tabDisplay.init(presenter);
     }
 
     @Override
