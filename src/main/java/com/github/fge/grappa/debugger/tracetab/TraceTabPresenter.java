@@ -19,4 +19,11 @@ public class TraceTabPresenter
     {
         this.view = view;
     }
+
+    public void loadTrace()
+    {
+        view.setInputText(model.getInputBuffer());
+        view.setInfo(model.getInfo());
+        view.setEvents(model.getEvents());
+    }
 }

@@ -85,7 +85,7 @@ public class MainWindowPresenterTest
 
         when(view.chooseFile()).thenReturn(path);
 
-        presenter.tabPresenter = mock(LegacyTraceTabPresenter.class);
+        presenter.legacyTabPresenter = mock(LegacyTraceTabPresenter.class);
 
         final MainWindowPresenter otherPresenter
             = mock(MainWindowPresenter.class);

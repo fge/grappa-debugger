@@ -5,6 +5,10 @@ import com.github.fge.grappa.debugger.legacy.tracetab.JavafxLegacyTraceTabView;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabView;
+import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
+import com.github.fge.grappa.debugger.tracetab.TraceTabDisplay;
+import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
+import com.github.fge.grappa.debugger.tracetab.TraceTabView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
@@ -22,11 +26,16 @@ public final class JavafxMainWindowView
     private static final Class<MainWindowView> MYSELF = MainWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
-    private static final URL TRACE_TAB_FXML;
+    private static final URL LEGACY_TAB_FXML;
+    private static final URL TAB_FXML;
 
     static {
-        TRACE_TAB_FXML = MYSELF.getResource("/legacyTraceTab.fxml");
-        if (TRACE_TAB_FXML == null)
+        LEGACY_TAB_FXML = MYSELF.getResource("/legacyTraceTab.fxml");
+        if (LEGACY_TAB_FXML == null)
+            throw new ExceptionInInitializerError("failed to load legacy tab "
+                + "fxml");
+        TAB_FXML = MYSELF.getResource("/traceTab.fxml");
+        if (TAB_FXML == null)
             throw new ExceptionInInitializerError("failed to load tab fxml");
     }
 
@@ -43,9 +52,9 @@ public final class JavafxMainWindowView
     }
 
     @Override
-    public void injectTab(final LegacyTraceTabPresenter presenter)
+    public void injectLegacyTab(final LegacyTraceTabPresenter presenter)
     {
-        final FXMLLoader loader = new FXMLLoader(TRACE_TAB_FXML);
+        final FXMLLoader loader = new FXMLLoader(LEGACY_TAB_FXML);
         final Node node;
         try {
             node = loader.load();
@@ -87,5 +96,23 @@ public final class JavafxMainWindowView
     public void setLabelText(final String text)
     {
         display.label.setText(text);
+    }
+
+    @Override
+    public void injectTab(final TraceTabPresenter presenter)
+    {
+        final FXMLLoader loader = new FXMLLoader(TAB_FXML);
+        final Node node;
+        try {
+            node = loader.load();
+        } catch (IOException oops) {
+            showError("Tab creation error", "Unable to create tab", oops);
+            return;
+        }
+        display.pane.setCenter(node);
+        final TraceTabDisplay tabDisplay = loader.getController();
+        final TraceTabView view = new JavafxTraceTabView(tabDisplay);
+        presenter.setView(view);
+        tabDisplay.init(presenter);
     }
 }
