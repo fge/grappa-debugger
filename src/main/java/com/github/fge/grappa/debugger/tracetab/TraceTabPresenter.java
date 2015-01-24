@@ -25,5 +25,6 @@ public class TraceTabPresenter
         view.setInputText(model.getInputBuffer());
         view.setInfo(model.getInfo());
         view.setEvents(model.getEvents());
+        view.setParseTree(model.getRootNode());
     }
 }

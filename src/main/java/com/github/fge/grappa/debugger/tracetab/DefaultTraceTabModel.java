@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.ParseTreeProcessor;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 
@@ -37,6 +39,7 @@ public final class DefaultTraceTabModel
     private final InputBuffer inputBuffer;
     private final ParseRunInfo info;
     private final List<TraceEvent> events;
+    private final ParseNode rootNode;
 
     public DefaultTraceTabModel(final FileSystem zipfs)
         throws IOException
@@ -44,6 +47,10 @@ public final class DefaultTraceTabModel
         inputBuffer = loadBuffer(zipfs);
         info = loadInfo(zipfs);
         events = loadEvents(zipfs);
+
+        final ParseTreeProcessor parseTreeProcessor = new ParseTreeProcessor();
+        events.stream().forEach(parseTreeProcessor::process);
+        rootNode = parseTreeProcessor.getRootNode();
     }
 
     @Nonnull
@@ -65,6 +72,13 @@ public final class DefaultTraceTabModel
     public List<TraceEvent> getEvents()
     {
         return Collections.unmodifiableList(events);
+    }
+
+    @Nonnull
+    @Override
+    public ParseNode getRootNode()
+    {
+        return rootNode;
     }
 
     private InputBuffer loadBuffer(final FileSystem zipfs)
