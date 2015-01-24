@@ -61,6 +61,7 @@ public class LegacyTraceTabPresenterTest
         verify(view).setInputBuffer(any(InputBuffer.class));
         verify(view).setParseDate(fakeDate);
         verify(view).setParseTree(any(ParseNode.class));
+        verify(view).setInputBuffer(any(InputBuffer.class));
         verify(view).setStatistics(anyCollection(), anyInt());
         verify(view).setTraceEvents(same(events));
         verifyNoMoreInteractions(view);

@@ -30,8 +30,8 @@ public class LegacyTraceTabPresenter
 
         view.setParseDate(model.getTrace().getStartDate());
         view.setTraceEvents(events);
-        view.setStatistics(model.getRuleStats(), model.getNrEmptyMatches());
         view.setInputBuffer(buffer);
+        view.setStatistics(model.getRuleStats(), model.getNrEmptyMatches());
         view.setParseTree(model.getParseTreeRoot());
     }
 

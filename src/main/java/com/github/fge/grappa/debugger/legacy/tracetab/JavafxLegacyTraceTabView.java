@@ -192,6 +192,11 @@ public final class JavafxLegacyTraceTabView
 
         fmt = String.format("Rule rundown (%d total)", totalInvocations);
         display.matchChart.setTitle(fmt);
+
+        final double invPerLine
+            = (double) totalInvocations / buffer.getLineCount();
+
+        display.invPerLine.setText(String.format("%.02f", invPerLine));
     }
 
     @Override

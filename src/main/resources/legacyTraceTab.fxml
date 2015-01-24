@@ -104,16 +104,17 @@
         </SplitPane>
     </Tab>
     <Tab text="Statistics" closable="false">
-        <SplitPane orientation="VERTICAL" dividerPositions="0.6">
+        <SplitPane orientation="VERTICAL" dividerPositions="0.5">
             <TitledPane text="General statistics" expanded="true"
                 collapsible="false">
-                <SplitPane orientation="HORIZONTAL" dividerPositions="0.35">
+                <SplitPane orientation="HORIZONTAL" dividerPositions="0.4">
                     <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES"/>
                             <ColumnConstraints hgrow="SOMETIMES"/>
                         </columnConstraints>
                         <rowConstraints>
+                            <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
@@ -140,8 +141,13 @@
                         <Label fx:id="nrRules" GridPane.rowIndex="3"
                             GridPane.columnIndex="1"/>
 
+                        <Label text="Avg. rule invocations per line:"
+                            GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <Label fx:id="invPerLine" GridPane.rowIndex="4"
+                            GridPane.columnIndex="1"/>
+
                     </GridPane>
-                    <PieChart fx:id="matchChart"/>
+                    <PieChart fx:id="matchChart" legendVisible="false"/>
                 </SplitPane>
             </TitledPane>
             <TableView fx:id="stats">
