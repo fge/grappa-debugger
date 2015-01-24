@@ -23,6 +23,9 @@
     fx:controller="com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay">
     <Tab text="Parse tree" closable="false">
         <SplitPane dividerPositions="0.5">
+            <padding>
+                <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
+            </padding>
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                 <BorderPane>
                     <top>
@@ -37,9 +40,6 @@
                 </BorderPane>
                 <TitledPane collapsible="true" text="Node information">
                     <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                        </padding>
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES"/>
                             <ColumnConstraints hgrow="SOMETIMES"/>
@@ -93,10 +93,6 @@
                 <center>
                     <ScrollPane fx:id="inputTextScroll">
                         <TextFlow fx:id="inputText">
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0"
-                                    top="5.0"/>
-                            </padding>
                         </TextFlow>
                     </ScrollPane>
                 </center>
@@ -105,6 +101,9 @@
     </Tab>
     <Tab text="Statistics" closable="false">
         <SplitPane orientation="VERTICAL" dividerPositions="0.5">
+            <padding>
+                <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
+            </padding>
             <TitledPane text="General statistics" expanded="true"
                 collapsible="false">
                 <SplitPane orientation="HORIZONTAL" dividerPositions="0.4">
@@ -114,6 +113,7 @@
                             <ColumnConstraints hgrow="SOMETIMES"/>
                         </columnConstraints>
                         <rowConstraints>
+                            <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
@@ -146,8 +146,17 @@
                         <Label fx:id="invPerLine" GridPane.rowIndex="4"
                             GridPane.columnIndex="1"/>
 
+                        <Label text="Avg. rule invocations per char:"
+                            GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                        <Label fx:id="invPerChar" GridPane.rowIndex="5"
+                            GridPane.columnIndex="1"/>
                     </GridPane>
-                    <PieChart fx:id="matchChart" legendVisible="false"/>
+                    <PieChart fx:id="matchChart" labelsVisible="false">
+                        <padding>
+                            <Insets top="5.0" bottom="5.0" right="5.0"
+                                left="5.0"/>
+                        </padding>
+                    </PieChart>
                 </SplitPane>
             </TitledPane>
             <TableView fx:id="stats">

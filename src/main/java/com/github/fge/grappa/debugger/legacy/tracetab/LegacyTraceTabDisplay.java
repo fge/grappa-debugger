@@ -74,6 +74,10 @@ public class LegacyTraceTabDisplay
 
     @FXML
     Label invPerLine;
+
+    @FXML
+    Label invPerChar;
+
     /*
      * Chart
      */
