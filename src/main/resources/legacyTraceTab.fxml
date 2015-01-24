@@ -104,61 +104,68 @@
             <padding>
                 <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
             </padding>
-            <TitledPane text="General statistics" expanded="true"
-                collapsible="false">
-                <SplitPane orientation="HORIZONTAL" dividerPositions="0.4">
-                    <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES"/>
-                            <ColumnConstraints hgrow="SOMETIMES"/>
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                        </rowConstraints>
+            <SplitPane orientation="HORIZONTAL" dividerPositions="0.4">
+                <BorderPane>
+                    <top>
+                        <ToolBar>
+                            <Label text="General statistics"/>
+                        </ToolBar>
+                    </top>
+                    <center>
+                        <GridPane gridLinesVisible="false" hgap="5.0"
+                            vgap="5.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES"/>
+                                <ColumnConstraints hgrow="SOMETIMES"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                            </rowConstraints>
 
-                        <Label text="Date:" GridPane.rowIndex="0"
-                            GridPane.columnIndex="0"/>
-                        <Label fx:id="parseDate" GridPane.rowIndex="0"
-                            GridPane.columnIndex="1"/>
+                            <Label text="Date:" GridPane.rowIndex="0"
+                                GridPane.columnIndex="0"/>
+                            <Label fx:id="parseDate" GridPane.rowIndex="0"
+                                GridPane.columnIndex="1"/>
 
-                        <Label text="Total parse time:" GridPane.rowIndex="1"
-                            GridPane.columnIndex="0"/>
-                        <Label fx:id="totalParseTime" GridPane.rowIndex="1"
-                            GridPane.columnIndex="1"/>
+                            <Label text="Total parse time:"
+                                GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <Label fx:id="totalParseTime"
+                                GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                        <Label text="Parse tree depth:" GridPane.rowIndex="2"
-                            GridPane.columnIndex="0"/>
-                        <Label fx:id="treeDepth" GridPane.rowIndex="2"
-                            GridPane.columnIndex="1"/>
+                            <Label text="Parse tree depth:"
+                                GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <Label fx:id="treeDepth" GridPane.rowIndex="2"
+                                GridPane.columnIndex="1"/>
 
-                        <Label text="Number of rules:" GridPane.rowIndex="3"
-                            GridPane.columnIndex="0"/>
-                        <Label fx:id="nrRules" GridPane.rowIndex="3"
-                            GridPane.columnIndex="1"/>
+                            <Label text="Number of rules:"
+                                GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <Label fx:id="nrRules" GridPane.rowIndex="3"
+                                GridPane.columnIndex="1"/>
 
-                        <Label text="Avg. rule invocations per line:"
-                            GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                        <Label fx:id="invPerLine" GridPane.rowIndex="4"
-                            GridPane.columnIndex="1"/>
+                            <Label text="Avg. rule invocations per line:"
+                                GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                            <Label fx:id="invPerLine" GridPane.rowIndex="4"
+                                GridPane.columnIndex="1"/>
 
-                        <Label text="Avg. rule invocations per char:"
-                            GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                        <Label fx:id="invPerChar" GridPane.rowIndex="5"
-                            GridPane.columnIndex="1"/>
-                    </GridPane>
-                    <PieChart fx:id="matchChart" labelsVisible="false">
-                        <padding>
-                            <Insets top="5.0" bottom="5.0" right="5.0"
-                                left="5.0"/>
-                        </padding>
-                    </PieChart>
-                </SplitPane>
-            </TitledPane>
+                            <Label text="Avg. rule invocations per char:"
+                                GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                            <Label fx:id="invPerChar" GridPane.rowIndex="5"
+                                GridPane.columnIndex="1"/>
+                        </GridPane>
+                    </center>
+                </BorderPane>
+                <PieChart fx:id="matchChart" labelsVisible="false">
+                    <padding>
+                        <Insets top="5.0" bottom="5.0" right="5.0"
+                            left="5.0"/>
+                    </padding>
+                </PieChart>
+            </SplitPane>
             <TableView fx:id="stats">
                 <columns>
                     <TableColumn fx:id="statsRule" text="Rule"/>
