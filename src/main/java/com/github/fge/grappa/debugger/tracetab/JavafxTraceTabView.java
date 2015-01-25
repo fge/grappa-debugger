@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.StatsType;
 import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.ParseRunInfo;
@@ -44,6 +45,7 @@ public final class JavafxTraceTabView
     public JavafxTraceTabView(final TraceTabDisplay display)
     {
         this.display = display;
+        display.statsCombo.getItems().addAll(StatsType.values());
     }
 
     @Override

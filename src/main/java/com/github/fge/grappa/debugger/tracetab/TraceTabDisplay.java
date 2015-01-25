@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.StatsType;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
@@ -11,7 +12,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
@@ -67,6 +70,12 @@ public class TraceTabDisplay
     ScrollPane inputTextScroll;
 
     /*
+     * Stats tab
+     */
+    @FXML
+    ComboBox<StatsType> statsCombo;
+
+    /*
      * Events tab
      */
     @FXML
@@ -105,6 +114,30 @@ public class TraceTabDisplay
          */
         parseTree.setCellFactory(param -> new ParseNodeCell(this));
 
+        /*
+         * Stats
+         */
+        statsCombo.getSelectionModel().selectedItemProperty()
+            .addListener(new ChangeListener<StatsType>()
+            {
+                @Override
+                public void changed(
+                    final ObservableValue<? extends StatsType> observable,
+                    final StatsType oldValue, final StatsType newValue)
+                {
+                    System.out.println(newValue);
+
+                }
+            });
+        statsCombo.setCellFactory(param -> new ListCell<StatsType>()
+        {
+            @Override
+            protected void updateItem(final StatsType item, final boolean empty)
+            {
+                super.updateItem(item, empty);
+                setText(empty ? null : item.toString());
+            }
+        });
         /*
          * Trace events
          */
