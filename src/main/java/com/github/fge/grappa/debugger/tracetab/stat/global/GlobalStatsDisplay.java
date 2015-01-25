@@ -127,9 +127,6 @@ public class GlobalStatsDisplay
                 {
                     super.updateItem(item, empty);
 
-                    if (item == null)
-                        return;
-
                     setText(null);
 
                     if (empty) {
@@ -152,6 +149,9 @@ public class GlobalStatsDisplay
                         = (double) emptyMatches / total;
                     final  double failureRatio
                         = (double) failedMatches / total;
+
+                    // FIXME: unfortunately I cannot use Rectangle::new...
+                    // If I do, the rectangle is not visible :/
                     final Supplier<Rectangle> supplier
                         = () -> new Rectangle(0.0, 20.0);
 
