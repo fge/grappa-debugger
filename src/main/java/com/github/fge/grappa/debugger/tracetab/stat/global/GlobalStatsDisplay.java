@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab.stat.global;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
+import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
-import com.github.fge.grappa.debugger.statistics.Utils;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -80,46 +80,19 @@ public class GlobalStatsDisplay
 
     protected void init()
     {
-        Utils.bindColumn(statsRule, "ruleName");
-        statsInvocations.setCellValueFactory(
-            param -> new SimpleObjectProperty<Integer>()
-            {
-                @SuppressWarnings("AutoBoxing")
-                @Override
-                public Integer get()
-                {
-                    final RuleMatchingStats stats = param.getValue();
-                    return stats.getNonEmptyMatches() + stats.getEmptyMatches()
-                        + stats.getFailures();
-                }
-            }
-        );
-        statsSuccess.setCellValueFactory(
-            param -> new SimpleObjectProperty<Integer>()
-            {
-                @SuppressWarnings("AutoBoxing")
-                @Override
-                public Integer get()
-                {
-                    final RuleMatchingStats stats = param.getValue();
-                    return stats.getEmptyMatches() + stats.getNonEmptyMatches();
-                }
-            }
-        );
-        statsSuccessRate.setCellValueFactory(
-            param -> new SimpleObjectProperty<Double>()
-            {
-                @SuppressWarnings("AutoBoxing")
-                @Override
-                public Double get()
-                {
-                    final RuleMatchingStats stats = param.getValue();
-                    final int successes = stats.getEmptyMatches() + stats
-                        .getNonEmptyMatches();
-                    final int failures = stats.getFailures();
+        JavafxUtils.setColumnValue(statsRule, RuleMatchingStats::getRuleName);
+        JavafxUtils.setColumnValue(statsInvocations,
+            stats -> stats.getNonEmptyMatches() + stats.getEmptyMatches()
+                + stats.getFailures());
+        JavafxUtils.setColumnValue(statsSuccess,
+            stats -> stats.getEmptyMatches() + stats.getNonEmptyMatches());
+        JavafxUtils.setColumnValue(statsSuccessRate,
+            stats -> {
+                final int successes = stats.getEmptyMatches() + stats
+                    .getNonEmptyMatches();
+                final int failures = stats.getFailures();
 
-                    return 100.0 * successes / (failures + successes);
-                }
+                return 100.0 * successes / (failures + successes);
             });
         statsSuccessRate.setCellFactory(
             param -> new TableCell<RuleMatchingStats, Double>()
@@ -129,11 +102,12 @@ public class GlobalStatsDisplay
                     final boolean empty)
                 {
                     super.updateItem(item, empty);
-                    setText(empty ? null : String.format("%.2f", item));
+                    setText(empty ? null : String.format("%.2f%%", item));
                 }
-            }
-        );
-        Utils.bindColumn(statsEmptyMatches, "emptyMatches");
+            });
+        JavafxUtils.setColumnValue(statsEmptyMatches,
+            RuleMatchingStats::getEmptyMatches);
+        //Utils.bindColumn(statsEmptyMatches, "emptyMatches");
         statsEmptyMatchesPct.setCellValueFactory(
             param -> new SimpleObjectProperty<Double>()
             {

@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.StatsType;
-import com.github.fge.grappa.debugger.statistics.Utils;
+import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.annotations.VisibleForTesting;

@@ -1,13 +1,15 @@
-package com.github.fge.grappa.debugger.statistics;
+package com.github.fge.grappa.debugger.javafx;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 
-public final class Utils
+import java.util.function.Function;
+
+public final class JavafxUtils
 {
     @SuppressWarnings("ProhibitedExceptionThrown")
-    private Utils()
+    private JavafxUtils()
     {
         throw new Error("nice try!");
     }
@@ -25,12 +27,6 @@ public final class Utils
             nrNanoseconds);
     }
 
-    public static <S, T> void bindColumn(final TableColumn<S, T> column,
-        final String propertyName)
-    {
-        column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
-    }
-
     public static <S> void setDisplayNanos(final TableColumn<S, Long> column)
     {
         column.setCellFactory(param -> new TableCell<S, Long>()
@@ -43,5 +39,20 @@ public final class Utils
                 setText(empty ? null : nanosToString(item));
             }
         });
+    }
+
+    public static <S, T> void setColumnValue(final TableColumn<S, T> column,
+        final Function<? super S, ? extends T> f)
+    {
+        column.setCellValueFactory(
+            param -> new SimpleObjectProperty<T>()
+            {
+                @Override
+                public T get()
+                {
+                    return f.apply(param.getValue());
+                }
+            }
+        );
     }
 }

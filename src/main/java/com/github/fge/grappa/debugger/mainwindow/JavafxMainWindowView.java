@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
-import com.github.fge.grappa.debugger.alert.AlertFactory;
+import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.legacy.tracetab.JavafxLegacyTraceTabView;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay;
 import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;

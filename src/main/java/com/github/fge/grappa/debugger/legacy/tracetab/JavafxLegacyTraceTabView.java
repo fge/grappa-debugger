@@ -5,7 +5,7 @@ import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.RuleStatistics;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
-import com.github.fge.grappa.debugger.statistics.Utils;
+import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.escape.CharEscaper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;

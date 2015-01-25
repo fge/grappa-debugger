@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.tracetab;
+package com.github.fge.grappa.debugger.javafx;
 
 import com.github.fge.grappa.debugger.statistics.StatsType;
 import com.github.fge.grappa.internal.NonFinalForTesting;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
-class JavafxStatsTabFactory
+public class JavafxStatsTabFactory
 {
     private static final Class<?> MYSELF = JavafxStatsTabFactory.class;
     private static final Map<StatsType, URL> STAT_TABS_FXML_FILES;
@@ -35,7 +35,7 @@ class JavafxStatsTabFactory
     }
 
     @Nonnull
-    FXMLLoader getLoader(final StatsType type)
+    public FXMLLoader getLoader(final StatsType type)
     {
         Objects.requireNonNull(type);
         final URL url = STAT_TABS_FXML_FILES.get(type);

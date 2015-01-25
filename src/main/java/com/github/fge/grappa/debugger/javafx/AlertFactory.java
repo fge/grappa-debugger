@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.alert;
+package com.github.fge.grappa.debugger.javafx;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

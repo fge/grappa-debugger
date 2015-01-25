@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger;
 
-import com.github.fge.grappa.debugger.alert.AlertFactory;
+import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.mainwindow.JavafxMainWindowView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowDisplay;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
