@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.HBox?>
 <SplitPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsDisplay"
     orientation="VERTICAL" dividerPositions="0.5">
@@ -83,7 +84,7 @@
             <TableColumn fx:id="ruleType" text="Rule type"/>
             <TableColumn fx:id="nrCalls" text="Invocations"/>
             <TableColumn fx:id="callDetail" text="Non empty/empty/failures"/>
-            <TableColumn fx:id="callDetailPct" text="Ratios"/>
+            <TableColumn fx:id="callGraph" text="Graph"/>
         </columns>
     </TableView>
 </SplitPane>

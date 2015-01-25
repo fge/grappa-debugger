@@ -4,14 +4,23 @@ import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
 import com.github.fge.grappa.matchers.MatcherType;
+import javafx.beans.binding.DoubleExpression;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
+import javafx.scene.shape.Rectangle;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public class GlobalStatsDisplay
@@ -68,7 +77,7 @@ public class GlobalStatsDisplay
     private TableColumn<RuleMatchingStats, String> callDetail;
 
     @FXML
-    private TableColumn<RuleMatchingStats, String> callDetailPct;
+    private TableColumn<RuleMatchingStats, RuleMatchingStats> callGraph;
 
     @NotFXML
     public void setPresenter(final GlobalStatsPresenter presenter)
@@ -98,14 +107,81 @@ public class GlobalStatsDisplay
             stats -> String.format("%d/%d/%d", stats.getNonEmptyMatches(),
                 stats.getEmptyMatches(), stats.getFailures()));
 
-        JavafxUtils.setColumnValue(callDetailPct, stats -> {
-            final int nonEmpty = stats.getNonEmptyMatches();
-            final int empty = stats.getEmptyMatches();
-            final int failures = stats.getFailures();
-            final int total = nonEmpty + empty + failures;
-            return String.format("%.2f%%/%.2f%%/%.2f%%",
-                100.0 * nonEmpty / total, 100.0 * empty / total,
-                100.0 * failures / total);
-        });
+        callGraph.setCellValueFactory(
+            param -> new SimpleObjectProperty<RuleMatchingStats>()
+            {
+                @Override
+                public RuleMatchingStats get()
+                {
+                    return param.getValue();
+                }
+            }
+        );
+
+        callGraph.setCellFactory(
+            param -> new TableCell<RuleMatchingStats, RuleMatchingStats>()
+            {
+                @Override
+                protected void updateItem(final RuleMatchingStats item,
+                    final boolean empty)
+                {
+                    super.updateItem(item, empty);
+
+                    if (item == null)
+                        return;
+
+                    setText(null);
+
+                    if (empty) {
+                        setGraphic(null);
+                        return;
+                    }
+
+                    final ReadOnlyDoubleProperty property = param
+                        .widthProperty();
+
+                    final int nonEmptyMatches = item.getNonEmptyMatches();
+                    final int emptyMatches = item.getEmptyMatches();
+                    final int failedMatches = item.getFailures();
+                    final int total = nonEmptyMatches + emptyMatches
+                        + failedMatches;
+
+                    final double nonEmptyRatio
+                        = (double) nonEmptyMatches / total;
+                    final double emptyRatio
+                        = (double) emptyMatches / total;
+                    final  double failureRatio
+                        = (double) failedMatches / total;
+                    final Supplier<Rectangle> supplier
+                        = () -> new Rectangle(0.0, 20.0);
+
+                    final HBox hbox = new HBox();
+                    final ObservableList<Node> nodes = hbox.getChildren();
+
+                    DoubleExpression expr;
+                    Rectangle r;
+
+                    r = supplier.get();
+                    expr = property.multiply(nonEmptyRatio);
+                    r.widthProperty().bind(expr);
+                    r.setStyle("-fx-fill: CHART_COLOR_3");
+                    nodes.add(r);
+
+                    r = supplier.get();
+                    expr = property.multiply(emptyRatio);
+                    r.widthProperty().bind(expr);
+                    r.setStyle("-fx-fill: CHART_COLOR_2");
+                    nodes.add(r);
+
+                    r = supplier.get();
+                    expr = property.multiply(failureRatio);
+                    r.widthProperty().bind(expr);
+                    r.setStyle("-fx-fill: CHART_COLOR_1");
+                    nodes.add(r);
+
+                    setGraphic(hbox);
+                }
+            }
+        );
     }
 }
