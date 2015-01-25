@@ -1,5 +1,9 @@
 package com.github.fge.grappa.debugger.statistics;
 
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 public final class Utils
 {
     @SuppressWarnings("ProhibitedExceptionThrown")
@@ -19,5 +23,25 @@ public final class Utils
 
         return String.format("%d ms, %03d.%03d µs", value, nrMicroseconds,
             nrNanoseconds);
+    }
+
+    public static <S, T> void bindColumn(final TableColumn<S, T> column,
+        final String propertyName)
+    {
+        column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
+    }
+
+    public static <S> void setDisplayNanos(final TableColumn<S, Long> column)
+    {
+        column.setCellFactory(param -> new TableCell<S, Long>()
+        {
+            @Override
+            protected void updateItem(final Long item, final boolean empty)
+            {
+                super.updateItem(item, empty);
+                //noinspection AutoUnboxing
+                setText(empty ? null : nanosToString(item));
+            }
+        });
     }
 }
