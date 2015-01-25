@@ -104,7 +104,7 @@ public class GlobalStatsDisplay
 
         //noinspection AutoBoxing
         JavafxUtils.setColumnValue(callDetail,
-            stats -> String.format("%d/%d/%d", stats.getNonEmptyMatches(),
+            stats -> String.format("%d / %d / %d", stats.getNonEmptyMatches(),
                 stats.getEmptyMatches(), stats.getFailures()));
 
         callGraph.setCellValueFactory(
@@ -134,7 +134,7 @@ public class GlobalStatsDisplay
                         return;
                     }
 
-                    final ReadOnlyDoubleProperty property
+                    final ReadOnlyDoubleProperty cellWidth
                         = param.widthProperty();
 
                     final int nonEmptyMatches = item.getNonEmptyMatches();
@@ -162,19 +162,19 @@ public class GlobalStatsDisplay
                     Rectangle r;
 
                     r = supplier.get();
-                    expr = property.multiply(nonEmptyRatio);
+                    expr = cellWidth.multiply(nonEmptyRatio);
                     r.widthProperty().bind(expr);
                     r.setStyle("-fx-fill: CHART_COLOR_3");
                     nodes.add(r);
 
                     r = supplier.get();
-                    expr = property.multiply(emptyRatio);
+                    expr = cellWidth.multiply(emptyRatio);
                     r.widthProperty().bind(expr);
                     r.setStyle("-fx-fill: CHART_COLOR_2");
                     nodes.add(r);
 
                     r = supplier.get();
-                    expr = property.multiply(failureRatio);
+                    expr = cellWidth.multiply(failureRatio);
                     r.widthProperty().bind(expr);
                     r.setStyle("-fx-fill: CHART_COLOR_1");
                     nodes.add(r);
