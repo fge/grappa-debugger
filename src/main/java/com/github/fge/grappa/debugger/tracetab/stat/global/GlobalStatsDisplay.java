@@ -134,8 +134,8 @@ public class GlobalStatsDisplay
                         return;
                     }
 
-                    final ReadOnlyDoubleProperty property = param
-                        .widthProperty();
+                    final ReadOnlyDoubleProperty property
+                        = param.widthProperty();
 
                     final int nonEmptyMatches = item.getNonEmptyMatches();
                     final int emptyMatches = item.getEmptyMatches();
