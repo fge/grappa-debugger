@@ -2,22 +2,44 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
+import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
+import com.google.common.escape.CharEscaper;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.parboiled.support.Position;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 @ParametersAreNonnullByDefault
 public final class JavafxTraceTabView
     implements TraceTabView
 {
+    private static final ThreadFactory THREAD_FACTORY
+        = new ThreadFactoryBuilder().setDaemon(true)
+        .setNameFormat("tree-expand-%d").build();
+    private static final CharEscaper ESCAPER = new TracingCharEscaper();
+
+    private final ExecutorService executor
+        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
+
     private final TraceTabDisplay display;
+
+    private InputBuffer buffer;
 
     public JavafxTraceTabView(final TraceTabDisplay display)
     {
@@ -27,7 +49,7 @@ public final class JavafxTraceTabView
     @Override
     public void setInputText(final InputBuffer inputBuffer)
     {
-        Objects.requireNonNull(inputBuffer);
+        buffer = Objects.requireNonNull(inputBuffer);
         final String inputText = inputBuffer.extract(0, inputBuffer.length());
         display.inputText.getChildren().setAll(new Text(inputText));
     }
@@ -40,8 +62,9 @@ public final class JavafxTraceTabView
         final int nrLines = info.getNrLines();
         final int nrChars = info.getNrChars();
         final int nrCodePoints = info.getNrCodePoints();
-        final String message  = String.format("Input: %d lines, %d characters,"
-            + " %d code points", nrLines, nrChars, nrCodePoints);
+        final String message  = String.format(
+            "Input: %d lines, %d characters," + " %d code points", nrLines,
+            nrChars, nrCodePoints);
         display.textInfo.setText(message);
     }
 
@@ -61,6 +84,131 @@ public final class JavafxTraceTabView
     public void setParseTree(final ParseNode rootNode)
     {
         display.parseTree.setRoot(buildTree(rootNode));
+    }
+
+    @Override
+    public void expandParseTree()
+    {
+        final TreeItem<ParseNode> root = display.parseTree.getRoot();
+        final ParseNode node = root.getValue();
+        final Button button = display.treeExpand;
+
+        button.setDisable(true);
+        button.setText("Please wait...");
+
+        executor.submit(() -> {
+            final TreeItem<ParseNode> newRoot = buildTree(node, true);
+            Platform.runLater(() -> {
+                display.parseTree.setRoot(newRoot);
+                button.setText("Expand tree");
+                button.setDisable(false);
+            });
+        });
+    }
+
+    @SuppressWarnings("AutoBoxing")
+    @Override
+    public void showParseNode(final ParseNode node)
+    {
+        final boolean success = node.isSuccess();
+        Position position;
+
+        display.parseNodeLevel.setText(String.valueOf(node.getLevel()));
+
+        display.parseNodeRuleName.setText(node.getRuleName());
+
+        if (success) {
+            display.parseNodeStatus.setText("SUCCESS");
+            display.parseNodeStatus.setTextFill(Color.GREEN);
+        } else {
+            display.parseNodeStatus.setText("FAILURE");
+            display.parseNodeStatus.setTextFill(Color.RED);
+        }
+
+        position = buffer.getPosition(node.getStart());
+        display.parseNodeStart.setText(String.format("line %d, column %d",
+            position.getLine(), position.getColumn()));
+        position = buffer.getPosition(node.getEnd());
+        display.parseNodeEnd.setText(String.format("line %d, column %d",
+            position.getLine(), position.getColumn()));
+
+        display.parseNodeTime.setText(Utils.nanosToString(node.getNanos()));
+    }
+
+    @Override
+    public void highlightFailedMatch(final int failedIndex)
+    {
+        final int length = buffer.length();
+        final List<Text> list = new ArrayList<>(3);
+
+        String fragment;
+        Text text;
+
+        fragment = buffer.extract(0, failedIndex);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragment);
+            text.setFill(Color.GRAY);
+            list.add(text);
+        }
+
+        text = new Text("\u2612");
+        text.setFill(Color.RED);
+        text.setUnderline(true);
+        list.add(text);
+
+        fragment = buffer.extract(failedIndex, length);
+        if (!fragment.isEmpty())
+            list.add(new Text(fragment));
+
+        display.inputText.getChildren().setAll(list);
+        setScroll(failedIndex);
+    }
+
+    @Override
+    public void highlightSuccessfulMatch(final int startIndex,
+        final int endIndex)
+    {
+        final int length = buffer.length();
+        final List<Text> list = new ArrayList<>(3);
+
+        String fragment;
+        Text text;
+
+        // Before match
+        fragment = buffer.extract(0, startIndex);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragment);
+            text.setFill(Color.GRAY);
+            list.add(text);
+        }
+
+        // Match
+        fragment = buffer.extract(startIndex, endIndex);
+        text = new Text(fragment.isEmpty() ? "\u2205"
+            : '\u21fe' + ESCAPER.escape(fragment) + '\u21fd');
+        text.setFill(Color.GREEN);
+        text.setUnderline(true);
+        list.add(text);
+
+        // After match
+        fragment = buffer.extract(endIndex, length);
+        if (!fragment.isEmpty()) {
+            text = new Text(fragment);
+            list.add(text);
+        }
+
+        display.inputText.getChildren().setAll(list);
+        setScroll(startIndex);
+    }
+
+    private void setScroll(final int index)
+    {
+        final Position position = buffer.getPosition(index);
+        double line = position.getLine();
+        final double nrLines = buffer.getLineCount();
+        if (line != nrLines)
+            line--;
+        display.inputTextScroll.setVvalue(line / nrLines);
     }
 
     private TreeItem<ParseNode> buildTree(final ParseNode root)

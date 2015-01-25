@@ -5,6 +5,7 @@ import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
+import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -25,7 +26,9 @@ import javafx.scene.text.TextFlow;
 
 public class TraceTabDisplay
 {
-    private TraceTabPresenter presenter;
+    @NotFXML
+    @VisibleForTesting
+    TraceTabPresenter presenter;
 
     /*
      * Tree tab
@@ -140,11 +143,13 @@ public class TraceTabDisplay
     @FXML
     void expandParseTreeEvent(final Event event)
     {
+        presenter.handleExpandParseTree();
     }
 
     @NotFXML
     void parseNodeShowEvent(final ParseNode node)
     {
+        presenter.handleParseNodeShow(node);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,

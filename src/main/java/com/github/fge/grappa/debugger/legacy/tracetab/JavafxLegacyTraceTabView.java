@@ -355,12 +355,6 @@ public final class JavafxLegacyTraceTabView
         display.inputTextScroll.setVvalue(line / nrLines);
     }
 
-    private static void doExpand(final TreeItem<ParseNode> item)
-    {
-        item.getChildren().forEach(JavafxLegacyTraceTabView::doExpand);
-        item.setExpanded(true);
-    }
-
     private static <S, T> void bindColumn(final TableColumn<S, T> column,
         final String propertyName)
     {

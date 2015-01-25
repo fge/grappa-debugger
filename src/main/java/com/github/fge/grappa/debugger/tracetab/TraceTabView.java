@@ -18,4 +18,12 @@ public interface TraceTabView
     void setEvents(List<TraceEvent> events);
 
     void setParseTree(ParseNode rootNode);
+
+    void expandParseTree();
+
+    void showParseNode(ParseNode node);
+
+    void highlightFailedMatch(int failedIndex);
+
+    void highlightSuccessfulMatch(int startIndex, int endIndex);
 }
