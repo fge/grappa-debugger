@@ -3,11 +3,10 @@ package com.github.fge.grappa.debugger.tracetab.stat.global;
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
-import javafx.beans.property.SimpleObjectProperty;
+import com.github.fge.grappa.matchers.MatcherType;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -54,22 +53,22 @@ public class GlobalStatsDisplay
     TableView<RuleMatchingStats> stats;
 
     @FXML
-    private TableColumn<RuleMatchingStats, String> statsRule;
+    private TableColumn<RuleMatchingStats, String> ruleName;
 
     @FXML
-    private TableColumn<RuleMatchingStats, Integer> statsInvocations;
+    private TableColumn<RuleMatchingStats, String> ruleClass;
 
     @FXML
-    private TableColumn<RuleMatchingStats, Integer> statsSuccess;
+    private TableColumn<RuleMatchingStats, MatcherType> ruleType;
 
     @FXML
-    private TableColumn<RuleMatchingStats, Double> statsSuccessRate;
+    private TableColumn<RuleMatchingStats, Integer> nrCalls;
 
     @FXML
-    private TableColumn<RuleMatchingStats, Integer> statsEmptyMatches;
+    private TableColumn<RuleMatchingStats, String> callDetail;
 
     @FXML
-    private TableColumn<RuleMatchingStats, Double> statsEmptyMatchesPct;
+    private TableColumn<RuleMatchingStats, String> callDetailPct;
 
     @NotFXML
     public void setPresenter(final GlobalStatsPresenter presenter)
@@ -80,68 +79,33 @@ public class GlobalStatsDisplay
 
     protected void init()
     {
-        JavafxUtils.setColumnValue(statsRule, RuleMatchingStats::getRuleName);
-        JavafxUtils.setColumnValue(statsInvocations,
+        /*
+         * Stats table
+         */
+        JavafxUtils.setColumnValue(ruleName, RuleMatchingStats::getRuleName);
+
+        JavafxUtils.setColumnValue(ruleClass,
+            RuleMatchingStats::getMatcherClass);
+
+        JavafxUtils.setColumnValue(ruleType, RuleMatchingStats::getMatcherType);
+
+        JavafxUtils.setColumnValue(nrCalls,
             stats -> stats.getNonEmptyMatches() + stats.getEmptyMatches()
                 + stats.getFailures());
-        JavafxUtils.setColumnValue(statsSuccess,
-            stats -> stats.getEmptyMatches() + stats.getNonEmptyMatches());
-        JavafxUtils.setColumnValue(statsSuccessRate,
-            stats -> {
-                final int successes = stats.getEmptyMatches() + stats
-                    .getNonEmptyMatches();
-                final int failures = stats.getFailures();
 
-                return 100.0 * successes / (failures + successes);
-            });
-        statsSuccessRate.setCellFactory(
-            param -> new TableCell<RuleMatchingStats, Double>()
-            {
-                @Override
-                protected void updateItem(final Double item,
-                    final boolean empty)
-                {
-                    super.updateItem(item, empty);
-                    setText(empty ? null : String.format("%.2f%%", item));
-                }
-            });
-        JavafxUtils.setColumnValue(statsEmptyMatches,
-            RuleMatchingStats::getEmptyMatches);
-        //Utils.bindColumn(statsEmptyMatches, "emptyMatches");
-        statsEmptyMatchesPct.setCellValueFactory(
-            param -> new SimpleObjectProperty<Double>()
-            {
-                @SuppressWarnings("AutoBoxing")
-                @Override
-                public Double get()
-                {
-                    final RuleMatchingStats stats = param.getValue();
-                    final int nonEmptyMatches = stats.getNonEmptyMatches();
-                    final int emptyMatches = stats.getEmptyMatches();
-                    final int successfulMatches
-                        = nonEmptyMatches + emptyMatches;
-                    return successfulMatches == 0 ? -1.0
-                        : 100.0 * emptyMatches / successfulMatches;
-                }
-            }
-        );
-        statsEmptyMatchesPct.setCellFactory(
-            param -> new TableCell<RuleMatchingStats, Double>()
-            {
-                @SuppressWarnings("AutoBoxing")
-                @Override
-                protected void updateItem(final Double item,
-                    final boolean empty)
-                {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        return;
-                    }
-                    setText(item.compareTo(0.0) < 0 ? "N/A"
-                        : String.format("%.2f%%", item));
-                }
-            }
-        );
+        //noinspection AutoBoxing
+        JavafxUtils.setColumnValue(callDetail,
+            stats -> String.format("%d/%d/%d", stats.getNonEmptyMatches(),
+                stats.getEmptyMatches(), stats.getFailures()));
+
+        JavafxUtils.setColumnValue(callDetailPct, stats -> {
+            final int nonEmpty = stats.getNonEmptyMatches();
+            final int empty = stats.getEmptyMatches();
+            final int failures = stats.getFailures();
+            final int total = nonEmpty + empty + failures;
+            return String.format("%.2f%%/%.2f%%/%.2f%%",
+                100.0 * nonEmpty / total, 100.0 * empty / total,
+                100.0 * failures / total);
+        });
     }
 }

@@ -23,8 +23,11 @@ public class GlobalStatsPresenter
     private int nonEmptyMatches = 0;
     private int emptyMatches = 0;
     private int failedMatches = 0;
+    private int totalMatches = 0;
 
-    private long totalParseTime;
+    private int treeDepth = 0;
+    private long totalParseTime = 0;
+
 
     private GlobalStatsView view;
 
@@ -36,8 +39,10 @@ public class GlobalStatsPresenter
         final RuleMatchingStatsProcessor processor
             = new RuleMatchingStatsProcessor();
         final List<TraceEvent> events = model.getEvents();
+
         totalParseTime = events.get(events.size() - 1).getNanoseconds();
-        events.forEach(processor::process);
+        treeDepth = events.stream().peek(processor::process)
+            .mapToInt(TraceEvent::getLevel).max().getAsInt();
 
         stats = processor.getStats();
 
@@ -46,6 +51,8 @@ public class GlobalStatsPresenter
             emptyMatches += stat.getEmptyMatches();
             failedMatches += stat.getFailures();
         }
+
+        totalMatches = nonEmptyMatches + emptyMatches + failedMatches;
     }
 
     @VisibleForTesting
@@ -64,5 +71,7 @@ public class GlobalStatsPresenter
     public void loadStats()
     {
         view.loadStats(stats);
+        view.loadInfo(info, totalMatches, treeDepth, totalParseTime);
+        view.loadPieChart(failedMatches, emptyMatches, nonEmptyMatches);
     }
 }
