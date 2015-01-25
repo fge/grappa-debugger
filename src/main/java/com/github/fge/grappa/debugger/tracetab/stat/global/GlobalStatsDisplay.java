@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab.stat.global;
 
+import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
 import com.github.fge.grappa.debugger.statistics.Utils;
 import javafx.beans.property.SimpleObjectProperty;
@@ -64,7 +65,14 @@ public class GlobalStatsDisplay
     @FXML
     private TableColumn<RuleMatchingStats, Double> statsSuccessRate;
 
-    void setPresenter(final GlobalStatsPresenter presenter)
+    @FXML
+    private TableColumn<RuleMatchingStats, Integer> statsEmptyMatches;
+
+    @FXML
+    private TableColumn<RuleMatchingStats, Double> statsEmptyMatchesPct;
+
+    @NotFXML
+    public void setPresenter(final GlobalStatsPresenter presenter)
     {
         this.presenter = Objects.requireNonNull(presenter);
         init();
@@ -106,14 +114,13 @@ public class GlobalStatsDisplay
                 public Double get()
                 {
                     final RuleMatchingStats stats = param.getValue();
-                    final int successes = stats.getEmptyMatches()
-                        + stats.getNonEmptyMatches();
+                    final int successes = stats.getEmptyMatches() + stats
+                        .getNonEmptyMatches();
                     final int failures = stats.getFailures();
 
                     return 100.0 * successes / (failures + successes);
                 }
-            }
-        );
+            });
         statsSuccessRate.setCellFactory(
             param -> new TableCell<RuleMatchingStats, Double>()
             {
@@ -123,6 +130,42 @@ public class GlobalStatsDisplay
                 {
                     super.updateItem(item, empty);
                     setText(empty ? null : String.format("%.2f", item));
+                }
+            }
+        );
+        Utils.bindColumn(statsEmptyMatches, "emptyMatches");
+        statsEmptyMatchesPct.setCellValueFactory(
+            param -> new SimpleObjectProperty<Double>()
+            {
+                @SuppressWarnings("AutoBoxing")
+                @Override
+                public Double get()
+                {
+                    final RuleMatchingStats stats = param.getValue();
+                    final int nonEmptyMatches = stats.getNonEmptyMatches();
+                    final int emptyMatches = stats.getEmptyMatches();
+                    final int successfulMatches
+                        = nonEmptyMatches + emptyMatches;
+                    return successfulMatches == 0 ? -1.0
+                        : 100.0 * emptyMatches / successfulMatches;
+                }
+            }
+        );
+        statsEmptyMatchesPct.setCellFactory(
+            param -> new TableCell<RuleMatchingStats, Double>()
+            {
+                @SuppressWarnings("AutoBoxing")
+                @Override
+                protected void updateItem(final Double item,
+                    final boolean empty)
+                {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        return;
+                    }
+                    setText(item.compareTo(0.0) < 0 ? "N/A"
+                        : String.format("%.2f%%", item));
                 }
             }
         );

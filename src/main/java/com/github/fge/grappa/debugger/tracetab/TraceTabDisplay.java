@@ -23,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -75,6 +76,8 @@ public class TraceTabDisplay
     @FXML
     ComboBox<StatsType> statsCombo;
 
+    @FXML
+    BorderPane statsTab;
     /*
      * Events tab
      */
@@ -125,8 +128,9 @@ public class TraceTabDisplay
                     final ObservableValue<? extends StatsType> observable,
                     final StatsType oldValue, final StatsType newValue)
                 {
-                    System.out.println(newValue);
-
+                    // TODO: can newValue ever be null?
+                    if (newValue != oldValue && newValue != null)
+                        presenter.handleLoadStats(newValue);
                 }
             });
         statsCombo.setCellFactory(param -> new ListCell<StatsType>()

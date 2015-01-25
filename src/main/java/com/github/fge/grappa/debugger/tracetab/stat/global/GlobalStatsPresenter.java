@@ -3,6 +3,7 @@ package com.github.fge.grappa.debugger.tracetab.stat.global;
 import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
 import com.github.fge.grappa.debugger.statistics.RuleMatchingStatsProcessor;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.google.common.annotations.VisibleForTesting;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
+@NonFinalForTesting
 public class GlobalStatsPresenter
 {
     private final Collection<RuleMatchingStats> stats;
@@ -54,7 +56,7 @@ public class GlobalStatsPresenter
         this.info = Objects.requireNonNull(info);
     }
 
-    void setView(final GlobalStatsView view)
+    public void setView(final GlobalStatsView view)
     {
         this.view = Objects.requireNonNull(view);
     }

@@ -29,9 +29,11 @@ public final class RuleMatchingStatsProcessor
         stats = statsMap.get(ruleName);
 
         if (type == TraceEventType.BEFORE_MATCH) {
-            if (stats == null)
+            if (stats == null) {
                 stats = new RuleMatchingStats(ruleName, event.getMatcherClass(),
                     event.getMatcherType());
+                statsMap.put(ruleName, stats);
+            }
             startingPositions.put(ruleName, index);
             return;
         }

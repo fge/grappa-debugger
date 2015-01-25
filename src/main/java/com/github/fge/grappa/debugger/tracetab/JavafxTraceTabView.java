@@ -5,12 +5,20 @@ import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.StatsType;
 import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.github.fge.grappa.debugger.statistics.Utils;
+import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsDisplay;
+import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsView;
+import com.github.fge.grappa.debugger.tracetab.stat.global
+    .JavafxGlobalStatsView;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.escape.CharEscaper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
@@ -19,6 +27,7 @@ import javafx.scene.text.Text;
 import org.parboiled.support.Position;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +50,9 @@ public final class JavafxTraceTabView
     private final TraceTabDisplay display;
 
     private InputBuffer buffer;
+
+    @VisibleForTesting
+    JavafxStatsTabFactory tabFactory = new JavafxStatsTabFactory();
 
     public JavafxTraceTabView(final TraceTabDisplay display)
     {
@@ -201,6 +213,20 @@ public final class JavafxTraceTabView
 
         display.inputText.getChildren().setAll(list);
         setScroll(startIndex);
+    }
+
+    @Override
+    public void loadGlobalStats(final GlobalStatsPresenter presenter)
+        throws IOException
+    {
+        final FXMLLoader loader = tabFactory.getLoader(StatsType.GLOBAL);
+        final Node node = loader.load();
+        final GlobalStatsDisplay statsDisplay = loader.getController();
+        final GlobalStatsView view = new JavafxGlobalStatsView(statsDisplay);
+        statsDisplay.setPresenter(presenter);
+        presenter.setView(view);
+        presenter.loadStats();
+        display.statsTab.setCenter(node);
     }
 
     private void setScroll(final int index)

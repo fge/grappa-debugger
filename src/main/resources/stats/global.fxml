@@ -82,7 +82,10 @@
             <TableColumn fx:id="statsInvocations"
                 text="Total invocations"/>
             <TableColumn fx:id="statsSuccess" text="Succesful matches"/>
-            <TableColumn fx:id="statsSuccessRate" text="Success rate"/>
+            <TableColumn fx:id="statsSuccessRate" text="Success rate (%)"/>
+            <TableColumn fx:id="statsEmptyMatches" text="Empty matches"/>
+            <TableColumn fx:id="statsEmptyMatchesPct"
+                text="Empty matches rate (%)"/>
         </columns>
     </TableView>
 </SplitPane>

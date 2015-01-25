@@ -102,7 +102,7 @@
         </SplitPane>
     </Tab>
     <Tab text="Statistics" closable="false">
-        <BorderPane>
+        <BorderPane fx:id="statsTab">
             <top>
                 <ToolBar>
                     <Label text="Statistics:"/>
@@ -112,12 +112,7 @@
                 </ToolBar>
             </top>
             <center>
-                <StackPane>
-                    <Label text="No statistics selected"/>
-                    <SplitPane orientation="VERTICAL" dividerPositions="0.5">
-                        <SplitPane orientation="HORIZONTAL" dividerPositions="0.4">
-                    </SplitPane>
-                </StackPane>
+                <Label text="No statistics selected"/>
             </center>
         </BorderPane>
     </Tab>
