@@ -2,10 +2,17 @@
 
 This project is licensed under both LGPLv3 and ASL 2.0. See file LICENSE for more details.
 
-This project has been developed with the latest Oracle JDK, that is 1.8u25. It requires JavaFX 8.
-
-The current version is **0.1.0**. You can download a self contained jar with a main on
+The current version is **0.2.0**. You can download a self contained jar with a main on
 [Bintray](https://bintray.com/fge/maven/grappa-debugger/view).
+
+### Compatibility notes
+
+This project requires Java 8 and JavaFX 8; it has been developed using JDK 1.8u25 from Oracle.
+
+It is recommended that you run this program with this very version; among other things, exception
+handling requires on the default uncaught exception handler working correctly with JavaFX.
+Apparently, this was not the case with earlier versions of JDK 8; unfortunately I don't know the
+full details.
 
 ## What this is
 
