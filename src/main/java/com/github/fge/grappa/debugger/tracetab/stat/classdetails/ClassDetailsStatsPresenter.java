@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab.stat.classdetails;
 
+import com.github.fge.grappa.debugger.stats.classdetails.MatcherClassDetails;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,5 +27,10 @@ public class ClassDetailsStatsPresenter
     public void loadStats()
     {
         view.loadClassDetails(model.getClassDetails());
+    }
+
+    void handleShowClassDetails(final MatcherClassDetails details)
+    {
+        view.showClassDetails(details);
     }
 }

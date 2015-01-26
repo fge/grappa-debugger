@@ -11,7 +11,7 @@ import java.util.Set;
 
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
-public final class MatcherClassDetails
+public class MatcherClassDetails
 {
     private final String className;
     private final MatcherType matcherType;

@@ -24,4 +24,10 @@ public final class JavafxClassDetailsStatsView
         Objects.requireNonNull(classDetails);
         display.classNames.getItems().setAll(classDetails.values());
     }
+
+    @Override
+    public void showClassDetails(final MatcherClassDetails details)
+    {
+        display.matcherType.setText(details.getMatcherType().toString());
+    }
 }

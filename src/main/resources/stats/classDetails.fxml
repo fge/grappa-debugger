@@ -36,9 +36,9 @@
                                 <RowConstraints vgrow="SOMETIMES"/>
                             </rowConstraints>
 
-                            <Label text="name" GridPane.rowIndex="0"
+                            <Label text="Matcher type:" GridPane.rowIndex="0"
                                 GridPane.columnIndex="0"/>
-                            <Label text="value" GridPane.rowIndex="0"
+                            <Label fx:id="matcherType" GridPane.rowIndex="0"
                                 GridPane.columnIndex="1"/>
                         </GridPane>
                     </center>

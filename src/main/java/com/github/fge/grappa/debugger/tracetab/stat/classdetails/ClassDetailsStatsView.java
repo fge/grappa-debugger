@@ -7,4 +7,6 @@ import java.util.Map;
 public interface ClassDetailsStatsView
 {
     void loadClassDetails(Map<String, MatcherClassDetails> classDetails);
+
+    void showClassDetails(MatcherClassDetails details);
 }

@@ -39,4 +39,14 @@ public class ClassDetailsStatsPresenterTest
 
         verify(view, only()).loadClassDetails(same(classDetails));
     }
+
+    @Test
+    public void showClassDetailsTest()
+    {
+        final MatcherClassDetails details = mock(MatcherClassDetails.class);
+
+        presenter.handleShowClassDetails(details);
+
+        verify(view).showClassDetails(same(details));
+    }
 }
