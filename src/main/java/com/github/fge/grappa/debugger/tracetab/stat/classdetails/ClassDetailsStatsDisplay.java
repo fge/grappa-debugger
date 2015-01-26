@@ -32,7 +32,8 @@ public class ClassDetailsStatsDisplay
                     final boolean empty)
                 {
                     super.updateItem(item, empty);
-                    setText(empty ? null : item.getClassName());
+                    if (!empty)
+                        setText(item.getClassName());
                 }
             }
         );

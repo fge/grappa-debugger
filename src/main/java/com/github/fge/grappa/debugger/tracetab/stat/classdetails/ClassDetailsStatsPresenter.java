@@ -25,6 +25,6 @@ public class ClassDetailsStatsPresenter
 
     public void loadStats()
     {
-        // TODO
+        view.loadClassDetails(model.getClassDetails());
     }
 }

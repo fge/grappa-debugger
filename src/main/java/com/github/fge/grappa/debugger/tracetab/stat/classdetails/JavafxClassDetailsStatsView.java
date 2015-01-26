@@ -1,8 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab.stat.classdetails;
 
 import com.github.fge.grappa.debugger.stats.classdetails.MatcherClassDetails;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
@@ -24,10 +22,6 @@ public final class JavafxClassDetailsStatsView
         final Map<String, MatcherClassDetails> classDetails)
     {
         Objects.requireNonNull(classDetails);
-
-        final ObservableList<MatcherClassDetails> list
-            = FXCollections.observableArrayList(classDetails.values());
-
-        display.classNames.setItems(list);
+        display.classNames.getItems().setAll(classDetails.values());
     }
 }

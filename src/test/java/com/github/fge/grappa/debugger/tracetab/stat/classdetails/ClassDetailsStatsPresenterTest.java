@@ -27,7 +27,7 @@ public class ClassDetailsStatsPresenterTest
         presenter.setView(view);
     }
 
-    @Test(enabled = false)
+    @Test
     public void loadStatsTest()
     {
         @SuppressWarnings("unchecked")

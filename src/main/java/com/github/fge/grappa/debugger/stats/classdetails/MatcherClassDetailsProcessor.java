@@ -60,7 +60,6 @@ public final class MatcherClassDetailsProcessor
 
     public Map<String, MatcherClassDetails> getClassDetails()
     {
-        System.out.println(classDetails.size());
         return Collections.unmodifiableMap(classDetails);
     }
 }

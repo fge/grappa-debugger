@@ -4,12 +4,10 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.StatsType;
-import com.github.fge.grappa.debugger.tracetab.stat.classdetails
-    .ClassDetailsStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
-import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -19,8 +17,8 @@ import java.util.List;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -123,14 +121,11 @@ public class TraceTabPresenterTest
             = mock(GlobalStatsPresenter.class);
 
         doReturn(statsPresenter).when(presenter).getGlobalStatsPresenter();
+        doNothing().when(presenter).loadGlobalStats();
 
         presenter.handleLoadStats(StatsType.GLOBAL);
 
-        final InOrder inOrder = inOrder(presenter, view);
-
-        inOrder.verify(presenter).loadGlobalStats();
-        inOrder.verify(view).loadGlobalStats(same(statsPresenter));
-        inOrder.verifyNoMoreInteractions();
+        verify(presenter).loadGlobalStats();
     }
 
     @Test(enabled = false)
@@ -142,13 +137,10 @@ public class TraceTabPresenterTest
 
         doReturn(statsPresenter).when(presenter)
             .getClassDetailsStatsPresenter();
+        doNothing().when(presenter).loadClassDetailsStats();
 
         presenter.handleLoadStats(StatsType.CLASS_DETAILS);
 
-        final InOrder inOrder = inOrder(presenter, view);
-
-        inOrder.verify(presenter).loadClassDetailsStats();
-        inOrder.verify(view).loadClassDetailsStats(same(statsPresenter));
-        inOrder.verifyNoMoreInteractions();
+        verify(presenter).loadClassDetailsStats();
     }
 }
