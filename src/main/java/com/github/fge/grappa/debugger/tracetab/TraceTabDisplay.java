@@ -12,9 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
@@ -23,10 +21,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
+import java.util.Objects;
 
 public class TraceTabDisplay
 {
@@ -71,13 +70,13 @@ public class TraceTabDisplay
     ScrollPane inputTextScroll;
 
     /*
-     * Stats tab
+     * Stats tabs
      */
     @FXML
-    ComboBox<StatsType> statsCombo;
+    Tab globalStatsTab;
 
     @FXML
-    BorderPane statsTab;
+    public Tab classStatsTab;
     /*
      * Events tab
      */
@@ -108,40 +107,20 @@ public class TraceTabDisplay
     @FXML
     TableColumn<TraceEvent, String> eventPath;
 
-    public void init(final TraceTabPresenter presenter)
+    public void setPresenter(final TraceTabPresenter presenter)
     {
-        this.presenter = presenter;
+        this.presenter = Objects.requireNonNull(presenter);
+        init();
+    }
 
+    @VisibleForTesting
+    void init()
+    {
         /*
          * Parse tree
          */
         parseTree.setCellFactory(param -> new ParseNodeCell(this));
 
-        /*
-         * Stats
-         */
-        statsCombo.getSelectionModel().selectedItemProperty()
-            .addListener(new ChangeListener<StatsType>()
-            {
-                @Override
-                public void changed(
-                    final ObservableValue<? extends StatsType> observable,
-                    final StatsType oldValue, final StatsType newValue)
-                {
-                    // TODO: can newValue ever be null?
-                    if (newValue != oldValue && newValue != null)
-                        loadStatsEvent(newValue);
-                }
-            });
-        statsCombo.setCellFactory(param -> new ListCell<StatsType>()
-        {
-            @Override
-            protected void updateItem(final StatsType item, final boolean empty)
-            {
-                super.updateItem(item, empty);
-                setText(empty ? null : item.toString());
-            }
-        });
         /*
          * Trace events
          */

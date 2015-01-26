@@ -56,6 +56,8 @@ public class TraceTabPresenter
         view.setInfo(model.getInfo());
         view.setEvents(model.getEvents());
         view.setParseTree(model.getRootNode());
+        loadGlobalStats();
+        loadClassDetailsStats();
     }
 
     public void handleExpandParseTree()

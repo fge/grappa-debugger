@@ -14,6 +14,9 @@
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsDisplay">
+    <padding>
+        <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
+    </padding>
     <left>
         <ListView editable="false" fx:id="classNames"/>
     </left>

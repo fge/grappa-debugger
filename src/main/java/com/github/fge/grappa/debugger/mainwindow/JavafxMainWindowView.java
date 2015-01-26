@@ -109,10 +109,10 @@ public final class JavafxMainWindowView
             showError("Tab creation error", "Unable to create tab", oops);
             return;
         }
-        display.pane.setCenter(node);
         final TraceTabDisplay tabDisplay = loader.getController();
         final TraceTabView view = new JavafxTraceTabView(this, tabDisplay);
         presenter.setView(view);
-        tabDisplay.init(presenter);
+        tabDisplay.setPresenter(presenter);
+        display.pane.setCenter(node);
     }
 }

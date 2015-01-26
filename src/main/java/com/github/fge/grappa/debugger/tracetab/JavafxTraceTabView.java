@@ -65,7 +65,6 @@ public final class JavafxTraceTabView
     {
         this.parentView = parentView;
         this.display = display;
-        display.statsCombo.getItems().addAll(StatsType.values());
     }
 
     @Override
@@ -240,7 +239,7 @@ public final class JavafxTraceTabView
         statsDisplay.setPresenter(presenter);
         presenter.setView(view);
         presenter.loadStats();
-        display.statsTab.setCenter(node);
+        display.globalStatsTab.setContent(node);
     }
 
     @Override
@@ -262,7 +261,7 @@ public final class JavafxTraceTabView
         statsDisplay.setPresenter(presenter);
         presenter.setView(view);
         presenter.loadStats();
-        display.statsTab.setCenter(node);
+        display.classStatsTab.setContent(node);
     }
 
     private void setScroll(final int index)

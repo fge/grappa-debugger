@@ -101,20 +101,8 @@
             </BorderPane>
         </SplitPane>
     </Tab>
-    <Tab text="Statistics" closable="false">
-        <BorderPane fx:id="statsTab">
-            <top>
-                <ToolBar>
-                    <Label text="Statistics:"/>
-                    <ComboBox fx:id="statsCombo" editable="false"
-                        promptText="Choose..."/>
-                </ToolBar>
-            </top>
-            <center>
-                <Label text="No statistics selected"/>
-            </center>
-        </BorderPane>
-    </Tab>
+    <Tab text="Global statistics" fx:id="globalStatsTab" closable="false"/>
+    <Tab text="Class statistics" fx:id="classStatsTab" closable="false"/>
     <Tab text="All events" fx:id="eventsTab" closable="false">
         <TableView fx:id="events">
             <columns>
