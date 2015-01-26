@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass
     .PerClassStatsPresenter;

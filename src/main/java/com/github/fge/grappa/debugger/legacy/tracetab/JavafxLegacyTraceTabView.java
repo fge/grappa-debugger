@@ -1,11 +1,11 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
-import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
-import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.github.fge.grappa.debugger.javafx.Utils;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
+import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
+import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.escape.CharEscaper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;

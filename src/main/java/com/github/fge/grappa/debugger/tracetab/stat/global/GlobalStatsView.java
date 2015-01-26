@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab.stat.global;
 
-import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
+import com.github.fge.grappa.debugger.stats.RuleMatchingStats;
 import com.github.fge.grappa.trace.ParseRunInfo;
 
 import java.util.Collection;

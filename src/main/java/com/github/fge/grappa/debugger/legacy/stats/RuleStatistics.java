@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.legacy;
+package com.github.fge.grappa.debugger.legacy.stats;
 
 public final class RuleStatistics
 {

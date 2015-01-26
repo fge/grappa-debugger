@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.javafx;
 
-import com.github.fge.grappa.debugger.statistics.StatsType;
+import com.github.fge.grappa.debugger.stats.StatsType;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.fxml.FXMLLoader;
 
@@ -49,7 +49,7 @@ public class JavafxStatsTabFactory
         final URL url = STAT_TABS_FXML_FILES.get(type);
         if (url == null)
             throw new UnsupportedOperationException("no tab found for " + type
-                + " statistics");
+                + " stats");
         return new FXMLLoader(url);
     }
 }

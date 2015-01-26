@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
-import com.github.fge.grappa.debugger.legacy.ParsingRunTrace;
-import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
-import com.github.fge.grappa.debugger.statistics.ParseTreeBuilder;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
+import com.github.fge.grappa.debugger.legacy.stats.ParsingRunTrace;
+import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
+import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.debugger.stats.ParseTreeBuilder;
 import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Nonnull;

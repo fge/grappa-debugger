@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab.stat.global;
 
-import com.github.fge.grappa.debugger.statistics.RuleMatchingStats;
-import com.github.fge.grappa.debugger.statistics.RuleMatchingStatsProcessor;
+import com.github.fge.grappa.debugger.stats.RuleMatchingStats;
+import com.github.fge.grappa.debugger.stats.RuleMatchingStatsProcessor;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.trace.ParseRunInfo;

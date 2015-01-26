@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.fge.grappa.debugger.legacy;
+package com.github.fge.grappa.debugger.legacy.stats;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;

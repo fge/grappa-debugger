@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
+import com.github.fge.grappa.debugger.stats.ParseNode;
 
 import java.util.List;
 

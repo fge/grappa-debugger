@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.legacy;
+package com.github.fge.grappa.debugger.legacy.stats;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.internal.NonFinalForTesting;

@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.statistics;
+package com.github.fge.grappa.debugger.stats;
 
 import javax.annotation.Nonnull;
 

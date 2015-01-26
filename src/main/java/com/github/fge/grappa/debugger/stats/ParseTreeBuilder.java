@@ -1,7 +1,7 @@
-package com.github.fge.grappa.debugger.statistics;
+package com.github.fge.grappa.debugger.stats;
 
 
-import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Untainted;

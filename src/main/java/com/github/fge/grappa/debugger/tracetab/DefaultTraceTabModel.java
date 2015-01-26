@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
-import com.github.fge.grappa.debugger.statistics.ParseTreeProcessor;
+import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.debugger.stats.ParseTreeProcessor;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 

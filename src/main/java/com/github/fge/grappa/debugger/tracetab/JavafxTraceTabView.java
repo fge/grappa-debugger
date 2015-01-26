@@ -2,22 +2,21 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.javafx.JavafxStatsTabFactory;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
-import com.github.fge.grappa.debugger.statistics.StatsType;
-import com.github.fge.grappa.debugger.statistics.TracingCharEscaper;
 import com.github.fge.grappa.debugger.javafx.Utils;
+import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.debugger.stats.StatsType;
+import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsDisplay;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsView;
-import com.github.fge.grappa.debugger.tracetab.stat.global.JavafxGlobalStatsView;
-
-
+import com.github.fge.grappa.debugger.tracetab.stat.global
+    .JavafxGlobalStatsView;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass
     .JavafxPerClassStatsView;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass
     .PerClassStatsDisplay;
-import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsPresenter;
-
+import com.github.fge.grappa.debugger.tracetab.stat.perclass
+    .PerClassStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsView;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;

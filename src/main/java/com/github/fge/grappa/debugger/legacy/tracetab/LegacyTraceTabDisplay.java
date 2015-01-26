@@ -1,9 +1,9 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
-import com.github.fge.grappa.debugger.legacy.LegacyTraceEvent;
-import com.github.fge.grappa.debugger.legacy.RuleStatistics;
-import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
+import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
+import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -58,7 +58,7 @@ public class LegacyTraceTabDisplay
     ScrollPane inputTextScroll;
 
     /*
-     * General statistics
+     * General stats
      */
     @FXML
     Label parseDate;

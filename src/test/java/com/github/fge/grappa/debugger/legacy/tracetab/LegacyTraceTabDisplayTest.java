@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
-import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.stats.ParseNode;
 import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
