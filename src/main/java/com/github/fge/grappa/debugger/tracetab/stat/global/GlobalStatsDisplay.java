@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.tracetab.stat.global;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
-import com.github.fge.grappa.debugger.stats.RuleMatchingStats;
+import com.github.fge.grappa.debugger.stats.global.RuleMatchingStats;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.ReadOnlyDoubleProperty;

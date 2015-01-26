@@ -1,5 +1,6 @@
-package com.github.fge.grappa.debugger.stats;
+package com.github.fge.grappa.debugger.stats.global;
 
+import com.github.fge.grappa.debugger.stats.TraceEventProcessor;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
 

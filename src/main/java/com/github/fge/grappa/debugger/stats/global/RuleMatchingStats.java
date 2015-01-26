@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.stats;
+package com.github.fge.grappa.debugger.stats.global;
 
 import com.github.fge.grappa.matchers.MatcherType;
 

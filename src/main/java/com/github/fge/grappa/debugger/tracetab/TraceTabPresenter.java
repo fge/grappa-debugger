@@ -10,6 +10,9 @@ import com.github.fge.grappa.debugger.tracetab.stat.classdetails
     .ClassDetailsStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails
     .DefaultClassDetailsStatsModel;
+import com.github.fge.grappa.debugger.tracetab.stat.global
+    .DefaultGlobalStatsModel;
+import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass
     .PerClassStatsPresenter;
@@ -90,7 +93,8 @@ public class TraceTabPresenter
     @VisibleForTesting
     GlobalStatsPresenter getGlobalStatsPresenter()
     {
-        return new GlobalStatsPresenter(model);
+        final GlobalStatsModel statsModel = new DefaultGlobalStatsModel(model);
+        return new GlobalStatsPresenter(statsModel);
     }
 
     @VisibleForTesting
@@ -123,7 +127,8 @@ public class TraceTabPresenter
         return new ClassDetailsStatsPresenter(statsModel);
     }
 
-    public void loadClassDetailsStats()
+    @VisibleForTesting
+    void loadClassDetailsStats()
         throws IOException
     {
         final ClassDetailsStatsPresenter presenter

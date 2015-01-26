@@ -1,7 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab.stat.global;
 
 import com.github.fge.grappa.debugger.javafx.Utils;
-import com.github.fge.grappa.debugger.stats.RuleMatchingStats;
+import com.github.fge.grappa.debugger.stats.global.GlobalParseInfo;
+import com.github.fge.grappa.debugger.stats.global.RuleMatchingStats;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import javafx.scene.chart.PieChart.Data;
 
@@ -34,8 +35,7 @@ public final class JavafxGlobalStatsView
 
     @SuppressWarnings("AutoBoxing")
     @Override
-    public void loadInfo(final ParseRunInfo info, final int totalMatches,
-        final int treeDepth, final long totalParseTime)
+    public void loadInfo(final ParseRunInfo info, final int totalMatches)
     {
         final Instant instant = Instant.ofEpochMilli(info.getStartDate());
         // TODO: record tz info in the JSON
@@ -43,10 +43,6 @@ public final class JavafxGlobalStatsView
             = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
 
         display.parseDate.setText(time.toString());
-
-        display.totalParseTime.setText(Utils.nanosToString(totalParseTime));
-
-        display.treeDepth.setText(String.valueOf(treeDepth));
 
         display.invPerLine.setText(String.format("%.02f",
             (double) totalMatches / info.getNrLines()));
@@ -56,11 +52,16 @@ public final class JavafxGlobalStatsView
 
     @SuppressWarnings("AutoBoxing")
     @Override
-    public void loadPieChart(final int failedMatches, final int emptyMatches,
-        final int nonEmptyMatches)
+    public void loadParseInfo(final GlobalParseInfo info)
     {
-        final int totalInvocations = failedMatches + emptyMatches
-            + nonEmptyMatches;
+        final long totalParseTime = info.getTotalParseTime();
+        final int treeDepth = info.getTreeDepth();
+        final int totalInvocations = info.getTotalMatches();
+
+        display.totalParseTime.setText(Utils.nanosToString(totalParseTime));
+
+        display.treeDepth.setText(String.valueOf(treeDepth));
+
         final List<Data> list = new ArrayList<>(3);
 
         int nr;
@@ -70,7 +71,7 @@ public final class JavafxGlobalStatsView
         /*
          * Failures
          */
-        nr = failedMatches;
+        nr = info.getFailedMatches();
         percent = 100.0 * nr / totalInvocations;
         fmt = String.format("Failures (%d - %.02f%%)", nr, percent);
         list.add(new Data(fmt, percent));
@@ -78,7 +79,7 @@ public final class JavafxGlobalStatsView
         /*
          * Empty
          */
-        nr = emptyMatches;
+        nr = info.getEmptyMatches();
         percent = 100.0 * nr / totalInvocations;
         fmt = String.format("Empty matches (%d - %.02f%%)", nr, percent);
         list.add(new Data(fmt, percent));
@@ -86,7 +87,7 @@ public final class JavafxGlobalStatsView
         /*
          * Non empty
          */
-        nr = nonEmptyMatches;
+        nr = info.getNonEmptyMatches();
         percent = 100.0 * nr / totalInvocations;
         fmt = String.format("Non empty matches (%d; %.02f%%)", nr, percent);
         list.add(new Data(fmt, percent));

@@ -4,13 +4,17 @@ import com.github.fge.grappa.debugger.stats.global.GlobalParseInfo;
 import com.github.fge.grappa.debugger.stats.global.RuleMatchingStats;
 import com.github.fge.grappa.trace.ParseRunInfo;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public interface GlobalStatsView
+public interface GlobalStatsModel
 {
-    void loadStats(Collection<RuleMatchingStats> stats);
+    @Nonnull
+    GlobalParseInfo getGlobalParseInfo();
 
-    void loadInfo(ParseRunInfo info, int totalMatches);
+    @Nonnull
+    ParseRunInfo getParseRunInfo();
 
-    void loadParseInfo(GlobalParseInfo info);
+    @Nonnull
+    Collection<RuleMatchingStats> getRuleStats();
 }
