@@ -17,8 +17,8 @@
         <ListView editable="false"/>
     </left>
     <center>
-        <SplitPane dividers="0.5" orientation="VERTICAL">
-            <SplitPane dividers="0.5" orientation="HORIZONTAL">
+        <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+            <SplitPane dividerPositions="0.5" orientation="HORIZONTAL">
                 <BorderPane>
                     <top>
                         <ToolBar>

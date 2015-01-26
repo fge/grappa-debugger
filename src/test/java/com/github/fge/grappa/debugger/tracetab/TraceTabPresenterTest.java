@@ -4,6 +4,8 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.StatsType;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .ClassDetailsStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsPresenter;
 import com.github.fge.grappa.trace.ParseRunInfo;
@@ -129,6 +131,7 @@ public class TraceTabPresenterTest
 
         inOrder.verify(presenter).loadGlobalStats();
         inOrder.verify(view).loadGlobalStats(same(statsPresenter));
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test
@@ -146,5 +149,25 @@ public class TraceTabPresenterTest
 
         inOrder.verify(presenter).loadPerClassStats();
         inOrder.verify(view).loadPerClassStats(same(statsPresenter));
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void handleLoadStatsClassDetailsTest()
+        throws IOException
+    {
+        final ClassDetailsStatsPresenter statsPresenter
+            = mock(ClassDetailsStatsPresenter.class);
+
+        doReturn(statsPresenter).when(presenter)
+            .getClassDetailsStatsPresenter();
+
+        presenter.handleLoadStats(StatsType.CLASS_DETAILS);
+
+        final InOrder inOrder = inOrder(presenter, view);
+
+        inOrder.verify(presenter).loadClassDetailsStats();
+        inOrder.verify(view).loadClassDetailsStats(same(statsPresenter));
+        inOrder.verifyNoMoreInteractions();
     }
 }

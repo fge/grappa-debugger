@@ -6,17 +6,21 @@ import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.StatsType;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .ClassDetailsStatsDisplay;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsPresenter;
+
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .ClassDetailsStatsView;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .JavafxClassDetailsStatsView;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsDisplay;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsView;
-import com.github.fge.grappa.debugger.tracetab.stat.global
-    .JavafxGlobalStatsView;
-import com.github.fge.grappa.debugger.tracetab.stat.perclass
-    .JavafxPerClassStatsView;
-import com.github.fge.grappa.debugger.tracetab.stat.perclass
-    .PerClassStatsDisplay;
-import com.github.fge.grappa.debugger.tracetab.stat.perclass
-    .PerClassStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.global.JavafxGlobalStatsView;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass.JavafxPerClassStatsView;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsDisplay;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsView;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
@@ -246,6 +250,22 @@ public final class JavafxTraceTabView
         final PerClassStatsDisplay statsDisplay = loader.getController();
         final PerClassStatsView view
             = new JavafxPerClassStatsView(statsDisplay);
+        statsDisplay.setPresenter(presenter);
+        presenter.setView(view);
+        presenter.loadStats();
+        display.statsTab.setCenter(node);
+    }
+
+    @Override
+    public void loadClassDetailsStats(
+        final ClassDetailsStatsPresenter presenter)
+        throws IOException
+    {
+        final FXMLLoader loader = tabFactory.getLoader(StatsType.CLASS_DETAILS);
+        final Node node = loader.load();
+        final ClassDetailsStatsDisplay statsDisplay = loader.getController();
+        final ClassDetailsStatsView view
+            = new JavafxClassDetailsStatsView(statsDisplay);
         statsDisplay.setPresenter(presenter);
         presenter.setView(view);
         presenter.loadStats();

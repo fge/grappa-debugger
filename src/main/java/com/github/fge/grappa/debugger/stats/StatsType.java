@@ -6,6 +6,7 @@ public enum StatsType
 {
     GLOBAL("Global"),
     PER_CLASS("Per class"),
+    CLASS_DETAILS("Class details"),
     ;
 
     private final String desc;

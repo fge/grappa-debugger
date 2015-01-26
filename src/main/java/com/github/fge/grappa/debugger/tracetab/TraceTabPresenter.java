@@ -4,6 +4,12 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.StatsType;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .ClassDetailsStatsModel;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .ClassDetailsStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .DefaultClassDetailsStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.perclass
     .PerClassStatsPresenter;
@@ -68,6 +74,9 @@ public class TraceTabPresenter
                 case PER_CLASS:
                     loadPerClassStats();
                     break;
+                case CLASS_DETAILS:
+                    loadClassDetailsStats();
+                    break;
                 default:
                     throw new UnsupportedOperationException(type + " not "
                         + "supported yet");
@@ -104,5 +113,21 @@ public class TraceTabPresenter
     {
         final PerClassStatsPresenter presenter = getPerClassStatsPresenter();
         view.loadPerClassStats(presenter);
+    }
+
+    @VisibleForTesting
+    ClassDetailsStatsPresenter getClassDetailsStatsPresenter()
+    {
+        final ClassDetailsStatsModel statsModel
+            = new DefaultClassDetailsStatsModel(model);
+        return new ClassDetailsStatsPresenter(statsModel);
+    }
+
+    public void loadClassDetailsStats()
+        throws IOException
+    {
+        final ClassDetailsStatsPresenter presenter
+            = getClassDetailsStatsPresenter();
+        view.loadClassDetailsStats(presenter);
     }
 }

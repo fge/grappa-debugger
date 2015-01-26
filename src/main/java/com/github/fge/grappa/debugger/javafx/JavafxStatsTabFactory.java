@@ -40,6 +40,14 @@ public class JavafxStatsTabFactory
             throw new ExceptionInInitializerError("resource " + location
                 + " not found");
         STAT_TABS_FXML_FILES.put(type, url);
+
+        type = StatsType.CLASS_DETAILS;
+        location = "/stats/classDetails.fxml";
+        url = MYSELF.getResource(location);
+        if (url == null)
+            throw new ExceptionInInitializerError("resource " + location
+                + " not found");
+        STAT_TABS_FXML_FILES.put(type, url);
     }
 
     @Nonnull
