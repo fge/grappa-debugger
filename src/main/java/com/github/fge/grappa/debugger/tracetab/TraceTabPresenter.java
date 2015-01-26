@@ -4,27 +4,32 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.StatsType;
-import com.github.fge.grappa.debugger.tracetab.stat.classdetails
-    .ClassDetailsStatsModel;
-import com.github.fge.grappa.debugger.tracetab.stat.classdetails
-    .ClassDetailsStatsPresenter;
-import com.github.fge.grappa.debugger.tracetab.stat.classdetails
-    .DefaultClassDetailsStatsModel;
-import com.github.fge.grappa.debugger.tracetab.stat.global
-    .DefaultGlobalStatsModel;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsModel;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails.DefaultClassDetailsStatsModel;
+import com.github.fge.grappa.debugger.tracetab.stat.global.DefaultGlobalStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
-import com.github.fge.grappa.debugger.tracetab.stat.perclass
-    .PerClassStatsPresenter;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 @ParametersAreNonnullByDefault
 public class TraceTabPresenter
 {
+    private static final ThreadFactory THREAD_FACTORY
+        = new ThreadFactoryBuilder().setDaemon(true)
+        .setNameFormat("tab-loader-%d").build();
+
+    private final ExecutorService executor
+        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
+
     private final TraceTabModel model;
     private final InputBuffer buffer;
 
@@ -69,24 +74,16 @@ public class TraceTabPresenter
 
     public void handleLoadStats(final StatsType type)
     {
-        try {
-            switch (type) {
-                case GLOBAL:
-                    loadGlobalStats();
-                    break;
-                case PER_CLASS:
-                    loadPerClassStats();
-                    break;
-                case CLASS_DETAILS:
-                    loadClassDetailsStats();
-                    break;
-                default:
-                    throw new UnsupportedOperationException(type + " not "
-                        + "supported yet");
-            }
-        } catch (IOException e) {
-            parentView.showError("Statistics loading error",
-                "Unable to load stats", e);
+        switch (type) {
+            case GLOBAL:
+                loadGlobalStats();
+                break;
+            case CLASS_DETAILS:
+                loadClassDetailsStats();
+                break;
+            default:
+                throw new UnsupportedOperationException(type + " not "
+                    + "supported yet");
         }
     }
 
@@ -99,24 +96,11 @@ public class TraceTabPresenter
 
     @VisibleForTesting
     void loadGlobalStats()
-        throws IOException
     {
-        final GlobalStatsPresenter presenter = getGlobalStatsPresenter();
-        view.loadGlobalStats(presenter);
-    }
-
-    @VisibleForTesting
-    PerClassStatsPresenter getPerClassStatsPresenter()
-    {
-        return new PerClassStatsPresenter(model);
-    }
-
-    @VisibleForTesting
-    void loadPerClassStats()
-        throws IOException
-    {
-        final PerClassStatsPresenter presenter = getPerClassStatsPresenter();
-        view.loadPerClassStats(presenter);
+        executor.submit(() -> {
+            final GlobalStatsPresenter presenter = getGlobalStatsPresenter();
+            Platform.runLater(() -> view.loadGlobalStats(presenter));
+        });
     }
 
     @VisibleForTesting
@@ -129,10 +113,11 @@ public class TraceTabPresenter
 
     @VisibleForTesting
     void loadClassDetailsStats()
-        throws IOException
     {
-        final ClassDetailsStatsPresenter presenter
-            = getClassDetailsStatsPresenter();
-        view.loadClassDetailsStats(presenter);
+        executor.submit(() -> {
+            final ClassDetailsStatsPresenter presenter
+                = getClassDetailsStatsPresenter();
+            Platform.runLater(() -> view.loadClassDetailsStats(presenter));
+        });
     }
 }

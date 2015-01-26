@@ -15,7 +15,7 @@ public class ClassDetailsStatsPresenter
 
     public ClassDetailsStatsPresenter(final ClassDetailsStatsModel model)
     {
-        this.model = model;
+        this.model = Objects.requireNonNull(model);
     }
 
     public void setView(final ClassDetailsStatsView view)

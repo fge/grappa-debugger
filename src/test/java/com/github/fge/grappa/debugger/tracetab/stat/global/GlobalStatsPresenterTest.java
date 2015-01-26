@@ -33,6 +33,7 @@ public class GlobalStatsPresenterTest
         presenter = new GlobalStatsPresenter(model);
         presenter.setView(view);
     }
+
     @SuppressWarnings("AutoBoxing")
     @Test
     public void loadStatsTest()

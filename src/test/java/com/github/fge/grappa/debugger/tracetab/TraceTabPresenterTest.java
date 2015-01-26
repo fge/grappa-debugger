@@ -7,7 +7,6 @@ import com.github.fge.grappa.debugger.stats.StatsType;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails
     .ClassDetailsStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
-import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsPresenter;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 import org.mockito.InOrder;
@@ -116,7 +115,7 @@ public class TraceTabPresenterTest
         verifyNoMoreInteractions(view);
     }
 
-    @Test
+    @Test(enabled = false)
     public void handleLoadStatsGlobalTest()
         throws IOException
     {
@@ -134,25 +133,7 @@ public class TraceTabPresenterTest
         inOrder.verifyNoMoreInteractions();
     }
 
-    @Test
-    public void handleLoadStatsPerClassTest()
-        throws IOException
-    {
-        final PerClassStatsPresenter statsPresenter
-            = mock(PerClassStatsPresenter.class);
-
-        doReturn(statsPresenter).when(presenter).getPerClassStatsPresenter();
-
-        presenter.handleLoadStats(StatsType.PER_CLASS);
-
-        final InOrder inOrder = inOrder(presenter, view);
-
-        inOrder.verify(presenter).loadPerClassStats();
-        inOrder.verify(view).loadPerClassStats(same(statsPresenter));
-        inOrder.verifyNoMoreInteractions();
-    }
-
-    @Test
+    @Test(enabled = false)
     public void handleLoadStatsClassDetailsTest()
         throws IOException
     {

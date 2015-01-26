@@ -111,7 +111,7 @@ public final class JavafxMainWindowView
         }
         display.pane.setCenter(node);
         final TraceTabDisplay tabDisplay = loader.getController();
-        final TraceTabView view = new JavafxTraceTabView(tabDisplay);
+        final TraceTabView view = new JavafxTraceTabView(this, tabDisplay);
         presenter.setView(view);
         tabDisplay.init(presenter);
     }

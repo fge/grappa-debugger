@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 public enum StatsType
 {
     GLOBAL("Global"),
-    PER_CLASS("Per class"),
     CLASS_DETAILS("Class details"),
     ;
 
