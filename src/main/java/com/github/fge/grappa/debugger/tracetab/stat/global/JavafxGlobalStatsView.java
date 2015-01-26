@@ -32,6 +32,7 @@ public final class JavafxGlobalStatsView
         display.nrRules.setText(String.valueOf(stats.size()));
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Override
     public void loadInfo(final ParseRunInfo info, final int totalMatches,
         final int treeDepth, final long totalParseTime)
@@ -53,6 +54,7 @@ public final class JavafxGlobalStatsView
             (double) totalMatches / info.getNrChars()));
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Override
     public void loadPieChart(final int failedMatches, final int emptyMatches,
         final int nonEmptyMatches)

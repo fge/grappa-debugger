@@ -3,6 +3,8 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass
+    .PerClassStatsPresenter;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 
@@ -30,5 +32,8 @@ public interface TraceTabView
     void highlightSuccessfulMatch(int startIndex, int endIndex);
 
     void loadGlobalStats(GlobalStatsPresenter presenter)
+        throws IOException;
+
+    void loadPerClassStats(PerClassStatsPresenter presenter)
         throws IOException;
 }

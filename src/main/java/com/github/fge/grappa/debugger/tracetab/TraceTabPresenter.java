@@ -5,6 +5,8 @@ import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
 import com.github.fge.grappa.debugger.statistics.StatsType;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass
+    .PerClassStatsPresenter;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -56,20 +58,23 @@ public class TraceTabPresenter
             view.highlightFailedMatch(node.getEnd());
     }
 
-    public void handleLoadStats(final StatsType newValue)
+    public void handleLoadStats(final StatsType type)
     {
-        switch (newValue) {
-            case GLOBAL:
-                try {
+        try {
+            switch (type) {
+                case GLOBAL:
                     loadGlobalStats();
-                } catch (IOException e) {
-                    parentView.showError("Statistics loading error",
-                        "Unable to load statistics", e);
-                }
-                break;
-            default:
-                throw new UnsupportedOperationException(newValue
-                    + " not supported yet");
+                    break;
+                case PER_CLASS:
+                    loadPerClassStats();
+                    break;
+                default:
+                    throw new UnsupportedOperationException(type + " not "
+                        + "supported yet");
+            }
+        } catch (IOException e) {
+            parentView.showError("Statistics loading error",
+                "Unable to load statistics", e);
         }
     }
 
@@ -85,5 +90,19 @@ public class TraceTabPresenter
     {
         final GlobalStatsPresenter presenter = getGlobalStatsPresenter();
         view.loadGlobalStats(presenter);
+    }
+
+    @VisibleForTesting
+    PerClassStatsPresenter getPerClassStatsPresenter()
+    {
+        return new PerClassStatsPresenter(model);
+    }
+
+    @VisibleForTesting
+    void loadPerClassStats()
+        throws IOException
+    {
+        final PerClassStatsPresenter presenter = getPerClassStatsPresenter();
+        view.loadPerClassStats(presenter);
     }
 }

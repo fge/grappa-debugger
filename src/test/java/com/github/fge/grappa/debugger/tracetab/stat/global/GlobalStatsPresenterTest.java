@@ -8,6 +8,8 @@ import org.testng.annotations.Test;
 import java.util.Collection;
 import java.util.Collections;
 
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -34,5 +36,7 @@ public class GlobalStatsPresenterTest
         presenter.loadStats();
 
         verify(view).loadStats(same(stats));
+        verify(view).loadInfo(same(info), anyInt(), anyInt(), anyLong());
+        verify(view).loadPieChart(anyInt(), anyInt(), anyInt());
     }
 }

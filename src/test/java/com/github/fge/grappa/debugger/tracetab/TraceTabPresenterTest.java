@@ -3,7 +3,9 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.statistics.ParseNode;
+import com.github.fge.grappa.debugger.statistics.StatsType;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsPresenter;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 import org.mockito.InOrder;
@@ -121,10 +123,28 @@ public class TraceTabPresenterTest
 
         doReturn(statsPresenter).when(presenter).getGlobalStatsPresenter();
 
-        presenter.loadGlobalStats();
+        presenter.handleLoadStats(StatsType.GLOBAL);
 
-        final InOrder inOrder = inOrder(statsPresenter, view);
+        final InOrder inOrder = inOrder(presenter, view);
 
+        inOrder.verify(presenter).loadGlobalStats();
         inOrder.verify(view).loadGlobalStats(same(statsPresenter));
+    }
+
+    @Test
+    public void handleLoadStatsPerClassTest()
+        throws IOException
+    {
+        final PerClassStatsPresenter statsPresenter
+            = mock(PerClassStatsPresenter.class);
+
+        doReturn(statsPresenter).when(presenter).getPerClassStatsPresenter();
+
+        presenter.handleLoadStats(StatsType.PER_CLASS);
+
+        final InOrder inOrder = inOrder(presenter, view);
+
+        inOrder.verify(presenter).loadPerClassStats();
+        inOrder.verify(view).loadPerClassStats(same(statsPresenter));
     }
 }

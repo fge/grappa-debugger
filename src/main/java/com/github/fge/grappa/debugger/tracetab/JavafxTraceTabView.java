@@ -9,8 +9,16 @@ import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsDisplay;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsView;
-import com.github.fge.grappa.debugger.tracetab.stat.global
-    .JavafxGlobalStatsView;
+import com.github.fge.grappa.debugger.tracetab.stat.global.JavafxGlobalStatsView;
+
+
+import com.github.fge.grappa.debugger.tracetab.stat.perclass
+    .JavafxPerClassStatsView;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass
+    .PerClassStatsDisplay;
+import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsPresenter;
+
+import com.github.fge.grappa.debugger.tracetab.stat.perclass.PerClassStatsView;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.google.common.annotations.VisibleForTesting;
@@ -224,6 +232,21 @@ public final class JavafxTraceTabView
         final Node node = loader.load();
         final GlobalStatsDisplay statsDisplay = loader.getController();
         final GlobalStatsView view = new JavafxGlobalStatsView(statsDisplay);
+        statsDisplay.setPresenter(presenter);
+        presenter.setView(view);
+        presenter.loadStats();
+        display.statsTab.setCenter(node);
+    }
+
+    @Override
+    public void loadPerClassStats(final PerClassStatsPresenter presenter)
+        throws IOException
+    {
+        final FXMLLoader loader = tabFactory.getLoader(StatsType.PER_CLASS);
+        final Node node = loader.load();
+        final PerClassStatsDisplay statsDisplay = loader.getController();
+        final PerClassStatsView view
+            = new JavafxPerClassStatsView(statsDisplay);
         statsDisplay.setPresenter(presenter);
         presenter.setView(view);
         presenter.loadStats();

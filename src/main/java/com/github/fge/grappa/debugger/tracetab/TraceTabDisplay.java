@@ -130,7 +130,7 @@ public class TraceTabDisplay
                 {
                     // TODO: can newValue ever be null?
                     if (newValue != oldValue && newValue != null)
-                        presenter.handleLoadStats(newValue);
+                        loadStatsEvent(newValue);
                 }
             });
         statsCombo.setCellFactory(param -> new ListCell<StatsType>()
@@ -187,6 +187,12 @@ public class TraceTabDisplay
     void parseNodeShowEvent(final ParseNode node)
     {
         presenter.handleParseNodeShow(node);
+    }
+
+    @NotFXML
+    void loadStatsEvent(final StatsType statsType)
+    {
+        presenter.handleLoadStats(statsType);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,
