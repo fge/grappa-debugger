@@ -108,7 +108,6 @@
                     <Label text="Statistics:"/>
                     <ComboBox fx:id="statsCombo" editable="false"
                         promptText="Choose..."/>
-                    <!--Label fx:id="statsLabelWait" text="Ready"/-->
                 </ToolBar>
             </top>
             <center>

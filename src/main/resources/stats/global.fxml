@@ -25,6 +25,10 @@
             <center>
                 <GridPane gridLinesVisible="false" hgap="5.0"
                     vgap="5.0">
+                    <padding>
+                        <Insets top="5.0" bottom="5.0" left="5.0"
+                            right="5.0"/>
+                    </padding>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
                         <ColumnConstraints hgrow="SOMETIMES"/>

@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsDisplay">
     <left>
@@ -28,11 +29,18 @@
                     <center>
                         <GridPane gridLinesVisible="false" hgap="5.0"
                             vgap="5.0">
+                            <padding>
+                                <Insets top="5.0" bottom="5.0" left="5.0"
+                                    right="5.0"/>
+                            </padding>
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES"/>
                                 <ColumnConstraints hgrow="SOMETIMES"/>
                             </columnConstraints>
                             <rowConstraints>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
                                 <RowConstraints vgrow="SOMETIMES"/>
                             </rowConstraints>
 
@@ -40,17 +48,35 @@
                                 GridPane.columnIndex="0"/>
                             <Label fx:id="matcherType" GridPane.rowIndex="0"
                                 GridPane.columnIndex="1"/>
+
+                            <Label text="Number of rules:" GridPane.rowIndex="1"
+                                GridPane.columnIndex="0"/>
+                            <Label fx:id="nrRules" GridPane.rowIndex="1"
+                                GridPane.columnIndex="1"/>
+
+                            <Label text="Invocations:"
+                                GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <Label fx:id="nrInvocations" GridPane.rowIndex="2"
+                                GridPane.columnIndex="1"/>
+
+                            <Label text="\% of total:" GridPane.rowIndex="3"
+                                GridPane.columnIndex="0"/>
+                            <Label fx:id="invPct" GridPane.rowIndex="3"
+                                GridPane.columnIndex="1"/>
                         </GridPane>
                     </center>
                 </BorderPane>
-                <PieChart/>
+                <PieChart fx:id="pieChart" animated="false"/>
             </SplitPane>
-            <TableView>
+            <TableView fx:id="ruleTable">
                 <columns>
-                    <TableColumn text="Rule name"/>
-                    <TableColumn text="Invocations"/>
-                    <TableColumn text="Matches/empty matches/failures"/>
-                    <TableColumn text="Graph"/>
+                    <TableColumn fx:id="ruleName" text="Rule name"/>
+                    <TableColumn fx:id="ruleInvTotal" text="Invocations"/>
+                    <TableColumn fx:id="ruleInvDetail"
+                        text="Matches/empty matches/failures"
+                        prefWidth="200.0"/>
+                    <TableColumn fx:id="ruleInvGraph" text="Graph"
+                        prefWidth="200.0"/>
                 </columns>
             </TableView>
         </SplitPane>
