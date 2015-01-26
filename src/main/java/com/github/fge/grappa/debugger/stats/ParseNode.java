@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.stats;
 
 import com.github.fge.grappa.debugger.internal.NonFinalForTesting;
+import com.github.fge.grappa.matchers.MatcherType;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 public class ParseNode
 {
     private final String ruleName;
+    private final MatcherType matcherType;
+    private final String matcherClass;
     private boolean success;
     private final int start;
     private final int level;
@@ -20,10 +23,12 @@ public class ParseNode
 
     private final List<ParseNode> children = new ArrayList<>();
 
-    public ParseNode(final String ruleName, final int start,
-        final int level)
+    public ParseNode(final String ruleName, final MatcherType matcherType,
+        final String matcherClass, final int start, final int level)
     {
         this.ruleName = ruleName;
+        this.matcherType = matcherType;
+        this.matcherClass = matcherClass;
         this.start = start;
         this.level = level;
     }
@@ -46,6 +51,16 @@ public class ParseNode
     public String getRuleName()
     {
         return ruleName;
+    }
+
+    public MatcherType getMatcherType()
+    {
+        return matcherType;
+    }
+
+    public String getMatcherClass()
+    {
+        return matcherClass;
     }
 
     public boolean isSuccess()

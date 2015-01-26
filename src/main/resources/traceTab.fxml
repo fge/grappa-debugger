@@ -50,6 +50,8 @@
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
                         </rowConstraints>
                         <Label text="Depth:" GridPane.rowIndex="0"
                             GridPane.columnIndex="0"/>
@@ -61,24 +63,34 @@
                         <Label fx:id="parseNodeRuleName" GridPane.rowIndex="1"
                             GridPane.columnIndex="1"/>
 
-                        <Label text="Status:" GridPane.rowIndex="2"
+                        <Label text="Matcher type:" GridPane.rowIndex="2"
                             GridPane.columnIndex="0"/>
-                        <Label fx:id="parseNodeStatus" GridPane.rowIndex="2"
+                        <Label fx:id="parseNodeMatcherType"
+                            GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Matcher Class:" GridPane.rowIndex="3"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeMatcherClass"
+                            GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Status:" GridPane.rowIndex="4"
+                            GridPane.columnIndex="0"/>
+                        <Label fx:id="parseNodeStatus" GridPane.rowIndex="4"
                             GridPane.columnIndex="1"/>
 
-                        <Label text="Starting position:" GridPane.rowIndex="3"
+                        <Label text="Starting position:" GridPane.rowIndex="5"
                             GridPane.columnIndex="0"/>
-                        <Label fx:id="parseNodeStart" GridPane.rowIndex="3"
+                        <Label fx:id="parseNodeStart" GridPane.rowIndex="5"
                             GridPane.columnIndex="1"/>
 
-                        <Label text="Ending position:" GridPane.rowIndex="4"
+                        <Label text="Ending position:" GridPane.rowIndex="6"
                             GridPane.columnIndex="0"/>
-                        <Label fx:id="parseNodeEnd" GridPane.rowIndex="4"
+                        <Label fx:id="parseNodeEnd" GridPane.rowIndex="6"
                             GridPane.columnIndex="1"/>
 
-                        <Label text="Time spent:" GridPane.rowIndex="5"
+                        <Label text="Time spent:" GridPane.rowIndex="7"
                             GridPane.columnIndex="0"/>
-                        <Label fx:id="parseNodeTime" GridPane.rowIndex="5"
+                        <Label fx:id="parseNodeTime" GridPane.rowIndex="7"
                             GridPane.columnIndex="1"/>
                     </GridPane>
                 </TitledPane>

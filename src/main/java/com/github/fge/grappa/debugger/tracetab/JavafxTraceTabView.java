@@ -135,8 +135,9 @@ public final class JavafxTraceTabView
         Position position;
 
         display.parseNodeLevel.setText(String.valueOf(node.getLevel()));
-
         display.parseNodeRuleName.setText(node.getRuleName());
+        display.parseNodeMatcherType.setText(node.getMatcherType().toString());
+        display.parseNodeMatcherClass.setText(node.getMatcherClass());
 
         if (success) {
             display.parseNodeStatus.setText("SUCCESS");

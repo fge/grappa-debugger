@@ -14,7 +14,7 @@ public final class ParseTreeProcessor
 
     public ParseTreeProcessor()
     {
-        nodes.put(-1, new ParseNode("WTF", Integer.MIN_VALUE, 0));
+        nodes.put(-1, new ParseNode("WTF", null, "", Integer.MIN_VALUE, 0));
     }
 
     @SuppressWarnings({ "AutoBoxing", "AutoUnboxing" })
@@ -26,8 +26,8 @@ public final class ParseTreeProcessor
         final ParseNode node;
 
         if (type == TraceEventType.BEFORE_MATCH) {
-            node = new ParseNode(event.getMatcher(), event.getIndex(),
-                level);
+            node = new ParseNode(event.getMatcher(), event.getMatcherType(),
+                event.getMatcherClass(), event.getIndex(), level);
             nodes.put(level, node);
             times.put(level, event.getNanoseconds());
             return;

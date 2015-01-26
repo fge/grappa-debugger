@@ -49,6 +49,12 @@ public class TraceTabDisplay
     Label parseNodeRuleName;
 
     @FXML
+    Label parseNodeMatcherType;
+
+    @FXML
+    Label parseNodeMatcherClass;
+
+    @FXML
     Label parseNodeStatus;
 
     @FXML
