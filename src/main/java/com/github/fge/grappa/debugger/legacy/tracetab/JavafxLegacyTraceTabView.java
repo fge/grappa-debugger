@@ -2,9 +2,9 @@ package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.javafx.Utils;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
 import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.escape.CharEscaper;
@@ -225,7 +225,7 @@ public final class JavafxLegacyTraceTabView
     }
 
     @Override
-    public void setParseTree(final ParseNode node)
+    public void setParseTree(final LegacyParseNode node)
     {
         display.parseTree.setRoot(buildTree(node));
         display.treeDepth.setText(String.valueOf(treeDepth));
@@ -233,7 +233,7 @@ public final class JavafxLegacyTraceTabView
 
     @SuppressWarnings("AutoBoxing")
     @Override
-    public void fillParseNodeDetails(final ParseNode node)
+    public void fillParseNodeDetails(final LegacyParseNode node)
     {
         final boolean success = node.isSuccess();
         Position position;
@@ -263,15 +263,15 @@ public final class JavafxLegacyTraceTabView
     @Override
     public void expandParseTree()
     {
-        final TreeItem<ParseNode> root = display.parseTree.getRoot();
-        final ParseNode node = root.getValue();
+        final TreeItem<LegacyParseNode> root = display.parseTree.getRoot();
+        final LegacyParseNode node = root.getValue();
         final Button button = display.treeExpand;
 
         button.setDisable(true);
         button.setText("Please wait...");
 
         executor.submit(() -> {
-            final TreeItem<ParseNode> newRoot = buildTree(node, true);
+            final TreeItem<LegacyParseNode> newRoot = buildTree(node, true);
             Platform.runLater(() -> {
                 display.parseTree.setRoot(newRoot);
                 button.setText("Expand tree");
@@ -376,7 +376,7 @@ public final class JavafxLegacyTraceTabView
     }
 
     private static final class ParseNodeCell
-        extends TreeCell<ParseNode>
+        extends TreeCell<LegacyParseNode>
     {
         private ParseNodeCell(final LegacyTraceTabDisplay display)
         {
@@ -390,7 +390,7 @@ public final class JavafxLegacyTraceTabView
                 {
                     if (!newValue)
                         return;
-                    final ParseNode node = getItem();
+                    final LegacyParseNode node = getItem();
                     if (node != null)
                         display.parseNodeShowEvent(node);
                 }
@@ -398,7 +398,8 @@ public final class JavafxLegacyTraceTabView
         }
 
         @Override
-        protected void updateItem(final ParseNode item, final boolean empty)
+        protected void updateItem(final LegacyParseNode item,
+            final boolean empty)
         {
             super.updateItem(item, empty);
             setText(empty ? null : String.format("%s (%s)", item.getRuleName(),
@@ -406,33 +407,33 @@ public final class JavafxLegacyTraceTabView
         }
     }
 
-    private TreeItem<ParseNode> buildTree(final ParseNode root)
+    private TreeItem<LegacyParseNode> buildTree(final LegacyParseNode root)
     {
         return buildTree(root, false);
     }
 
-    private TreeItem<ParseNode> buildTree(final ParseNode root,
+    private TreeItem<LegacyParseNode> buildTree(final LegacyParseNode root,
         final boolean expanded)
     {
-        final TreeItem<ParseNode> ret = new TreeItem<>(root);
+        final TreeItem<LegacyParseNode> ret = new TreeItem<>(root);
 
         addChildren(ret, root, expanded);
 
         return ret;
     }
 
-    private void addChildren(final TreeItem<ParseNode> item,
-        final ParseNode parent, final boolean expanded)
+    private void addChildren(final TreeItem<LegacyParseNode> item,
+        final LegacyParseNode parent, final boolean expanded)
     {
         final int depth = parent.getLevel();
         if (depth > treeDepth)
             treeDepth = depth;
 
-        TreeItem<ParseNode> childItem;
-        final List<TreeItem<ParseNode>> childrenItems
+        TreeItem<LegacyParseNode> childItem;
+        final List<TreeItem<LegacyParseNode>> childrenItems
             = FXCollections.observableArrayList();
 
-        for (final ParseNode node: parent.getChildren()) {
+        for (final LegacyParseNode node: parent.getChildren()) {
             childItem = new TreeItem<>(node);
             addChildren(childItem, node, expanded);
             childrenItems.add(childItem);

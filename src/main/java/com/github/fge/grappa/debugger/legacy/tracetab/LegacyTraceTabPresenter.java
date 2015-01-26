@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
 import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class LegacyTraceTabPresenter
         view.setParseTree(model.getParseTreeRoot());
     }
 
-    void handleParseNodeShow(final ParseNode node)
+    void handleParseNodeShow(final LegacyParseNode node)
     {
         final int length = buffer.length();
         final int start = Math.min(node.getStart(), length);

@@ -1,9 +1,9 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
 import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.stats.ParsingRunTrace;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.TraceEventType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -60,7 +60,7 @@ public class LegacyTraceTabPresenterTest
 
         verify(view).setInputBuffer(any(InputBuffer.class));
         verify(view).setParseDate(fakeDate);
-        verify(view).setParseTree(any(ParseNode.class));
+        verify(view).setParseTree(any(LegacyParseNode.class));
         verify(view).setInputBuffer(any(InputBuffer.class));
         verify(view).setStatistics(anyCollection(), anyInt());
         verify(view).setTraceEvents(same(events));
@@ -71,7 +71,7 @@ public class LegacyTraceTabPresenterTest
     @Test
     public void handleParseNodeShowSuccessTest()
     {
-        final ParseNode node = mock(ParseNode.class);
+        final LegacyParseNode node = mock(LegacyParseNode.class);
         final int start = 4;
         final int end = 7;
 
@@ -91,7 +91,7 @@ public class LegacyTraceTabPresenterTest
     @Test
     public void handleParseNodeShowFailureTest()
     {
-        final ParseNode node = mock(ParseNode.class);
+        final LegacyParseNode node = mock(LegacyParseNode.class);
         final int end = 21;
 
         when(buffer.length()).thenReturn(20);

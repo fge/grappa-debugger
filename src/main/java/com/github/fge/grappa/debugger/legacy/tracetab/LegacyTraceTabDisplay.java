@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.debugger.internal.NotFXML;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
 import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
 import com.github.fge.grappa.debugger.stats.ParseNode;
@@ -28,7 +29,7 @@ public class LegacyTraceTabDisplay
     Button treeExpand;
 
     @FXML
-    TreeView<ParseNode> parseTree;
+    TreeView<LegacyParseNode> parseTree;
 
     @FXML
     Label parseNodeLevel;
@@ -144,7 +145,7 @@ public class LegacyTraceTabDisplay
     }
 
     @NotFXML
-    void parseNodeShowEvent(final ParseNode node)
+    void parseNodeShowEvent(final LegacyParseNode node)
     {
         presenter.handleParseNodeShow(node);
     }

@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
-import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
 import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -35,7 +35,7 @@ public class LegacyTraceTabDisplayTest
     @Test
     public void parseNodeShowEventTest()
     {
-        final ParseNode node = mock(ParseNode.class);
+        final LegacyParseNode node = mock(LegacyParseNode.class);
 
         display.parseNodeShowEvent(node);
         verify(presenter, only()).handleParseNodeShow(same(node));

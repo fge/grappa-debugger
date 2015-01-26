@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseTreeBuilder;
 import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.stats.ParsingRunTrace;
 import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
-import com.github.fge.grappa.debugger.stats.ParseNode;
-import com.github.fge.grappa.debugger.stats.ParseTreeBuilder;
 import com.github.fge.grappa.trace.TraceEventType;
 
 import javax.annotation.Nonnull;
@@ -41,7 +41,7 @@ public final class DefaultLegacyTraceTabModel
 
     private final List<LegacyTraceEvent> traceEvents;
     private final Collection<RuleStatistics> ruleStats;
-    private final ParseNode rootNode;
+    private final LegacyParseNode rootNode;
     private final int nrEmptyMatches;
 
     public DefaultLegacyTraceTabModel(final FileSystem zipfs)
@@ -53,9 +53,10 @@ public final class DefaultLegacyTraceTabModel
         final List<LegacyTraceEvent> events = trace.getEvents();
         traceEvents = relativize(events);
         ruleStats = collectStatistics(events);
-        final ParseTreeBuilder parseTreeBuilder = new ParseTreeBuilder(events);
-        rootNode = parseTreeBuilder.getRootNode();
-        nrEmptyMatches = parseTreeBuilder.getNrEmptyMatches();
+        final LegacyParseTreeBuilder builder
+            = new LegacyParseTreeBuilder(events);
+        rootNode = builder.getRootNode();
+        nrEmptyMatches = builder.getNrEmptyMatches();
     }
 
     @Nonnull
@@ -89,7 +90,7 @@ public final class DefaultLegacyTraceTabModel
 
     @Nonnull
     @Override
-    public ParseNode getParseTreeRoot()
+    public LegacyParseNode getParseTreeRoot()
     {
         return rootNode;
     }

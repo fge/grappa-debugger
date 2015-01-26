@@ -1,25 +1,23 @@
-package com.github.fge.grappa.debugger.stats;
+package com.github.fge.grappa.debugger.legacy.stats;
 
 
-import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
 
-import javax.annotation.Untainted;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ParseTreeBuilder
+public final class LegacyParseTreeBuilder
 {
-    private final ParseNode rootNode;
+    private final LegacyParseNode rootNode;
     private int nrEmptyMatches = 0;
 
-    public ParseTreeBuilder(final List<LegacyTraceEvent> events)
+    public LegacyParseTreeBuilder(final List<LegacyTraceEvent> events)
     {
         rootNode = process(events);
     }
 
-    public ParseNode getRootNode()
+    public LegacyParseNode getRootNode()
     {
         return rootNode;
     }
@@ -30,23 +28,23 @@ public final class ParseTreeBuilder
     }
 
     @SuppressWarnings({ "AutoBoxing", "TypeMayBeWeakened" })
-    private ParseNode process(@Untainted final List<LegacyTraceEvent> events)
+    private LegacyParseNode process(final List<LegacyTraceEvent> events)
     {
-        final Map<Integer, ParseNode> nodes = new HashMap<>();
+        final Map<Integer, LegacyParseNode> nodes = new HashMap<>();
         final Map<Integer, Long> times = new HashMap<>();
 
-        nodes.put(-1, new ParseNode("WTF", Integer.MIN_VALUE, 0));
+        nodes.put(-1, new LegacyParseNode("WTF", Integer.MIN_VALUE, 0));
 
         int level;
         TraceEventType type;
-        ParseNode node;
+        LegacyParseNode node;
 
         for (final LegacyTraceEvent event: events) {
             level = event.getLevel();
             type = event.getType();
 
             if (type == TraceEventType.BEFORE_MATCH) {
-                node = new ParseNode(event.getMatcher(), event.getIndex(),
+                node = new LegacyParseNode(event.getMatcher(), event.getIndex(),
                     level);
                 nodes.put(level, node);
                 times.put(level, event.getNanoseconds());

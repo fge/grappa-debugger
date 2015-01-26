@@ -1,9 +1,9 @@
 package com.github.fge.grappa.debugger.legacy.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.legacy.stats.LegacyParseNode;
 import com.github.fge.grappa.debugger.legacy.stats.LegacyTraceEvent;
 import com.github.fge.grappa.debugger.legacy.stats.RuleStatistics;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +18,9 @@ public interface LegacyTraceTabView
 
     void setInputBuffer(final InputBuffer buffer);
 
-    void setParseTree(ParseNode node);
+    void setParseTree(LegacyParseNode node);
 
-    void fillParseNodeDetails(ParseNode node);
+    void fillParseNodeDetails(LegacyParseNode node);
 
     void expandParseTree();
 
