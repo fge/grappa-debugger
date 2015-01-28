@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.stats;
 
-import com.github.fge.grappa.debugger.internal.NonFinalForTesting;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.matchers.MatcherType;
 
 import javax.annotation.Nonnull;

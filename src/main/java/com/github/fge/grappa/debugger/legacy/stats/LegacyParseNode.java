@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.legacy.stats;
 
-import com.github.fge.grappa.debugger.internal.NonFinalForTesting;
+
+import com.github.fge.grappa.internal.NonFinalForTesting;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
