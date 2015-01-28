@@ -3,7 +3,6 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.debugger.stats.ParseNode;
-import com.github.fge.grappa.debugger.stats.StatsType;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
 import com.google.common.annotations.VisibleForTesting;
@@ -82,7 +81,7 @@ public class TraceTabDisplay
     Tab globalStatsTab;
 
     @FXML
-    public Tab classStatsTab;
+    Tab classStatsTab;
     /*
      * Events tab
      */
@@ -172,12 +171,6 @@ public class TraceTabDisplay
     void parseNodeShowEvent(final ParseNode node)
     {
         presenter.handleParseNodeShow(node);
-    }
-
-    @NotFXML
-    void loadStatsEvent(final StatsType statsType)
-    {
-        presenter.handleLoadStats(statsType);
     }
 
     private static <S, T> void bindColumn(final TableColumn<S, T> column,

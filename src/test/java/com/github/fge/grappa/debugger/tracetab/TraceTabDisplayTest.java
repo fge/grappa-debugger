@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.stats.ParseNode;
-import com.github.fge.grappa.debugger.stats.StatsType;
 import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -40,14 +39,5 @@ public class TraceTabDisplayTest
         display.parseNodeShowEvent(node);
 
         verify(presenter, only()).handleParseNodeShow(same(node));
-    }
-
-    @Test
-    public void loadStatsEventTest()
-    {
-        final StatsType type = StatsType.GLOBAL;
-        display.loadStatsEvent(type);
-
-        verify(presenter, only()).handleLoadStats(type);
     }
 }

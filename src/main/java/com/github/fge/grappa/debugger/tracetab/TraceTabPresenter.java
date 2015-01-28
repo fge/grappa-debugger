@@ -3,7 +3,6 @@ package com.github.fge.grappa.debugger.tracetab;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
-import com.github.fge.grappa.debugger.stats.StatsType;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsPresenter;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.DefaultClassDetailsStatsModel;
@@ -72,21 +71,6 @@ public class TraceTabPresenter
             view.highlightSuccessfulMatch(node.getStart(), node.getEnd());
         else
             view.highlightFailedMatch(node.getEnd());
-    }
-
-    public void handleLoadStats(final StatsType type)
-    {
-        switch (type) {
-            case GLOBAL:
-                loadGlobalStats();
-                break;
-            case CLASS_DETAILS:
-                loadClassDetailsStats();
-                break;
-            default:
-                throw new UnsupportedOperationException(type + " not "
-                    + "supported yet");
-        }
     }
 
     @VisibleForTesting
