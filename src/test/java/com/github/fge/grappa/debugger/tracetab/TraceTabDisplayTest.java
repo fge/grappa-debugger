@@ -23,7 +23,6 @@ public class TraceTabDisplayTest
         display.presenter = presenter;
     }
 
-
     @Test
     public void expandParseTreeEventTest()
     {
