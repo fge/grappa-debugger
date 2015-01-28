@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
+import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -85,7 +85,7 @@ public class MainWindowPresenterTest
 
         when(view.chooseFile()).thenReturn(path);
 
-        presenter.legacyTabPresenter = mock(LegacyTraceTabPresenter.class);
+        presenter.tabPresenter = mock(TraceTabPresenter.class);
 
         final MainWindowPresenter otherPresenter
             = mock(MainWindowPresenter.class);

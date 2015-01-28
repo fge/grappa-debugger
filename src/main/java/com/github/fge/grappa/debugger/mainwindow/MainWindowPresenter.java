@@ -1,9 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.legacy.tracetab.DefaultLegacyTraceTabModel;
-import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabModel;
-import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
 import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
@@ -16,6 +13,7 @@ import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -36,9 +34,6 @@ public class MainWindowPresenter
 
     private final MainWindowFactory windowFactory;
     private final MainWindowView view;
-
-    @VisibleForTesting
-    LegacyTraceTabPresenter legacyTabPresenter;
 
     @VisibleForTesting
     TraceTabPresenter tabPresenter;
@@ -69,7 +64,7 @@ public class MainWindowPresenter
 
         MainWindowPresenter window = this;
 
-        if (legacyTabPresenter != null || tabPresenter != null) {
+        if (tabPresenter != null) {
             window = windowFactory.createWindow();
             if (window == null)
                 return;
@@ -90,33 +85,16 @@ public class MainWindowPresenter
                 final FileSystem zipfs
                     = FileSystems.newFileSystem(uri, ZIPFS_ENV);
             ) {
-                if (isCurrent(zipfs)) {
-                    tabPresenter = loadPresenter(zipfs);
-                    Platform.runLater(() -> loadTab(path));
-                } else {
-                    legacyTabPresenter = loadLegacyPresenter(zipfs);
-                    Platform.runLater(() -> loadLegacyTab(path));
-                }
+                final boolean exists
+                    = Files.exists(zipfs.getPath("/info.json"));
+                if (!exists)
+                    throw new NoSuchFileException("/info.json");
+                tabPresenter = loadPresenter(zipfs);
+                Platform.runLater(() -> loadTab(path));
             } catch (IOException e) {
                 Platform.runLater(() -> handleLoadFileError(e));
             }
         });
-    }
-
-    private void loadLegacyTab(final Path path)
-    {
-        view.injectLegacyTab(legacyTabPresenter);
-        legacyTabPresenter.loadTrace();
-        view.setWindowTitle("Grappa debugger: " + path.toAbsolutePath()
-            + " (legacy)");
-    }
-
-    private LegacyTraceTabPresenter loadLegacyPresenter(final FileSystem zipfs)
-        throws IOException
-    {
-        final LegacyTraceTabModel model
-            = new DefaultLegacyTraceTabModel(zipfs);
-        return new LegacyTraceTabPresenter(model);
     }
 
     private void loadTab(final Path path)
@@ -137,11 +115,5 @@ public class MainWindowPresenter
     {
         view.showError("Trace file error", "Unable to load trace file", e);
         view.setLabelText("Please load a trace file (File -> Load file)");
-    }
-
-    @VisibleForTesting
-    boolean isCurrent(final FileSystem zipfs)
-    {
-        return Files.exists(zipfs.getPath("/info.json"));
     }
 }

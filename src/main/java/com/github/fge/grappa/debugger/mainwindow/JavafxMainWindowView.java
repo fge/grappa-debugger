@@ -1,10 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
-import com.github.fge.grappa.debugger.legacy.tracetab.JavafxLegacyTraceTabView;
-import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabDisplay;
-import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabPresenter;
-import com.github.fge.grappa.debugger.legacy.tracetab.LegacyTraceTabView;
 import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabDisplay;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
@@ -26,14 +22,9 @@ public final class JavafxMainWindowView
     private static final Class<MainWindowView> MYSELF = MainWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
-    private static final URL LEGACY_TAB_FXML;
     private static final URL TAB_FXML;
 
     static {
-        LEGACY_TAB_FXML = MYSELF.getResource("/legacyTraceTab.fxml");
-        if (LEGACY_TAB_FXML == null)
-            throw new ExceptionInInitializerError("failed to load legacy tab "
-                + "fxml");
         TAB_FXML = MYSELF.getResource("/traceTab.fxml");
         if (TAB_FXML == null)
             throw new ExceptionInInitializerError("failed to load tab fxml");
@@ -49,25 +40,6 @@ public final class JavafxMainWindowView
         this.stage = stage;
         this.alertFactory = alertFactory;
         this.display = display;
-    }
-
-    @Override
-    public void injectLegacyTab(final LegacyTraceTabPresenter presenter)
-    {
-        final FXMLLoader loader = new FXMLLoader(LEGACY_TAB_FXML);
-        final Node node;
-        try {
-            node = loader.load();
-        } catch (IOException oops) {
-            showError("Tab creation error", "Unable to create tab", oops);
-            return;
-        }
-        display.pane.setCenter(node);
-        final LegacyTraceTabDisplay tabDisplay = loader.getController();
-        final LegacyTraceTabView view =
-            new JavafxLegacyTraceTabView(tabDisplay);
-        presenter.setView(view);
-        tabDisplay.init(presenter);
     }
 
     @Override
