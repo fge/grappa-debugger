@@ -9,9 +9,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -36,11 +34,6 @@ public class CsvTracePresenterTest
 
         view = mock(CsvTraceView.class);
         presenter.setView(view);
-
-        doAnswer(invocation -> {
-            ((Runnable) invocation.getArguments()[0]).run();
-            return null;
-        }).when(presenter).delayRun(any(Runnable.class));
     }
 
     @Test(enabled = false)

@@ -5,8 +5,6 @@ import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
-import com.google.common.annotations.VisibleForTesting;
-import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -30,9 +28,7 @@ public class CsvTracePresenter
 
     public void loadStats()
     {
-        taskRunner.runOrFail(
-            model::getRootNode,
-            view::loadRootNode,
+        taskRunner.runOrFail(model::getRootNode, view::loadRootNode,
             e -> mainView.showError("Parse tree error",
                 "Unable to load parse tree", e)
         );
@@ -40,12 +36,6 @@ public class CsvTracePresenter
 
     void handleExpandParseTree()
     {
-    }
-
-    @VisibleForTesting
-    void delayRun(final Runnable runnable)
-    {
-        Platform.runLater(runnable::run);
     }
 
     public void parseNodeShowEvent(final ParseNode node)
