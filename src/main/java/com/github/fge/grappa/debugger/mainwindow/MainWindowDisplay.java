@@ -1,26 +1,23 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
-import com.github.fge.grappa.debugger.javafx.AlertFactory;
+import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 
-import java.io.IOException;
-
 public class MainWindowDisplay
+    extends JavafxDisplay<MainWindowPresenter>
 {
-    private MainWindowPresenter presenter;
-
     @FXML
     BorderPane pane;
 
     @FXML
     Label label;
 
-    public void init(final MainWindowPresenter presenter)
+    @Override
+    public void init()
     {
-        this.presenter = presenter;
     }
 
     @FXML
@@ -39,10 +36,5 @@ public class MainWindowDisplay
     void loadFileEvent(final ActionEvent event)
     {
         presenter.handleLoadFile();
-    }
-
-    public void x(ActionEvent event)
-    {
-        new AlertFactory().unhandledError(new IOException());
     }
 }

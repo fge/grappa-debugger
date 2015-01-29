@@ -18,7 +18,7 @@ public class MainWindowDisplayTest
     {
         presenter = mock(MainWindowPresenter.class);
         display = new MainWindowDisplay();
-        display.init(presenter);
+        display.setPresenter(presenter);
         event = mock(ActionEvent.class);
     }
 

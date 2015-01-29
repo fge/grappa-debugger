@@ -36,7 +36,7 @@ public final class GrappaDebugger
 
     private final AlertFactory alertFactory = new AlertFactory();
     private final BackgroundTaskRunner taskRunner
-        = new BackgroundTaskRunner("tab-%d", Platform::runLater);
+        = new BackgroundTaskRunner("grappa-debugger-%d", Platform::runLater);
 
     private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 
@@ -77,13 +77,13 @@ public final class GrappaDebugger
             return null;
         }
 
-        final MainWindowDisplay ui = loader.getController();
+        final MainWindowDisplay display = loader.getController();
         final MainWindowView view
-            = new JavafxMainWindowView(stage, alertFactory, ui);
+            = new JavafxMainWindowView(stage, alertFactory, display);
         final MainWindowPresenter presenter
             = new MainWindowPresenter(this, taskRunner, view);
 
-        ui.init(presenter);
+        display.setPresenter(presenter);
 
         stage.setScene(new Scene(pane, 1024, 768));
         stage.setTitle("Grappa debugger");
