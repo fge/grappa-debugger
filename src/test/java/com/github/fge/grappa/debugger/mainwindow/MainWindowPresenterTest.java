@@ -34,7 +34,8 @@ public class MainWindowPresenterTest
     {
         factory = mock(MainWindowFactory.class);
         view = mock(MainWindowView.class);
-        presenter = spy(new MainWindowPresenter(factory, taskRunner, view));
+        presenter = spy(new MainWindowPresenter(factory, taskRunner));
+        presenter.setView(view);
     }
 
     @Test

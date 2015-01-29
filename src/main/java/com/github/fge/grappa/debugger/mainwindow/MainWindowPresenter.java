@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
@@ -21,6 +22,7 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public class MainWindowPresenter
+    extends BasePresenter<MainWindowView>
 {
     private static final Map<String, ?> ZIPFS_ENV
         = Collections.singletonMap("readonly", "true");
@@ -28,17 +30,15 @@ public class MainWindowPresenter
     private final BackgroundTaskRunner taskRunner;
 
     private final MainWindowFactory windowFactory;
-    private final MainWindowView view;
 
     @VisibleForTesting
     TraceTabPresenter tabPresenter;
 
     public MainWindowPresenter(final MainWindowFactory windowFactory,
-        final BackgroundTaskRunner taskRunner, final MainWindowView view)
+        final BackgroundTaskRunner taskRunner)
     {
         this.windowFactory = Objects.requireNonNull(windowFactory);
         this.taskRunner = Objects.requireNonNull(taskRunner);
-        this.view = Objects.requireNonNull(view);
     }
 
     public void handleCloseWindow()

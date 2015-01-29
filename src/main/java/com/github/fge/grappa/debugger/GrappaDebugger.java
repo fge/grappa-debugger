@@ -81,7 +81,8 @@ public final class GrappaDebugger
         final MainWindowView view
             = new JavafxMainWindowView(stage, alertFactory, display);
         final MainWindowPresenter presenter
-            = new MainWindowPresenter(this, taskRunner, view);
+            = new MainWindowPresenter(this, taskRunner);
+        presenter.setView(view);
 
         display.setPresenter(presenter);
 
