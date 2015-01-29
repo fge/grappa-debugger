@@ -70,7 +70,14 @@ public class MainWindowPresenter
                 return;
         }
 
-        window.loadPresenter(path);
+        window.loadCsvPresenter(path);
+    }
+
+    @VisibleForTesting
+    void loadCsvPresenter(final Path path)
+    {
+        // TODO
+
     }
 
     @VisibleForTesting

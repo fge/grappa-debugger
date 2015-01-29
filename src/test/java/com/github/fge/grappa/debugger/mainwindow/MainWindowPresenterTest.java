@@ -62,7 +62,7 @@ public class MainWindowPresenterTest
         inOrder.verifyNoMoreInteractions();
     }
 
-    @Test
+    @Test(enabled = false)
     public void handleLoadFileWithFileTest()
         throws IOException
     {
@@ -77,7 +77,10 @@ public class MainWindowPresenterTest
         verify(presenter).loadPresenter(same(path));
     }
 
-    @Test(dependsOnMethods = "handleLoadFileWithFileTest")
+    @Test(
+        dependsOnMethods = "handleLoadFileWithFileTest",
+        enabled = false
+    )
     public void handleLoadFileTwiceTest()
         throws IOException
     {
