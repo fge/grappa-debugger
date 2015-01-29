@@ -1,10 +1,12 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -21,6 +23,9 @@ import static org.mockito.Mockito.when;
 
 public class TraceTabPresenterTest
 {
+    private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
+        MoreExecutors.newDirectExecutorService(), Runnable::run);
+
     private MainWindowView parentView;
     private TraceTabModel model;
     private InputBuffer buffer;
@@ -36,7 +41,7 @@ public class TraceTabPresenterTest
         buffer = mock(InputBuffer.class);
         when(model.getInputBuffer()).thenReturn(buffer);
 
-        presenter = spy(new TraceTabPresenter(parentView, model));
+        presenter = spy(new TraceTabPresenter(parentView, taskRunner, model));
 
         view = mock(TraceTabView.class);
         presenter.setView(view);

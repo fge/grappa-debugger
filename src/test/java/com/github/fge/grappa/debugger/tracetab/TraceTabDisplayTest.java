@@ -6,8 +6,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 public class TraceTabDisplayTest
@@ -18,9 +20,11 @@ public class TraceTabDisplayTest
     @BeforeMethod
     public void init()
     {
-        display = new TraceTabDisplay();
+        display = spy(new TraceTabDisplay());
         presenter = mock(TraceTabPresenter.class);
-        display.presenter = presenter;
+
+        doNothing().when(display).init();
+        display.setPresenter(presenter);
     }
 
     @Test

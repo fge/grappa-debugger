@@ -110,7 +110,7 @@ public class MainWindowPresenter
         throws IOException
     {
         final TraceTabModel model = new DefaultTraceTabModel(zipfs);
-        return new TraceTabPresenter(view, model);
+        return new TraceTabPresenter(view, taskRunner, model);
     }
 
     private void handleLoadFileError(final Throwable throwable)

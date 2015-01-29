@@ -1,11 +1,11 @@
 package com.github.fge.grappa.debugger.tracetab;
 
+import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.internal.NotFXML;
 import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.github.fge.grappa.trace.TraceEventType;
-import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -24,14 +24,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.util.Objects;
-
 public class TraceTabDisplay
+    extends JavafxDisplay<TraceTabPresenter>
 {
-    @NotFXML
-    @VisibleForTesting
-    TraceTabPresenter presenter;
-
     /*
      * Tree tab
      */
@@ -112,14 +107,8 @@ public class TraceTabDisplay
     @FXML
     TableColumn<TraceEvent, String> eventPath;
 
-    public void setPresenter(final TraceTabPresenter presenter)
-    {
-        this.presenter = Objects.requireNonNull(presenter);
-        init();
-    }
-
-    @VisibleForTesting
-    void init()
+    @Override
+    public void init()
     {
         /*
          * Parse tree

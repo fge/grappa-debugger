@@ -1,6 +1,8 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsModel;
@@ -21,6 +23,7 @@ import java.util.concurrent.ThreadFactory;
 
 @ParametersAreNonnullByDefault
 public class TraceTabPresenter
+    extends BasePresenter<TraceTabView>
 {
     private static final ThreadFactory THREAD_FACTORY
         = new ThreadFactoryBuilder().setDaemon(true)
@@ -29,24 +32,19 @@ public class TraceTabPresenter
     private final ExecutorService executor
         = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
+    private final BackgroundTaskRunner taskRunner;
     private final TraceTabModel model;
     private final InputBuffer buffer;
 
     private final MainWindowView parentView;
 
-    private TraceTabView view;
-
     public TraceTabPresenter(final MainWindowView parentView,
-        final TraceTabModel model)
+        final BackgroundTaskRunner taskRunner, final TraceTabModel model)
     {
-        this.parentView = parentView;
+        this.parentView = Objects.requireNonNull(parentView);
+        this.taskRunner = taskRunner;
         this.model = Objects.requireNonNull(model);
         buffer = model.getInputBuffer();
-    }
-
-    public void setView(final TraceTabView view)
-    {
-        this.view = Objects.requireNonNull(view);
     }
 
     public void loadTrace()
