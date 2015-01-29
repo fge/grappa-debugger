@@ -24,9 +24,10 @@ public abstract class JavafxView<P, D extends JavafxDisplay<P>>
         display = loader.getController();
     }
 
-    public final Node getNode()
+    @SuppressWarnings("unchecked")
+    public final <T extends Node> T getNode()
     {
-        return node;
+        return (T) node;
     }
 
     public final void attachPresenter(final P presenter)

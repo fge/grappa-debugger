@@ -3,12 +3,9 @@ package com.github.fge.grappa.debugger;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.mainwindow.JavafxMainWindowView;
-import com.github.fge.grappa.debugger.mainwindow.MainWindowDisplay;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
-import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -67,24 +64,22 @@ public final class GrappaDebugger
     @Nullable
     private MainWindowPresenter createWindow(final Stage stage)
     {
-        final FXMLLoader loader = new FXMLLoader(BASE_WINDOW_FXML);
+        final MainWindowPresenter presenter
+            = new MainWindowPresenter(this, taskRunner);
+
+        final JavafxMainWindowView view;
         final Pane pane;
+
         try {
-            pane = loader.load();
+            view = new JavafxMainWindowView(stage, alertFactory);
+            presenter.setView(view);
+            view.attachPresenter(presenter);
+            pane = view.getNode();
         } catch (IOException e) {
             alertFactory.showError("Window creation error",
                 "Unable to create window", e);
             return null;
         }
-
-        final MainWindowDisplay display = loader.getController();
-        final MainWindowView view
-            = new JavafxMainWindowView(stage, alertFactory, display);
-        final MainWindowPresenter presenter
-            = new MainWindowPresenter(this, taskRunner);
-        presenter.setView(view);
-
-        display.setPresenter(presenter);
 
         stage.setScene(new Scene(pane, 1024, 768));
         stage.setTitle("Grappa debugger");

@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
+import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Path;
 
 public final class JavafxMainWindowView
+    extends JavafxView<MainWindowPresenter, MainWindowDisplay>
     implements MainWindowView
 {
     private static final Class<MainWindowView> MYSELF = MainWindowView.class;
@@ -28,14 +30,14 @@ public final class JavafxMainWindowView
 
     private final Stage stage;
     private final AlertFactory alertFactory;
-    private final MainWindowDisplay display;
 
     public JavafxMainWindowView(final Stage stage,
-        final AlertFactory alertFactory, final MainWindowDisplay display)
+        final AlertFactory alertFactory)
+        throws IOException
     {
+        super("/mainWindow.fxml");
         this.stage = stage;
         this.alertFactory = alertFactory;
-        this.display = display;
     }
 
     @Override
