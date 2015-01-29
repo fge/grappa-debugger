@@ -72,11 +72,11 @@ public final class JavafxMainWindowView
         final JavafxTraceTabView view;
         try {
             view = new JavafxTraceTabView(this);
-            presenter.setView(view);
         } catch (IOException oops) {
             showError("Tab creation error", "Unable to create tab", oops);
             return;
         }
+        presenter.setView(view);
         view.attachPresenter(presenter);
         display.pane.setCenter(view.getNode());
     }
