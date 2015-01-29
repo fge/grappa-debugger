@@ -6,28 +6,16 @@ import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
 public class CsvTracePresenter
     extends BasePresenter<CsvTraceView>
 {
-    private static final ThreadFactory THREAD_FACTORY
-        = new ThreadFactoryBuilder().setDaemon(true)
-        .setNameFormat("csv-tab-%d").build();
-
-    @VisibleForTesting
-    ExecutorService executor
-        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
-
     private final MainWindowView mainView;
     private final BackgroundTaskRunner taskRunner;
     private final CsvTraceModel model;
@@ -50,7 +38,6 @@ public class CsvTracePresenter
         );
     }
 
-
     void handleExpandParseTree()
     {
     }
@@ -63,7 +50,5 @@ public class CsvTracePresenter
 
     public void parseNodeShowEvent(final ParseNode node)
     {
-        // TODO
-
     }
 }
