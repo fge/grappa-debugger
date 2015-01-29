@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
-import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -11,25 +11,17 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @NonFinalForTesting
 public class CsvTraceDisplay
+    extends JavafxDisplay<CsvTracePresenter>
 {
-    private CsvTracePresenter presenter;
-
     @FXML
     TreeView<ParseNode> parseTree;
 
-    void setPresenter(final CsvTracePresenter presenter)
-    {
-        this.presenter = Objects.requireNonNull(presenter);
-        init();
-    }
-
-    @VisibleForTesting
-    void init()
+    @Override
+    public void init()
     {
         /*
          * Parse tree

@@ -1,19 +1,21 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TreeItem;
 
+import java.io.IOException;
 import java.util.List;
 
 public final class JavafxCsvTraceView
+    extends JavafxView<CsvTracePresenter, CsvTraceDisplay>
     implements CsvTraceView
 {
-    private final CsvTraceDisplay display;
-
-    public JavafxCsvTraceView(final CsvTraceDisplay display)
+    public JavafxCsvTraceView()
+        throws IOException
     {
-        this.display = display;
+        super("/csvTrace.fxml");
     }
 
     @Override
