@@ -59,8 +59,6 @@ public class CsvTracePresenter
 
     void handleExpandParseTree()
     {
-        // TODO
-
     }
 
     @VisibleForTesting

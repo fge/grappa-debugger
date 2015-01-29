@@ -1,7 +1,9 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,6 +23,8 @@ import static org.mockito.Mockito.when;
 
 public class MainWindowPresenterTest
 {
+    private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
+        MoreExecutors.newDirectExecutorService(), Runnable::run);
     private MainWindowFactory factory;
     private MainWindowView view;
     private MainWindowPresenter presenter;
@@ -30,7 +34,7 @@ public class MainWindowPresenterTest
     {
         factory = mock(MainWindowFactory.class);
         view = mock(MainWindowView.class);
-        presenter = spy(new MainWindowPresenter(factory, view));
+        presenter = spy(new MainWindowPresenter(factory, taskRunner, view));
     }
 
     @Test

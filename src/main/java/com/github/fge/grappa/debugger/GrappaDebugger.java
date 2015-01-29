@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger;
 
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.mainwindow.JavafxMainWindowView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowDisplay;
@@ -34,6 +35,8 @@ public final class GrappaDebugger
     }
 
     private final AlertFactory alertFactory = new AlertFactory();
+    private final BackgroundTaskRunner taskRunner
+        = new BackgroundTaskRunner("tab-%d", Platform::runLater);
 
     private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 
@@ -61,6 +64,7 @@ public final class GrappaDebugger
         return createWindow(new Stage());
     }
 
+    @Nullable
     private MainWindowPresenter createWindow(final Stage stage)
     {
         final FXMLLoader loader = new FXMLLoader(BASE_WINDOW_FXML);
@@ -77,7 +81,7 @@ public final class GrappaDebugger
         final MainWindowView view
             = new JavafxMainWindowView(stage, alertFactory, ui);
         final MainWindowPresenter presenter
-            = new MainWindowPresenter(this, view);
+            = new MainWindowPresenter(this, taskRunner, view);
 
         ui.init(presenter);
 
@@ -89,6 +93,12 @@ public final class GrappaDebugger
         stage.show();
 
         return presenter;
+    }
+
+    @Override
+    public void stop()
+    {
+        taskRunner.dispose();
     }
 
     @Override

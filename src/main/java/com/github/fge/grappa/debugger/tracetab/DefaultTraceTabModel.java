@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
@@ -26,7 +27,8 @@ public final class DefaultTraceTabModel
 {
     private static final Charset UTF8 = StandardCharsets.UTF_8;
     private static final ObjectMapper MAPPER = new ObjectMapper()
-        .disable(Feature.AUTO_CLOSE_TARGET);
+        .disable(Feature.AUTO_CLOSE_TARGET)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private static final TypeReference<List<TraceEvent>> TYPE_REF
         = new TypeReference<List<TraceEvent>>() {};
 

@@ -38,7 +38,7 @@ public class CsvTracePresenterTest
         }).when(presenter).delayRun(any(Runnable.class));
     }
 
-    @Test
+    @Test(enabled = false)
     public void loadStatsTest()
         throws IOException
     {
