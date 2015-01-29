@@ -64,25 +64,26 @@ public final class GrappaDebugger
     @Nullable
     private MainWindowPresenter createWindow(final Stage stage)
     {
-        final MainWindowPresenter presenter
-            = new MainWindowPresenter(this, taskRunner);
+        final MainWindowPresenter presenter;
 
         final JavafxMainWindowView view;
         final Pane pane;
 
         try {
             view = new JavafxMainWindowView(stage, alertFactory);
-            presenter.setView(view);
-            view.attachPresenter(presenter);
-            pane = view.getNode();
         } catch (IOException e) {
             alertFactory.showError("Window creation error",
                 "Unable to create window", e);
             return null;
         }
 
+        pane = view.getNode();
         stage.setScene(new Scene(pane, 1024, 768));
         stage.setTitle("Grappa debugger");
+
+        presenter = new MainWindowPresenter(this, taskRunner);
+        presenter.setView(view);
+        view.attachPresenter(presenter);
 
         windows.put(presenter, stage);
 
