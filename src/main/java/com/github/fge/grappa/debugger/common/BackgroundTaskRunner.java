@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public final class BackgroundTaskRunner
@@ -59,6 +60,17 @@ public final class BackgroundTaskRunner
         executor.submit(() -> {
             task.run();
             frontExecutor.execute(post);
+        });
+    }
+
+    public <T> void run(final Supplier<T> supplier, final Consumer<T> consumer)
+    {
+        Objects.requireNonNull(supplier);
+        Objects.requireNonNull(consumer);
+
+        executor.submit(() -> {
+            final T t = supplier.get();
+            frontExecutor.execute(() -> consumer.accept(t));
         });
     }
 

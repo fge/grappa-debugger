@@ -1,6 +1,5 @@
 package com.github.fge.grappa.debugger.tracetab;
 
-import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -12,39 +11,22 @@ import com.github.fge.grappa.debugger.tracetab.stat.global.DefaultGlobalStatsMod
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 @ParametersAreNonnullByDefault
 public class TraceTabPresenter
     extends BasePresenter<TraceTabView>
 {
-    private static final ThreadFactory THREAD_FACTORY
-        = new ThreadFactoryBuilder().setDaemon(true)
-        .setNameFormat("tab-loader-%d").build();
-
-    private final ExecutorService executor
-        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
-
     private final BackgroundTaskRunner taskRunner;
     private final TraceTabModel model;
-    private final InputBuffer buffer;
-
-    private final MainWindowView parentView;
 
     public TraceTabPresenter(final MainWindowView parentView,
         final BackgroundTaskRunner taskRunner, final TraceTabModel model)
     {
-        this.parentView = Objects.requireNonNull(parentView);
         this.taskRunner = taskRunner;
         this.model = Objects.requireNonNull(model);
-        buffer = model.getInputBuffer();
     }
 
     public void loadTrace()
@@ -81,10 +63,7 @@ public class TraceTabPresenter
     @VisibleForTesting
     void loadGlobalStats()
     {
-        executor.submit(() -> {
-            final GlobalStatsPresenter presenter = getGlobalStatsPresenter();
-            Platform.runLater(() -> view.loadGlobalStats(presenter));
-        });
+        taskRunner.run(this::getGlobalStatsPresenter, view::loadGlobalStats);
     }
 
     @VisibleForTesting
@@ -98,10 +77,7 @@ public class TraceTabPresenter
     @VisibleForTesting
     void loadClassDetailsStats()
     {
-        executor.submit(() -> {
-            final ClassDetailsStatsPresenter presenter
-                = getClassDetailsStatsPresenter();
-            Platform.runLater(() -> view.loadClassDetailsStats(presenter));
-        });
+        taskRunner.run(this::getClassDetailsStatsPresenter,
+            view::loadClassDetailsStats);
     }
 }
