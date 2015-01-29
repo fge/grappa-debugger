@@ -27,7 +27,7 @@ public class CsvTracePresenterTest
     {
         mainView = mock(MainWindowView.class);
         model = mock(CsvTraceModel.class);
-        presenter = spy(new CsvTracePresenter(mainView, model));
+        presenter = spy(new CsvTracePresenter(mainView, model, taskRunner));
 
         view = mock(CsvTraceView.class);
         presenter.setView(view);

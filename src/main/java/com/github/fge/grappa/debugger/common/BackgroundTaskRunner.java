@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.common;
 
+import com.github.fge.lambdas.suppliers.ThrowingSupplier;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -49,17 +50,17 @@ public final class BackgroundTaskRunner
     }
 
     public void run(final Runnable before, final Runnable task,
-        final Runnable post)
+        final Runnable after)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(task);
-        Objects.requireNonNull(post);
+        Objects.requireNonNull(after);
 
         frontExecutor.execute(before);
 
         executor.submit(() -> {
             task.run();
-            frontExecutor.execute(post);
+            frontExecutor.execute(after);
         });
     }
 
@@ -71,6 +72,19 @@ public final class BackgroundTaskRunner
         executor.submit(() -> {
             final T t = supplier.get();
             frontExecutor.execute(() -> consumer.accept(t));
+        });
+    }
+
+    public <T> void runOrFail(final ThrowingSupplier<T> supplier,
+        final Consumer<T> consumer, final Consumer<Throwable> onError)
+    {
+        executor.submit(() -> {
+            try {
+                final T t = supplier.doGet();
+                frontExecutor.execute(() -> consumer.accept(t));
+            } catch (Throwable throwable) {
+                frontExecutor.execute(() -> onError.accept(throwable));
+            }
         });
     }
 

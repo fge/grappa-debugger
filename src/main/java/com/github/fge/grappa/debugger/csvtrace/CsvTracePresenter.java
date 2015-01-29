@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
@@ -9,7 +10,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,26 +29,25 @@ public class CsvTracePresenter
         = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
     private final MainWindowView mainView;
+    private final BackgroundTaskRunner taskRunner;
     private final CsvTraceModel model;
 
     public CsvTracePresenter(final MainWindowView mainView,
-        final CsvTraceModel model)
+        final BackgroundTaskRunner taskRunner, final CsvTraceModel model)
     {
         this.mainView = Objects.requireNonNull(mainView);
+        this.taskRunner = taskRunner;
         this.model = Objects.requireNonNull(model);
     }
 
     public void loadStats()
     {
-        executor.submit(() -> {
-            try {
-                final ParseNode rootNode = model.getRootNode();
-                delayRun(() -> view.loadRootNode(rootNode));
-            } catch (IOException e) {
-                delayRun(() -> mainView.showError("Parse tree error",
-                    "Unable to load parse tree", e));
-            }
-        });
+        taskRunner.runOrFail(
+            model::getRootNode,
+            view::loadRootNode,
+            e -> mainView.showError("Parse tree error",
+                "Unable to load parse tree", e)
+        );
     }
 
 
