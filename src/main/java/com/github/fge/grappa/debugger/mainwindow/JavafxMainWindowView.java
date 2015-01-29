@@ -2,11 +2,7 @@ package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
-import com.github.fge.grappa.debugger.tracetab.TraceTabDisplay;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
-import com.github.fge.grappa.debugger.tracetab.TraceTabView;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -73,18 +69,15 @@ public final class JavafxMainWindowView
     @Override
     public void injectTab(final TraceTabPresenter presenter)
     {
-        final FXMLLoader loader = new FXMLLoader(TAB_FXML);
-        final Node node;
+        final JavafxTraceTabView view;
         try {
-            node = loader.load();
+            view = new JavafxTraceTabView(this);
+            presenter.setView(view);
         } catch (IOException oops) {
             showError("Tab creation error", "Unable to create tab", oops);
             return;
         }
-        final TraceTabDisplay tabDisplay = loader.getController();
-        final TraceTabView view = new JavafxTraceTabView(this, tabDisplay);
-        presenter.setView(view);
-        tabDisplay.setPresenter(presenter);
-        display.pane.setCenter(node);
+        view.attachPresenter(presenter);
+        display.pane.setCenter(view.getNode());
     }
 }

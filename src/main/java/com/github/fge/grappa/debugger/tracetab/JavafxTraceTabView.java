@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.JavafxStatsTabFactory;
 import com.github.fge.grappa.debugger.javafx.Utils;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -42,6 +43,7 @@ import java.util.concurrent.ThreadFactory;
 
 @ParametersAreNonnullByDefault
 public final class JavafxTraceTabView
+    extends JavafxView<TraceTabPresenter, TraceTabDisplay>
     implements TraceTabView
 {
     private static final ThreadFactory THREAD_FACTORY
@@ -53,18 +55,17 @@ public final class JavafxTraceTabView
         = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
     private final MainWindowView parentView;
-    private final TraceTabDisplay display;
 
     private InputBuffer buffer;
 
     @VisibleForTesting
     JavafxStatsTabFactory tabFactory = new JavafxStatsTabFactory();
 
-    public JavafxTraceTabView(final MainWindowView parentView,
-        final TraceTabDisplay display)
+    public JavafxTraceTabView(final MainWindowView parentView)
+        throws IOException
     {
+        super("/traceTab.fxml");
         this.parentView = parentView;
-        this.display = display;
     }
 
     @Override
