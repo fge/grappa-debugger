@@ -2,8 +2,10 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
-import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.debugger.tracetab.stat.classdetails
+    .ClassDetailsStatsPresenter;
+import com.github.fge.grappa.debugger.tracetab.stat.global.GlobalStatsPresenter;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -26,7 +29,6 @@ public class TraceTabPresenterTest
     private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run);
 
-    private MainWindowView parentView;
     private TraceTabModel model;
     private InputBuffer buffer;
     private TraceTabPresenter presenter;
@@ -35,13 +37,12 @@ public class TraceTabPresenterTest
     @BeforeMethod
     public void init()
     {
-        parentView = mock(MainWindowView.class);
         model = mock(TraceTabModel.class);
 
         buffer = mock(InputBuffer.class);
         when(model.getInputBuffer()).thenReturn(buffer);
 
-        presenter = spy(new TraceTabPresenter(parentView, taskRunner, model));
+        presenter = spy(new TraceTabPresenter(taskRunner, model));
 
         view = mock(TraceTabView.class);
         presenter.setView(view);
@@ -59,12 +60,22 @@ public class TraceTabPresenterTest
         final ParseNode node = mock(ParseNode.class);
         when(model.getRootNode()).thenReturn(node);
 
+        final GlobalStatsPresenter presenter1
+            = mock(GlobalStatsPresenter.class);
+        doReturn(presenter1).when(presenter).getGlobalStatsPresenter();
+
+        final ClassDetailsStatsPresenter presenter2
+            = mock(ClassDetailsStatsPresenter.class);
+        doReturn(presenter2).when(presenter).getClassDetailsStatsPresenter();
+
         presenter.loadTrace();
 
         verify(view).setEvents(same(events));
         verify(view).setInfo(same(info));
         verify(view).setInputText(same(buffer));
         verify(view).setParseTree(same(node));
+        verify(view).loadGlobalStats(same(presenter1));
+        verify(view).loadClassDetailsStats(same(presenter2));
         verifyNoMoreInteractions(view);
     }
 

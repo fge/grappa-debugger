@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
@@ -19,14 +18,10 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ThreadFactory;
 
 @ParametersAreNonnullByDefault
 public class MainWindowPresenter
 {
-    private static final ThreadFactory THREAD_FACTORY
-        = new ThreadFactoryBuilder().setNameFormat("grappa-debugger-main-%d")
-            .setDaemon(true).build();
     private static final Map<String, ?> ZIPFS_ENV
         = Collections.singletonMap("readonly", "true");
 
@@ -110,7 +105,7 @@ public class MainWindowPresenter
         throws IOException
     {
         final TraceTabModel model = new DefaultTraceTabModel(zipfs);
-        return new TraceTabPresenter(view, taskRunner, model);
+        return new TraceTabPresenter(taskRunner, model);
     }
 
     private void handleLoadFileError(final Throwable throwable)

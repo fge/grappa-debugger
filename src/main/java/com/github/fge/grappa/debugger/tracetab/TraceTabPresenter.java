@@ -2,7 +2,6 @@ package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
-import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsPresenter;
@@ -22,8 +21,8 @@ public class TraceTabPresenter
     private final BackgroundTaskRunner taskRunner;
     private final TraceTabModel model;
 
-    public TraceTabPresenter(final MainWindowView parentView,
-        final BackgroundTaskRunner taskRunner, final TraceTabModel model)
+    public TraceTabPresenter(final BackgroundTaskRunner taskRunner,
+        final TraceTabModel model)
     {
         this.taskRunner = taskRunner;
         this.model = Objects.requireNonNull(model);
@@ -35,8 +34,9 @@ public class TraceTabPresenter
         view.setInfo(model.getInfo());
         view.setEvents(model.getEvents());
         view.setParseTree(model.getRootNode());
-        loadGlobalStats();
-        loadClassDetailsStats();
+        taskRunner.run(this::getGlobalStatsPresenter, view::loadGlobalStats);
+        taskRunner.run(this::getClassDetailsStatsPresenter,
+            view::loadClassDetailsStats);
     }
 
     public void handleExpandParseTree()
@@ -61,12 +61,6 @@ public class TraceTabPresenter
     }
 
     @VisibleForTesting
-    void loadGlobalStats()
-    {
-        taskRunner.run(this::getGlobalStatsPresenter, view::loadGlobalStats);
-    }
-
-    @VisibleForTesting
     ClassDetailsStatsPresenter getClassDetailsStatsPresenter()
     {
         final ClassDetailsStatsModel statsModel
@@ -74,10 +68,4 @@ public class TraceTabPresenter
         return new ClassDetailsStatsPresenter(statsModel);
     }
 
-    @VisibleForTesting
-    void loadClassDetailsStats()
-    {
-        taskRunner.run(this::getClassDetailsStatsPresenter,
-            view::loadClassDetailsStats);
-    }
 }
