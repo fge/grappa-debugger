@@ -12,7 +12,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -83,12 +82,7 @@ public class MainWindowPresenter
         throws IOException
     {
         final URI uri = URI.create("jar:" + path.toUri());
-        FileSystem zipfs;
-        try {
-            zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
-        } catch (FileSystemAlreadyExistsException ignored) {
-            zipfs = FileSystems.getFileSystem(uri);
-        }
+        final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
         final CsvTraceModel model = new DefaultCsvTraceModel(zipfs);
         return new CsvTracePresenter(view, taskRunner, model);
     }
