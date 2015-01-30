@@ -3,6 +3,8 @@ package com.github.fge.grappa.debugger.csvtrace;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.model.TraceEventSpliterator;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.ParseTreeProcessor;
@@ -24,6 +26,7 @@ import java.util.stream.StreamSupport;
 public final class DefaultCsvTraceModel
     implements CsvTraceModel
 {
+    private static final int BUFSIZE = 16384;
     private static final ObjectMapper MAPPER = new ObjectMapper()
         .disable(Feature.AUTO_CLOSE_TARGET)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -55,6 +58,26 @@ public final class DefaultCsvTraceModel
             StreamSupport.stream(spliterator, false)
                 .forEach(processor::process);
             return processor.getRootNode();
+        }
+    }
+
+    @Override
+    public InputBuffer getInputBuffer()
+        throws IOException
+    {
+        final Path path = zipfs.getPath(INPUT_TEXT_PATH);
+
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            final char[] buf = new char[BUFSIZE];
+            final StringBuilder sb = new StringBuilder();
+            int nrChars;
+
+            while ((nrChars = reader.read(buf)) != -1)
+                sb.append(buf, 0, nrChars);
+
+            return new CharSequenceInputBuffer(sb);
         }
     }
 

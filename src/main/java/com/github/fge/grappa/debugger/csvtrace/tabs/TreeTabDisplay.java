@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
+import javafx.scene.text.TextFlow;
 
 public class TreeTabDisplay
     extends JavafxDisplay<TreeTabPresenter>
@@ -18,6 +19,9 @@ public class TreeTabDisplay
 
     @FXML
     protected TreeView<ParseNode> parseTree;
+
+    @FXML
+    protected TextFlow inputText;
 
     @Override
     public void init()

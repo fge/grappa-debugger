@@ -5,6 +5,7 @@ import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -27,9 +28,24 @@ public class TreeTabPresenter
 
     public void load()
     {
+        loadParseTree();
+        loadInputText();
+    }
+
+    @VisibleForTesting
+    void loadParseTree()
+    {
         taskRunner.computeOrFail(model::getRootNode, view::loadTree,
             throwable -> mainView.showError("Parse tree error",
                 "Unable to load parse tree", throwable));
+    }
+
+    @VisibleForTesting
+    void loadInputText()
+    {
+        taskRunner.computeOrFail(model::getInputBuffer, view::loadText,
+            throwable -> mainView.showError("Input text error",
+                "Unable to load input text", throwable));
     }
 
     void parseNodeShowEvent(final ParseNode node)
