@@ -6,18 +6,14 @@ import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.DefaultCsvTraceModel;
-import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
-import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -35,7 +31,7 @@ public class MainWindowPresenter
     private final MainWindowFactory windowFactory;
 
     @VisibleForTesting
-    TraceTabPresenter tabPresenter;
+    CsvTracePresenter tracePresenter;
 
     public MainWindowPresenter(final MainWindowFactory windowFactory,
         final BackgroundTaskRunner taskRunner)
@@ -63,15 +59,11 @@ public class MainWindowPresenter
 
         MainWindowPresenter window = this;
 
-        if (tabPresenter != null) {
+        if (tracePresenter != null) {
             window = windowFactory.createWindow();
             if (window == null)
                 return;
         }
-
-        //window.loadPresenter(path);
-
-        final CsvTracePresenter tracePresenter;
 
         try {
             tracePresenter = loadTrace(path);
@@ -84,51 +76,19 @@ public class MainWindowPresenter
         tracePresenter.loadTrace();
     }
 
+    @VisibleForTesting
     CsvTracePresenter loadTrace(final Path path)
         throws IOException
     {
         final URI uri = URI.create("jar:" + path.toUri());
-        final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
+        FileSystem zipfs;
+        try {
+            zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
+        } catch (FileSystemAlreadyExistsException ignored) {
+            zipfs = FileSystems.getFileSystem(uri);
+        }
         final CsvTraceModel model = new DefaultCsvTraceModel(zipfs);
         return new CsvTracePresenter(view, taskRunner, model);
-    }
-
-    @VisibleForTesting
-    void loadPresenter(final Path path)
-    {
-        final URI uri = URI.create("jar:" + path.toUri());
-
-        taskRunner.runOrFail(
-            () -> view.setLabelText("Please wait..."),
-            () -> {
-                try (
-                    final FileSystem zipfs
-                        = FileSystems.newFileSystem(uri, ZIPFS_ENV);
-                ) {
-                    final boolean exists
-                        = Files.exists(zipfs.getPath("/info.json"));
-                    if (!exists)
-                        throw new NoSuchFileException("/info.json");
-                    tabPresenter = loadPresenter(zipfs);
-                }
-            },
-            () -> loadTab(path),
-            this::handleLoadFileError
-        );
-    }
-
-    private void loadTab(final Path path)
-    {
-        view.injectTab(tabPresenter);
-        tabPresenter.loadTrace();
-        view.setWindowTitle("Grappa debugger: " + path.toAbsolutePath());
-    }
-
-    private TraceTabPresenter loadPresenter(final FileSystem zipfs)
-        throws IOException
-    {
-        final TraceTabModel model = new DefaultTraceTabModel(zipfs);
-        return new TraceTabPresenter(taskRunner, model);
     }
 
     private void handleLoadFileError(final Throwable throwable)
