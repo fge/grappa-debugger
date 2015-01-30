@@ -30,6 +30,7 @@
                     <top>
                         <ToolBar>
                             <Button fx:id="treeExpand" text="Expand tree"
+                                disable="true"
                                 onMouseClicked="#expandParseTreeEvent"/>
                         </ToolBar>
                     </top>

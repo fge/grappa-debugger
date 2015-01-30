@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 
@@ -17,6 +18,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CsvTraceDisplay
     extends JavafxDisplay<CsvTracePresenter>
 {
+    @FXML
+    protected Button treeExpand;
+
     @FXML
     protected TreeView<ParseNode> parseTree;
 

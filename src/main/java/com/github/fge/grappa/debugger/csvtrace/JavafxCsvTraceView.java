@@ -28,10 +28,10 @@ public final class JavafxCsvTraceView
     @Override
     public void loadRootNode(final ParseNode rootNode)
     {
-        taskRunner.compute(
-            () -> buildTree(rootNode),
-            display.parseTree::setRoot
-        );
+        taskRunner.compute(() -> buildTree(rootNode), value -> {
+            display.parseTree.setRoot(value);
+            display.treeExpand.setDisable(false);
+        });
     }
 
     private TreeItem<ParseNode> buildTree(final ParseNode root)

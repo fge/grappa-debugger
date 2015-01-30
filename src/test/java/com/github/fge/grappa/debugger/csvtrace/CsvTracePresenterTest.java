@@ -36,8 +36,8 @@ public class CsvTracePresenterTest
         presenter.setView(view);
     }
 
-    @Test(enabled = false)
-    public void loadStatsTest()
+    @Test
+    public void loadTraceTest()
         throws IOException
     {
         final ParseNode rootNode = mock(ParseNode.class);

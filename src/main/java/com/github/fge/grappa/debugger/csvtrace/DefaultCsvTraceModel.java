@@ -1,5 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.debugger.csvtrace.model.TraceEventSpliterator;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.ParseTreeProcessor;
@@ -21,7 +24,13 @@ import java.util.stream.StreamSupport;
 public final class DefaultCsvTraceModel
     implements CsvTraceModel
 {
+    private static final ObjectMapper MAPPER = new ObjectMapper()
+        .disable(Feature.AUTO_CLOSE_TARGET)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     private static final Charset UTF8 = StandardCharsets.UTF_8;
+    private static final String INFO_PATH = "/info.json";
+    private static final String INPUT_TEXT_PATH = "/input.txt";
     private static final String CSV_PATH = "/trace.csv";
 
     private final FileSystem zipfs;

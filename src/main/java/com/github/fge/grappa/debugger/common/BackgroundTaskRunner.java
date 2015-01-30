@@ -15,9 +15,6 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 public final class BackgroundTaskRunner
 {
-    private static final int NR_THREADS
-        = Runtime.getRuntime().availableProcessors();
-
     private final ExecutorService executor;
     private final Executor frontExecutor;
 
@@ -28,7 +25,7 @@ public final class BackgroundTaskRunner
 
         final ThreadFactory factory = new ThreadFactoryBuilder()
             .setNameFormat(fmt).setDaemon(true).build();
-        executor = Executors.newFixedThreadPool(NR_THREADS, factory);
+        executor = Executors.newCachedThreadPool(factory);
         this.frontExecutor = frontExecutor;
     }
 
