@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.tracetab;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
-import com.github.fge.grappa.debugger.common.BasePresenter;
+import com.github.fge.grappa.debugger.common.TracePresenter;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsModel;
 import com.github.fge.grappa.debugger.tracetab.stat.classdetails.ClassDetailsStatsPresenter;
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public class TraceTabPresenter
-    extends BasePresenter<TraceTabView>
+    extends TracePresenter<TraceTabView>
 {
     private final BackgroundTaskRunner taskRunner;
     private final TraceTabModel model;
@@ -28,6 +28,7 @@ public class TraceTabPresenter
         this.model = Objects.requireNonNull(model);
     }
 
+    @Override
     public void loadTrace()
     {
         view.setInputText(model.getInputBuffer());

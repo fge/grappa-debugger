@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
-import com.github.fge.grappa.debugger.common.BasePresenter;
+import com.github.fge.grappa.debugger.common.TracePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
@@ -12,7 +12,7 @@ import java.util.Objects;
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
 public class CsvTracePresenter
-    extends BasePresenter<CsvTraceView>
+    extends TracePresenter<CsvTraceView>
 {
     private final MainWindowView mainView;
     private final BackgroundTaskRunner taskRunner;
@@ -26,7 +26,8 @@ public class CsvTracePresenter
         this.model = Objects.requireNonNull(model);
     }
 
-    public void loadStats()
+    @Override
+    public void loadTrace()
     {
         taskRunner.runOrFail(model::getRootNode, view::loadRootNode,
             e -> mainView.showError("Parse tree error",

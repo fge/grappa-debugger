@@ -30,8 +30,8 @@ public abstract class JavafxView<P, D extends JavafxDisplay<P>>
         return (T) node;
     }
 
-    public final void attachPresenter(final P presenter)
+    public final D getDisplay()
     {
-        display.setPresenter(presenter);
+        return display;
     }
 }

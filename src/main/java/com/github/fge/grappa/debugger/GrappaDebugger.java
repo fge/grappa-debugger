@@ -83,7 +83,7 @@ public final class GrappaDebugger
 
         presenter = new MainWindowPresenter(this, taskRunner);
         presenter.setView(view);
-        view.attachPresenter(presenter);
+        view.getDisplay().setPresenter(presenter);
 
         windows.put(presenter, stage);
 

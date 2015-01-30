@@ -43,7 +43,7 @@ public class CsvTracePresenterTest
         final ParseNode rootNode = mock(ParseNode.class);
         when(model.getRootNode()).thenReturn(rootNode);
 
-        presenter.loadStats();
+        presenter.loadTrace();
 
         verify(view).loadRootNode(same(rootNode));
     }

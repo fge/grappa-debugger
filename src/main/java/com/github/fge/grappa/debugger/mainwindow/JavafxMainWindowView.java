@@ -79,7 +79,7 @@ public final class JavafxMainWindowView
             return;
         }
         presenter.setView(view);
-        view.attachPresenter(presenter);
+        view.getDisplay().setPresenter(presenter);
         display.pane.setCenter(view.getNode());
     }
 }
