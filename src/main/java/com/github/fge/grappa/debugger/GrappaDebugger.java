@@ -70,7 +70,7 @@ public final class GrappaDebugger
         final Pane pane;
 
         try {
-            view = new JavafxMainWindowView(stage, alertFactory);
+            view = new JavafxMainWindowView(stage, taskRunner, alertFactory);
         } catch (IOException e) {
             alertFactory.showError("Window creation error",
                 "Unable to create window", e);

@@ -22,7 +22,7 @@ public final class DefaultCsvTraceModel
     implements CsvTraceModel
 {
     private static final Charset UTF8 = StandardCharsets.UTF_8;
-    private static final String CSV_PATH = "/events.csv";
+    private static final String CSV_PATH = "/trace.csv";
 
     private final FileSystem zipfs;
 

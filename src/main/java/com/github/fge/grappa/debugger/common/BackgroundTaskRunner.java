@@ -36,7 +36,7 @@ public final class BackgroundTaskRunner
         final Executor frontExecutor)
     {
         this.executor = Objects.requireNonNull(executor);
-        this.frontExecutor = frontExecutor;
+        this.frontExecutor = Objects.requireNonNull(frontExecutor);
     }
 
     public void run(final Runnable task, final Runnable after)
@@ -46,6 +46,18 @@ public final class BackgroundTaskRunner
         executor.execute(() -> {
             task.run();
             frontExecutor.execute(after);
+        });
+    }
+
+    public <T> void compute(final Supplier<T> supplier,
+        final Consumer<T> consumer)
+    {
+        Objects.requireNonNull(supplier);
+        Objects.requireNonNull(consumer);
+
+        executor.submit(() -> {
+            final T t = supplier.get();
+            frontExecutor.execute(() -> consumer.accept(t));
         });
     }
 
@@ -64,28 +76,18 @@ public final class BackgroundTaskRunner
         });
     }
 
-    public <T> void compute(final Supplier<T> supplier,
+    public <T> void compute(final Runnable before, final Supplier<T> supplier,
         final Consumer<T> consumer)
     {
+        Objects.requireNonNull(before);
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(consumer);
+
+        frontExecutor.execute(before);
 
         executor.submit(() -> {
             final T t = supplier.get();
             frontExecutor.execute(() -> consumer.accept(t));
-        });
-    }
-
-    public <T> void computeOrFail(final ThrowingSupplier<T> supplier,
-        final Consumer<T> consumer, final Consumer<Throwable> onError)
-    {
-        executor.submit(() -> {
-            try {
-                final T t = supplier.doGet();
-                frontExecutor.execute(() -> consumer.accept(t));
-            } catch (Throwable throwable) {
-                frontExecutor.execute(() -> onError.accept(throwable));
-            }
         });
     }
 
@@ -106,6 +108,23 @@ public final class BackgroundTaskRunner
         });
     }
 
+    public <T> void computeOrFail(final ThrowingSupplier<T> supplier,
+        final Consumer<T> consumer, final Consumer<Throwable> onError)
+    {
+        Objects.requireNonNull(supplier);
+        Objects.requireNonNull(consumer);
+        Objects.requireNonNull(onError);
+
+        executor.submit(() -> {
+            try {
+                final T t = supplier.doGet();
+                frontExecutor.execute(() -> consumer.accept(t));
+            } catch (Throwable throwable) {
+                frontExecutor.execute(() -> onError.accept(throwable));
+            }
+        });
+    }
+
     public void runOrFail(final Runnable before, final ThrowingRunnable task,
         final Runnable after, final Consumer<Throwable> onError)
     {
@@ -120,6 +139,27 @@ public final class BackgroundTaskRunner
             try {
                 task.doRun();
                 frontExecutor.execute(after);
+            } catch (Throwable throwable) {
+                frontExecutor.execute(() -> onError.accept(throwable));
+            }
+        });
+    }
+
+    public <T> void computeOrFail(final Runnable before,
+        final ThrowingSupplier<T> supplier, final Consumer<T> consumer,
+        final Consumer<Throwable> onError)
+    {
+        Objects.requireNonNull(before);
+        Objects.requireNonNull(supplier);
+        Objects.requireNonNull(consumer);
+        Objects.requireNonNull(onError);
+
+        frontExecutor.execute(before);
+
+        executor.submit(() -> {
+            try {
+                final T t = supplier.doGet();
+                frontExecutor.execute(() -> consumer.accept(t));
             } catch (Throwable throwable) {
                 frontExecutor.execute(() -> onError.accept(throwable));
             }

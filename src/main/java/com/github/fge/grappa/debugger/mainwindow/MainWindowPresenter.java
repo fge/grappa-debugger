@@ -3,6 +3,9 @@ package com.github.fge.grappa.debugger.mainwindow;
 import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
+import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
+import com.github.fge.grappa.debugger.csvtrace.DefaultCsvTraceModel;
 import com.github.fge.grappa.debugger.tracetab.DefaultTraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabModel;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
@@ -66,7 +69,25 @@ public class MainWindowPresenter
                 return;
         }
 
-        window.loadPresenter(path);
+        //window.loadPresenter(path);
+
+        taskRunner.computeOrFail(
+            () -> view.setLabelText("Please wait..."),
+            () -> loadTrace(path), presenter -> {
+                view.attachTrace(presenter);
+                presenter.loadTrace();
+            },
+            this::handleLoadFileError
+        );
+    }
+
+    CsvTracePresenter loadTrace(final Path path)
+        throws IOException
+    {
+        final URI uri = URI.create("jar:" + path.toUri());
+        final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
+        final CsvTraceModel model = new DefaultCsvTraceModel(zipfs);
+        return new CsvTracePresenter(view, taskRunner, model);
     }
 
     @VisibleForTesting

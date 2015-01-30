@@ -1,6 +1,9 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
+import com.github.fge.grappa.debugger.csvtrace.JavafxCsvTraceView;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
 import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
@@ -29,14 +32,16 @@ public final class JavafxMainWindowView
     }
 
     private final Stage stage;
+    private final BackgroundTaskRunner taskRunner;
     private final AlertFactory alertFactory;
 
     public JavafxMainWindowView(final Stage stage,
-        final AlertFactory alertFactory)
+        final BackgroundTaskRunner taskRunner, final AlertFactory alertFactory)
         throws IOException
     {
         super("/mainWindow.fxml");
         this.stage = stage;
+        this.taskRunner = taskRunner;
         this.alertFactory = alertFactory;
     }
 
@@ -76,6 +81,21 @@ public final class JavafxMainWindowView
             view = new JavafxTraceTabView(this);
         } catch (IOException oops) {
             showError("Tab creation error", "Unable to create tab", oops);
+            return;
+        }
+        presenter.setView(view);
+        view.getDisplay().setPresenter(presenter);
+        display.pane.setCenter(view.getNode());
+    }
+
+    @Override
+    public void attachTrace(final CsvTracePresenter presenter)
+    {
+        final JavafxCsvTraceView view;
+        try {
+            view = new JavafxCsvTraceView(taskRunner);
+        } catch (IOException e) {
+            showError("Tab creation error", "Unable to create tab", e);
             return;
         }
         presenter.setView(view);
