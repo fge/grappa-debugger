@@ -71,14 +71,17 @@ public class MainWindowPresenter
 
         //window.loadPresenter(path);
 
-        taskRunner.computeOrFail(
-            () -> view.setLabelText("Please wait..."),
-            () -> loadTrace(path), presenter -> {
-                view.attachTrace(presenter);
-                presenter.loadTrace();
-            },
-            this::handleLoadFileError
-        );
+        final CsvTracePresenter tracePresenter;
+
+        try {
+            tracePresenter = loadTrace(path);
+        } catch (IOException e) {
+            handleLoadFileError(e);
+            return;
+        }
+
+        window.view.attachTrace(tracePresenter);
+        tracePresenter.loadTrace();
     }
 
     CsvTracePresenter loadTrace(final Path path)
