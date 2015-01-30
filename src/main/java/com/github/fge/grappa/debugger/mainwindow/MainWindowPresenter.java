@@ -72,7 +72,6 @@ public class MainWindowPresenter
     @VisibleForTesting
     void loadPresenter(final Path path)
     {
-
         final URI uri = URI.create("jar:" + path.toUri());
 
         taskRunner.runOrFail(

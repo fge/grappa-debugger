@@ -10,10 +10,10 @@ public class MainWindowDisplay
     extends JavafxDisplay<MainWindowPresenter>
 {
     @FXML
-    BorderPane pane;
+    protected BorderPane pane;
 
     @FXML
-    Label label;
+    protected Label label;
 
     @Override
     public void init()

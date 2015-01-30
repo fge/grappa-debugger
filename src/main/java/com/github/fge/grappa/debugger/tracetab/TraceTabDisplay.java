@@ -31,81 +31,81 @@ public class TraceTabDisplay
      * Tree tab
      */
     @FXML
-    Button treeExpand;
+    protected Button treeExpand;
 
     @FXML
     TreeView<ParseNode> parseTree;
 
     @FXML
-    Label parseNodeLevel;
+    protected Label parseNodeLevel;
 
     @FXML
-    Label parseNodeRuleName;
+    protected Label parseNodeRuleName;
 
     @FXML
-    Label parseNodeMatcherType;
+    protected Label parseNodeMatcherType;
 
     @FXML
-    Label parseNodeMatcherClass;
+    protected Label parseNodeMatcherClass;
 
     @FXML
-    Label parseNodeStatus;
+    protected Label parseNodeStatus;
 
     @FXML
-    Label parseNodeStart;
+    protected Label parseNodeStart;
 
     @FXML
-    Label parseNodeEnd;
+    protected Label parseNodeEnd;
 
     @FXML
-    Label parseNodeTime;
+    protected Label parseNodeTime;
 
     @FXML
-    Label textInfo;
+    protected Label textInfo;
 
     @FXML
-    TextFlow inputText;
+    protected TextFlow inputText;
 
     @FXML
-    ScrollPane inputTextScroll;
+    protected ScrollPane inputTextScroll;
 
     /*
      * Stats tabs
      */
     @FXML
-    Tab globalStatsTab;
+    protected Tab globalStatsTab;
 
     @FXML
-    Tab classStatsTab;
+    protected Tab classStatsTab;
     /*
      * Events tab
      */
     @FXML
-    Tab eventsTab;
+    protected Tab eventsTab;
 
     /*
      * Events table
      */
     @FXML
-    TableView<TraceEvent> events;
+    protected TableView<TraceEvent> events;
 
     @FXML
-    TableColumn<TraceEvent, Long> eventTime;
+    protected TableColumn<TraceEvent, Long> eventTime;
 
     @FXML
-    TableColumn<TraceEvent, String> eventRule;
+    protected TableColumn<TraceEvent, String> eventRule;
 
     @FXML
-    TableColumn<TraceEvent, Integer> eventIndex;
+    protected TableColumn<TraceEvent, Integer> eventIndex;
 
     @FXML
-    TableColumn<TraceEvent, TraceEventType> eventType;
+    protected TableColumn<TraceEvent, TraceEventType> eventType;
 
     @FXML
-    TableColumn<TraceEvent, Integer> eventDepth;
+    protected TableColumn<TraceEvent, Integer> eventDepth;
 
     @FXML
-    TableColumn<TraceEvent, String> eventPath;
+    protected TableColumn<TraceEvent, String> eventPath;
 
     @Override
     public void init()

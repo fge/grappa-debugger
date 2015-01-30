@@ -18,7 +18,7 @@ public class CsvTraceDisplay
     extends JavafxDisplay<CsvTracePresenter>
 {
     @FXML
-    TreeView<ParseNode> parseTree;
+    protected TreeView<ParseNode> parseTree;
 
     @Override
     public void init()
