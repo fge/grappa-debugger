@@ -7,6 +7,7 @@ import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.IOException;
 import java.util.Objects;
 
 @NonFinalForTesting
@@ -40,5 +41,16 @@ public class CsvTracePresenter
 
     public void parseNodeShowEvent(final ParseNode node)
     {
+    }
+
+    @Override
+    public void dispose()
+    {
+        try {
+            model.dispose();
+        } catch (IOException e) {
+            mainView.showError("Trace file error", "Problem closing trace file",
+                e);
+        }
     }
 }

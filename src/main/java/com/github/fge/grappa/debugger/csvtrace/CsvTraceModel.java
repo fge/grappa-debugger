@@ -8,4 +8,7 @@ public interface CsvTraceModel
 {
     ParseNode getRootNode()
         throws IOException;
+
+    void dispose()
+        throws IOException;
 }

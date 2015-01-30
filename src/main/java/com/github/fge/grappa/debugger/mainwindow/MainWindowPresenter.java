@@ -42,6 +42,8 @@ public class MainWindowPresenter
 
     public void handleCloseWindow()
     {
+        if (tracePresenter != null)
+            tracePresenter.dispose();
         windowFactory.close(this);
     }
 

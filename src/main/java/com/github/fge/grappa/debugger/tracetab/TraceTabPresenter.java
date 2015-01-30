@@ -69,4 +69,8 @@ public class TraceTabPresenter
         return new ClassDetailsStatsPresenter(statsModel);
     }
 
+    @Override
+    public void dispose()
+    {
+    }
 }

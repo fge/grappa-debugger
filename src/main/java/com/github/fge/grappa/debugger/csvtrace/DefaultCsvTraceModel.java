@@ -48,4 +48,11 @@ public final class DefaultCsvTraceModel
             return processor.getRootNode();
         }
     }
+
+    @Override
+    public void dispose()
+        throws IOException
+    {
+        zipfs.close();
+    }
 }

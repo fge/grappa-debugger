@@ -4,4 +4,6 @@ public abstract class TracePresenter<V>
     extends BasePresenter<V>
 {
     public abstract void loadTrace();
+
+    public abstract void dispose();
 }
