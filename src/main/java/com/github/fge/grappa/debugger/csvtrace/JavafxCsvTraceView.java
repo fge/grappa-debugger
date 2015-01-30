@@ -1,32 +1,39 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TreeItem;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public final class JavafxCsvTraceView
     extends JavafxView<CsvTracePresenter, CsvTraceDisplay>
     implements CsvTraceView
 {
-    public JavafxCsvTraceView()
+    private final BackgroundTaskRunner taskRunner;
+
+    public JavafxCsvTraceView(final BackgroundTaskRunner taskRunner)
         throws IOException
     {
         super("/csvTrace.fxml");
+        this.taskRunner = Objects.requireNonNull(taskRunner);
     }
 
     @Override
     public void loadRootNode(final ParseNode rootNode)
     {
-        display.parseTree.setRoot(buildTree(rootNode));
+        taskRunner.compute(
+            () -> buildTree(rootNode),
+            display.parseTree::setRoot
+        );
     }
 
-    /*
-     * TODO: move the code below somewhere else
-     */
     private TreeItem<ParseNode> buildTree(final ParseNode root)
     {
         return buildTree(root, false);

@@ -64,7 +64,8 @@ public final class BackgroundTaskRunner
         });
     }
 
-    public <T> void run(final Supplier<T> supplier, final Consumer<T> consumer)
+    public <T> void compute(final Supplier<T> supplier,
+        final Consumer<T> consumer)
     {
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(consumer);
@@ -75,7 +76,7 @@ public final class BackgroundTaskRunner
         });
     }
 
-    public <T> void runOrFail(final ThrowingSupplier<T> supplier,
+    public <T> void computeOrFail(final ThrowingSupplier<T> supplier,
         final Consumer<T> consumer, final Consumer<Throwable> onError)
     {
         executor.submit(() -> {

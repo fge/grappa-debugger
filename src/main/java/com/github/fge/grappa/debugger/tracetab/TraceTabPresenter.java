@@ -35,8 +35,8 @@ public class TraceTabPresenter
         view.setInfo(model.getInfo());
         view.setEvents(model.getEvents());
         view.setParseTree(model.getRootNode());
-        taskRunner.run(this::getGlobalStatsPresenter, view::loadGlobalStats);
-        taskRunner.run(this::getClassDetailsStatsPresenter,
+        taskRunner.compute(this::getGlobalStatsPresenter, view::loadGlobalStats);
+        taskRunner.compute(this::getClassDetailsStatsPresenter,
             view::loadClassDetailsStats);
     }
 
