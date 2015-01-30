@@ -4,7 +4,6 @@ import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.TracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -35,24 +34,14 @@ public class CsvTracePresenter
 //        taskRunner.computeOrFail(model::getRootNode, view::loadRootNode,
 //            e -> mainView.showError("Parse tree error",
 //                "Unable to load parse tree", e));
-        taskRunner.computeOrFail(this::loadTreeTab, view::loadTree,
-            e -> mainView.showError("Parse tree error",
-                "Unable to load parse tree", e));
+        final TreeTabPresenter treeTab = loadTreeTab();
+        view.loadTree(treeTab);
     }
 
     @VisibleForTesting
     TreeTabPresenter loadTreeTab()
-        throws IOException
     {
-        return new TreeTabPresenter(model.getRootNode());
-    }
-
-    void handleExpandParseTree()
-    {
-    }
-
-    public void parseNodeShowEvent(final ParseNode node)
-    {
+        return new TreeTabPresenter(taskRunner, mainView, model);
     }
 
     @Override

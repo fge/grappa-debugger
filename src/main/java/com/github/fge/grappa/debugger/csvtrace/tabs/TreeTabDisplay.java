@@ -22,6 +22,7 @@ public class TreeTabDisplay
     @Override
     public void init()
     {
+        parseTree.setCellFactory(param -> new ParseNodeCell(presenter));
     }
 
     @FXML
