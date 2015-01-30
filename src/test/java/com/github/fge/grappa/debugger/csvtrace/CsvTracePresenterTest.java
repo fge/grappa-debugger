@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.csvtrace.tabs.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -10,10 +10,11 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class CsvTracePresenterTest
 {
@@ -40,11 +41,11 @@ public class CsvTracePresenterTest
     public void loadTraceTest()
         throws IOException
     {
-        final ParseNode rootNode = mock(ParseNode.class);
-        when(model.getRootNode()).thenReturn(rootNode);
+        final TreeTabPresenter tabPresenter = mock(TreeTabPresenter.class);
+        doReturn(tabPresenter).when(presenter).loadTreeTab();
 
         presenter.loadTrace();
 
-        verify(view).loadRootNode(same(rootNode));
+        verify(view, only()).loadTree(same(tabPresenter));
     }
 }

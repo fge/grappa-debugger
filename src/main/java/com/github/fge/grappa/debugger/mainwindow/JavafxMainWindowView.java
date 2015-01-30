@@ -93,7 +93,7 @@ public final class JavafxMainWindowView
     {
         final JavafxCsvTraceView view;
         try {
-            view = new JavafxCsvTraceView(taskRunner);
+            view = new JavafxCsvTraceView(taskRunner, this);
         } catch (IOException e) {
             showError("Tab creation error", "Unable to create tab", e);
             return;

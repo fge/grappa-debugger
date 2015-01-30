@@ -2,13 +2,12 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
-import com.github.fge.grappa.debugger.stats.ParseNode;
-import javafx.collections.FXCollections;
-import javafx.scene.control.TreeItem;
+import com.github.fge.grappa.debugger.csvtrace.tabs.JavafxTreeTabView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.TreeTabPresenter;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
@@ -17,52 +16,30 @@ public final class JavafxCsvTraceView
     implements CsvTraceView
 {
     private final BackgroundTaskRunner taskRunner;
+    private final MainWindowView parentView;
 
-    public JavafxCsvTraceView(final BackgroundTaskRunner taskRunner)
+    public JavafxCsvTraceView(final BackgroundTaskRunner taskRunner,
+        final MainWindowView parentView)
         throws IOException
     {
         super("/csvTrace.fxml");
         this.taskRunner = Objects.requireNonNull(taskRunner);
+        this.parentView = Objects.requireNonNull(parentView);
     }
 
     @Override
-    public void loadRootNode(final ParseNode rootNode)
+    public void loadTree(final TreeTabPresenter presenter)
     {
-        taskRunner.compute(() -> buildTree(rootNode), value -> {
-            display.parseTree.setRoot(value);
-            display.treeExpand.setDisable(false);
-        });
-    }
-
-    private TreeItem<ParseNode> buildTree(final ParseNode root)
-    {
-        return buildTree(root, false);
-    }
-
-    private TreeItem<ParseNode> buildTree(final ParseNode root,
-        final boolean expanded)
-    {
-        final TreeItem<ParseNode> ret = new TreeItem<>(root);
-
-        addChildren(ret, root, expanded);
-
-        return ret;
-    }
-
-    private void addChildren(final TreeItem<ParseNode> item,
-        final ParseNode parent, final boolean expanded)
-    {
-        TreeItem<ParseNode> childItem;
-        final List<TreeItem<ParseNode>> childrenItems
-            = FXCollections.observableArrayList();
-
-        for (final ParseNode node: parent.getChildren()) {
-            childItem = new TreeItem<>(node);
-            addChildren(childItem, node, expanded);
-            childrenItems.add(childItem);
+        final JavafxTreeTabView tabView;
+        try {
+            tabView = new JavafxTreeTabView(taskRunner);
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load parse tree", e);
+            return;
         }
-
-        item.getChildren().setAll(childrenItems);
-        item.setExpanded(expanded);
+        tabView.getDisplay().setPresenter(presenter);
+        presenter.setView(tabView);
+        display.treeTab.setContent(tabView.getNode());
+        presenter.load();
     }
 }
