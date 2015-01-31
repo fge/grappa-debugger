@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs;
+package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;

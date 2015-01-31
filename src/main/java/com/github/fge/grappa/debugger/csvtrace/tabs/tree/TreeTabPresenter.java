@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs;
+package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;

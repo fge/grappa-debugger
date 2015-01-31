@@ -3,8 +3,8 @@ package com.github.fge.grappa.debugger.csvtrace;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
-import com.github.fge.grappa.debugger.csvtrace.tabs.JavafxTreeTabView;
-import com.github.fge.grappa.debugger.csvtrace.tabs.TreeTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.tree.JavafxTreeTabView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 
 import javax.annotation.ParametersAreNonnullByDefault;

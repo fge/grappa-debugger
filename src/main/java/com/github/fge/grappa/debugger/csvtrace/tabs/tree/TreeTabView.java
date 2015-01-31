@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs;
+package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.ParseRunInfo;

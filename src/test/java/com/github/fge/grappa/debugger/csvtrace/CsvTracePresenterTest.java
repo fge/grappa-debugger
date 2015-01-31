@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
-import com.github.fge.grappa.debugger.csvtrace.tabs.TreeTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
