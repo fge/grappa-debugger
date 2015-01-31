@@ -29,22 +29,24 @@ public class JavafxTreeTabView
         String.format("line %d, column %d", pos.getLine(), pos.getColumn());
 
     private final BackgroundTaskRunner taskRunner;
+    private final InputBuffer buffer;
 
-    private InputBuffer buffer;
-
-    public JavafxTreeTabView(final BackgroundTaskRunner taskRunner)
+    public JavafxTreeTabView(final BackgroundTaskRunner taskRunner,
+        final InputBuffer buffer)
         throws IOException
     {
         super("/tabs/treeTab.fxml");
-        this.taskRunner = taskRunner;
+        this.taskRunner = Objects.requireNonNull(taskRunner);
+        this.buffer = Objects.requireNonNull(buffer);
     }
 
     // TODO: only for tests, which don't work :(
-    JavafxTreeTabView(final BackgroundTaskRunner taskRunner,
-        final Node node, final TreeTabDisplay display)
+    JavafxTreeTabView(final BackgroundTaskRunner taskRunner, final Node node,
+        final TreeTabDisplay display, final InputBuffer buffer)
     {
         super(node, display);
-        this.taskRunner = taskRunner;
+        this.taskRunner = Objects.requireNonNull(taskRunner);
+        this.buffer = Objects.requireNonNull(buffer);
     }
 
 
@@ -61,8 +63,6 @@ public class JavafxTreeTabView
     @Override
     public void loadText(final InputBuffer buffer)
     {
-        this.buffer = Objects.requireNonNull(buffer);
-
         final String text = buffer.extract(0, buffer.length());
         display.inputText.getChildren().setAll(new Text(text));
     }

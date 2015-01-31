@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs;
 
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -22,14 +23,17 @@ public final class JavafxTreeTabViewTest
     private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run
     );
+
     private JavafxTreeTabView view;
     private TreeTabDisplay display;
+    private InputBuffer buffer;
 
     @BeforeMethod
     public void init()
     {
         display = new TreeTabDisplay();
-        view = spy(new JavafxTreeTabView(taskRunner, node, display));
+        buffer = mock(InputBuffer.class);
+        view = spy(new JavafxTreeTabView(taskRunner, node, display, buffer));
     }
 
     // TODO: fails with JavaFX thread context exception, wtf?

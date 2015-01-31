@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CsvTracePresenterTest
 {
@@ -25,12 +27,17 @@ public class CsvTracePresenterTest
     private CsvTraceModel model;
     private CsvTraceView view;
     private CsvTracePresenter presenter;
+    private InputBuffer buffer;
 
     @BeforeMethod
     public void init()
+        throws IOException
     {
-        mainView = mock(MainWindowView.class);
         model = mock(CsvTraceModel.class);
+        buffer = mock(InputBuffer.class);
+        when(model.getInputBuffer()).thenReturn(buffer);
+
+        mainView = mock(MainWindowView.class);
         presenter = spy(new CsvTracePresenter(mainView, taskRunner, model));
 
         view = mock(CsvTraceView.class);
@@ -46,6 +53,6 @@ public class CsvTracePresenterTest
 
         presenter.loadTrace();
 
-        verify(view, only()).loadTree(same(tabPresenter));
+        verify(view, only()).loadTree(same(tabPresenter), same(buffer));
     }
 }
