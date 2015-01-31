@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.parboiled.support.Position;
@@ -146,6 +147,19 @@ public class JavafxTreeTabView
         final String value = String.format("%d lines, %d characters, "
                 + "%d code points", nrLines, nrChars, nrCodePoints);
         display.textInfo.setText(value);
+    }
+
+    @Override
+    public void expandParseTree()
+    {
+        final TreeView<ParseNode> parseTree = display.parseTree;
+        final Button expand = display.treeExpand;
+        final ParseNode root = parseTree.getRoot().getValue();
+        taskRunner.compute(
+            () -> expand.setDisable(true),
+            () -> buildTree(root, true),
+            item -> { parseTree.setRoot(item); expand.setDisable(false); }
+        );
     }
 
     private List<Text> getFailedMatchFragments(final int length,

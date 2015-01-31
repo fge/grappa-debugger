@@ -136,4 +136,12 @@ public class TreeTabPresenterTest
         verify(view).showParseNode(same(node));
         verify(view).highlightFailure(end);
     }
+
+    @Test
+    public void handleExpandParseTreeTest()
+    {
+        presenter.handleExpandParseTree();
+
+        verify(view).expandParseTree();
+    }
 }

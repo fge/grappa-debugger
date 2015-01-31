@@ -16,4 +16,6 @@ public interface TreeTabView
     void highlightFailure(int end);
 
     void loadParseRunInfo(ParseRunInfo info);
+
+    void expandParseTree();
 }

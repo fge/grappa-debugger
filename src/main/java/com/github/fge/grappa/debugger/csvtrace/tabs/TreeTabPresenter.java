@@ -68,4 +68,9 @@ public class TreeTabPresenter
                 "Unable to load parse run info", throwable)
         );
     }
+
+    void handleExpandParseTree()
+    {
+        view.expandParseTree();
+    }
 }

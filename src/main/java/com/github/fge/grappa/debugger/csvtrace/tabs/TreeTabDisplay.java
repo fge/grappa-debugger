@@ -78,6 +78,7 @@ public class TreeTabDisplay
     @FXML
     void expandParseTreeEvent(final Event event)
     {
+        presenter.handleExpandParseTree();
     }
 
     private static final class ParseNodeCell
