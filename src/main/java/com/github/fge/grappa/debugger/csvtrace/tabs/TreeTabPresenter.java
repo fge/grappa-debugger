@@ -48,7 +48,8 @@ public class TreeTabPresenter
                 "Unable to load input text", throwable));
     }
 
-    void parseNodeShowEvent(final ParseNode node)
+    public void handleParseNodeShow(final ParseNode node)
     {
+        view.showParseNode(node);
     }
 }

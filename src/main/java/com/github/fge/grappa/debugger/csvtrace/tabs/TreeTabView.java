@@ -8,4 +8,6 @@ public interface TreeTabView
     void loadTree(ParseNode rootNode);
 
     void loadText(InputBuffer buffer);
+
+    void showParseNode(ParseNode node);
 }

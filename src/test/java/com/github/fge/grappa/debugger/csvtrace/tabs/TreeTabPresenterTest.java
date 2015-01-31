@@ -103,4 +103,14 @@ public class TreeTabPresenterTest
         verify(mainView).showError(anyString(), anyString(), same(exception));
         verifyZeroInteractions(view);
     }
+
+    @Test
+    public void handleParseNodeShowTest()
+    {
+        final ParseNode node = mock(ParseNode.class);
+
+        presenter.handleParseNodeShow(node);
+
+        verify(view).showParseNode(same(node));
+    }
 }
