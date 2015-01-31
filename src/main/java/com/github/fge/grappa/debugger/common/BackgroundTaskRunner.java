@@ -5,7 +5,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
