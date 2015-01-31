@@ -5,15 +5,12 @@ import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.JavafxCsvTraceView;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
-import com.github.fge.grappa.debugger.tracetab.JavafxTraceTabView;
-import com.github.fge.grappa.debugger.tracetab.TraceTabPresenter;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
 
 public final class JavafxMainWindowView
@@ -23,14 +20,6 @@ public final class JavafxMainWindowView
     private static final Class<MainWindowView> MYSELF = MainWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
-    private static final URL TAB_FXML;
-
-    static {
-        TAB_FXML = MYSELF.getResource("/traceTab.fxml");
-        if (TAB_FXML == null)
-            throw new ExceptionInInitializerError("failed to load tab fxml");
-    }
-
     private final Stage stage;
     private final BackgroundTaskRunner taskRunner;
     private final AlertFactory alertFactory;
@@ -71,21 +60,6 @@ public final class JavafxMainWindowView
     public void setLabelText(final String text)
     {
         display.label.setText(text);
-    }
-
-    @Override
-    public void injectTab(final TraceTabPresenter presenter)
-    {
-        final JavafxTraceTabView view;
-        try {
-            view = new JavafxTraceTabView(this);
-        } catch (IOException oops) {
-            showError("Tab creation error", "Unable to create tab", oops);
-            return;
-        }
-        presenter.setView(view);
-        view.getDisplay().setPresenter(presenter);
-        display.pane.setCenter(view.getNode());
     }
 
     @Override
