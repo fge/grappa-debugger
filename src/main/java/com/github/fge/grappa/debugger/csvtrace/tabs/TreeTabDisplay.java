@@ -9,6 +9,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
@@ -61,6 +62,9 @@ public class TreeTabDisplay
      */
     @FXML
     protected TextFlow inputText;
+
+    @FXML
+    protected ScrollPane inputTextScroll;
 
     @Override
     public void init()

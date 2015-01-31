@@ -123,9 +123,11 @@ public class JavafxTreeTabView
 
         taskRunner.compute(
             () -> getSuccessfulMatchFragments(length, realStart, realEnd),
-            nodes::setAll
+            fragments -> {
+                nodes.setAll(fragments);
+                setScroll(realStart);
+            }
         );
-        //setScroll(start);
     }
 
     @Override
@@ -137,9 +139,10 @@ public class JavafxTreeTabView
 
         taskRunner.compute(
             () -> getFailedMatchFragments(length, realEnd),
-            nodes::setAll
-        );
-        //setScroll(failedIndex);
+            fragments -> {
+                nodes.setAll(fragments);
+                setScroll(realEnd);
+            });
     }
 
     private List<Text> getFailedMatchFragments(final int length,
@@ -232,5 +235,15 @@ public class JavafxTreeTabView
 
         item.getChildren().setAll(childrenItems);
         item.setExpanded(expanded);
+    }
+
+    private void setScroll(final int index)
+    {
+        final Position position = buffer.getPosition(index);
+        double line = position.getLine();
+        final double nrLines = buffer.getLineCount();
+        if (line != nrLines)
+            line--;
+        display.inputTextScroll.setVvalue(line / nrLines);
     }
 }
