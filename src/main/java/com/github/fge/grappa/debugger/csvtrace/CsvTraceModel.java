@@ -8,8 +8,7 @@ import java.io.IOException;
 
 public interface CsvTraceModel
 {
-    ParseRunInfo getParseRunInfo()
-        throws IOException;
+    ParseRunInfo getParseRunInfo();
 
     ParseNode getRootNode()
         throws IOException;

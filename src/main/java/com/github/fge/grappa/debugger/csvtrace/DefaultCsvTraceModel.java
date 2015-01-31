@@ -27,7 +27,8 @@ import java.util.stream.StreamSupport;
 public final class DefaultCsvTraceModel
     implements CsvTraceModel
 {
-    private static final int BUFSIZE = 16384;
+    private static final int QUEUE_SIZE = 16384;
+    private static final int BUFSIZE = 65536;
     private static final ObjectMapper MAPPER = new ObjectMapper()
         .disable(Feature.AUTO_CLOSE_TARGET)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -38,22 +39,19 @@ public final class DefaultCsvTraceModel
     private static final String CSV_PATH = "/trace.csv";
 
     private final FileSystem zipfs;
+    private final ParseRunInfo parseRunInfo;
 
     public DefaultCsvTraceModel(final FileSystem zipfs)
+        throws IOException
     {
         this.zipfs = Objects.requireNonNull(zipfs);
+        parseRunInfo = loadParseRunInfo();
     }
 
     @Override
     public ParseRunInfo getParseRunInfo()
-        throws IOException
     {
-        final Path path = zipfs.getPath(INFO_PATH);
-        try (
-            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
-        ) {
-            return MAPPER.readValue(reader, ParseRunInfo.class);
-        }
+        return parseRunInfo;
     }
 
     @Override
@@ -62,12 +60,12 @@ public final class DefaultCsvTraceModel
     {
         final Path path = zipfs.getPath(CSV_PATH);
         final ParseTreeProcessor processor = new ParseTreeProcessor();
-
+        final int nrEvents = parseRunInfo.getNrRuleInvocations() * 2;
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
         ) {
             final Spliterator<TraceEvent> spliterator
-                = new TraceEventSpliterator(reader);
+                = new TraceEventSpliterator(reader, nrEvents);
             StreamSupport.stream(spliterator, false)
                 .forEach(processor::process);
             return processor.getRootNode();
@@ -99,5 +97,16 @@ public final class DefaultCsvTraceModel
         throws IOException
     {
         zipfs.close();
+    }
+
+    private ParseRunInfo loadParseRunInfo()
+        throws IOException
+    {
+        final Path path = zipfs.getPath(INFO_PATH);
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            return MAPPER.readValue(reader, ParseRunInfo.class);
+        }
     }
 }

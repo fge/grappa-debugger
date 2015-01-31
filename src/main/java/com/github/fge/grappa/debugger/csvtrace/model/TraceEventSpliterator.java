@@ -4,8 +4,8 @@ import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.run.EventBasedParseRunner;
 import com.github.fge.grappa.run.ParseRunner;
 import com.github.fge.grappa.trace.TraceEvent;
-import com.github.fge.grappa.trace.parser.TraceEventBuilder;
 import com.github.fge.grappa.trace.parser.TraceEventParser;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.parboiled.Parboiled;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -13,45 +13,88 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 public final class TraceEventSpliterator
     implements Spliterator<TraceEvent>
 {
-    private final TraceEventBuilder builder = new TraceEventBuilder();
-    private final TraceEventParser parser
-        = Parboiled.createParser(TraceEventParser.class, builder);
-    private final ParseRunner<TraceEvent> runner
-        = new EventBasedParseRunner<>(parser.traceEvent());
+    private static final int QUEUE_SIZE = 32768;
+    private static final ThreadFactory THREAD_FACTORY
+        = new ThreadFactoryBuilder().setDaemon(true)
+        .setNameFormat("events-spliterator-%d").build();
 
-    private final BufferedReader reader;
+    private final ExecutorService executor
+        = Executors.newFixedThreadPool(2, THREAD_FACTORY);
+
+    private final BlockingQueue<String> lineQueue
+        = new LinkedBlockingQueue<>(QUEUE_SIZE);
+    private final BlockingQueue<TraceEvent> eventQueue
+        = new LinkedBlockingQueue<>(QUEUE_SIZE);
 
     private long count = 0L;
+    private final long nrEvents;
 
-    public TraceEventSpliterator(final BufferedReader reader)
+    public TraceEventSpliterator(final BufferedReader reader,
+        final int nrEvents)
     {
-        this.reader = Objects.requireNonNull(reader);
+        Objects.requireNonNull(reader);
+        this.nrEvents = (long) nrEvents;
+
+        final TraceEventParser parser
+            = Parboiled.createParser(TraceEventParser.class, eventQueue);
+        final ParseRunner<TraceEvent> runner
+            = new EventBasedParseRunner<>(parser.traceEvent());
+
+        executor.submit(() -> {
+            for (long lineCount = 0; lineCount < nrEvents; lineCount++)
+                try {
+                    lineQueue.put(reader.readLine());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new GrappaException("parsing interruped!", e);
+                } catch (IOException e) {
+                    throw new GrappaException("failed to read line ("
+                        + lineCount + " lines read so far)");
+                }
+        });
+        executor.submit(() -> {
+            for (long eventCount = 0; eventCount < nrEvents; eventCount++)
+                try {
+                    final String input = lineQueue.take();
+                    if (!runner.run(input).isSuccess())
+                        throw new GrappaException("failed to parse event (line:"
+                            + eventCount + ")");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new GrappaException("parsing interruped!", e);
+                }
+        });
     }
 
     @Override
     public boolean tryAdvance(final Consumer<? super TraceEvent> action)
     {
         Objects.requireNonNull(action);
-        final String line;
-        try {
-            line = reader.readLine();
-        } catch (IOException e) {
-            throw new GrappaException("failed to read line (current line was "
-                + count + ")", e);
-        }
-        if (line == null)
+
+        if (count == nrEvents)
             return false;
-        count++;
-        if (!runner.run(line).isSuccess())
-            throw new GrappaException("failed to parse event at line " + count);
-        action.accept(builder.build());
-        return true;
+
+        try {
+            action.accept(eventQueue.take());
+            count++;
+            if (count % 25000L == 0)
+                System.out.println(count + " events processed");
+            return true;
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
+            throw new GrappaException("parsing interrupted");
+        }
     }
 
     @Override
@@ -63,12 +106,12 @@ public final class TraceEventSpliterator
     @Override
     public long estimateSize()
     {
-        return Long.MAX_VALUE;
+        return nrEvents - count;
     }
 
     @Override
     public int characteristics()
     {
-        return IMMUTABLE | DISTINCT | ORDERED;
+        return IMMUTABLE | DISTINCT | ORDERED | SIZED;
     }
 }
