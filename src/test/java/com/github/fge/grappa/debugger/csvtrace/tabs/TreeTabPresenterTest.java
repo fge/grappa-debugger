@@ -87,13 +87,38 @@ public class TreeTabPresenterTest
         verify(view).loadText();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test
-    public void handleParseNodeShowTest()
+    public void handleParseNodeShowSuccessTest()
     {
         final ParseNode node = mock(ParseNode.class);
+        final int start = 31;
+        final int end = 61;
+
+        when(node.isSuccess()).thenReturn(true);
+        when(node.getStart()).thenReturn(start);
+        when(node.getEnd()).thenReturn(end);
 
         presenter.handleParseNodeShow(node);
 
         verify(view).showParseNode(same(node));
+        verify(view).highlightSuccess(start, end);
+    }
+
+    @Test
+    public void handleParseNodeShowFailureTest()
+    {
+        final ParseNode node = mock(ParseNode.class);
+        final int start = 31;
+        final int end = 61;
+
+        when(node.isSuccess()).thenReturn(false);
+        when(node.getStart()).thenReturn(start);
+        when(node.getEnd()).thenReturn(end);
+
+        presenter.handleParseNodeShow(node);
+
+        verify(view).showParseNode(same(node));
+        verify(view).highlightFailure(end);
     }
 }

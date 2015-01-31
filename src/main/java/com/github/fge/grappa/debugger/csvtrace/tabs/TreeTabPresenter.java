@@ -48,6 +48,11 @@ public class TreeTabPresenter
 
     public void handleParseNodeShow(final ParseNode node)
     {
+        final int end = node.getEnd();
         view.showParseNode(node);
+        if (node.isSuccess())
+            view.highlightSuccess(node.getStart(), end);
+        else
+            view.highlightFailure(end);
     }
 }

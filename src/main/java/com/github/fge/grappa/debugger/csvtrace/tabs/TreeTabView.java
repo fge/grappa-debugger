@@ -9,4 +9,8 @@ public interface TreeTabView
     void loadText();
 
     void showParseNode(ParseNode node);
+
+    void highlightSuccess(int start, int end);
+
+    void highlightFailure(int end);
 }
