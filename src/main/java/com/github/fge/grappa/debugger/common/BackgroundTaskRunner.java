@@ -47,8 +47,8 @@ public final class BackgroundTaskRunner
         });
     }
 
-    public <T> void compute(final Supplier<T> supplier,
-        final Consumer<T> consumer)
+    public <T> void compute(final Supplier<? extends T> supplier,
+        final Consumer<? super T> consumer)
     {
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(consumer);
@@ -74,8 +74,9 @@ public final class BackgroundTaskRunner
         });
     }
 
-    public <T> void compute(final Runnable before, final Supplier<T> supplier,
-        final Consumer<T> consumer)
+    public <T> void compute(final Runnable before,
+        final Supplier<? extends T> supplier,
+        final Consumer<? super T> consumer)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(supplier);
@@ -106,8 +107,9 @@ public final class BackgroundTaskRunner
         });
     }
 
-    public <T> void computeOrFail(final ThrowingSupplier<T> supplier,
-        final Consumer<T> consumer, final Consumer<Throwable> onError)
+    public <T> void computeOrFail(
+        final ThrowingSupplier<? extends T> supplier,
+        final Consumer<? super T> consumer, final Consumer<Throwable> onError)
     {
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(consumer);
@@ -144,8 +146,8 @@ public final class BackgroundTaskRunner
     }
 
     public <T> void computeOrFail(final Runnable before,
-        final ThrowingSupplier<T> supplier, final Consumer<T> consumer,
-        final Consumer<Throwable> onError)
+        final ThrowingSupplier<? extends T> supplier,
+        final Consumer<? super T> consumer, final Consumer<Throwable> onError)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(supplier);
