@@ -28,6 +28,9 @@ public class TreeTabDisplay
     protected Button treeExpand;
 
     @FXML
+    protected Label treeLoading;
+
+    @FXML
     protected TreeView<ParseNode> parseTree;
 
     /*

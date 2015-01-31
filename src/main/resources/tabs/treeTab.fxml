@@ -28,7 +28,7 @@
                     <Button fx:id="treeExpand" text="Expand tree"
                         disable="true"
                         onMouseClicked="#expandParseTreeEvent"/>
-                    <Label text="Loading..."/>
+                    <Label fx:id="treeLoading" text="Loading..."/>
                 </ToolBar>
             </top>
             <center>

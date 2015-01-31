@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
@@ -153,12 +154,22 @@ public class JavafxTreeTabView
     public void expandParseTree()
     {
         final TreeView<ParseNode> parseTree = display.parseTree;
+        final ObservableList<Node> items = display.treeToolbar.getItems();
         final Button expand = display.treeExpand;
+        final Label loadingLabel = display.treeLoading;
+
         final ParseNode root = parseTree.getRoot().getValue();
-        taskRunner.compute(
-            () -> expand.setDisable(true),
+
+        taskRunner.compute(() -> {
+                expand.setDisable(true);
+                items.setAll(expand, loadingLabel);
+            },
             () -> buildTree(root, true),
-            item -> { parseTree.setRoot(item); expand.setDisable(false); }
+            item -> {
+                parseTree.setRoot(item);
+                expand.setDisable(false);
+                items.setAll(expand);
+            }
         );
     }
 
