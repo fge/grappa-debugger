@@ -1,6 +1,5 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs;
 
-import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -83,25 +82,9 @@ public class TreeTabPresenterTest
     public void successfulLoadInputText()
         throws IOException
     {
-        final InputBuffer buffer = mock(InputBuffer.class);
-        when(model.getInputBuffer()).thenReturn(buffer);
-
         presenter.loadInputText();
 
-        verify(view).loadText(same(buffer));
-    }
-
-    @Test
-    public void failedLoadInputText()
-        throws IOException
-    {
-        final IOException exception = new IOException();
-        when(model.getInputBuffer()).thenThrow(exception);
-
-        presenter.loadInputText();
-
-        verify(mainView).showError(anyString(), anyString(), same(exception));
-        verifyZeroInteractions(view);
+        verify(view).loadText();
     }
 
     @Test

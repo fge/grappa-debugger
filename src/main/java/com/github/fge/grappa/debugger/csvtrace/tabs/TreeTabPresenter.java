@@ -43,9 +43,7 @@ public class TreeTabPresenter
     @VisibleForTesting
     void loadInputText()
     {
-        taskRunner.computeOrFail(model::getInputBuffer, view::loadText,
-            throwable -> mainView.showError("Input text error",
-                "Unable to load input text", throwable));
+        view.loadText();
     }
 
     public void handleParseNodeShow(final ParseNode node)

@@ -61,7 +61,7 @@ public class JavafxTreeTabView
     }
 
     @Override
-    public void loadText(final InputBuffer buffer)
+    public void loadText()
     {
         final String text = buffer.extract(0, buffer.length());
         display.inputText.getChildren().setAll(new Text(text));
