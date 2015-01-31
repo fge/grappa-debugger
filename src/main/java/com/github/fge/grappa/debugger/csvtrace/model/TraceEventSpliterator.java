@@ -1,12 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace.model;
 
 import com.github.fge.grappa.exceptions.GrappaException;
-import com.github.fge.grappa.run.EventBasedParseRunner;
-import com.github.fge.grappa.run.ParseRunner;
 import com.github.fge.grappa.trace.TraceEvent;
-import com.github.fge.grappa.trace.parser.TraceEventParser;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.parboiled.Parboiled;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
@@ -24,7 +20,8 @@ import java.util.function.Consumer;
 public final class TraceEventSpliterator
     implements Spliterator<TraceEvent>
 {
-    private static final int QUEUE_SIZE = 32768;
+    private static final int BATCH_SIZE = 512;
+    private static final int QUEUE_SIZE = 1024;
     private static final ThreadFactory THREAD_FACTORY
         = new ThreadFactoryBuilder().setDaemon(true)
         .setNameFormat("events-spliterator-%d").build();
@@ -37,6 +34,9 @@ public final class TraceEventSpliterator
     private final BlockingQueue<TraceEvent> eventQueue
         = new LinkedBlockingQueue<>(QUEUE_SIZE);
 
+    private final BatchLineReader lineReader;
+    private final BatchEventsReader eventsReader;
+
     private long count = 0L;
     private final long nrEvents;
 
@@ -46,34 +46,28 @@ public final class TraceEventSpliterator
         Objects.requireNonNull(reader);
         this.nrEvents = (long) nrEvents;
 
-        final TraceEventParser parser
-            = Parboiled.createParser(TraceEventParser.class, eventQueue);
-        final ParseRunner<TraceEvent> runner
-            = new EventBasedParseRunner<>(parser.traceEvent());
+        lineReader = new BatchLineReader(nrEvents, BATCH_SIZE, lineQueue,
+            reader);
+        eventsReader = new BatchEventsReader(BATCH_SIZE, nrEvents, lineQueue,
+            eventQueue);
 
         executor.submit(() -> {
-            for (long lineCount = 0; lineCount < nrEvents; lineCount++)
-                try {
-                    lineQueue.put(reader.readLine());
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    throw new GrappaException("parsing interruped!", e);
-                } catch (IOException e) {
-                    throw new GrappaException("failed to read line ("
-                        + lineCount + " lines read so far)");
-                }
+            try {
+                lineReader.process();
+            } catch (IOException e) {
+                throw new GrappaException("failed to read events file", e);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new GrappaException("parsing interrupted", e);
+            }
         });
         executor.submit(() -> {
-            for (long eventCount = 0; eventCount < nrEvents; eventCount++)
-                try {
-                    final String input = lineQueue.take();
-                    if (!runner.run(input).isSuccess())
-                        throw new GrappaException("failed to parse event (line:"
-                            + eventCount + ")");
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    throw new GrappaException("parsing interruped!", e);
-                }
+            try {
+                eventsReader.process();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new GrappaException("parsing interrupted", e);
+            }
         });
     }
 
