@@ -8,7 +8,9 @@ import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -53,18 +55,24 @@ public class JavafxTreeTabView
     @Override
     public void loadTree(final ParseNode rootNode)
     {
-        taskRunner.compute(() -> buildTree(rootNode), value -> {
-            display.parseTree.setRoot(value);
-            display.treeToolbar.getItems().setAll(display.treeExpand);
-            display.treeExpand.setDisable(false);
-        });
+        final Button button = display.treeExpand;
+
+        taskRunner.compute(
+            () -> buildTree(rootNode),
+            value -> {
+                display.parseTree.setRoot(value);
+                display.treeToolbar.getItems().setAll(button);
+                button.setDisable(false);
+            }
+        );
     }
 
     @Override
     public void loadText()
     {
-        final String text = buffer.extract(0, buffer.length());
-        display.inputText.getChildren().setAll(new Text(text));
+        final ObservableList<Node> children = display.inputText.getChildren();
+        taskRunner.compute(() -> buffer.extract(0, buffer.length()),
+            text -> children.setAll(new Text(text)));
     }
 
     @Override
