@@ -40,6 +40,7 @@ public final class BackgroundTaskRunner
     {
         Objects.requireNonNull(task);
         Objects.requireNonNull(after);
+
         executor.execute(() -> {
             task.run();
             frontExecutor.execute(after);

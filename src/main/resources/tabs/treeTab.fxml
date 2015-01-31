@@ -24,10 +24,11 @@
     <SplitPane dividerPositions="0.5" orientation="VERTICAL">
         <BorderPane>
             <top>
-                <ToolBar>
+                <ToolBar fx:id="treeToolbar">
                     <Button fx:id="treeExpand" text="Expand tree"
                         disable="true"
                         onMouseClicked="#expandParseTreeEvent"/>
+                    <Label text="Loading..."/>
                 </ToolBar>
             </top>
             <center>

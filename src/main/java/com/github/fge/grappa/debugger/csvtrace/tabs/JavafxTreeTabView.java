@@ -53,6 +53,7 @@ public class JavafxTreeTabView
     {
         taskRunner.compute(() -> buildTree(rootNode), value -> {
             display.parseTree.setRoot(value);
+            display.treeToolbar.getItems().setAll(display.treeExpand);
             display.treeExpand.setDisable(false);
         });
     }
