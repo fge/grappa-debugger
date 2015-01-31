@@ -30,6 +30,7 @@ public class TreeTabPresenter
     {
         loadParseTree();
         loadInputText();
+        loadParseRunInfo();
     }
 
     @VisibleForTesting
@@ -46,7 +47,8 @@ public class TreeTabPresenter
         view.loadText();
     }
 
-    public void handleParseNodeShow(final ParseNode node)
+    @VisibleForTesting
+    void handleParseNodeShow(final ParseNode node)
     {
         final int end = node.getEnd();
         view.showParseNode(node);
@@ -54,5 +56,16 @@ public class TreeTabPresenter
             view.highlightSuccess(node.getStart(), end);
         else
             view.highlightFailure(end);
+    }
+
+    @VisibleForTesting
+    void loadParseRunInfo()
+    {
+        taskRunner.computeOrFail(
+            model::getParseRunInfo,
+            view::loadParseRunInfo,
+            throwable -> mainView.showError("Trace load failure",
+                "Unable to load parse run info", throwable)
+        );
     }
 }

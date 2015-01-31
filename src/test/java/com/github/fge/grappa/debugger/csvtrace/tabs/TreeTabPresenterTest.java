@@ -4,6 +4,7 @@ import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.trace.ParseRunInfo;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -51,6 +52,7 @@ public class TreeTabPresenterTest
 
         verify(presenter).loadParseTree();
         verify(presenter).loadInputText();
+        verify(presenter).loadParseRunInfo();
     }
 
     @Test
@@ -87,6 +89,18 @@ public class TreeTabPresenterTest
         verify(view).loadText();
     }
 
+    @Test
+    public void successfulLoadParseRunInfo()
+        throws IOException
+    {
+        final ParseRunInfo info = new ParseRunInfo(0L, 0, 0, 0);
+        when(model.getParseRunInfo()).thenReturn(info);
+
+        presenter.loadParseRunInfo();
+
+        verify(view).loadParseRunInfo(same(info));
+    }
+
     @SuppressWarnings("AutoBoxing")
     @Test
     public void handleParseNodeShowSuccessTest()
@@ -105,6 +119,7 @@ public class TreeTabPresenterTest
         verify(view).highlightSuccess(start, end);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test
     public void handleParseNodeShowFailureTest()
     {

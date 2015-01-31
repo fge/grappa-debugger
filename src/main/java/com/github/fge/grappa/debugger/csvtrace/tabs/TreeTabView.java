@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs;
 
 import com.github.fge.grappa.debugger.stats.ParseNode;
+import com.github.fge.grappa.trace.ParseRunInfo;
 
 public interface TreeTabView
 {
@@ -13,4 +14,6 @@ public interface TreeTabView
     void highlightSuccess(int start, int end);
 
     void highlightFailure(int end);
+
+    void loadParseRunInfo(ParseRunInfo info);
 }

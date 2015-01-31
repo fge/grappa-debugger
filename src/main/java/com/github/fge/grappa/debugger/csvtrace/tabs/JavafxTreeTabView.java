@@ -7,6 +7,7 @@ import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.github.fge.grappa.trace.ParseRunInfo;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.escape.CharEscaper;
 import javafx.collections.FXCollections;
@@ -45,16 +46,6 @@ public class JavafxTreeTabView
         this.taskRunner = Objects.requireNonNull(taskRunner);
         this.buffer = Objects.requireNonNull(buffer);
     }
-
-    // TODO: only for tests, which don't work :(
-    JavafxTreeTabView(final BackgroundTaskRunner taskRunner, final Node node,
-        final TreeTabDisplay display, final InputBuffer buffer)
-    {
-        super(node, display);
-        this.taskRunner = Objects.requireNonNull(taskRunner);
-        this.buffer = Objects.requireNonNull(buffer);
-    }
-
 
     @Override
     public void loadTree(final ParseNode rootNode)
@@ -143,6 +134,18 @@ public class JavafxTreeTabView
                 nodes.setAll(fragments);
                 setScroll(realEnd);
             });
+    }
+
+    @SuppressWarnings("AutoBoxing")
+    @Override
+    public void loadParseRunInfo(final ParseRunInfo info)
+    {
+        final int nrLines = info.getNrLines();
+        final int nrChars = info.getNrChars();
+        final int nrCodePoints = info.getNrCodePoints();
+        final String value = String.format("%d lines, %d characters, "
+                + "%d code points", nrLines, nrChars, nrCodePoints);
+        display.textInfo.setText(value);
     }
 
     private List<Text> getFailedMatchFragments(final int length,

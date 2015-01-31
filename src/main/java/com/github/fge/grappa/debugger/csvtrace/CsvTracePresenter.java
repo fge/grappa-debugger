@@ -35,9 +35,6 @@ public class CsvTracePresenter
     @Override
     public void loadTrace()
     {
-//        taskRunner.computeOrFail(model::getRootNode, view::loadRootNode,
-//            e -> mainView.showError("Parse tree error",
-//                "Unable to load parse tree", e));
         final TreeTabPresenter treeTab = loadTreeTab();
         view.loadTree(treeTab, buffer);
     }

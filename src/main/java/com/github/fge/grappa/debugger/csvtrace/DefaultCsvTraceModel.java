@@ -8,6 +8,7 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.model.TraceEventSpliterator;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.ParseTreeProcessor;
+import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -41,6 +42,18 @@ public final class DefaultCsvTraceModel
     public DefaultCsvTraceModel(final FileSystem zipfs)
     {
         this.zipfs = Objects.requireNonNull(zipfs);
+    }
+
+    @Override
+    public ParseRunInfo getParseRunInfo()
+        throws IOException
+    {
+        final Path path = zipfs.getPath(INFO_PATH);
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            return MAPPER.readValue(reader, ParseRunInfo.class);
+        }
     }
 
     @Override

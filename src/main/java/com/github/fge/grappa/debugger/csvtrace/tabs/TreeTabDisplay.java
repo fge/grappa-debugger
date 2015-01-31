@@ -61,6 +61,9 @@ public class TreeTabDisplay
      * Text
      */
     @FXML
+    protected Label textInfo;
+
+    @FXML
     protected TextFlow inputText;
 
     @FXML
