@@ -151,7 +151,8 @@ public final class NewCsvTraceModel
                 final int endIndex = Integer.parseInt(elements[6]);
                 final long time = Long.parseLong(elements[7]);
                 ret[index] = new ParseTreeNode(parent, index, level, success,
-                    matcherId, startIndex, endIndex, time);
+                    ruleInfos[matcherId], matcherId, startIndex, endIndex,
+                    time);
             });
         }
 

@@ -146,7 +146,8 @@ public class TreeTabDisplay
         protected void updateItem(final ParseTreeNode item, final boolean empty)
         {
             super.updateItem(item, empty);
-            setText(empty ? null : String.format("%s (%s)", item.getId(),
+            setText(empty ? null : String.format("%s (%s)",
+                item.getRuleInfo().getName(),
                 item.isSuccess() ? "SUCCESS" : "FAILURE"));
         }
     }

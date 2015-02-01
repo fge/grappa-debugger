@@ -13,6 +13,7 @@ public class ParseTreeNode
     private final int id;
     private final int level;
     private final boolean success;
+    private final RuleInfo ruleInfo;
     private final int matcherId;
     private final int startIndex;
     private final int endIndex;
@@ -21,13 +22,14 @@ public class ParseTreeNode
     private final List<ParseTreeNode> children = new ArrayList<>();
 
     ParseTreeNode(final int parentId, final int id, final int level,
-        final boolean success, final int matcherId, final int startIndex,
-        final int endIndex, final long nanos)
+        final boolean success, final RuleInfo ruleInfo, final int matcherId,
+        final int startIndex, final int endIndex, final long nanos)
     {
         this.parentId = parentId;
         this.id = id;
         this.level = level;
         this.success = success;
+        this.ruleInfo = ruleInfo;
         this.matcherId = matcherId;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
@@ -57,6 +59,11 @@ public class ParseTreeNode
     public int getMatcherId()
     {
         return matcherId;
+    }
+
+    public RuleInfo getRuleInfo()
+    {
+        return ruleInfo;
     }
 
     public int getStartIndex()
