@@ -94,8 +94,8 @@ public final class NewCsvTraceModel
             final int nrMatchers = Integer.parseInt(elements[2]);
             final int nrLines = Integer.parseInt(elements[3]);
             final int nrChars = Integer.parseInt(elements[4]);
-            final int nrCodePoints = Integer.parseInt(elements[4]);
-            final int nrInvocations = Integer.parseInt(elements[4]);
+            final int nrCodePoints = Integer.parseInt(elements[5]);
+            final int nrInvocations = Integer.parseInt(elements[6]);
 
             return new ParseInfo(time, treeDepth, nrMatchers, nrLines, nrChars,
                 nrCodePoints, nrInvocations);
