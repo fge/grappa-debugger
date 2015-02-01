@@ -141,6 +141,14 @@ public class TreeTabDisplay
                 }
             });
         }
+
+        @Override
+        protected void updateItem(final ParseTreeNode item, final boolean empty)
+        {
+            super.updateItem(item, empty);
+            setText(empty ? null : String.format("%s (%s)", item.getId(),
+                item.isSuccess() ? "SUCCESS" : "FAILURE"));
+        }
     }
 
     @VisibleForTesting
