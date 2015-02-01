@@ -72,17 +72,11 @@ public class TreeTabPresenterTest
     @Test
     public void handleParseTreeNodeShowTest()
     {
-        final int id = 42;
-
         final ParseTreeNode node = mock(ParseTreeNode.class);
-        when(node.getMatcherId()).thenReturn(id);
-
-        final RuleInfo info = mock(RuleInfo.class);
-        when(model.getRuleInfo(id)).thenReturn(info);
 
         presenter.handleParseTreeNodeShow(node);
 
-        verify(view).showParseTreeNode(same(node), same(info));
+        verify(view).showParseTreeNode(same(node));
     }
 
     @Test

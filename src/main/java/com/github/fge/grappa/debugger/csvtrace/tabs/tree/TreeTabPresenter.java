@@ -4,7 +4,6 @@ import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.google.common.annotations.VisibleForTesting;
@@ -30,9 +29,9 @@ public class TreeTabPresenter
 
     public void load()
     {
+        loadInputText();
         loadParseTree2();
 //        loadParseTree();
-//        loadInputText();
 //        loadParseRunInfo();
     }
 
@@ -85,9 +84,11 @@ public class TreeTabPresenter
 
     public void handleParseTreeNodeShow(final ParseTreeNode node)
     {
-        final int matcherId = node.getMatcherId();
-        final RuleInfo info = model.getRuleInfo(matcherId);
-
-        view.showParseTreeNode(node, info);
+        final int end = node.getEndIndex();
+        view.showParseTreeNode(node);
+        if (node.isSuccess())
+            view.highlightSuccess(node.getStartIndex(), end);
+        else
+            view.highlightFailure(end);
     }
 }

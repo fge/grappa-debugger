@@ -155,18 +155,18 @@ public class JavafxTreeTabView
     @Override
     public void expandParseTree()
     {
-        final TreeView<ParseNode> parseTree = display.parseTree;
+        final TreeView<ParseTreeNode> parseTree = display.parseTree2;
         final ObservableList<Node> items = display.treeToolbar.getItems();
         final Button expand = display.treeExpand;
         final Label loadingLabel = display.treeLoading;
 
-        final ParseNode root = parseTree.getRoot().getValue();
+        final ParseTreeNode root = parseTree.getRoot().getValue();
 
         taskRunner.compute(() -> {
                 expand.setDisable(true);
                 items.setAll(expand, loadingLabel);
             },
-            () -> buildTree(root, true),
+            () -> buildTree2(root, true),
             item -> {
                 parseTree.setRoot(item);
                 expand.setDisable(false);
@@ -191,10 +191,34 @@ public class JavafxTreeTabView
     }
 
     @Override
-    public void showParseTreeNode(final ParseTreeNode node, final RuleInfo info)
+    public void showParseTreeNode(final ParseTreeNode node)
     {
-        // TODO
+        final RuleInfo info = node.getRuleInfo();
 
+        // Pure text, or nearly so
+        display.nodeDepth.setText(Integer.toString(node.getLevel()));
+        display.nodeRuleName.setText(info.getName());
+        display.nodeMatcherType.setText(info.getType().name());
+        display.nodeMatcherClass.setText(info.getClassName());
+
+        // Time
+        display.nodeTime.setText(JavafxUtils.nanosToString(node.getNanos()));
+
+        // Status
+        if (node.isSuccess()) {
+            display.nodeStatus.setText("SUCCESS");
+            display.nodeStatus.setTextFill(Color.GREEN);
+        } else {
+            display.nodeStatus.setText("FAILURE");
+            display.nodeStatus.setTextFill(Color.RED);
+        }
+
+        // Positions
+        final Position start = buffer.getPosition(node.getStartIndex());
+        final Position end = buffer.getPosition(node.getEndIndex());
+
+        display.nodeStartPos.setText(POS_TO_STRING.apply(start));
+        display.nodeEndPos.setText(POS_TO_STRING.apply(end));
     }
 
     private List<Text> getFailedMatchFragments(final int length,

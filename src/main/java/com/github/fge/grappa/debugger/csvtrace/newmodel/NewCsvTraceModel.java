@@ -81,6 +81,7 @@ public final class NewCsvTraceModel
         ) {
             final CharBuffer buf = CharBuffer.allocate(nrChars);
             reader.read(buf);
+            buf.flip();
             return new CharSequenceInputBuffer(buf);
         }
     }
