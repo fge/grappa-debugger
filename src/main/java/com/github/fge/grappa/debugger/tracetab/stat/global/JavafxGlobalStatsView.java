@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.tracetab.stat.global;
 
-import com.github.fge.grappa.debugger.javafx.Utils;
+import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.stats.global.GlobalParseInfo;
 import com.github.fge.grappa.debugger.stats.global.RuleMatchingStats;
 import com.github.fge.grappa.trace.ParseRunInfo;
@@ -58,7 +58,8 @@ public final class JavafxGlobalStatsView
         final int treeDepth = info.getTreeDepth();
         final int totalInvocations = info.getTotalMatches();
 
-        display.totalParseTime.setText(Utils.nanosToString(totalParseTime));
+        display.totalParseTime.setText(
+            JavafxUtils.nanosToString(totalParseTime));
 
         display.treeDepth.setText(String.valueOf(treeDepth));
 

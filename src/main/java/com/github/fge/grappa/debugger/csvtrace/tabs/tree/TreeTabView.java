@@ -13,9 +13,7 @@ public interface TreeTabView
 
     void loadParseRunInfo(ParseRunInfo info);
 
-    void expandParseTree();
-
-    void loadTree2(ParseTreeNode rootNode);
+    void loadTree(ParseTreeNode rootNode);
 
     void showParseTreeNode(ParseTreeNode node);
 }

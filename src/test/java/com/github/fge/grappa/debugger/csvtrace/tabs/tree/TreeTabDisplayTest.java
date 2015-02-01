@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
-import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -33,13 +32,5 @@ public class TreeTabDisplayTest
         display.parseTreeNodeShowEvent(node);
 
         verify(presenter).handleParseTreeNodeShow(same(node));
-    }
-
-    @Test
-    public void expandParseTreeEventTest()
-    {
-        display.expandParseTreeEvent(mock(Event.class));
-
-        verify(presenter).handleExpandParseTree();
     }
 }

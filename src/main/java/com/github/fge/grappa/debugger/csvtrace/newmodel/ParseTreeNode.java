@@ -2,10 +2,6 @@ package com.github.fge.grappa.debugger.csvtrace.newmodel;
 
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 @NonFinalForTesting
 public class ParseTreeNode
 {
@@ -17,12 +13,11 @@ public class ParseTreeNode
     private final int startIndex;
     private final int endIndex;
     private final long nanos;
-
-    private final List<ParseTreeNode> children = new ArrayList<>();
+    private final boolean hasChildren;
 
     ParseTreeNode(final int parentId, final int id, final int level,
         final boolean success, final RuleInfo ruleInfo, final int startIndex,
-        final int endIndex, final long nanos)
+        final int endIndex, final long nanos, final boolean hasChildren)
     {
         this.parentId = parentId;
         this.id = id;
@@ -32,6 +27,7 @@ public class ParseTreeNode
         this.startIndex = startIndex;
         this.endIndex = endIndex;
         this.nanos = nanos;
+        this.hasChildren = hasChildren;
     }
 
     public int getParentId()
@@ -74,13 +70,8 @@ public class ParseTreeNode
         return nanos;
     }
 
-    public List<ParseTreeNode> getChildren()
+    public boolean hasChildren()
     {
-        return Collections.unmodifiableList(children);
-    }
-
-    void addChild(final ParseTreeNode child)
-    {
-        children.add(child);
+        return hasChildren;
     }
 }

@@ -25,14 +25,11 @@
         <BorderPane>
             <top>
                 <ToolBar fx:id="treeToolbar">
-                    <Button fx:id="treeExpand" text="Expand tree"
-                        disable="true"
-                        onMouseClicked="#expandParseTreeEvent"/>
-                    <Label fx:id="treeLoading" text="Loading..."/>
+                    <Label fx:id="treeInfo"/>
                 </ToolBar>
             </top>
             <center>
-                <TreeView fx:id="parseTree2" editable="false"/>
+                <TreeView fx:id="parseTree" editable="false"/>
             </center>
         </BorderPane>
         <TitledPane collapsible="true" text="Node information">

@@ -2,18 +2,15 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
-import com.google.common.annotations.VisibleForTesting;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
+import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeNodeCell;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
+
+import java.util.List;
 
 public class TreeTabDisplay
     extends JavafxDisplay<TreeTabPresenter>
@@ -25,13 +22,10 @@ public class TreeTabDisplay
     protected ToolBar treeToolbar;
 
     @FXML
-    protected Button treeExpand;
+    protected Label treeInfo;
 
     @FXML
-    protected Label treeLoading;
-
-    @FXML
-    protected TreeView<ParseTreeNode> parseTree2;
+    protected TreeView<ParseTreeNode> parseTree;
 
     /*
      * Node detail
@@ -75,50 +69,16 @@ public class TreeTabDisplay
     @Override
     public void init()
     {
-        parseTree2.setCellFactory(param -> new ParseTreeNodeCell(this));
+        parseTree.setCellFactory(param -> new ParseTreeNodeCell(this));
     }
 
-    @FXML
-    void expandParseTreeEvent(final Event event)
-    {
-        presenter.handleExpandParseTree();
-    }
-
-    private static final class ParseTreeNodeCell
-        extends TreeCell<ParseTreeNode>
-    {
-        private ParseTreeNodeCell(final TreeTabDisplay display)
-        {
-            setEditable(false);
-            selectedProperty().addListener(new ChangeListener<Boolean>()
-            {
-                @Override
-                public void changed(
-                    final ObservableValue<? extends Boolean> observable,
-                    final Boolean oldValue, final Boolean newValue)
-                {
-                    if (!newValue)
-                        return;
-                    final ParseTreeNode node = getItem();
-                    if (node != null)
-                        display.parseTreeNodeShowEvent(node);
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(final ParseTreeNode item, final boolean empty)
-        {
-            super.updateItem(item, empty);
-            setText(empty ? null : String.format("%s (%s)",
-                item.getRuleInfo().getName(),
-                item.isSuccess() ? "SUCCESS" : "FAILURE"));
-        }
-    }
-
-    @VisibleForTesting
-    void parseTreeNodeShowEvent(final ParseTreeNode node)
+    public void parseTreeNodeShowEvent(final ParseTreeNode node)
     {
         presenter.handleParseTreeNodeShow(node);
+    }
+
+    public List<ParseTreeNode> getNodeChildren(final int nodeId)
+    {
+        return presenter.getNodeChildren(nodeId);
     }
 }

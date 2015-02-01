@@ -43,24 +43,25 @@ public class TreeTabPresenterTest
     @Test
     public void loadTest()
     {
-        doNothing().when(presenter).loadParseTree2();
+        doNothing().when(presenter).loadParseTree();
         doNothing().when(presenter).loadInputText();
 
         presenter.load();
 
         verify(presenter).loadInputText();
-        verify(presenter).loadParseTree2();
+        verify(presenter).loadParseTree();
     }
 
     @Test
-    public void loadParseTree2Test()
+    public void loadParseTreeTest()
+        throws IOException
     {
         final ParseTreeNode rootNode = mock(ParseTreeNode.class);
         when(model.getRootNode2()).thenReturn(rootNode);
 
-        presenter.loadParseTree2();
+        presenter.loadParseTree();
 
-        verify(view).loadTree2(same(rootNode));
+        verify(view).loadTree(same(rootNode));
     }
 
     @SuppressWarnings("AutoBoxing")
@@ -116,13 +117,5 @@ public class TreeTabPresenterTest
         presenter.loadParseRunInfo();
 
         verify(view).loadParseRunInfo(same(info));
-    }
-
-    @Test
-    public void handleExpandParseTreeTest()
-    {
-        presenter.handleExpandParseTree();
-
-        verify(view).expandParseTree();
     }
 }

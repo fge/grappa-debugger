@@ -6,17 +6,13 @@ import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
+import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeItem;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.google.common.escape.CharEscaper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.parboiled.support.Position;
@@ -84,8 +80,7 @@ public class JavafxTreeTabView
         final int realEnd = Math.min(end, length);
         final ObservableList<Node> nodes = display.inputText.getChildren();
 
-        taskRunner.compute(
-            () -> getFailedMatchFragments(length, realEnd),
+        taskRunner.compute(() -> getFailedMatchFragments(length, realEnd),
             fragments -> {
                 nodes.setAll(fragments);
                 setScroll(realEnd);
@@ -105,41 +100,9 @@ public class JavafxTreeTabView
     }
 
     @Override
-    public void expandParseTree()
+    public void loadTree(final ParseTreeNode rootNode)
     {
-        final TreeView<ParseTreeNode> parseTree = display.parseTree2;
-        final ObservableList<Node> items = display.treeToolbar.getItems();
-        final Button expand = display.treeExpand;
-        final Label loadingLabel = display.treeLoading;
-
-        final ParseTreeNode root = parseTree.getRoot().getValue();
-
-        taskRunner.compute(() -> {
-                expand.setDisable(true);
-                items.setAll(expand, loadingLabel);
-            },
-            () -> buildTree2(root, true),
-            item -> {
-                parseTree.setRoot(item);
-                expand.setDisable(false);
-                items.setAll(expand);
-            }
-        );
-    }
-
-    @Override
-    public void loadTree2(final ParseTreeNode rootNode)
-    {
-        final Button button = display.treeExpand;
-
-        taskRunner.compute(
-            () -> buildTree2(rootNode),
-            value -> {
-                display.parseTree2.setRoot(value);
-                display.treeToolbar.getItems().setAll(button);
-                button.setDisable(false);
-            }
-        );
+        display.parseTree.setRoot(new ParseTreeItem(display, rootNode));
     }
 
     @Override
@@ -230,37 +193,6 @@ public class JavafxTreeTabView
             list.add(text);
         }
         return list;
-    }
-
-    TreeItem<ParseTreeNode> buildTree2(final ParseTreeNode root)
-    {
-        return buildTree2(root, false);
-    }
-
-    private TreeItem<ParseTreeNode> buildTree2(final ParseTreeNode root,
-        final boolean expanded)
-    {
-        final TreeItem<ParseTreeNode> ret = new TreeItem<>(root);
-
-        addChildren2(ret, root, expanded);
-
-        return ret;
-    }
-    private void addChildren2(final TreeItem<ParseTreeNode> item,
-        final ParseTreeNode parent, final boolean expanded)
-    {
-        TreeItem<ParseTreeNode> childItem;
-        final List<TreeItem<ParseTreeNode>> childrenItems
-            = FXCollections.observableArrayList();
-
-        for (final ParseTreeNode node: parent.getChildren()) {
-            childItem = new TreeItem<>(node);
-            addChildren2(childItem, node, expanded);
-            childrenItems.add(childItem);
-        }
-
-        item.getChildren().setAll(childrenItems);
-        item.setExpanded(expanded);
     }
 
     private void setScroll(final int index)

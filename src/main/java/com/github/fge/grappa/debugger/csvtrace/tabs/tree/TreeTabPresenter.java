@@ -8,6 +8,7 @@ import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
@@ -29,7 +30,7 @@ public class TreeTabPresenter
     public void load()
     {
         loadInputText();
-        loadParseTree2();
+        loadParseTree();
     }
 
     @VisibleForTesting
@@ -41,23 +42,16 @@ public class TreeTabPresenter
     @VisibleForTesting
     void loadParseRunInfo()
     {
-        taskRunner.computeOrFail(
-            model::getParseRunInfo,
-            view::loadParseRunInfo,
+        taskRunner.computeOrFail(model::getParseRunInfo, view::loadParseRunInfo,
             throwable -> mainView.showError("Trace load failure",
-                "Unable to load parse run info", throwable)
-        );
+                "Unable to load parse run info", throwable));
     }
 
-    void handleExpandParseTree()
+    public void loadParseTree()
     {
-        view.expandParseTree();
-    }
-
-    public void loadParseTree2()
-    {
-        final ParseTreeNode rootNode = model.getRootNode2();
-        view.loadTree2(rootNode);
+        taskRunner.computeOrFail(model::getRootNode2, view::loadTree,
+            throwable -> mainView.showError("Tree load failure",
+                "Unable to load parse tree", throwable));
     }
 
     public void handleParseTreeNodeShow(final ParseTreeNode node)
@@ -68,5 +62,10 @@ public class TreeTabPresenter
             view.highlightSuccess(node.getStartIndex(), end);
         else
             view.highlightFailure(end);
+    }
+
+    public List<ParseTreeNode> getNodeChildren(final int nodeId)
+    {
+        return model.getNodeChildren(nodeId);
     }
 }
