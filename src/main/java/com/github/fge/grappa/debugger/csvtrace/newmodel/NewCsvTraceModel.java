@@ -49,6 +49,7 @@ public final class NewCsvTraceModel
 
     private final ParseInfo info;
     private final RuleInfo[] ruleInfos;
+    private final ParseTreeNode[] parseTreeNodes;
 
     public NewCsvTraceModel(final Path zipPath)
         throws IOException
@@ -68,6 +69,8 @@ public final class NewCsvTraceModel
 
             info = readInfo(zipfs);
             ruleInfos = readRuleInfos(zipfs, info.getNrMatchers());
+            parseTreeNodes = readParseTreeNodes(zipfs, info.getTreeDepth(),
+                info.getNrInvocations());
         }
     }
 
@@ -121,6 +124,52 @@ public final class NewCsvTraceModel
         return ret;
     }
 
+    private ParseTreeNode[] readParseTreeNodes(final FileSystem zipfs,
+        final int treeDepth, final int nrNodes)
+        throws IOException
+    {
+        final Path path = zipfs.getPath(NODE_PATH);
+
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            if (!NODE_CSV_HEAD.equals(reader.readLine()))
+                throw new GrappaException("unrecognized trace file: nodes file"
+                    + "has an incorrect format");
+        }
+
+        final ParseTreeNode[] ret = new ParseTreeNode[nrNodes];
+
+        // Read all nodes
+        try (
+            final Stream<String> lines = Files.lines(path, UTF8).skip(1L)
+                .parallel();
+        ) {
+            lines.forEach(line -> {
+                final String[] elements = SEMICOLON.split(line);
+                final int parent = Integer.parseInt(elements[0]);
+                final int index = Integer.parseInt(elements[1]);
+                final int level = Integer.parseInt(elements[2]);
+                final boolean success = elements[3].charAt(0) == '1';
+                final int matcherId = Integer.parseInt(elements[4]);
+                final int startIndex = Integer.parseInt(elements[5]);
+                final int endIndex = Integer.parseInt(elements[6]);
+                final long time = Long.parseLong(elements[7]);
+                ret[index] = new ParseTreeNode(parent, index, level, success,
+                    matcherId, startIndex, endIndex, time);
+            });
+        }
+
+        // Now attach children. Skip first node, it will always have no parent
+        ParseTreeNode node;
+
+        for (int i = 1; i < nrNodes; i++) {
+            node = ret[i];
+            ret[node.getParentId()].addChild(node);
+        }
+
+        return ret;
+    }
     @Override
     public ParseRunInfo getParseRunInfo()
     {
