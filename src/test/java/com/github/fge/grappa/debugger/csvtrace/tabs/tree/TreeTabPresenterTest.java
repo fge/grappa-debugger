@@ -3,9 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -13,13 +11,11 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class TreeTabPresenterTest
@@ -47,14 +43,12 @@ public class TreeTabPresenterTest
     @Test
     public void loadTest()
     {
-        doNothing().when(presenter).loadParseTree();
+        doNothing().when(presenter).loadParseTree2();
         doNothing().when(presenter).loadInputText();
 
         presenter.load();
 
-//        verify(presenter).loadParseTree();
-//        verify(presenter).loadInputText();
-//        verify(presenter).loadParseRunInfo();
+        verify(presenter).loadInputText();
         verify(presenter).loadParseTree2();
     }
 
@@ -69,39 +63,38 @@ public class TreeTabPresenterTest
         verify(view).loadTree2(same(rootNode));
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test
-    public void handleParseTreeNodeShowTest()
+    public void handleParseTreeNodeShowFailureTest()
     {
+        final int end = 42;
+
         final ParseTreeNode node = mock(ParseTreeNode.class);
+        when(node.isSuccess()).thenReturn(false);
+        when(node.getEndIndex()).thenReturn(end);
 
         presenter.handleParseTreeNodeShow(node);
 
         verify(view).showParseTreeNode(same(node));
+        verify(view).highlightFailure(end);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test
-    public void successfulLoadParseTreeTest()
-        throws IOException
+    public void handleParseTreeNodeShowSuccessTest()
     {
-        final ParseNode rootNode = mock(ParseNode.class);
-        when(model.getRootNode()).thenReturn(rootNode);
+        final int start = 24;
+        final int end = 42;
 
-        presenter.loadParseTree();
+        final ParseTreeNode node = mock(ParseTreeNode.class);
+        when(node.isSuccess()).thenReturn(true);
+        when(node.getStartIndex()).thenReturn(start);
+        when(node.getEndIndex()).thenReturn(end);
 
-        verify(view).loadTree(same(rootNode));
-    }
+        presenter.handleParseTreeNodeShow(node);
 
-    @Test
-    public void failedLoadParseTreeTest()
-        throws IOException
-    {
-        final IOException exception = new IOException();
-        when(model.getRootNode()).thenThrow(exception);
-
-        presenter.loadParseTree();
-
-        verify(mainView).showError(anyString(), anyString(), same(exception));
-        verifyZeroInteractions(view);
+        verify(view).showParseTreeNode(same(node));
+        verify(view).highlightSuccess(start, end);
     }
 
     @Test
@@ -123,42 +116,6 @@ public class TreeTabPresenterTest
         presenter.loadParseRunInfo();
 
         verify(view).loadParseRunInfo(same(info));
-    }
-
-    @SuppressWarnings("AutoBoxing")
-    @Test
-    public void handleParseNodeShowSuccessTest()
-    {
-        final ParseNode node = mock(ParseNode.class);
-        final int start = 31;
-        final int end = 61;
-
-        when(node.isSuccess()).thenReturn(true);
-        when(node.getStart()).thenReturn(start);
-        when(node.getEnd()).thenReturn(end);
-
-        presenter.handleParseNodeShow(node);
-
-        verify(view).showParseNode(same(node));
-        verify(view).highlightSuccess(start, end);
-    }
-
-    @SuppressWarnings("AutoBoxing")
-    @Test
-    public void handleParseNodeShowFailureTest()
-    {
-        final ParseNode node = mock(ParseNode.class);
-        final int start = 31;
-        final int end = 61;
-
-        when(node.isSuccess()).thenReturn(false);
-        when(node.getStart()).thenReturn(start);
-        when(node.getEnd()).thenReturn(end);
-
-        presenter.handleParseNodeShow(node);
-
-        verify(view).showParseNode(same(node));
-        verify(view).highlightFailure(end);
     }
 
     @Test

@@ -6,11 +6,9 @@ import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.trace.ParseRunInfo;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.escape.CharEscaper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,57 +50,11 @@ public class JavafxTreeTabView
     }
 
     @Override
-    public void loadTree(final ParseNode rootNode)
-    {
-        final Button button = display.treeExpand;
-
-        taskRunner.compute(
-            () -> buildTree(rootNode),
-            value -> {
-                display.parseTree.setRoot(value);
-                display.treeToolbar.getItems().setAll(button);
-                button.setDisable(false);
-            }
-        );
-    }
-
-    @Override
     public void loadText()
     {
         final ObservableList<Node> children = display.inputText.getChildren();
         taskRunner.compute(() -> buffer.extract(0, buffer.length()),
             text -> children.setAll(new Text(text)));
-    }
-
-    @Override
-    public void showParseNode(final ParseNode node)
-    {
-        final int realStart = Math.min(buffer.length(), node.getStart());
-        final Position start = buffer.getPosition(realStart);
-        final int realEnd = Math.min(buffer.length(), node.getEnd());
-        final Position end = buffer.getPosition(realEnd);
-
-        // Pure text, or nearly so
-        display.nodeDepth.setText(Integer.toString(node.getLevel()));
-        display.nodeRuleName.setText(node.getRuleName());
-        display.nodeMatcherType.setText(node.getMatcherType().name());
-        display.nodeMatcherClass.setText(node.getMatcherClass());
-
-        // Time
-        display.nodeTime.setText(JavafxUtils.nanosToString(node.getNanos()));
-
-        // Status
-        if (node.isSuccess()) {
-            display.nodeStatus.setText("SUCCESS");
-            display.nodeStatus.setTextFill(Color.GREEN);
-        } else {
-            display.nodeStatus.setText("FAILURE");
-            display.nodeStatus.setTextFill(Color.RED);
-        }
-
-        // Positions
-        display.nodeStartPos.setText(POS_TO_STRING.apply(start));
-        display.nodeEndPos.setText(POS_TO_STRING.apply(end));
     }
 
     @Override
@@ -280,25 +232,9 @@ public class JavafxTreeTabView
         return list;
     }
 
-    @VisibleForTesting
-    TreeItem<ParseNode> buildTree(final ParseNode root)
-    {
-        return buildTree(root, false);
-    }
-
     TreeItem<ParseTreeNode> buildTree2(final ParseTreeNode root)
     {
         return buildTree2(root, false);
-    }
-
-    private TreeItem<ParseNode> buildTree(final ParseNode root,
-        final boolean expanded)
-    {
-        final TreeItem<ParseNode> ret = new TreeItem<>(root);
-
-        addChildren(ret, root, expanded);
-
-        return ret;
     }
 
     private TreeItem<ParseTreeNode> buildTree2(final ParseTreeNode root,
@@ -310,24 +246,6 @@ public class JavafxTreeTabView
 
         return ret;
     }
-
-    private void addChildren(final TreeItem<ParseNode> item,
-        final ParseNode parent, final boolean expanded)
-    {
-        TreeItem<ParseNode> childItem;
-        final List<TreeItem<ParseNode>> childrenItems
-            = FXCollections.observableArrayList();
-
-        for (final ParseNode node: parent.getChildren()) {
-            childItem = new TreeItem<>(node);
-            addChildren(childItem, node, expanded);
-            childrenItems.add(childItem);
-        }
-
-        item.getChildren().setAll(childrenItems);
-        item.setExpanded(expanded);
-    }
-
     private void addChildren2(final TreeItem<ParseTreeNode> item,
         final ParseTreeNode parent, final boolean expanded)
     {

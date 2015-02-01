@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -137,11 +138,17 @@ public final class NewCsvTraceModel
 
         final ParseTreeNode[] ret = new ParseTreeNode[nrNodes];
 
+        final AtomicInteger count = new AtomicInteger(0);
         // Read all nodes
         try (
             final Stream<String> lines = Files.lines(path, UTF8).parallel();
         ) {
-            lines.forEach(line -> {
+            lines.peek(ignored -> {
+                final int i = count.incrementAndGet();
+                if (i % 25000 == 0)
+                    System.out.println(i + " events processed");
+            })
+                .forEach(line -> {
                 final String[] elements = SEMICOLON.split(line);
                 final int parent = Integer.parseInt(elements[0]);
                 final int index = Integer.parseInt(elements[1]);
@@ -159,9 +166,16 @@ public final class NewCsvTraceModel
 
         // Now attach children. Skip first node, it will always have no parent
         ParseTreeNode node;
+        ParseTreeNode parentNode;
 
         for (int i = 1; i < nrNodes; i++) {
             node = ret[i];
+            if (node == null)
+                throw new IllegalStateException("node is null at index " + i);
+            parentNode = ret[node.getParentId()];
+            if (parentNode == null)
+                throw new IllegalStateException("parent node is null at index"
+                    + node.getParentId());
             ret[node.getParentId()].addChild(node);
         }
 

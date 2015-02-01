@@ -2,7 +2,6 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
-import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,9 +29,6 @@ public class TreeTabDisplay
 
     @FXML
     protected Label treeLoading;
-
-    @FXML
-    protected TreeView<ParseNode> parseTree;
 
     @FXML
     protected TreeView<ParseTreeNode> parseTree2;
@@ -79,7 +75,6 @@ public class TreeTabDisplay
     @Override
     public void init()
     {
-        parseTree.setCellFactory(param -> new ParseNodeCell(this));
         parseTree2.setCellFactory(param -> new ParseTreeNodeCell(this));
     }
 
@@ -87,37 +82,6 @@ public class TreeTabDisplay
     void expandParseTreeEvent(final Event event)
     {
         presenter.handleExpandParseTree();
-    }
-
-    private static final class ParseNodeCell
-        extends TreeCell<ParseNode>
-    {
-        private ParseNodeCell(final TreeTabDisplay display)
-        {
-            setEditable(false);
-            selectedProperty().addListener(new ChangeListener<Boolean>()
-            {
-                @Override
-                public void changed(
-                    final ObservableValue<? extends Boolean> observable,
-                    final Boolean oldValue, final Boolean newValue)
-                {
-                    if (!newValue)
-                        return;
-                    final ParseNode node = getItem();
-                    if (node != null)
-                        display.parseNodeShowEvent(node);
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(final ParseNode item, final boolean empty)
-        {
-            super.updateItem(item, empty);
-            setText(empty ? null : String.format("%s (%s)", item.getRuleName(),
-                item.isSuccess() ? "SUCCESS" : "FAILURE"));
-        }
     }
 
     private static final class ParseTreeNodeCell
@@ -156,12 +120,5 @@ public class TreeTabDisplay
     void parseTreeNodeShowEvent(final ParseTreeNode node)
     {
         presenter.handleParseTreeNodeShow(node);
-    }
-
-
-    @VisibleForTesting
-    void parseNodeShowEvent(final ParseNode node)
-    {
-        presenter.handleParseNodeShow(node);
     }
 }
