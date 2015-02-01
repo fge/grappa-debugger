@@ -150,32 +150,24 @@ public final class NewCsvTraceModel
             })
                 .forEach(line -> {
                 final String[] elements = SEMICOLON.split(line);
-                final int parent = Integer.parseInt(elements[0]);
-                final int index = Integer.parseInt(elements[1]);
+                final int parentId = Integer.parseInt(elements[0]);
+                final int nodeId = Integer.parseInt(elements[1]);
                 final int level = Integer.parseInt(elements[2]);
                 final boolean success = elements[3].charAt(0) == '1';
                 final int matcherId = Integer.parseInt(elements[4]);
                 final int startIndex = Integer.parseInt(elements[5]);
                 final int endIndex = Integer.parseInt(elements[6]);
                 final long time = Long.parseLong(elements[7]);
-                ret[index] = new ParseTreeNode(parent, index, level, success,
-                    ruleInfos[matcherId], matcherId, startIndex, endIndex,
-                    time);
+                ret[nodeId] = new ParseTreeNode(parentId, nodeId, level,
+                    success, ruleInfos[matcherId], startIndex, endIndex, time);
             });
         }
 
         // Now attach children. Skip first node, it will always have no parent
         ParseTreeNode node;
-        ParseTreeNode parentNode;
 
         for (int i = 1; i < nrNodes; i++) {
             node = ret[i];
-            if (node == null)
-                throw new IllegalStateException("node is null at index " + i);
-            parentNode = ret[node.getParentId()];
-            if (parentNode == null)
-                throw new IllegalStateException("parent node is null at index"
-                    + node.getParentId());
             ret[node.getParentId()].addChild(node);
         }
 
