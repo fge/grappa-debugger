@@ -81,9 +81,9 @@ public final class NewCsvTraceModel
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
         ) {
-            if (!INFO_CSV_HEAD.equals(reader.readLine()))
-                throw new GrappaException("unrecognized trace file: info.csv "
-                    + "has an incorrect format");
+//            if (!INFO_CSV_HEAD.equals(reader.readLine()))
+//                throw new GrappaException("unrecognized trace file: info.csv "
+//                    + "has an incorrect format");
             final String[] elements = SEMICOLON.split(reader.readLine());
 
             final long epoch = Long.parseLong(elements[0]);
@@ -108,9 +108,9 @@ public final class NewCsvTraceModel
         final Path path = zipfs.getPath(MATCHERS_PATH);
         final List<String> lines = Files.readAllLines(path, UTF8);
 
-        if (!MATCHER_DESCRIPTOR_CSV_HEAD.equals(lines.remove(0)))
-            throw new GrappaException("unrecognized trace file: matchers file "
-                + "has an illegal format");
+//        if (!MATCHER_DESCRIPTOR_CSV_HEAD.equals(lines.remove(0)))
+//            throw new GrappaException("unrecognized trace file: matchers file "
+//                + "has an illegal format");
 
         final RuleInfo[] ret = new RuleInfo[nrRules];
         lines.parallelStream().forEach(line -> {
@@ -129,20 +129,19 @@ public final class NewCsvTraceModel
     {
         final Path path = zipfs.getPath(NODE_PATH);
 
-        try (
-            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
-        ) {
-            if (!NODE_CSV_HEAD.equals(reader.readLine()))
-                throw new GrappaException("unrecognized trace file: nodes file"
-                    + "has an incorrect format");
-        }
+//        try (
+//            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+//        ) {
+//            if (!NODE_CSV_HEAD.equals(reader.readLine()))
+//                throw new GrappaException("unrecognized trace file: nodes file"
+//                    + "has an incorrect format");
+//        }
 
         final ParseTreeNode[] ret = new ParseTreeNode[nrNodes];
 
         // Read all nodes
         try (
-            final Stream<String> lines = Files.lines(path, UTF8).skip(1L)
-                .parallel();
+            final Stream<String> lines = Files.lines(path, UTF8).parallel();
         ) {
             lines.forEach(line -> {
                 final String[] elements = SEMICOLON.split(line);
