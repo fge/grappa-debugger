@@ -69,8 +69,7 @@ public final class NewCsvTraceModel
 
             info = readInfo(zipfs);
             ruleInfos = readRuleInfos(zipfs, info.getNrMatchers());
-            parseTreeNodes = readParseTreeNodes(zipfs, info.getTreeDepth(),
-                info.getNrInvocations());
+            parseTreeNodes = readParseTreeNodes(zipfs, info.getNrInvocations());
         }
     }
 
@@ -125,7 +124,7 @@ public final class NewCsvTraceModel
     }
 
     private ParseTreeNode[] readParseTreeNodes(final FileSystem zipfs,
-        final int treeDepth, final int nrNodes)
+        final int nrNodes)
         throws IOException
     {
         final Path path = zipfs.getPath(NODE_PATH);
