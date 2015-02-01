@@ -1,8 +1,10 @@
 package com.github.fge.grappa.debugger.csvtrace.newmodel;
 
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.matchers.MatcherType;
 
-public final class RuleInfo
+@NonFinalForTesting
+public class RuleInfo
 {
     private final String className;
     private final MatcherType type;

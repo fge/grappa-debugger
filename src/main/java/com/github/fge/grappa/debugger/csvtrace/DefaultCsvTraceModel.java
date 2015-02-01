@@ -6,11 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.model.TraceEventSpliterator;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.ParseTreeProcessor;
 import com.github.fge.grappa.trace.ParseRunInfo;
 import com.github.fge.grappa.trace.TraceEvent;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -97,6 +100,20 @@ public final class DefaultCsvTraceModel
         throws IOException
     {
         zipfs.close();
+    }
+
+    @Nonnull
+    @Override
+    public ParseTreeNode getRootNode2()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nonnull
+    @Override
+    public RuleInfo getRuleInfo(final int matcherId)
+    {
+        throw new UnsupportedOperationException();
     }
 
     private ParseRunInfo loadParseRunInfo()

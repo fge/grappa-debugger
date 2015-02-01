@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.trace.ParseRunInfo;
@@ -50,9 +52,37 @@ public class TreeTabPresenterTest
 
         presenter.load();
 
-        verify(presenter).loadParseTree();
-        verify(presenter).loadInputText();
-        verify(presenter).loadParseRunInfo();
+//        verify(presenter).loadParseTree();
+//        verify(presenter).loadInputText();
+//        verify(presenter).loadParseRunInfo();
+        verify(presenter).loadParseTree2();
+    }
+
+    @Test
+    public void loadParseTree2Test()
+    {
+        final ParseTreeNode rootNode = mock(ParseTreeNode.class);
+        when(model.getRootNode2()).thenReturn(rootNode);
+
+        presenter.loadParseTree2();
+
+        verify(view).loadTree2(same(rootNode));
+    }
+
+    @Test
+    public void handleParseTreeNodeShowTest()
+    {
+        final int id = 42;
+
+        final ParseTreeNode node = mock(ParseTreeNode.class);
+        when(node.getMatcherId()).thenReturn(id);
+
+        final RuleInfo info = mock(RuleInfo.class);
+        when(model.getRuleInfo(id)).thenReturn(info);
+
+        presenter.handleParseTreeNodeShow(node);
+
+        verify(view).showParseTreeNode(same(node), same(info));
     }
 
     @Test

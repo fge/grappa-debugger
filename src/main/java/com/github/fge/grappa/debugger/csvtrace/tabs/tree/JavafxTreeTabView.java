@@ -3,6 +3,8 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
@@ -173,6 +175,28 @@ public class JavafxTreeTabView
         );
     }
 
+    @Override
+    public void loadTree2(final ParseTreeNode rootNode)
+    {
+        final Button button = display.treeExpand;
+
+        taskRunner.compute(
+            () -> buildTree2(rootNode),
+            value -> {
+                display.parseTree2.setRoot(value);
+                display.treeToolbar.getItems().setAll(button);
+                button.setDisable(false);
+            }
+        );
+    }
+
+    @Override
+    public void showParseTreeNode(final ParseTreeNode node, final RuleInfo info)
+    {
+        // TODO
+
+    }
+
     private List<Text> getFailedMatchFragments(final int length,
         final int realEnd)
     {
@@ -238,12 +262,27 @@ public class JavafxTreeTabView
         return buildTree(root, false);
     }
 
+    TreeItem<ParseTreeNode> buildTree2(final ParseTreeNode root)
+    {
+        return buildTree2(root, false);
+    }
+
     private TreeItem<ParseNode> buildTree(final ParseNode root,
         final boolean expanded)
     {
         final TreeItem<ParseNode> ret = new TreeItem<>(root);
 
         addChildren(ret, root, expanded);
+
+        return ret;
+    }
+
+    private TreeItem<ParseTreeNode> buildTree2(final ParseTreeNode root,
+        final boolean expanded)
+    {
+        final TreeItem<ParseTreeNode> ret = new TreeItem<>(root);
+
+        addChildren2(ret, root, expanded);
 
         return ret;
     }
@@ -258,6 +297,23 @@ public class JavafxTreeTabView
         for (final ParseNode node: parent.getChildren()) {
             childItem = new TreeItem<>(node);
             addChildren(childItem, node, expanded);
+            childrenItems.add(childItem);
+        }
+
+        item.getChildren().setAll(childrenItems);
+        item.setExpanded(expanded);
+    }
+
+    private void addChildren2(final TreeItem<ParseTreeNode> item,
+        final ParseTreeNode parent, final boolean expanded)
+    {
+        TreeItem<ParseTreeNode> childItem;
+        final List<TreeItem<ParseTreeNode>> childrenItems
+            = FXCollections.observableArrayList();
+
+        for (final ParseTreeNode node: parent.getChildren()) {
+            childItem = new TreeItem<>(node);
+            addChildren2(childItem, node, expanded);
             childrenItems.add(childItem);
         }
 

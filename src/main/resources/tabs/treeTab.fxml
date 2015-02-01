@@ -33,6 +33,7 @@
             </top>
             <center>
                 <TreeView fx:id="parseTree" editable="false"/>
+                <TreeView fx:id="parseTree2" editable="false"/>
             </center>
         </BorderPane>
         <TitledPane collapsible="true" text="Node information">

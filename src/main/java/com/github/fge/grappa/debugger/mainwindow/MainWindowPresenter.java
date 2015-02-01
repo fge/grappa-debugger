@@ -5,14 +5,11 @@ import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
-import com.github.fge.grappa.debugger.csvtrace.DefaultCsvTraceModel;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.NewCsvTraceModel;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -81,9 +78,7 @@ public class MainWindowPresenter
     CsvTracePresenter loadTrace(final Path path)
         throws IOException
     {
-        final URI uri = URI.create("jar:" + path.toUri());
-        final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
-        final CsvTraceModel model = new DefaultCsvTraceModel(zipfs);
+        final CsvTraceModel model = new NewCsvTraceModel(path);
         return new CsvTracePresenter(view, taskRunner, model);
     }
 

@@ -1,10 +1,13 @@
 package com.github.fge.grappa.debugger.csvtrace.newmodel;
 
+import com.github.fge.grappa.internal.NonFinalForTesting;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class ParseTreeNode
+@NonFinalForTesting
+public class ParseTreeNode
 {
     private final int parentId;
     private final int id;

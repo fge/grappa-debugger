@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.JavafxDisplay;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.stats.ParseNode;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
@@ -32,6 +33,9 @@ public class TreeTabDisplay
 
     @FXML
     protected TreeView<ParseNode> parseTree;
+
+    @FXML
+    protected TreeView<ParseTreeNode> parseTree2;
 
     /*
      * Node detail
@@ -76,6 +80,7 @@ public class TreeTabDisplay
     public void init()
     {
         parseTree.setCellFactory(param -> new ParseNodeCell(this));
+        parseTree2.setCellFactory(param -> new ParseTreeNodeCell(this));
     }
 
     @FXML
@@ -114,6 +119,36 @@ public class TreeTabDisplay
                 item.isSuccess() ? "SUCCESS" : "FAILURE"));
         }
     }
+
+    private static final class ParseTreeNodeCell
+        extends TreeCell<ParseTreeNode>
+    {
+        private ParseTreeNodeCell(final TreeTabDisplay display)
+        {
+            setEditable(false);
+            selectedProperty().addListener(new ChangeListener<Boolean>()
+            {
+                @Override
+                public void changed(
+                    final ObservableValue<? extends Boolean> observable,
+                    final Boolean oldValue, final Boolean newValue)
+                {
+                    if (!newValue)
+                        return;
+                    final ParseTreeNode node = getItem();
+                    if (node != null)
+                        display.parseTreeNodeShowEvent(node);
+                }
+            });
+        }
+    }
+
+    @VisibleForTesting
+    void parseTreeNodeShowEvent(final ParseTreeNode node)
+    {
+        presenter.handleParseTreeNodeShow(node);
+    }
+
 
     @VisibleForTesting
     void parseNodeShowEvent(final ParseNode node)

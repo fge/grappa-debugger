@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.newmodel;
 
+import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.stats.ParseNode;
@@ -7,9 +8,11 @@ import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.trace.ParseRunInfo;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -32,14 +35,6 @@ public final class NewCsvTraceModel
     private static final Charset UTF8 = StandardCharsets.UTF_8;
     private static final Pattern SEMICOLON = Pattern.compile(";");
 
-    private static final String MATCHER_DESCRIPTOR_CSV_HEAD
-        = "id;className;type;name";
-    private static final String NODE_CSV_HEAD
-        = "parent;id;level;success;matcherId;start;end;time";
-    private static final String INFO_CSV_HEAD
-        = "startDate;treeDepth;nrMatchers;nrLines;nrChars;nrCodePoints;"
-        + "nrNodes";
-
     private static final Map<String, ?> ENV
         = Collections.singletonMap("readonly", "true");
     private static final String NODE_PATH = "/nodes.csv";
@@ -48,6 +43,7 @@ public final class NewCsvTraceModel
     private static final String INFO_PATH = "/info.csv";
 
     private final ParseInfo info;
+    private final InputBuffer inputBuffer;
     private final RuleInfo[] ruleInfos;
     private final ParseTreeNode[] parseTreeNodes;
 
@@ -68,8 +64,24 @@ public final class NewCsvTraceModel
                     + "missing files (" + String.join(", ", missing));
 
             info = readInfo(zipfs);
+            inputBuffer = readInputBuffer(zipfs, info.getNrChars());
             ruleInfos = readRuleInfos(zipfs, info.getNrMatchers());
             parseTreeNodes = readParseTreeNodes(zipfs, info.getNrInvocations());
+        }
+    }
+
+    private InputBuffer readInputBuffer(final FileSystem zipfs,
+        final int nrChars)
+        throws IOException
+    {
+        final Path path = zipfs.getPath(INPUT_TEXT_PATH);
+
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            final CharBuffer buf = CharBuffer.allocate(nrChars);
+            reader.read(buf);
+            return new CharSequenceInputBuffer(buf);
         }
     }
 
@@ -81,9 +93,6 @@ public final class NewCsvTraceModel
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
         ) {
-//            if (!INFO_CSV_HEAD.equals(reader.readLine()))
-//                throw new GrappaException("unrecognized trace file: info.csv "
-//                    + "has an incorrect format");
             final String[] elements = SEMICOLON.split(reader.readLine());
 
             final long epoch = Long.parseLong(elements[0]);
@@ -108,10 +117,6 @@ public final class NewCsvTraceModel
         final Path path = zipfs.getPath(MATCHERS_PATH);
         final List<String> lines = Files.readAllLines(path, UTF8);
 
-//        if (!MATCHER_DESCRIPTOR_CSV_HEAD.equals(lines.remove(0)))
-//            throw new GrappaException("unrecognized trace file: matchers file "
-//                + "has an illegal format");
-
         final RuleInfo[] ret = new RuleInfo[nrRules];
         lines.parallelStream().forEach(line -> {
             final String[] elements = SEMICOLON.split(line, 4);
@@ -128,14 +133,6 @@ public final class NewCsvTraceModel
         throws IOException
     {
         final Path path = zipfs.getPath(NODE_PATH);
-
-//        try (
-//            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
-//        ) {
-//            if (!NODE_CSV_HEAD.equals(reader.readLine()))
-//                throw new GrappaException("unrecognized trace file: nodes file"
-//                    + "has an incorrect format");
-//        }
 
         final ParseTreeNode[] ret = new ParseTreeNode[nrNodes];
 
@@ -185,13 +182,26 @@ public final class NewCsvTraceModel
     public InputBuffer getInputBuffer()
         throws IOException
     {
-        // TODO
-        return null;
+        return inputBuffer;
     }
 
     @Override
     public void dispose()
         throws IOException
     {
+    }
+
+    @Nonnull
+    @Override
+    public ParseTreeNode getRootNode2()
+    {
+        return parseTreeNodes[0];
+    }
+
+    @Nonnull
+    @Override
+    public RuleInfo getRuleInfo(final int matcherId)
+    {
+        return ruleInfos[matcherId];
     }
 }
