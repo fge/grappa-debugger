@@ -4,7 +4,6 @@ import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.matchers.MatcherType;
-import com.github.fge.lambdas.consumers.Consumers;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 
 import javax.annotation.Nonnull;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class NewCsvTraceModel
     implements CsvTraceModel
@@ -37,12 +35,12 @@ public final class NewCsvTraceModel
 
     private static final Map<String, ?> ENV
         = Collections.singletonMap("readonly", "true");
-    private static final String NODE_PATH = "nodes.csv";
-    private static final String MATCHERS_PATH = "matchers.csv";
-    private static final String INPUT_TEXT_PATH = "input.txt";
-    private static final String INFO_PATH = "info.csv";
+    private static final String NODE_PATH = "/nodes.csv";
+    private static final String MATCHERS_PATH = "/matchers.csv";
+    private static final String INPUT_TEXT_PATH = "/input.txt";
+    private static final String INFO_PATH = "/info.csv";
 
-    private final Path traceDir;
+    private final FileSystem zipfs;
 
     private final ParseInfo info;
     private InputBuffer inputBuffer = null;
@@ -54,40 +52,29 @@ public final class NewCsvTraceModel
     public NewCsvTraceModel(final Path zipPath)
         throws IOException
     {
-        traceDir = Files.createTempDirectory("grappa-debugger");
-
         final URI uri = URI.create("jar:" + zipPath.toUri());
 
-        try (
-            final FileSystem zipfs = FileSystems.newFileSystem(uri, ENV);
-        ) {
-            Stream.of(NODE_PATH, MATCHERS_PATH, INPUT_TEXT_PATH, INFO_PATH)
-                .forEach(Consumers.wrap((String name) -> Files.copy(
-                        zipfs.getPath(name), traceDir.resolve(name))));
-        }
-
+        zipfs = FileSystems.newFileSystem(uri, ENV);
         info = readInfo();
     }
 
     @Override
-    public InputBuffer getInputBuffer()
+    public InputText getInputText()
         throws IOException
     {
         if (inputBuffer == null)
             inputBuffer = readInputBuffer();
-        return inputBuffer;
+        return new InputText(info.getNrLines(), info.getNrChars(),
+            info.getNrCodePoints(), inputBuffer);
     }
 
     @Nonnull
     @Override
-    public ParseTreeNode getRootNode()
+    public ParseTree getParseTree()
         throws IOException
     {
-        if (nodeIndices == null)
-            computeIndices();
-        if (ruleInfos == null)
-            readRuleInfos();
-        return readNode(0);
+        return new ParseTree(readNode(0), info.getNrInvocations(),
+            info.getTreeDepth());
     }
 
     @Override
@@ -104,7 +91,7 @@ public final class NewCsvTraceModel
     private void computeIndices()
         throws IOException
     {
-        final Path path = traceDir.resolve(NODE_PATH);
+        final Path path = zipfs.getPath(NODE_PATH);
 
         final StringBuilder sb = new StringBuilder();
         final int total = info.getNrInvocations();
@@ -132,8 +119,6 @@ public final class NewCsvTraceModel
                     continue;
                 }
                 found++;
-                if (found % 25000 == 0)
-                    System.out.println(found + " elements processed");
                 elements = SEMICOLON.split(sb, 3);
                 sb.setLength(0);
                 parentId = Integer.parseInt(elements[0]);
@@ -155,7 +140,7 @@ public final class NewCsvTraceModel
     private InputBuffer readInputBuffer()
         throws IOException
     {
-        final Path path = traceDir.resolve(INPUT_TEXT_PATH);
+        final Path path = zipfs.getPath(INPUT_TEXT_PATH);
 
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
@@ -170,7 +155,7 @@ public final class NewCsvTraceModel
     private ParseInfo readInfo()
         throws IOException
     {
-        final Path path = traceDir.resolve(INFO_PATH);
+        final Path path = zipfs.getPath(INFO_PATH);
 
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
@@ -198,7 +183,7 @@ public final class NewCsvTraceModel
         throws IOException
     {
         final int nrRules = info.getNrMatchers();
-        final Path path = traceDir.resolve(MATCHERS_PATH);
+        final Path path = zipfs.getPath(MATCHERS_PATH);
         final List<String> lines = Files.readAllLines(path, UTF8);
 
         ruleInfos = new RuleInfo[nrRules];
@@ -213,7 +198,12 @@ public final class NewCsvTraceModel
     private ParseTreeNode readNode(final int nodeIndex)
         throws IOException
     {
-        final Path path = traceDir.resolve(NODE_PATH);
+        if (nodeIndices == null)
+            computeIndices();
+        if (ruleInfos == null)
+            readRuleInfos();
+
+        final Path path = zipfs.getPath(NODE_PATH);
 
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
@@ -238,9 +228,6 @@ public final class NewCsvTraceModel
     public void dispose()
         throws IOException
     {
-        if (Files.exists(traceDir)) {
-            Files.list(traceDir).forEach(Consumers.rethrow(Files::delete));
-            Files.delete(traceDir);
-        }
+        zipfs.close();
     }
 }

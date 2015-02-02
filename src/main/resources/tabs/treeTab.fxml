@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.TextFlow?>
 
+<?import javafx.scene.text.Text?>
 <SplitPane xmlns="http://javafx.com/javafx/8"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabDisplay"
@@ -24,8 +25,8 @@
     <SplitPane dividerPositions="0.5" orientation="VERTICAL">
         <BorderPane>
             <top>
-                <ToolBar fx:id="treeToolbar">
-                    <Label fx:id="treeInfo"/>
+                <ToolBar>
+                    <Label fx:id="treeInfo" text="Please wait..."/>
                 </ToolBar>
             </top>
             <center>
@@ -99,6 +100,7 @@
         <center>
             <ScrollPane fx:id="inputTextScroll">
                 <TextFlow fx:id="inputText">
+                    <Text text="Please wait..."/>
                 </TextFlow>
             </ScrollPane>
         </center>

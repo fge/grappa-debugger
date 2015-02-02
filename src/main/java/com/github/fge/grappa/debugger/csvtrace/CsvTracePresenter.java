@@ -33,6 +33,7 @@ public class CsvTracePresenter
         final TreeTabPresenter treeTab
             = new TreeTabPresenter(taskRunner, mainView, model);
         view.loadTreeTab(treeTab);
+        treeTab.load();
     }
 
     @Override

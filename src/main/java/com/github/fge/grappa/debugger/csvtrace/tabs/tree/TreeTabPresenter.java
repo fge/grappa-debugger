@@ -28,27 +28,28 @@ public class TreeTabPresenter
 
     public void load()
     {
+        loadInputText();
+        loadParseTree();
+    }
+
+    void loadInputText()
+    {
         taskRunner.computeOrFail(
-            view::waitForText,
-            model::getInputBuffer,
-            view::loadText,
+            model::getInputText,
+            view::loadInputText,
             throwable -> mainView.showError("Text loading error",
                 "Unable to load input text", throwable)
         );
+    }
+
+    void loadParseTree()
+    {
         taskRunner.computeOrFail(
-            view::waitForTree,
-            model::getRootNode,
-            view::loadTree,
+            model::getParseTree,
+            view::loadParseTree,
             throwable -> mainView.showError("Tree load failure",
                 "Unable to load parse tree", throwable)
         );
-    }
-
-    public void loadParseTree()
-    {
-        taskRunner.computeOrFail(model::getRootNode, view::loadTree,
-            throwable -> mainView.showError("Tree load failure",
-                "Unable to load parse tree", throwable));
     }
 
     public void handleParseTreeNodeShow(final ParseTreeNode node)

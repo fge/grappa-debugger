@@ -42,6 +42,5 @@ public final class JavafxCsvTraceView
         tabView.getDisplay().setPresenter(presenter);
         presenter.setView(tabView);
         display.treeTab.setContent(tabView.getNode());
-        presenter.load();
     }
 }

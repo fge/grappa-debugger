@@ -3,6 +3,8 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
@@ -43,15 +45,14 @@ public class JavafxTreeTabView
         this.taskRunner = Objects.requireNonNull(taskRunner);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Override
-    public void waitForText()
+    public void loadInputText(final InputText inputText)
     {
-    }
-
-    @Override
-    public void loadText(final InputBuffer inputBuffer)
-    {
-        buffer = inputBuffer;
+        buffer = inputText.getInputBuffer();
+        display.textInfo.setText(String.format("Input text: %d lines, %d "
+            + "characters, %d code points", inputText.getNrLines(),
+            inputText.getNrChars(), inputText.getNrCodePoints()));
         final ObservableList<Node> children = display.inputText.getChildren();
         taskRunner.compute(() -> buffer.extract(0, buffer.length()),
             text -> children.setAll(new Text(text)));
@@ -91,16 +92,14 @@ public class JavafxTreeTabView
             });
     }
 
-
+    @SuppressWarnings("AutoBoxing")
     @Override
-    public void waitForTree()
+    public void loadParseTree(final ParseTree parseTree)
     {
-    }
-
-    @Override
-    public void loadTree(final ParseTreeNode rootNode)
-    {
+        final ParseTreeNode rootNode = parseTree.getRootNode();
         display.parseTree.setRoot(new ParseTreeItem(display, rootNode));
+        display.treeInfo.setText(String.format("Tree: %d nodes; depth %d",
+            parseTree.getNrInvocations(), parseTree.getTreeDepth()));
     }
 
     @Override

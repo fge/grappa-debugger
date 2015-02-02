@@ -8,8 +8,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -36,18 +34,6 @@ public class TreeTabPresenterTest
 
         view = mock(TreeTabView.class);
         presenter.setView(view);
-    }
-
-    @Test
-    public void loadParseTreeTest()
-        throws IOException
-    {
-        final ParseTreeNode rootNode = mock(ParseTreeNode.class);
-        when(model.getRootNode()).thenReturn(rootNode);
-
-        presenter.loadParseTree();
-
-        verify(view).loadTree(same(rootNode));
     }
 
     @SuppressWarnings("AutoBoxing")

@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeNodeCell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
@@ -18,9 +17,6 @@ public class TreeTabDisplay
     /*
      * Tree
      */
-    @FXML
-    protected ToolBar treeToolbar;
-
     @FXML
     protected Label treeInfo;
 
