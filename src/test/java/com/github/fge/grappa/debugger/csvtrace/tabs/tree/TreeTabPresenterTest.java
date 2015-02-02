@@ -2,14 +2,21 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,6 +42,73 @@ public class TreeTabPresenterTest
         view = mock(TreeTabView.class);
         presenter.setView(view);
     }
+
+    @Test
+    public void loadTest()
+    {
+        doNothing().when(presenter).loadInputText();
+        doNothing().when(presenter).loadParseTree();
+
+        presenter.load();
+
+        verify(presenter).loadParseTree();
+        verify(presenter).loadInputText();
+    }
+
+    @Test
+    public void loadParseTreeSuccessTest()
+        throws IOException
+    {
+        final ParseTree parseTree = mock(ParseTree.class);
+        when(model.getParseTree()).thenReturn(parseTree);
+
+        presenter.loadParseTree();
+
+        verify(model).getParseTree();
+        verify(view).loadParseTree(same(parseTree));
+    }
+
+    @Test
+    public void loadParseTreeErrorTest()
+        throws IOException
+    {
+        final IOException exception = new IOException();
+        when(model.getParseTree()).thenThrow(exception);
+
+        presenter.loadParseTree();
+
+        verify(model).getParseTree();
+        verify(view, never()).loadParseTree(any());
+        verify(presenter).handleLoadParseTreeError(same(exception));
+    }
+
+    @Test
+    public void loadInputTextSuccessTest()
+        throws IOException
+    {
+        final InputText inputText = mock(InputText.class);
+        when(model.getInputText()).thenReturn(inputText);
+
+        presenter.loadInputText();
+
+        verify(model).getInputText();
+        verify(view).loadInputText(same(inputText));
+    }
+
+    @Test
+    public void loadInputTextErrorTest()
+        throws IOException
+    {
+        final IOException exception = new IOException();
+        when(model.getInputText()).thenThrow(exception);
+
+        presenter.loadInputText();
+
+        verify(model).getInputText();
+        verify(presenter).handleLoadInputTextError(same(exception));
+        verify(view, never()).loadInputText(any());
+    }
+
 
     @SuppressWarnings("AutoBoxing")
     @Test

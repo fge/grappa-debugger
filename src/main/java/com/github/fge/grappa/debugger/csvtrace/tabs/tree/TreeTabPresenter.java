@@ -5,6 +5,7 @@ import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -32,24 +33,32 @@ public class TreeTabPresenter
         loadParseTree();
     }
 
+    @VisibleForTesting
     void loadInputText()
     {
-        taskRunner.computeOrFail(
-            model::getInputText,
-            view::loadInputText,
-            throwable -> mainView.showError("Text loading error",
-                "Unable to load input text", throwable)
-        );
+        taskRunner.computeOrFail(model::getInputText, view::loadInputText,
+            this::handleLoadInputTextError);
     }
 
+    @VisibleForTesting
+    void handleLoadInputTextError(final Throwable throwable)
+    {
+        mainView.showError("Text loading error", "Unable to load input text",
+            throwable);
+    }
+
+    @VisibleForTesting
     void loadParseTree()
     {
-        taskRunner.computeOrFail(
-            model::getParseTree,
-            view::loadParseTree,
-            throwable -> mainView.showError("Tree load failure",
-                "Unable to load parse tree", throwable)
-        );
+        taskRunner.computeOrFail(model::getParseTree, view::loadParseTree,
+            this::handleLoadParseTreeError);
+    }
+
+    @VisibleForTesting
+    void handleLoadParseTreeError(final Throwable throwable)
+    {
+        mainView.showError("Tree load failure", "Unable to load parse tree",
+            throwable);
     }
 
     public void handleParseTreeNodeShow(final ParseTreeNode node)
