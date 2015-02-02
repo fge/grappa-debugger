@@ -133,6 +133,12 @@ public final class JooqInsertTest
                     r.value2())
                 );
 
+            db.select(NODES.LEVEL, DSL.count()).from(NODES)
+                .groupBy(NODES.LEVEL)
+                .fetch()
+                .forEach(r -> System.out.printf("%d: %d\n", r.value1(),
+                    r.value2())
+                );
 //            final Result<Record2<Integer, String>> action = db.select(
 //                MATCHERS.ID, MATCHERS.NAME).from(MATCHERS).where(
 //                MATCHERS.MATCHER_TYPE.equal("ACTION")).fetch();
