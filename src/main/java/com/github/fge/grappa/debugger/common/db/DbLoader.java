@@ -73,7 +73,7 @@ public final class DbLoader
     private final DbLoadStatus status;
 
     public DbLoader(final FileSystem zipfs, final DbLoadStatus status,
-        final BackgroundTaskRunner taskRunner,
+        final BackgroundTaskRunner taskRunner, final Runnable loadFinish,
         final Consumer<Throwable> onError)
         throws IOException, SQLException
     {
@@ -97,7 +97,12 @@ public final class DbLoader
             insertMatchers(jooq);
             insertNodes(jooq);
         };
-        taskRunner.runOrFail(runnable, () -> {}, onError);
+        taskRunner.runOrFail(runnable, loadFinish, onError);
+    }
+
+    public DSLContext getJooq()
+    {
+        return jooq;
     }
 
     private void doDdl(final DSLContext jooq)

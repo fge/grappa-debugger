@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public abstract class CsvLineRecord<R extends Record>
     implements Function<String, R>
 {
-    protected final Pattern SEMICOLON = Pattern.compile(";");
+    private final Pattern SEMICOLON = Pattern.compile(";");
 
     protected final int limit;
 

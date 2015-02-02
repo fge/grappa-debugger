@@ -10,7 +10,7 @@ public class RuleInfo
     private final MatcherType type;
     private final String name;
 
-    RuleInfo(final String className, final MatcherType type,
+    public RuleInfo(final String className, final MatcherType type,
         final String name)
     {
         this.className = className;

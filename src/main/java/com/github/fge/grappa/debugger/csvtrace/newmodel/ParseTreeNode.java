@@ -15,7 +15,7 @@ public class ParseTreeNode
     private final long nanos;
     private final boolean hasChildren;
 
-    ParseTreeNode(final int parentId, final int id, final int level,
+    public ParseTreeNode(final int parentId, final int id, final int level,
         final boolean success, final RuleInfo ruleInfo, final int startIndex,
         final int endIndex, final long nanos, final boolean hasChildren)
     {

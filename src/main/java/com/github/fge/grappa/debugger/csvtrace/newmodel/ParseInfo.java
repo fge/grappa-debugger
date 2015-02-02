@@ -12,7 +12,7 @@ public final class ParseInfo
     private final int nrCodePoints;
     private final int nrInvocations;
 
-    ParseInfo(final LocalDateTime time, final int treeDepth,
+    public ParseInfo(final LocalDateTime time, final int treeDepth,
         final int nrMatchers, final int nrLines, final int nrChars,
         final int nrCodePoints, final int nrInvocations)
     {
