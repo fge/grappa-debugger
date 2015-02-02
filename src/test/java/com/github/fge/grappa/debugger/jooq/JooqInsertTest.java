@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.db;
+package com.github.fge.grappa.debugger.jooq;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static com.github.fge.grappa.debugger.db.Tables.MATCHERS;
-import static com.github.fge.grappa.debugger.db.Tables.NODES;
+import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
+import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 
 public final class JooqInsertTest
 {
@@ -137,8 +137,7 @@ public final class JooqInsertTest
                 .groupBy(NODES.LEVEL)
                 .fetch()
                 .forEach(r -> System.out.printf("%d: %d\n", r.value1(),
-                    r.value2())
-                );
+                        r.value2()));
 //            final Result<Record2<Integer, String>> action = db.select(
 //                MATCHERS.ID, MATCHERS.NAME).from(MATCHERS).where(
 //                MATCHERS.MATCHER_TYPE.equal("ACTION")).fetch();

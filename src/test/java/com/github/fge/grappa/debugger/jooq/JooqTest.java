@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.db;
+package com.github.fge.grappa.debugger.jooq;
 
 import com.google.common.base.Stopwatch;
 import org.jooq.DSLContext;
@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static com.github.fge.grappa.debugger.db.Tables.MATCHERS;
-import static com.github.fge.grappa.debugger.db.Tables.NODES;
+import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
+import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 
 public final class JooqTest
 {
