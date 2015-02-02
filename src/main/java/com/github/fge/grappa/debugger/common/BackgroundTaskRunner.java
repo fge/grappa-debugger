@@ -5,7 +5,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import javafx.application.Platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -100,6 +100,8 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 public final class BackgroundTaskRunner
 {
+    private static final int NR_CPUS
+        = Runtime.getRuntime().availableProcessors();
     private final ExecutorService executor;
     private final Executor frontExecutor;
 
@@ -123,7 +125,7 @@ public final class BackgroundTaskRunner
 
         final ThreadFactory factory = new ThreadFactoryBuilder()
             .setNameFormat(fmt).setDaemon(true).build();
-        executor = Executors.newCachedThreadPool(factory);
+        executor = Executors.newFixedThreadPool(NR_CPUS, factory);
         this.frontExecutor = frontExecutor;
     }
 

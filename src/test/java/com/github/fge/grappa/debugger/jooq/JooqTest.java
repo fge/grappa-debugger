@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.LogManager;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -22,6 +23,10 @@ import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 
 public final class JooqTest
 {
+    static {
+        LogManager.getLogManager().reset();
+    }
+
     private static final Pattern SEMICOLON = Pattern.compile(";");
 
     public static void main(final String... args)
@@ -29,7 +34,7 @@ public final class JooqTest
     {
         final String username = "sa";
         final String passwd = "";
-        final String url = "jdbc:h2:~/tmp/testdb2;LOG=0;LOCK_MODE=0;"
+        final String url = "jdbc:h2:~/tmp/testdb;LOG=0;LOCK_MODE=0;"
             + "UNDO_LOG=0;CACHE_SIZE=131072";
 
         try (
@@ -42,14 +47,14 @@ public final class JooqTest
             preInsert(jooq);
             System.out.println("pre done: " + stopwatch);
 
+            postInsert(jooq);
+            System.out.println("everything done: " + stopwatch);
+
             insertMatchers(jooq);
             System.out.println("matchers done: " + stopwatch);
 
             insertNodes(jooq);
             System.out.println("nodes done: " + stopwatch);
-
-            postInsert(jooq);
-            System.out.println("everything done: " + stopwatch);
         }
     }
 
