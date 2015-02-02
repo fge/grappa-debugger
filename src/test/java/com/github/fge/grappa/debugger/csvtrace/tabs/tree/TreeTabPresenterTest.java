@@ -4,7 +4,6 @@ import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.trace.ParseRunInfo;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -12,7 +11,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -41,23 +39,11 @@ public class TreeTabPresenterTest
     }
 
     @Test
-    public void loadTest()
-    {
-        doNothing().when(presenter).loadParseTree();
-        doNothing().when(presenter).loadInputText();
-
-        presenter.load();
-
-        verify(presenter).loadInputText();
-        verify(presenter).loadParseTree();
-    }
-
-    @Test
     public void loadParseTreeTest()
         throws IOException
     {
         final ParseTreeNode rootNode = mock(ParseTreeNode.class);
-        when(model.getRootNode2()).thenReturn(rootNode);
+        when(model.getRootNode()).thenReturn(rootNode);
 
         presenter.loadParseTree();
 
@@ -96,26 +82,5 @@ public class TreeTabPresenterTest
 
         verify(view).showParseTreeNode(same(node));
         verify(view).highlightSuccess(start, end);
-    }
-
-    @Test
-    public void successfulLoadInputText()
-        throws IOException
-    {
-        presenter.loadInputText();
-
-        verify(view).loadText();
-    }
-
-    @Test
-    public void successfulLoadParseRunInfo()
-        throws IOException
-    {
-        final ParseRunInfo info = new ParseRunInfo(0L, 0, 0, 0, 0);
-        when(model.getParseRunInfo()).thenReturn(info);
-
-        presenter.loadParseRunInfo();
-
-        verify(view).loadParseRunInfo(same(info));
     }
 }

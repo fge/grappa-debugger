@@ -9,7 +9,6 @@ import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeItem;
 import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
 import com.github.fge.grappa.internal.NonFinalForTesting;
-import com.github.fge.grappa.trace.ParseRunInfo;
 import com.google.common.escape.CharEscaper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -34,20 +33,25 @@ public class JavafxTreeTabView
     private static final CharEscaper ESCAPER = new TracingCharEscaper();
 
     private final BackgroundTaskRunner taskRunner;
-    private final InputBuffer buffer;
 
-    public JavafxTreeTabView(final BackgroundTaskRunner taskRunner,
-        final InputBuffer buffer)
+    private InputBuffer buffer;
+
+    public JavafxTreeTabView(final BackgroundTaskRunner taskRunner)
         throws IOException
     {
         super("/tabs/treeTab.fxml");
         this.taskRunner = Objects.requireNonNull(taskRunner);
-        this.buffer = Objects.requireNonNull(buffer);
     }
 
     @Override
-    public void loadText()
+    public void waitForText()
     {
+    }
+
+    @Override
+    public void loadText(final InputBuffer inputBuffer)
+    {
+        buffer = inputBuffer;
         final ObservableList<Node> children = display.inputText.getChildren();
         taskRunner.compute(() -> buffer.extract(0, buffer.length()),
             text -> children.setAll(new Text(text)));
@@ -87,16 +91,10 @@ public class JavafxTreeTabView
             });
     }
 
-    @SuppressWarnings("AutoBoxing")
+
     @Override
-    public void loadParseRunInfo(final ParseRunInfo info)
+    public void waitForTree()
     {
-        final int nrLines = info.getNrLines();
-        final int nrChars = info.getNrChars();
-        final int nrCodePoints = info.getNrCodePoints();
-        final String value = String.format("%d lines, %d characters, "
-                + "%d code points", nrLines, nrChars, nrCodePoints);
-        display.textInfo.setText(value);
     }
 
     @Override
@@ -134,6 +132,8 @@ public class JavafxTreeTabView
 
         display.nodeStartPos.setText(POS_TO_STRING.apply(start));
         display.nodeEndPos.setText(POS_TO_STRING.apply(end));
+
+        setScroll(node.getStartIndex());
     }
 
     private List<Text> getFailedMatchFragments(final int length,

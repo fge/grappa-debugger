@@ -1,6 +1,5 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
-import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.JavafxTreeTabView;
@@ -29,15 +28,13 @@ public final class JavafxCsvTraceView
     }
 
     @Override
-    public void loadTree(final TreeTabPresenter presenter,
-        final InputBuffer buffer)
+    public void loadTreeTab(final TreeTabPresenter presenter)
     {
         Objects.requireNonNull(presenter);
-        Objects.requireNonNull(buffer);
 
         final JavafxTreeTabView tabView;
         try {
-            tabView = new JavafxTreeTabView(taskRunner, buffer);
+            tabView = new JavafxTreeTabView(taskRunner);
         } catch (IOException e) {
             parentView.showError("Load error", "Unable to load parse tree", e);
             return;

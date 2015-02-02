@@ -3,9 +3,8 @@ package com.github.fge.grappa.debugger.csvtrace.newmodel;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
-import com.github.fge.grappa.trace.ParseRunInfo;
+import com.github.fge.lambdas.consumers.Consumers;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 
 import javax.annotation.Nonnull;
@@ -19,7 +18,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -39,61 +37,80 @@ public final class NewCsvTraceModel
 
     private static final Map<String, ?> ENV
         = Collections.singletonMap("readonly", "true");
-    private static final String NODE_PATH = "/nodes.csv";
-    private static final String MATCHERS_PATH = "/matchers.csv";
-    private static final String INPUT_TEXT_PATH = "/input.txt";
-    private static final String INFO_PATH = "/info.csv";
+    private static final String NODE_PATH = "nodes.csv";
+    private static final String MATCHERS_PATH = "matchers.csv";
+    private static final String INPUT_TEXT_PATH = "input.txt";
+    private static final String INFO_PATH = "info.csv";
 
-    private final Path zipPath;
+    private final Path traceDir;
 
     private final ParseInfo info;
-    private final InputBuffer inputBuffer;
-    private final RuleInfo[] ruleInfos;
-    //private final ParseTreeNode[] parseTreeNodes;
+    private InputBuffer inputBuffer = null;
+    private RuleInfo[] ruleInfos = null;
 
-    private final long[] nodeIndices;
-    private final List<Integer>[] childrenLists;
+    private long[] nodeIndices = null;
+    private List<Integer>[] childrenLists = null;
 
     public NewCsvTraceModel(final Path zipPath)
         throws IOException
     {
-        this.zipPath = zipPath;
+        traceDir = Files.createTempDirectory("grappa-debugger");
 
         final URI uri = URI.create("jar:" + zipPath.toUri());
 
         try (
             final FileSystem zipfs = FileSystems.newFileSystem(uri, ENV);
         ) {
-            final List<String> missing = Stream.of(NODE_PATH, MATCHERS_PATH,
-                INPUT_TEXT_PATH, INFO_PATH).map(zipfs::getPath)
-                .filter(path -> !Files.exists(path)).map(Object::toString)
-                .collect(Collectors.toList());
-            if (!missing.isEmpty())
-                throw new GrappaException("unrecognized trace file: "
-                    + "missing files (" + String.join(", ", missing));
-
-            info = readInfo(zipfs);
-            inputBuffer = readInputBuffer(zipfs, info.getNrChars());
-            ruleInfos = readRuleInfos(zipfs, info.getNrMatchers());
-
-            final int nrInvocations = info.getNrInvocations();
-            nodeIndices = new long[nrInvocations];
-            //noinspection unchecked
-            childrenLists = (List<Integer>[]) new List[nrInvocations];
-            computeIndices(zipfs, nodeIndices, childrenLists);
-            //parseTreeNodes = readParseTreeNodes(zipfs, nrInvocations);
+            Stream.of(NODE_PATH, MATCHERS_PATH, INPUT_TEXT_PATH, INFO_PATH)
+                .forEach(Consumers.wrap((String name) -> Files.copy(
+                        zipfs.getPath(name), traceDir.resolve(name))));
         }
+
+        info = readInfo();
+    }
+
+    @Override
+    public InputBuffer getInputBuffer()
+        throws IOException
+    {
+        if (inputBuffer == null)
+            inputBuffer = readInputBuffer();
+        return inputBuffer;
+    }
+
+    @Nonnull
+    @Override
+    public ParseTreeNode getRootNode()
+        throws IOException
+    {
+        if (nodeIndices == null)
+            computeIndices();
+        if (ruleInfos == null)
+            readRuleInfos();
+        return readNode(0);
+    }
+
+    @Override
+    public List<ParseTreeNode> getNodeChildren(final int nodeId)
+    {
+        final ThrowingFunction<Integer, ParseTreeNode> f
+            = this::readNode;
+
+        return childrenLists[nodeId].stream().map(f)
+            .collect(Collectors.toList());
     }
 
     @SuppressWarnings("MethodCanBeVariableArityMethod")
-    private void computeIndices(final FileSystem zipfs,
-        final long[] nodeIndices, final List<Integer>[] childrenLists)
+    private void computeIndices()
         throws IOException
     {
-        final Path path = zipfs.getPath(NODE_PATH);
+        final Path path = traceDir.resolve(NODE_PATH);
 
         final StringBuilder sb = new StringBuilder();
-        final int total = nodeIndices.length;
+        final int total = info.getNrInvocations();
+        nodeIndices = new long[total];
+        //noinspection unchecked
+        childrenLists = (List<Integer>[]) new List[total];
 
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
@@ -135,26 +152,25 @@ public final class NewCsvTraceModel
         }
     }
 
-    private InputBuffer readInputBuffer(final FileSystem zipfs,
-        final int nrChars)
+    private InputBuffer readInputBuffer()
         throws IOException
     {
-        final Path path = zipfs.getPath(INPUT_TEXT_PATH);
+        final Path path = traceDir.resolve(INPUT_TEXT_PATH);
 
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
         ) {
-            final CharBuffer buf = CharBuffer.allocate(nrChars);
+            final CharBuffer buf = CharBuffer.allocate(info.getNrChars());
             reader.read(buf);
             buf.flip();
             return new CharSequenceInputBuffer(buf);
         }
     }
 
-    private ParseInfo readInfo(final FileSystem zipfs)
+    private ParseInfo readInfo()
         throws IOException
     {
-        final Path path = zipfs.getPath(INFO_PATH);
+        final Path path = traceDir.resolve(INFO_PATH);
 
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
@@ -162,8 +178,9 @@ public final class NewCsvTraceModel
             final String[] elements = SEMICOLON.split(reader.readLine());
 
             final long epoch = Long.parseLong(elements[0]);
-            final LocalDateTime time = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(epoch), ZoneId.systemDefault());
+            final Instant instant = Instant.ofEpochMilli(epoch);
+            final ZoneId zone = ZoneId.systemDefault();
+            final LocalDateTime time = LocalDateTime.ofInstant(instant, zone);
 
             final int treeDepth = Integer.parseInt(elements[1]);
             final int nrMatchers = Integer.parseInt(elements[2]);
@@ -177,32 +194,29 @@ public final class NewCsvTraceModel
         }
     }
 
-    private RuleInfo[] readRuleInfos(final FileSystem zipfs, final int nrRules)
+    private void readRuleInfos()
         throws IOException
     {
-        final Path path = zipfs.getPath(MATCHERS_PATH);
+        final int nrRules = info.getNrMatchers();
+        final Path path = traceDir.resolve(MATCHERS_PATH);
         final List<String> lines = Files.readAllLines(path, UTF8);
 
-        final RuleInfo[] ret = new RuleInfo[nrRules];
+        ruleInfos = new RuleInfo[nrRules];
         lines.parallelStream().forEach(line -> {
             final String[] elements = SEMICOLON.split(line, 4);
             final int index = Integer.parseInt(elements[0]);
             final MatcherType type = MatcherType.valueOf(elements[2]);
-            ret[index] = new RuleInfo(elements[1], type, elements[3]);
+            ruleInfos[index] = new RuleInfo(elements[1], type, elements[3]);
         });
-
-        return ret;
     }
 
     private ParseTreeNode readNode(final int nodeIndex)
         throws IOException
     {
-        final URI uri = URI.create("jar:" + zipPath.toUri());
+        final Path path = traceDir.resolve(NODE_PATH);
 
         try (
-            final FileSystem zipfs = FileSystems.newFileSystem(uri, ENV);
-            final BufferedReader reader
-                = Files.newBufferedReader(zipfs.getPath(NODE_PATH), UTF8);
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
         ) {
             reader.skip(nodeIndices[nodeIndex]);
             final String[] elements = SEMICOLON.split(reader.readLine());
@@ -220,98 +234,13 @@ public final class NewCsvTraceModel
         }
     }
 
-//    private ParseTreeNode[] readParseTreeNodes(final FileSystem zipfs,
-//        final int nrNodes)
-//        throws IOException
-//    {
-//        final Path path = zipfs.getPath(NODE_PATH);
-//
-//        final ParseTreeNode[] ret = new ParseTreeNode[nrNodes];
-//
-//        final AtomicInteger count = new AtomicInteger(0);
-//        // Read all nodes
-//        try (
-//            final Stream<String> lines = Files.lines(path, UTF8).parallel();
-//        ) {
-//            lines.peek(ignored -> {
-//                final int i = count.incrementAndGet();
-//                if (i % 25000 == 0)
-//                    System.out.println(i + " events processed");
-//            })
-//                .forEach(line -> {
-//                final String[] elements = SEMICOLON.split(line);
-//                final int parentId = Integer.parseInt(elements[0]);
-//                final int nodeId = Integer.parseInt(elements[1]);
-//                final int level = Integer.parseInt(elements[2]);
-//                final boolean success = elements[3].charAt(0) == '1';
-//                final int matcherId = Integer.parseInt(elements[4]);
-//                final int startIndex = Integer.parseInt(elements[5]);
-//                final int endIndex = Integer.parseInt(elements[6]);
-//                final long time = Long.parseLong(elements[7]);
-//                ret[nodeId] = new ParseTreeNode(parentId, nodeId, level,
-//                    success, ruleInfos[matcherId], startIndex, endIndex, time);
-//            });
-//        }
-//
-//        // Now attach children. Skip first node, it will always have no parent
-//        ParseTreeNode node;
-//
-//        for (int i = 1; i < nrNodes; i++) {
-//            node = ret[i];
-//            ret[node.getParentId()].addChild(node);
-//        }
-//
-//        return ret;
-//    }
-
-    @Override
-    public ParseRunInfo getParseRunInfo()
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public InputBuffer getInputBuffer()
-        throws IOException
-    {
-        return inputBuffer;
-    }
-
     @Override
     public void dispose()
         throws IOException
     {
-    }
-
-    @Nonnull
-    @Override
-    public ParseTreeNode getRootNode2()
-        throws IOException
-    {
-        return readNode(0);
-    }
-
-    @Override
-    public List<ParseTreeNode> getNodeChildren(final int nodeId)
-    {
-        final ThrowingFunction<Integer, ParseTreeNode> f
-            = this::readNode;
-
-        return childrenLists[nodeId].stream().map(f)
-            .collect(Collectors.toList());
-    }
-
-    public static void main(final String... args)
-        throws IOException
-    {
-        final Path zip = Paths.get("/home/fge/tmp/foobar.zip");
-        final NewCsvTraceModel model = new NewCsvTraceModel(zip);
-        final URI uri = URI.create("jar:" + zip.toUri());
-        final FileSystem fs = FileSystems.newFileSystem(uri, ENV);
-        final BufferedReader reader
-            = Files.newBufferedReader(fs.getPath(NODE_PATH));
-        final long index = model.nodeIndices[0];
-        reader.skip(index);
-        System.out.println(reader.readLine());
+        if (Files.exists(traceDir)) {
+            Files.list(traceDir).forEach(Consumers.rethrow(Files::delete));
+            Files.delete(traceDir);
+        }
     }
 }
