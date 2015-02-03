@@ -14,7 +14,6 @@ import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.escape.CharEscaper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.parboiled.support.Position;
@@ -148,7 +147,8 @@ public class JavafxTreeTabView
     @Override
     public void waitForChildren()
     {
-        display.currentItem.setGraphic(new ProgressIndicator());
+        System.out.println("show");
+        display.currentItem.showIndicator();
     }
 
     @Override
@@ -158,7 +158,8 @@ public class JavafxTreeTabView
             .map(node -> new ParseTreeItem(display, node))
             .collect(Collectors.toList());
         display.currentItem.getChildren().setAll(items);
-        display.currentItem.setGraphic(null);
+        System.out.println("hide");
+        display.currentItem.hideIndicator();
     }
 
     private List<Text> getFailedMatchFragments(final int length,

@@ -11,6 +11,8 @@ public final class ParseTreeItem
 {
     private final boolean leaf;
 
+    private ParseTreeNodeCell cell;
+
     public ParseTreeItem(final TreeTabDisplay display,
         final ParseTreeNode value)
     {
@@ -38,5 +40,20 @@ public final class ParseTreeItem
     public boolean isLeaf()
     {
         return leaf;
+    }
+
+    public void setCell(final ParseTreeNodeCell cell)
+    {
+        this.cell = cell;
+    }
+
+    public void showIndicator()
+    {
+        cell.showIndicator();
+    }
+
+    public void hideIndicator()
+    {
+        cell.hideIndicator();
     }
 }

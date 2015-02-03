@@ -15,11 +15,11 @@ public final class ParseTreeNodeCell
     private final ProgressIndicator indicator = new ProgressIndicator();
     private final Text text = new Text();
     private final HBox hBox = new HBox(text, indicator);
-    //private final HBox hBox = new HBox(text);
 
     public ParseTreeNodeCell(final TreeTabDisplay display)
     {
         indicator.setMaxHeight(heightProperty().doubleValue());
+        indicator.setVisible(false);
         setEditable(false);
         selectedProperty().addListener(new ChangeListener<Boolean>()
         {
@@ -61,6 +61,7 @@ public final class ParseTreeNodeCell
             item.isSuccess() ? "SUCCESS" : "FAILURE");
         text.setText(msg);
         setGraphic(hBox);
+        ((ParseTreeItem) getTreeItem()).setCell(this);
     }
 }
 
