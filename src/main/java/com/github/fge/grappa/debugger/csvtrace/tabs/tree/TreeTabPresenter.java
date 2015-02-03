@@ -83,7 +83,7 @@ public class TreeTabPresenter
     {
         taskRunner.computeOrFail(
             view::waitForChildren, () -> {
-                TimeUnit.SECONDS.sleep(1L);
+                TimeUnit.SECONDS.sleep(5L);
                 return getNodeChildren(value.getId());
             },
             view::setTreeChildren,

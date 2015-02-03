@@ -148,7 +148,6 @@ public class JavafxTreeTabView
     public void waitForChildren()
     {
         System.out.println("show");
-        display.currentItem.showIndicator();
     }
 
     @Override
@@ -159,7 +158,6 @@ public class JavafxTreeTabView
             .collect(Collectors.toList());
         display.currentItem.getChildren().setAll(items);
         System.out.println("hide");
-        display.currentItem.hideIndicator();
     }
 
     private List<Text> getFailedMatchFragments(final int length,
