@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
@@ -17,10 +17,10 @@ public class TreeTabPresenter
     extends BasePresenter<TreeTabView>
 {
     private final CsvTraceModel model;
-    private final BackgroundTaskRunner taskRunner;
+    private final GuiTaskRunner taskRunner;
     private final MainWindowView mainView;
 
-    public TreeTabPresenter(final BackgroundTaskRunner taskRunner,
+    public TreeTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
     {
         this.taskRunner = Objects.requireNonNull(taskRunner);

@@ -17,10 +17,13 @@ public class MainWindowDisplay
     protected Label label;
 
     @FXML
+    protected Label dbLoadStatus;
+
+    @FXML
     protected ProgressBar dbLoadProgress;
 
     @FXML
-    protected Label dbLoadStatus;
+    public Label dbLoadProgressMessage;
 
     @Override
     public void init()

@@ -36,11 +36,11 @@ import java.util.function.Supplier;
  *
  * <pre>
  *     // If you use JavaFX...
- *     final BackgroundTaskRunner taskRunner
- *         = new BackgroundTaskRunner("myapp-%d", Platform::runLater);
+ *     final GuiTaskRunner taskRunner
+ *         = new GuiTaskRunner("myapp-%d", Platform::runLater);
  *     // If you use Swing...
- *     final BackgroundTaskRunner taskRunner
- *         = new BackgroundTaskRunner("myapp-%d", SwingUtilities::invokeLater);
+ *     final GuiTaskRunner taskRunner
+ *         = new GuiTaskRunner("myapp-%d", SwingUtilities::invokeLater);
  *
  *     // ...
  *
@@ -98,7 +98,7 @@ import java.util.function.Supplier;
  * @see ThrowingSupplier
  */
 @ParametersAreNonnullByDefault
-public final class BackgroundTaskRunner
+public final class GuiTaskRunner
 {
     private static final int NR_CPUS
         = Runtime.getRuntime().availableProcessors();
@@ -118,7 +118,7 @@ public final class BackgroundTaskRunner
      * @see ThreadFactoryBuilder#setNameFormat(String)
      * @see ThreadFactoryBuilder#setDaemon(boolean)
      */
-    public BackgroundTaskRunner(final String fmt, final Executor frontExecutor)
+    public GuiTaskRunner(final String fmt, final Executor frontExecutor)
     {
         Objects.requireNonNull(fmt);
         Objects.requireNonNull(frontExecutor);
@@ -139,18 +139,24 @@ public final class BackgroundTaskRunner
      * <pre>
      *     private final ExecutorService executor
      *         = MoreExecutors.newDirectExecutorService();
-     *     private final BackgroundTaskRunner testTaskRunner
-     *         = new BackgroundTaskRunner(executor, Runnable::run);
+     *     private final GuiTaskRunner testTaskRunner
+     *         = new GuiTaskRunner(executor, Runnable::run);
      * </pre>
      *
      * @param executor the executor
      * @param frontExecutor the frontend executor
      */
-    public BackgroundTaskRunner(final ExecutorService executor,
+    public GuiTaskRunner(final ExecutorService executor,
         final Executor frontExecutor)
     {
         this.executor = Objects.requireNonNull(executor);
         this.frontExecutor = Objects.requireNonNull(frontExecutor);
+    }
+
+    public void executeFront(final Runnable runnable)
+    {
+        Objects.requireNonNull(runnable);
+        frontExecutor.execute(runnable);
     }
 
     /**

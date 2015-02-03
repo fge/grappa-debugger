@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
@@ -37,11 +37,11 @@ public class JavafxTreeTabView
         String.format("line %d, column %d", pos.getLine(), pos.getColumn());
     private static final CharEscaper ESCAPER = new TracingCharEscaper();
 
-    private final BackgroundTaskRunner taskRunner;
+    private final GuiTaskRunner taskRunner;
 
     private InputBuffer buffer;
 
-    public JavafxTreeTabView(final BackgroundTaskRunner taskRunner)
+    public JavafxTreeTabView(final GuiTaskRunner taskRunner)
         throws IOException
     {
         super("/tabs/treeTab.fxml");

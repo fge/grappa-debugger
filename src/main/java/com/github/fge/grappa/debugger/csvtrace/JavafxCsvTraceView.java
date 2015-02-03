@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.JavafxTreeTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
@@ -15,10 +15,10 @@ public final class JavafxCsvTraceView
     extends JavafxView<CsvTracePresenter, CsvTraceDisplay>
     implements CsvTraceView
 {
-    private final BackgroundTaskRunner taskRunner;
+    private final GuiTaskRunner taskRunner;
     private final MainWindowView parentView;
 
-    public JavafxCsvTraceView(final BackgroundTaskRunner taskRunner,
+    public JavafxCsvTraceView(final GuiTaskRunner taskRunner,
         final MainWindowView parentView)
         throws IOException
     {

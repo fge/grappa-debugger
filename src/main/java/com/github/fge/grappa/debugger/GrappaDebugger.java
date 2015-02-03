@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.mainwindow.JavafxMainWindowView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
@@ -32,8 +32,8 @@ public final class GrappaDebugger
     }
 
     private final AlertFactory alertFactory = new AlertFactory();
-    private final BackgroundTaskRunner taskRunner
-        = new BackgroundTaskRunner("grappa-debugger-%d", Platform::runLater);
+    private final GuiTaskRunner taskRunner
+        = new GuiTaskRunner("grappa-debugger-%d", Platform::runLater);
 
     private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 

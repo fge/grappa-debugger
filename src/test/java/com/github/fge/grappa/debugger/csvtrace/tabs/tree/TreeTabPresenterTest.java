@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 public class TreeTabPresenterTest
 {
-    private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
+    private final GuiTaskRunner taskRunner = new GuiTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run
     );
 

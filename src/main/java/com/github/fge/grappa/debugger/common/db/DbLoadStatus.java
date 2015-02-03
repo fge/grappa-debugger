@@ -1,6 +1,8 @@
 package com.github.fge.grappa.debugger.common.db;
 
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public final class DbLoadStatus
 {
@@ -48,10 +50,11 @@ public final class DbLoadStatus
         processedNodes++;
     }
 
-    public void waitReady()
+    public boolean waitReady(final long count, final TimeUnit unit)
         throws InterruptedException
     {
-        readyLatch.await();
+        Objects.requireNonNull(unit);
+        return readyLatch.await(count, unit);
     }
 
     void setReady()

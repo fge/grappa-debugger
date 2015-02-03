@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.spy;
 
 public class CsvTracePresenterTest
 {
-    private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
+    private final GuiTaskRunner taskRunner = new GuiTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run);
 
     private MainWindowView mainView;

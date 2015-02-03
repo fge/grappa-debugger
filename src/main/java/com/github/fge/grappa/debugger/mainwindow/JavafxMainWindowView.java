@@ -1,9 +1,11 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.JavafxCsvTraceView;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -12,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public final class JavafxMainWindowView
     extends JavafxView<MainWindowPresenter, MainWindowDisplay>
@@ -21,11 +24,11 @@ public final class JavafxMainWindowView
         = new ExtensionFilter("ZIP files", "*.zip");
 
     private final Stage stage;
-    private final BackgroundTaskRunner taskRunner;
+    private final GuiTaskRunner taskRunner;
     private final AlertFactory alertFactory;
 
     public JavafxMainWindowView(final Stage stage,
-        final BackgroundTaskRunner taskRunner, final AlertFactory alertFactory)
+        final GuiTaskRunner taskRunner, final AlertFactory alertFactory)
         throws IOException
     {
         super("/mainWindow.fxml");
@@ -75,5 +78,50 @@ public final class JavafxMainWindowView
         presenter.setView(view);
         view.getDisplay().setPresenter(presenter);
         display.pane.setCenter(view.getNode());
+    }
+
+    @Override
+    public void reportProgress(final DbLoadStatus status,
+        final ParseInfo info)
+    {
+        Objects.requireNonNull(status);
+        Objects.requireNonNull(info);
+        final int processedMatchers = status.getProcessedMatchers();
+        final int processedNodes = status.getProcessedNodes();
+        final int current = status.getCurrent();
+        final int total = status.getTotal();
+        final double pct = (double) current / total;
+
+        final String msg = String.format("%d/%d matchers, %d/%d nodes",
+            processedMatchers, info.getNrMatchers(),
+            processedNodes, info.getNrInvocations()
+        );
+
+        display.dbLoadProgress.setProgress(pct);
+        display.dbLoadProgressMessage.setText(msg);
+    }
+
+    @Override
+    public void initLoad()
+    {
+        display.dbLoadStatus.setText("loading:");
+        display.dbLoadProgress.setVisible(true);
+        display.dbLoadProgressMessage.setVisible(true);
+    }
+
+    @Override
+    public void loadComplete()
+    {
+        display.dbLoadStatus.setText("loading complete");
+        display.dbLoadProgress.setVisible(false);
+        display.dbLoadProgressMessage.setVisible(false);
+    }
+
+    @Override
+    public void loadAborted()
+    {
+        display.dbLoadStatus.setText("loading aborted");
+        display.dbLoadProgress.setVisible(false);
+        display.dbLoadProgressMessage.setVisible(false);
     }
 }

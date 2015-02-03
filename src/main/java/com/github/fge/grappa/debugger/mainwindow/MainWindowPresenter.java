@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.common.db.DbLoader;
@@ -35,6 +35,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 @ParametersAreNonnullByDefault
@@ -54,9 +55,9 @@ public class MainWindowPresenter
         .setNameFormat("db-loader-%d").build();
 
     private final ExecutorService executor
-        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
+        = Executors.newFixedThreadPool(2, THREAD_FACTORY);
 
-    private final BackgroundTaskRunner taskRunner;
+    private final GuiTaskRunner taskRunner;
 
     private final MainWindowFactory windowFactory;
 
@@ -64,7 +65,7 @@ public class MainWindowPresenter
     CsvTracePresenter tracePresenter;
 
     public MainWindowPresenter(final MainWindowFactory windowFactory,
-        final BackgroundTaskRunner taskRunner)
+        final GuiTaskRunner taskRunner)
     {
         this.windowFactory = Objects.requireNonNull(windowFactory);
         this.taskRunner = Objects.requireNonNull(taskRunner);
@@ -102,16 +103,14 @@ public class MainWindowPresenter
 
     void loadTab(final Path path)
     {
-        try {
-            final CsvTraceModel model = getModel(path);
-            tracePresenter = new CsvTracePresenter(view, taskRunner, model);
-        } catch (IOException | SQLException e) {
-            handleLoadFileError(e);
-            return;
-        }
-
-        view.attachTrace(tracePresenter);
-        tracePresenter.loadTrace();
+        taskRunner.computeOrFail(
+            () -> getModel(path),
+            model -> {
+                tracePresenter = new CsvTracePresenter(view, taskRunner, model);
+                view.attachTrace(tracePresenter);
+                tracePresenter.loadTrace();
+            },
+            this::handleLoadFileError);
     }
 
     CsvTraceModel getModel(final Path path)
@@ -122,6 +121,7 @@ public class MainWindowPresenter
         final ParseInfo info = readInfo(zipfs);
         final DbLoadStatus status = new DbLoadStatus(info.getNrMatchers(),
             info.getNrInvocations());
+        executor.submit(() -> checkLoadStatus(status, info));
         final DbLoader loader = new DbLoader(zipfs, status);
         final DSLContext jooq = loader.getJooq();
         final Callable<DSLContext> callable = loader::loadAll;
@@ -163,4 +163,16 @@ public class MainWindowPresenter
         }
     }
 
+    private void checkLoadStatus(final DbLoadStatus status,
+        final ParseInfo info)
+    {
+        taskRunner.executeFront(view::initLoad);
+        try {
+            while (!status.waitReady(1L, TimeUnit.SECONDS))
+                taskRunner.executeFront(() ->view.reportProgress(status, info));
+            taskRunner.executeFront(view::loadComplete);
+        } catch (InterruptedException ignored) {
+            taskRunner.executeFront(view::loadAborted);
+        }
+    }
 }

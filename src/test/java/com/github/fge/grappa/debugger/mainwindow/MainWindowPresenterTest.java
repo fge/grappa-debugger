@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 public class MainWindowPresenterTest
 {
-    private final BackgroundTaskRunner taskRunner = new BackgroundTaskRunner(
+    private final GuiTaskRunner taskRunner = new GuiTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run);
     private MainWindowFactory factory;
     private MainWindowView view;
