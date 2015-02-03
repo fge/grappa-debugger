@@ -100,7 +100,7 @@ public final class DbCsvTraceModel
         final RuleInfo ruleInfo = getRuleInfoFromId(matcherId);
         final int nrChildren = dsl.select(DSL.count())
             .from(NODES)
-            .where(NODES.PARENT_ID.equal(0))
+            .where(NODES.PARENT_ID.equal(id))
             .fetchOne()
             .value1();
         return new ParseTreeNode(
