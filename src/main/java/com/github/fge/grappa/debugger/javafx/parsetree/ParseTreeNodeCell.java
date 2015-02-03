@@ -4,13 +4,22 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabDisplay;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TreeCell;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 public final class ParseTreeNodeCell
     extends TreeCell<ParseTreeNode>
 {
+    private final ProgressIndicator indicator = new ProgressIndicator();
+    private final Text text = new Text();
+    private final HBox hBox = new HBox(text, indicator);
+    //private final HBox hBox = new HBox(text);
+
     public ParseTreeNodeCell(final TreeTabDisplay display)
     {
+        indicator.setMaxHeight(heightProperty().doubleValue());
         setEditable(false);
         selectedProperty().addListener(new ChangeListener<Boolean>()
         {
@@ -29,14 +38,29 @@ public final class ParseTreeNodeCell
         });
     }
 
+    public void showIndicator()
+    {
+        indicator.setVisible(true);
+    }
+
+    public void hideIndicator()
+    {
+        indicator.setVisible(false);
+    }
 
     @Override
     protected void updateItem(final ParseTreeNode item, final boolean empty)
     {
         super.updateItem(item, empty);
-        setText(empty ? null : String.format("%s (%s)",
+        if (empty) {
+            setGraphic(null);
+            return;
+        }
+        final String msg = String.format("%s (%s)",
             item.getRuleInfo().getName(),
-            item.isSuccess() ? "SUCCESS" : "FAILURE"));
+            item.isSuccess() ? "SUCCESS" : "FAILURE");
+        text.setText(msg);
+        setGraphic(hBox);
     }
 }
 

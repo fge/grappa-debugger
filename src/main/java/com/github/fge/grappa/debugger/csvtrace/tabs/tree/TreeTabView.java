@@ -6,6 +6,7 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 public interface TreeTabView
@@ -20,4 +21,7 @@ public interface TreeTabView
 
     void showParseTreeNode(ParseTreeNode node);
 
+    void waitForChildren();
+
+    void setTreeChildren(List<ParseTreeNode> children);
 }

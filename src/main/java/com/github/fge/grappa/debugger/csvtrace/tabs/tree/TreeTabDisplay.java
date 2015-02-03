@@ -2,15 +2,13 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeItem;
 import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeNodeCell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class TreeTabDisplay
     extends JavafxDisplay<TreeTabPresenter>
@@ -63,6 +61,8 @@ public class TreeTabDisplay
     @FXML
     protected ScrollPane inputTextScroll;
 
+    protected ParseTreeItem currentItem;
+
     @Override
     public void init()
     {
@@ -74,9 +74,9 @@ public class TreeTabDisplay
         presenter.handleParseTreeNodeShow(node);
     }
 
-    public List<ParseTreeNode> getNodeChildren(final int nodeId)
-        throws ExecutionException
+    public void needChildren(final ParseTreeItem parseTreeItem)
     {
-        return presenter.getNodeChildren(nodeId);
+        currentItem = parseTreeItem;
+        presenter.needChildren(currentItem.getValue());
     }
 }

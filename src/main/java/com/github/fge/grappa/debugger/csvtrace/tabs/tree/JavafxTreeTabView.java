@@ -14,6 +14,7 @@ import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.escape.CharEscaper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.parboiled.support.Position;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
@@ -141,6 +143,22 @@ public class JavafxTreeTabView
         display.nodeEndPos.setText(POS_TO_STRING.apply(end));
 
         setScroll(node.getStartIndex());
+    }
+
+    @Override
+    public void waitForChildren()
+    {
+        display.currentItem.setGraphic(new ProgressIndicator());
+    }
+
+    @Override
+    public void setTreeChildren(final List<ParseTreeNode> children)
+    {
+        final List<ParseTreeItem> items = children.stream()
+            .map(node -> new ParseTreeItem(display, node))
+            .collect(Collectors.toList());
+        display.currentItem.getChildren().setAll(items);
+        display.currentItem.setGraphic(null);
     }
 
     private List<Text> getFailedMatchFragments(final int length,
