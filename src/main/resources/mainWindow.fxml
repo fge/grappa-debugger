@@ -29,7 +29,8 @@
     </center>
     <bottom>
         <ToolBar>
-            <Label text="ready"/>
+            <ProgressBar fx:id="dbLoadProgress" visible="false"/>
+            <Label fx:id="dbLoadStatus" text="ready"/>
         </ToolBar>
     </bottom>
 </BorderPane>

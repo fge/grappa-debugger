@@ -1,7 +1,11 @@
 package com.github.fge.grappa.debugger.common.db;
 
+import java.util.concurrent.CountDownLatch;
+
 public final class DbLoadStatus
 {
+    private final CountDownLatch readyLatch = new CountDownLatch(1);
+
     private final int nrMatchers;
     private final int nrNodes;
 
@@ -42,5 +46,16 @@ public final class DbLoadStatus
     void incrementProcessedNodes()
     {
         processedNodes++;
+    }
+
+    public void waitReady()
+        throws InterruptedException
+    {
+        readyLatch.await();
+    }
+
+    void setReady()
+    {
+        readyLatch.countDown();
     }
 }

@@ -64,7 +64,8 @@ public class MainWindowPresenter
         }
 
         try {
-            tracePresenter = loadTrace(path);
+            final CsvTraceModel model = new NewCsvTraceModel(path);
+            tracePresenter = new CsvTracePresenter(view, taskRunner, model);
         } catch (IOException e) {
             handleLoadFileError(e);
             return;
@@ -72,14 +73,6 @@ public class MainWindowPresenter
 
         window.view.attachTrace(tracePresenter);
         tracePresenter.loadTrace();
-    }
-
-    @VisibleForTesting
-    CsvTracePresenter loadTrace(final Path path)
-        throws IOException
-    {
-        final CsvTraceModel model = new NewCsvTraceModel(path);
-        return new CsvTracePresenter(view, taskRunner, model);
     }
 
     private void handleLoadFileError(final Throwable throwable)

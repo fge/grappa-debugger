@@ -17,9 +17,9 @@ public final class JavafxMainWindowView
     extends JavafxView<MainWindowPresenter, MainWindowDisplay>
     implements MainWindowView
 {
-    private static final Class<MainWindowView> MYSELF = MainWindowView.class;
     private static final ExtensionFilter ZIP_FILES
         = new ExtensionFilter("ZIP files", "*.zip");
+
     private final Stage stage;
     private final BackgroundTaskRunner taskRunner;
     private final AlertFactory alertFactory;

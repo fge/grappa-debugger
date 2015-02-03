@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
@@ -49,8 +50,8 @@ public final class DbCsvTraceModel
     public DbCsvTraceModel(final FileSystem zipfs, final DSLContext jooq)
         throws IOException
     {
-        this.zipfs = zipfs;
-        this.jooq = jooq;
+        this.zipfs = Objects.requireNonNull(zipfs);
+        this.jooq = Objects.requireNonNull(jooq);
         info = readInfo();
     }
 

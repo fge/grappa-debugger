@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.common.db;
 
 import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
-import com.github.fge.grappa.debugger.common.ThrowingRunnable;
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -92,17 +91,24 @@ public final class DbLoader
             + H2_URI_POSTFIX;
         connection = DriverManager.getConnection(url, H2_USERNAME, H2_PASSWORD);
         jooq = DSL.using(connection, SQLDialect.H2);
-        final ThrowingRunnable runnable = () -> {
-            doDdl(jooq);
-            insertMatchers(jooq);
-            insertNodes(jooq);
-        };
-        taskRunner.runOrFail(runnable, loadFinish, onError);
+        taskRunner.runOrFail(this::loadAll, loadFinish, onError);
     }
 
     public DSLContext getJooq()
     {
         return jooq;
+    }
+
+    private void loadAll()
+        throws IOException
+    {
+        try {
+            doDdl(jooq);
+            insertMatchers(jooq);
+            insertNodes(jooq);
+        } finally {
+            status.setReady();
+        }
     }
 
     private void doDdl(final DSLContext jooq)

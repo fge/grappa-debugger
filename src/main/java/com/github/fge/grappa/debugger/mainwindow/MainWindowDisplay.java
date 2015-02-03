@@ -4,6 +4,7 @@ import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 
 public class MainWindowDisplay
@@ -14,6 +15,12 @@ public class MainWindowDisplay
 
     @FXML
     protected Label label;
+
+    @FXML
+    protected ProgressBar dbLoadProgress;
+
+    @FXML
+    protected Label dbLoadStatus;
 
     @Override
     public void init()
