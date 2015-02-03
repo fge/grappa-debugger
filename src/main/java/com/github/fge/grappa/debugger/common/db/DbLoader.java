@@ -1,6 +1,5 @@
 package com.github.fge.grappa.debugger.common.db;
 
-import com.github.fge.grappa.debugger.common.BackgroundTaskRunner;
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
@@ -71,15 +69,11 @@ public final class DbLoader
     private final DSLContext jooq;
     private final DbLoadStatus status;
 
-    public DbLoader(final FileSystem zipfs, final DbLoadStatus status,
-        final BackgroundTaskRunner taskRunner, final Runnable loadFinish,
-        final Consumer<Throwable> onError)
+    public DbLoader(final FileSystem zipfs, final DbLoadStatus status)
         throws IOException, SQLException
     {
         Objects.requireNonNull(zipfs);
         Objects.requireNonNull(status);
-        Objects.requireNonNull(taskRunner);
-        Objects.requireNonNull(onError);
 
         this.status = status;
 
@@ -91,7 +85,7 @@ public final class DbLoader
             + H2_URI_POSTFIX;
         connection = DriverManager.getConnection(url, H2_USERNAME, H2_PASSWORD);
         jooq = DSL.using(connection, SQLDialect.H2);
-        taskRunner.runOrFail(this::loadAll, loadFinish, onError);
+        doDdl(jooq);
     }
 
     public DSLContext getJooq()
@@ -99,13 +93,13 @@ public final class DbLoader
         return jooq;
     }
 
-    private void loadAll()
+    public DSLContext loadAll()
         throws IOException
     {
         try {
-            doDdl(jooq);
             insertMatchers(jooq);
             insertNodes(jooq);
+            return jooq;
         } finally {
             status.setReady();
         }

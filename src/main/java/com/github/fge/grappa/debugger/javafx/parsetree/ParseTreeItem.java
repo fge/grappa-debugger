@@ -5,6 +5,9 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabDisplay;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 public final class ParseTreeItem
     extends TreeItem<ParseTreeNode>
 {
@@ -32,7 +35,13 @@ public final class ParseTreeItem
     {
         final ObservableList<TreeItem<ParseTreeNode>> ret = super.getChildren();
         if (!childrenLoaded) {
-            display.getNodeChildren(getValue().getId()).stream().map(
+            final List<ParseTreeNode> nodes;
+            try {
+                nodes = display.getNodeChildren(getValue().getId());
+            } catch (ExecutionException ignored) {
+                return ret;
+            }
+            nodes.stream().map(
                 node -> new ParseTreeItem(display, node)).forEach(ret::add);
             childrenLoaded = true;
         }

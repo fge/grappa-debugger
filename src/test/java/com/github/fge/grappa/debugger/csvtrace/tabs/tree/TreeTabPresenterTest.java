@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
@@ -57,7 +58,7 @@ public class TreeTabPresenterTest
 
     @Test
     public void loadParseTreeSuccessTest()
-        throws IOException
+        throws IOException, ExecutionException
     {
         final ParseTree parseTree = mock(ParseTree.class);
         when(model.getParseTree()).thenReturn(parseTree);
@@ -70,7 +71,7 @@ public class TreeTabPresenterTest
 
     @Test
     public void loadParseTreeErrorTest()
-        throws IOException
+        throws IOException, ExecutionException
     {
         final IOException exception = new IOException();
         when(model.getParseTree()).thenThrow(exception);

@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.parboiled.support.Position;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @NonFinalForTesting
+@ParametersAreNonnullByDefault
 public class JavafxTreeTabView
     extends JavafxView<TreeTabPresenter, TreeTabDisplay>
     implements TreeTabView
@@ -94,8 +97,13 @@ public class JavafxTreeTabView
 
     @SuppressWarnings("AutoBoxing")
     @Override
-    public void loadParseTree(final ParseTree parseTree)
+    public void loadParseTree(@Nullable final ParseTree parseTree)
     {
+        if (parseTree == null) {
+            display.treeInfo.setText("Load error");
+            return;
+        }
+
         final ParseTreeNode rootNode = parseTree.getRootNode();
         display.parseTree.setRoot(new ParseTreeItem(display, rootNode));
         display.treeInfo.setText(String.format("Tree: %d nodes; depth %d",

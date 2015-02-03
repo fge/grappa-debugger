@@ -10,6 +10,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.text.TextFlow;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class TreeTabDisplay
     extends JavafxDisplay<TreeTabPresenter>
@@ -74,6 +75,7 @@ public class TreeTabDisplay
     }
 
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
+        throws ExecutionException
     {
         return presenter.getNodeChildren(nodeId);
     }

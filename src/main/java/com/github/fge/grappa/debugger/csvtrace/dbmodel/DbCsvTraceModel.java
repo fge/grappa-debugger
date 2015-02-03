@@ -9,11 +9,14 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.matchers.MatcherType;
+import com.github.fge.lambdas.functions.ThrowingFunction;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record1;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -22,12 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
 import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
@@ -36,23 +39,23 @@ public final class DbCsvTraceModel
     implements CsvTraceModel
 {
     private static final Charset UTF8 = StandardCharsets.UTF_8;
-    private final Pattern SEMICOLON = Pattern.compile(";");
 
     private static final String INPUT_TEXT_PATH = "/input.txt";
-    private static final String INFO_PATH = "/info.csv";
 
     private final FileSystem zipfs;
     private final DSLContext jooq;
     private final ParseInfo info;
+    private final Future<DSLContext> future;
 
     private InputBuffer inputBuffer = null;
 
-    public DbCsvTraceModel(final FileSystem zipfs, final DSLContext jooq)
-        throws IOException
+    public DbCsvTraceModel(final FileSystem zipfs, final DSLContext jooq,
+        final ParseInfo info, final Future<DSLContext> future)
     {
         this.zipfs = Objects.requireNonNull(zipfs);
         this.jooq = Objects.requireNonNull(jooq);
-        info = readInfo();
+        this.info = Objects.requireNonNull(info);
+        this.future = Objects.requireNonNull(future);
     }
 
     @Override
@@ -66,27 +69,36 @@ public final class DbCsvTraceModel
     }
 
     @SuppressWarnings("AutoUnboxing")
-    @Nonnull
+    @Nullable
     @Override
     public ParseTree getParseTree()
-        throws IOException
+        throws ExecutionException
     {
         final ParseTreeNode node = getParseTreeNodeFromId(0);
 
-        return new ParseTree(node, info.getNrInvocations(),
-            info.getTreeDepth());
+        return node == null ? null
+            : new ParseTree(node, info.getNrInvocations(), info.getTreeDepth());
     }
 
+    @Nullable
     @SuppressWarnings("AutoUnboxing")
     private ParseTreeNode getParseTreeNodeFromId(final Integer id)
+        throws ExecutionException
     {
-        final Record nodeRecord = jooq.select(NODES.fields())
+        final DSLContext dsl;
+        try {
+            dsl = future.get();
+        } catch (InterruptedException | CancellationException ignored) {
+            return null;
+        }
+
+        final Record nodeRecord = dsl.select(NODES.fields())
             .from(NODES)
             .where(NODES.ID.equal(id))
             .fetchOne();
         final Integer matcherId = nodeRecord.getValue(NODES.MATCHER_ID);
         final RuleInfo ruleInfo = getRuleInfoFromId(matcherId);
-        final int nrChildren = jooq.select(DSL.count())
+        final int nrChildren = dsl.select(DSL.count())
             .from(NODES)
             .where(NODES.PARENT_ID.equal(0))
             .fetchOne()
@@ -110,8 +122,7 @@ public final class DbCsvTraceModel
             .from(MATCHERS)
             .where(MATCHERS.ID.equal(matcherId))
             .fetchOne();
-        return new RuleInfo(
-            matcherRecord.getValue(MATCHERS.CLASS_NAME),
+        return new RuleInfo(matcherRecord.getValue(MATCHERS.CLASS_NAME),
             MatcherType.valueOf(matcherRecord.getValue(MATCHERS.MATCHER_TYPE)),
             matcherRecord.getValue(MATCHERS.NAME));
     }
@@ -119,11 +130,16 @@ public final class DbCsvTraceModel
     @Override
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
     {
-        return jooq.select(NODES.ID)
-            .from(NODES)
-            .where(NODES.PARENT_ID.equal(nodeId))
-            .fetch()
-            .map(r -> getParseTreeNodeFromId(r.value1()));
+        final Result<Record1<Integer>> result = jooq.select(NODES.ID)
+            .from(NODES).where(NODES.PARENT_ID.equal(nodeId)).fetch();
+
+        final ThrowingFunction<Integer, ParseTreeNode> function
+            = this::getParseTreeNodeFromId;
+
+        return result.stream()
+            .map(Record1::value1)
+            .map(function)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -131,33 +147,6 @@ public final class DbCsvTraceModel
         throws IOException
     {
         zipfs.close();
-    }
-
-    private ParseInfo readInfo()
-        throws IOException
-    {
-        final Path path = zipfs.getPath(INFO_PATH);
-
-        try (
-            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
-        ) {
-            final String[] elements = SEMICOLON.split(reader.readLine());
-
-            final long epoch = Long.parseLong(elements[0]);
-            final Instant instant = Instant.ofEpochMilli(epoch);
-            final ZoneId zone = ZoneId.systemDefault();
-            final LocalDateTime time = LocalDateTime.ofInstant(instant, zone);
-
-            final int treeDepth = Integer.parseInt(elements[1]);
-            final int nrMatchers = Integer.parseInt(elements[2]);
-            final int nrLines = Integer.parseInt(elements[3]);
-            final int nrChars = Integer.parseInt(elements[4]);
-            final int nrCodePoints = Integer.parseInt(elements[5]);
-            final int nrInvocations = Integer.parseInt(elements[6]);
-
-            return new ParseInfo(time, treeDepth, nrMatchers, nrLines, nrChars,
-                nrCodePoints, nrInvocations);
-        }
     }
 
     private InputBuffer readInputBuffer()

@@ -4,9 +4,10 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public interface CsvTraceModel
 {
@@ -16,9 +17,10 @@ public interface CsvTraceModel
     void dispose()
         throws IOException;
 
-    @Nonnull
+    @Nullable
     ParseTree getParseTree()
-        throws IOException;
+        throws ExecutionException, IOException;
 
-    List<ParseTreeNode> getNodeChildren(int nodeId);
+    List<ParseTreeNode> getNodeChildren(int nodeId)
+        throws ExecutionException;
 }

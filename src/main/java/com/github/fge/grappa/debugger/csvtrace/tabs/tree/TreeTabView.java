@@ -4,6 +4,10 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public interface TreeTabView
 {
     void loadInputText(InputText inputText);
@@ -12,7 +16,7 @@ public interface TreeTabView
 
     void highlightFailure(int end);
 
-    void loadParseTree(ParseTree parseTree);
+    void loadParseTree(@Nullable ParseTree parseTree);
 
     void showParseTreeNode(ParseTreeNode node);
 

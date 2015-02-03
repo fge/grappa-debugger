@@ -10,6 +10,7 @@ import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 @ParametersAreNonnullByDefault
 public class TreeTabPresenter
@@ -72,6 +73,7 @@ public class TreeTabPresenter
     }
 
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
+        throws ExecutionException
     {
         return model.getNodeChildren(nodeId);
     }
