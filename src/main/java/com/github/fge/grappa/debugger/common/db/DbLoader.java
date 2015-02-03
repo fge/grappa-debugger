@@ -108,7 +108,8 @@ public final class DbLoader
     private void doDdl(final DSLContext jooq)
     {
         H2_DDL.forEach(jooq::execute);
-        jooq.createIndex("nodes_parent_id").on(NODES, NODES.PARENT_ID);
+        jooq.createIndex("nodes_parent_id").on(NODES, NODES.PARENT_ID)
+            .execute();
     }
 
     private void insertMatchers(final DSLContext jooq)
