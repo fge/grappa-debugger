@@ -24,12 +24,21 @@ public class StatsTabPresenter
     public void load()
     {
         final ParseInfo info = model.getParseInfo();
+
         view.showParseInfo(info);
+
         taskRunner.computeOrFail(
             () -> model.getNodeById(0).getNanos(),
             view::displayTotalParseTime,
             throwable -> mainView.showError("Load error",
                 "Unable to load parse tree", throwable)
+        );
+
+        taskRunner.computeOrFail(
+            model::getMatchersByType,
+            view::displayMatchersByType,
+            throwable -> mainView.showError("Load error",
+                "Unable to load matcher statistics", throwable)
         );
     }
 }

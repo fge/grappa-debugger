@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.newmodel;
 
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -69,7 +69,7 @@ public final class NewCsvTraceModel
     @Nonnull
     @Override
     public InputText getInputText()
-        throws IOException
+        throws GrappaDebuggerException
     {
         if (inputBuffer == null)
             inputBuffer = readInputBuffer();
@@ -77,10 +77,20 @@ public final class NewCsvTraceModel
             info.getNrCodePoints(), inputBuffer);
     }
 
+    @Override
+    public void waitForNodes()
+    {
+    }
+
+    @Override
+    public void waitForMatchers()
+    {
+    }
+
     @Nonnull
     @Override
     public ParseTree getParseTree()
-        throws IOException
+        throws GrappaDebuggerException
     {
         return new ParseTree(readNode(0), info.getNrInvocations(),
             info.getTreeDepth());
@@ -99,7 +109,7 @@ public final class NewCsvTraceModel
 
     @SuppressWarnings("MethodCanBeVariableArityMethod")
     private void computeIndices()
-        throws IOException
+        throws GrappaDebuggerException
     {
         final Path path = zipfs.getPath(NODE_PATH);
 
@@ -144,11 +154,13 @@ public final class NewCsvTraceModel
                 }
                 children.add(nodeId);
             }
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
         }
     }
 
     private InputBuffer readInputBuffer()
-        throws IOException
+        throws GrappaDebuggerException
     {
         final Path path = zipfs.getPath(INPUT_TEXT_PATH);
 
@@ -159,6 +171,8 @@ public final class NewCsvTraceModel
             reader.read(buf);
             buf.flip();
             return new CharSequenceInputBuffer(buf);
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
         }
     }
 
@@ -190,11 +204,16 @@ public final class NewCsvTraceModel
     }
 
     private void readRuleInfos()
-        throws IOException
+        throws GrappaDebuggerException
     {
         final int nrRules = info.getNrMatchers();
         final Path path = zipfs.getPath(MATCHERS_PATH);
-        final List<String> lines = Files.readAllLines(path, UTF8);
+        final List<String> lines;
+        try {
+            lines = Files.readAllLines(path, UTF8);
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
+        }
 
         ruleInfos = new RuleInfo[nrRules];
         lines.parallelStream().forEach(line -> {
@@ -206,7 +225,7 @@ public final class NewCsvTraceModel
     }
 
     private ParseTreeNode readNode(final int nodeIndex)
-        throws IOException
+        throws GrappaDebuggerException
     {
         if (nodeIndices == null)
             computeIndices();
@@ -231,20 +250,35 @@ public final class NewCsvTraceModel
             return new ParseTreeNode(parentId, nodeId, level, success,
                 ruleInfos[matcherId], startIndex, endIndex, time,
                 childrenLists[nodeId] != null);
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
         }
     }
 
     @Override
     public void dispose()
-        throws IOException
+        throws GrappaDebuggerException
     {
-        zipfs.close();
+        try {
+            zipfs.close();
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
+        }
     }
 
+    @Nonnull
     @Override
     public ParseTreeNode getNodeById(final int id)
-        throws ExecutionException
     {
         throw new UnsupportedOperationException();
+    }
+
+    @Nonnull
+    @Override
+    public Map<MatcherType, Integer> getMatchersByType()
+        throws GrappaDebuggerException
+    {
+        // TODO
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
@@ -10,7 +11,6 @@ import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 @ParametersAreNonnullByDefault
 public class TreeTabPresenter
@@ -73,7 +73,7 @@ public class TreeTabPresenter
     }
 
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
-        throws ExecutionException
+        throws GrappaDebuggerException
     {
         return model.getNodeChildren(nodeId);
     }

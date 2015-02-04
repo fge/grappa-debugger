@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class DbLoadStatus
 {
+    private final CountDownLatch matchersLatch = new CountDownLatch(1);
     private final CountDownLatch readyLatch = new CountDownLatch(1);
 
     private final int nrMatchers;
@@ -43,6 +44,8 @@ public final class DbLoadStatus
     void incrementProcessedMatchers()
     {
         processedMatchers++;
+        if (processedMatchers == nrMatchers)
+            matchersLatch.countDown();
     }
 
     void incrementProcessedNodes()
@@ -60,5 +63,17 @@ public final class DbLoadStatus
     void setReady()
     {
         readyLatch.countDown();
+    }
+
+    public void waitForMatchers()
+        throws InterruptedException
+    {
+        matchersLatch.await();
+    }
+
+    public void waitForNodes()
+        throws InterruptedException
+    {
+        readyLatch.await();
     }
 }

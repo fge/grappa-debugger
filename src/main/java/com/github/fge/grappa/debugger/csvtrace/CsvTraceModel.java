@@ -1,14 +1,15 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.matchers.MatcherType;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.Map;
 
 public interface CsvTraceModel
 {
@@ -17,20 +18,31 @@ public interface CsvTraceModel
 
     @Nonnull
     InputText getInputText()
-        throws IOException;
+        throws GrappaDebuggerException;
+
+    void waitForNodes()
+        throws GrappaDebuggerException;
+
+    void waitForMatchers()
+        throws GrappaDebuggerException;
 
     @Nonnull
     ParseTree getParseTree()
-        throws ExecutionException, IOException;
+        throws GrappaDebuggerException;
 
     @Nonnull
     List<ParseTreeNode> getNodeChildren(int nodeId)
-        throws ExecutionException;
+        throws GrappaDebuggerException;
 
     // TODO: replace with better exception
     void dispose()
-        throws Exception;
+        throws GrappaDebuggerException;
 
+    @Nonnull
     ParseTreeNode getNodeById(int id)
-        throws ExecutionException;
+        throws GrappaDebuggerException;
+
+    @Nonnull
+    Map<MatcherType, Integer> getMatchersByType()
+        throws GrappaDebuggerException, InterruptedException;
 }

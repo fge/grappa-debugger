@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace.dbmodel;
 
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
+import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.common.db.DbLoader;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
@@ -19,7 +21,6 @@ import org.jooq.Result;
 import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -32,7 +33,9 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -72,6 +75,7 @@ public class DbCsvTraceModel
     private final DbLoader loader;
     private final DSLContext jooq;
     private final ParseInfo info;
+    private final DbLoadStatus status;
     private final Future<DSLContext> future;
 
     private InputBuffer inputBuffer = null;
@@ -86,6 +90,7 @@ public class DbCsvTraceModel
         jooq = loader.getJooq();
         future = executor.submit(loader::loadAll);
         loader.createStatus(info);
+        status = loader.getStatus();
     }
 
     @Nonnull
@@ -98,7 +103,7 @@ public class DbCsvTraceModel
     @Nonnull
     @Override
     public InputText getInputText()
-        throws IOException
+        throws GrappaDebuggerException
     {
         if (inputBuffer == null)
             inputBuffer = readInputBuffer();
@@ -106,28 +111,51 @@ public class DbCsvTraceModel
             info.getNrCodePoints(), inputBuffer);
     }
 
+    @Override
+    public void waitForNodes()
+        throws GrappaDebuggerException
+    {
+        try {
+            status.waitForNodes();
+        } catch (InterruptedException e) {
+            throw new GrappaDebuggerException(e);
+        }
+    }
+
+    @Override
+    public void waitForMatchers()
+        throws GrappaDebuggerException
+    {
+        try {
+            status.waitForMatchers();
+        } catch (InterruptedException e) {
+            throw new GrappaDebuggerException(e);
+        }
+    }
+
     @Nonnull
     @SuppressWarnings("AutoUnboxing")
     @Override
     public ParseTree getParseTree()
-        throws ExecutionException
+        throws GrappaDebuggerException
     {
         final ParseTreeNode node = getParseTreeNodeFromId(0);
 
-        return node == null ? null
-            : new ParseTree(node, info.getNrInvocations(), info.getTreeDepth());
+        return new ParseTree(node, info.getNrInvocations(),
+            info.getTreeDepth());
     }
 
-    @Nullable
+    @Nonnull
     @SuppressWarnings("AutoUnboxing")
     private ParseTreeNode getParseTreeNodeFromId(final Integer id)
-        throws ExecutionException
+        throws GrappaDebuggerException
     {
         final DSLContext dsl;
         try {
             dsl = future.get();
-        } catch (InterruptedException | CancellationException ignored) {
-            return null;
+        } catch (InterruptedException | CancellationException
+            | ExecutionException e) {
+            throw new GrappaDebuggerException(e);
         }
 
         final Record nodeRecord = dsl.select(NODES.fields())
@@ -182,7 +210,7 @@ public class DbCsvTraceModel
     }
 
     private InputBuffer readInputBuffer()
-        throws IOException
+        throws GrappaDebuggerException
     {
         final Path path = zipfs.getPath(INPUT_TEXT_PATH);
 
@@ -193,14 +221,16 @@ public class DbCsvTraceModel
             reader.read(buf);
             buf.flip();
             return new CharSequenceInputBuffer(buf);
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
         }
     }
 
     @Override
     public void dispose()
-        throws IOException, SQLException
+        throws GrappaDebuggerException
     {
-        IOException exception = null;
+        Exception exception = null;
         try {
             zipfs.close();
         } catch (IOException e) {
@@ -212,21 +242,39 @@ public class DbCsvTraceModel
 
         try {
             loader.close();
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             if (exception != null)
                 exception.addSuppressed(e);
-            throw e;
+            else
+                exception = e;
         }
 
         if (exception != null)
-            throw exception;
+            throw new GrappaDebuggerException(exception);
     }
 
+    @Nonnull
     @Override
     public ParseTreeNode getNodeById(final int id)
-        throws ExecutionException
+        throws GrappaDebuggerException
     {
         return getParseTreeNodeFromId(id);
+    }
+
+    @Nonnull
+    @Override
+    public Map<MatcherType, Integer> getMatchersByType()
+        throws GrappaDebuggerException
+    {
+        waitForMatchers();
+        final Map<MatcherType, Integer> ret = new EnumMap<>(MatcherType.class);
+
+        jooq.select(MATCHERS.MATCHER_TYPE, DSL.count())
+            .from(MATCHERS)
+            .groupBy(MATCHERS.MATCHER_TYPE)
+            .forEach(r -> ret.put(MatcherType.valueOf(r.value1()), r.value2()));
+
+        return ret;
     }
 
     private ParseInfo readInfo()

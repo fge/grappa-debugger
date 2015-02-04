@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
@@ -11,7 +12,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
@@ -58,7 +58,7 @@ public class TreeTabPresenterTest
 
     @Test
     public void loadParseTreeSuccessTest()
-        throws IOException, ExecutionException
+        throws GrappaDebuggerException
     {
         final ParseTree parseTree = mock(ParseTree.class);
         when(model.getParseTree()).thenReturn(parseTree);
@@ -71,7 +71,7 @@ public class TreeTabPresenterTest
 
     @Test
     public void loadParseTreeErrorTest()
-        throws IOException, ExecutionException
+        throws GrappaDebuggerException
     {
         final IOException exception = new IOException();
         when(model.getParseTree()).thenThrow(exception);
@@ -85,7 +85,7 @@ public class TreeTabPresenterTest
 
     @Test
     public void loadInputTextSuccessTest()
-        throws IOException
+        throws GrappaDebuggerException
     {
         final InputText inputText = mock(InputText.class);
         when(model.getInputText()).thenReturn(inputText);
@@ -98,9 +98,11 @@ public class TreeTabPresenterTest
 
     @Test
     public void loadInputTextErrorTest()
-        throws IOException
+        throws GrappaDebuggerException
     {
-        final IOException exception = new IOException();
+        final Exception cause = new Exception();
+        final GrappaDebuggerException exception
+            = new GrappaDebuggerException(cause);
         when(model.getInputText()).thenThrow(exception);
 
         presenter.loadInputText();
