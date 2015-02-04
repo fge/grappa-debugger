@@ -18,6 +18,7 @@ import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,6 +29,9 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CancellationException;
@@ -37,6 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.LogManager;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
@@ -50,9 +55,11 @@ public class DbCsvTraceModel
         LogManager.getLogManager().reset();
     }
 
+    private final Pattern SEMICOLON = Pattern.compile(";");
     private static final Charset UTF8 = StandardCharsets.UTF_8;
 
     private static final String INPUT_TEXT_PATH = "/input.txt";
+    private static final String INFO_PATH = "/info.csv";
 
     private static final ThreadFactory THREAD_FACTORY
         = new ThreadFactoryBuilder().setNameFormat("db-loader-%d")
@@ -69,17 +76,26 @@ public class DbCsvTraceModel
 
     private InputBuffer inputBuffer = null;
 
-    public DbCsvTraceModel(final FileSystem zipfs, final DbLoader loader,
-        final ParseInfo info)
+    public DbCsvTraceModel(final FileSystem zipfs, final DbLoader loader)
+        throws IOException
     {
         this.zipfs = Objects.requireNonNull(zipfs);
-        this.info = Objects.requireNonNull(info);
         this.loader = Objects.requireNonNull(loader);
 
+        info = readInfo();
         jooq = loader.getJooq();
         future = executor.submit(loader::loadAll);
+        loader.createStatus(info);
     }
 
+    @Nonnull
+    @Override
+    public ParseInfo getParseInfo()
+    {
+        return info;
+    }
+
+    @Nonnull
     @Override
     public InputText getInputText()
         throws IOException
@@ -149,6 +165,7 @@ public class DbCsvTraceModel
             matcherRecord.getValue(MATCHERS.NAME));
     }
 
+    @Nonnull
     @Override
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
     {
@@ -191,6 +208,7 @@ public class DbCsvTraceModel
         }
 
         future.cancel(true);
+        executor.shutdownNow();
 
         try {
             loader.close();
@@ -202,5 +220,32 @@ public class DbCsvTraceModel
 
         if (exception != null)
             throw exception;
+    }
+
+    private ParseInfo readInfo()
+        throws IOException
+    {
+        final Path path = zipfs.getPath(INFO_PATH);
+
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            final String[] elements = SEMICOLON.split(reader.readLine());
+
+            final long epoch = Long.parseLong(elements[0]);
+            final Instant instant = Instant.ofEpochMilli(epoch);
+            final ZoneId zone = ZoneId.systemDefault();
+            final LocalDateTime time = LocalDateTime.ofInstant(instant, zone);
+
+            final int treeDepth = Integer.parseInt(elements[1]);
+            final int nrMatchers = Integer.parseInt(elements[2]);
+            final int nrLines = Integer.parseInt(elements[3]);
+            final int nrChars = Integer.parseInt(elements[4]);
+            final int nrCodePoints = Integer.parseInt(elements[5]);
+            final int nrInvocations = Integer.parseInt(elements[6]);
+
+            return new ParseInfo(time, treeDepth, nrMatchers, nrLines, nrChars,
+                nrCodePoints, nrInvocations);
+        }
     }
 }

@@ -58,6 +58,14 @@ public final class NewCsvTraceModel
         info = readInfo();
     }
 
+    @Nonnull
+    @Override
+    public ParseInfo getParseInfo()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nonnull
     @Override
     public InputText getInputText()
         throws IOException
@@ -77,6 +85,7 @@ public final class NewCsvTraceModel
             info.getTreeDepth());
     }
 
+    @Nonnull
     @Override
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
     {

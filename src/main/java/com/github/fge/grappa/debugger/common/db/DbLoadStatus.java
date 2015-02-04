@@ -11,8 +11,8 @@ public final class DbLoadStatus
     private final int nrMatchers;
     private final int nrNodes;
 
-    int processedMatchers = 0;
-    int processedNodes = 0;
+    private int processedMatchers = 0;
+    private int processedNodes = 0;
 
     public DbLoadStatus(final int nrMatchers, final int nrNodes)
     {

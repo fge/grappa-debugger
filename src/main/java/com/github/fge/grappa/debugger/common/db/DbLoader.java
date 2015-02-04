@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.common.db;
 
 import com.github.fge.filesystem.MoreFiles;
 import com.github.fge.filesystem.RecursionMode;
+import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -72,15 +73,12 @@ public final class DbLoader
 
     private final Connection connection;
     private final DSLContext jooq;
-    private final DbLoadStatus status;
+    private DbLoadStatus status;
 
-    public DbLoader(final FileSystem zipfs, final DbLoadStatus status)
+    public DbLoader(final FileSystem zipfs)
         throws IOException, SQLException
     {
         Objects.requireNonNull(zipfs);
-        Objects.requireNonNull(status);
-
-        this.status = status;
 
         matchersPath = zipfs.getPath(MATCHERS_PATH);
         nodesPath = zipfs.getPath(NODES_PATH);
@@ -91,6 +89,18 @@ public final class DbLoader
         connection = DriverManager.getConnection(url, H2_USERNAME, H2_PASSWORD);
         jooq = DSL.using(connection, SQLDialect.H2);
         doDdl(jooq);
+    }
+
+    public void createStatus(final ParseInfo info)
+    {
+        Objects.requireNonNull(info);
+        status = new DbLoadStatus(info.getNrMatchers(),
+            info.getNrInvocations());
+    }
+
+    public DbLoadStatus getStatus()
+    {
+        return status;
     }
 
     public DSLContext getJooq()

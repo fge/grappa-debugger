@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.TracePresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
@@ -29,10 +30,21 @@ public class CsvTracePresenter
     @Override
     public void loadTrace()
     {
+        loadTreeTab();
+    }
+
+    private void loadTreeTab()
+    {
         final TreeTabPresenter treeTab
             = new TreeTabPresenter(taskRunner, mainView, model);
         view.loadTreeTab(treeTab);
         treeTab.load();
+    }
+
+    private void loadStatsTab()
+    {
+        final StatsTabPresenter statsTab
+            = new StatsTabPresenter(taskRunner, mainView, model);
     }
 
     @Override

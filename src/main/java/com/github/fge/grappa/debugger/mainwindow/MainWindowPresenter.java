@@ -10,26 +10,19 @@ import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.dbmodel.DbCsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -44,10 +37,6 @@ public class MainWindowPresenter
     private final Pattern SEMICOLON = Pattern.compile(";");
 
     private static final String INFO_PATH = "/info.csv";
-
-    private static final ThreadFactory THREAD_FACTORY
-        = new ThreadFactoryBuilder().setDaemon(true)
-        .setNameFormat("db-loader-%d").build();
 
     private final GuiTaskRunner taskRunner;
 
@@ -119,23 +108,18 @@ public class MainWindowPresenter
         final URI uri = URI.create("jar:" + path.toUri());
 
         final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
-        final ParseInfo info = readInfo(zipfs);
 
-        final DbLoadStatus status = new DbLoadStatus(info.getNrMatchers(),
-            info.getNrInvocations());
+        final DbLoader loader = new DbLoader(zipfs);
+
+        final CsvTraceModel model = new DbCsvTraceModel(zipfs, loader);
+
+        final ParseInfo info = model.getParseInfo();
+
+        final DbLoadStatus status = loader.getStatus();
 
         taskRunner.executeBackground(() -> checkLoadStatus(status, info));
 
-        final DbLoader loader = createDbLoader(zipfs, status);
-
-        return new DbCsvTraceModel(zipfs, loader, info);
-    }
-
-    @VisibleForTesting
-    DbLoader createDbLoader(final FileSystem zipfs, final DbLoadStatus status)
-        throws IOException, SQLException
-    {
-        return new DbLoader(zipfs, status);
+        return model;
     }
 
     @VisibleForTesting
@@ -146,40 +130,15 @@ public class MainWindowPresenter
         view.setLabelText("Please load a trace file (File -> Load file)");
     }
 
-    private ParseInfo readInfo(final FileSystem zipfs)
-        throws IOException
-    {
-        final Path path = zipfs.getPath(INFO_PATH);
-
-        try (
-            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
-        ) {
-            final String[] elements = SEMICOLON.split(reader.readLine());
-
-            final long epoch = Long.parseLong(elements[0]);
-            final Instant instant = Instant.ofEpochMilli(epoch);
-            final ZoneId zone = ZoneId.systemDefault();
-            final LocalDateTime time = LocalDateTime.ofInstant(instant, zone);
-
-            final int treeDepth = Integer.parseInt(elements[1]);
-            final int nrMatchers = Integer.parseInt(elements[2]);
-            final int nrLines = Integer.parseInt(elements[3]);
-            final int nrChars = Integer.parseInt(elements[4]);
-            final int nrCodePoints = Integer.parseInt(elements[5]);
-            final int nrInvocations = Integer.parseInt(elements[6]);
-
-            return new ParseInfo(time, treeDepth, nrMatchers, nrLines, nrChars,
-                nrCodePoints, nrInvocations);
-        }
-    }
-
     private void checkLoadStatus(final DbLoadStatus status,
         final ParseInfo info)
     {
         taskRunner.executeFront(view::initLoad);
         try {
             while (!status.waitReady(1L, TimeUnit.SECONDS))
-                taskRunner.executeFront(() ->view.reportProgress(status, info));
+                taskRunner.executeFront(
+                    () -> view.reportProgress(status, info)
+                );
             taskRunner.executeFront(view::loadComplete);
         } catch (InterruptedException ignored) {
             taskRunner.executeFront(view::loadAborted);
