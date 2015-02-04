@@ -95,6 +95,7 @@ public final class GrappaDebugger
     @Override
     public void stop()
     {
+        windows.keySet().forEach(MainWindowPresenter::handleCloseWindow);
         taskRunner.dispose();
     }
 

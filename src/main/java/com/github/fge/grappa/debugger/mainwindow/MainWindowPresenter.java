@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.common.db.DbLoader;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
@@ -11,7 +11,6 @@ import com.github.fge.grappa.debugger.csvtrace.dbmodel.DbCsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.jooq.DSLContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
@@ -30,10 +29,6 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -53,9 +48,6 @@ public class MainWindowPresenter
     private static final ThreadFactory THREAD_FACTORY
         = new ThreadFactoryBuilder().setDaemon(true)
         .setNameFormat("db-loader-%d").build();
-
-    private final ExecutorService executor
-        = Executors.newFixedThreadPool(2, THREAD_FACTORY);
 
     private final GuiTaskRunner taskRunner;
 
@@ -132,15 +124,11 @@ public class MainWindowPresenter
         final DbLoadStatus status = new DbLoadStatus(info.getNrMatchers(),
             info.getNrInvocations());
 
-        executor.submit(() -> checkLoadStatus(status, info));
+        taskRunner.executeBackground(() -> checkLoadStatus(status, info));
 
         final DbLoader loader = createDbLoader(zipfs, status);
 
-        final DSLContext jooq = loader.getJooq();
-        final Callable<DSLContext> callable = loader::loadAll;
-        final Future<DSLContext> future = executor.submit(callable);
-
-        return new DbCsvTraceModel(zipfs, jooq, info, future);
+        return new DbCsvTraceModel(zipfs, loader, info);
     }
 
     @VisibleForTesting

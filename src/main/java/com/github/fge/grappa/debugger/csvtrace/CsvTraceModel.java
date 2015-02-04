@@ -15,7 +15,7 @@ public interface CsvTraceModel
         throws IOException;
 
     void dispose()
-        throws IOException;
+        throws Exception;
 
     @Nullable
     ParseTree getParseTree()

@@ -159,6 +159,12 @@ public final class GuiTaskRunner
         frontExecutor.execute(runnable);
     }
 
+    public void executeBackground(final Runnable runnable)
+    {
+        Objects.requireNonNull(runnable);
+        executor.submit(runnable);
+    }
+
     /**
      * Run a task in the background; schedule a task to run on the ui thread
      * after the background task completes

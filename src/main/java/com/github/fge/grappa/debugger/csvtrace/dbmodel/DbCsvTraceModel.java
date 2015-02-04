@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.dbmodel;
 
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
+import com.github.fge.grappa.debugger.common.db.DbLoader;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
@@ -10,6 +11,7 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record1;
@@ -25,18 +27,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
 import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 
-public final class DbCsvTraceModel
+public class DbCsvTraceModel
     implements CsvTraceModel
 {
     // Keep jooq quiet
@@ -48,20 +54,30 @@ public final class DbCsvTraceModel
 
     private static final String INPUT_TEXT_PATH = "/input.txt";
 
+    private static final ThreadFactory THREAD_FACTORY
+        = new ThreadFactoryBuilder().setNameFormat("db-loader-%d")
+        .setDaemon(true).build();
+
+    private final ExecutorService executor
+        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
+
     private final FileSystem zipfs;
+    private final DbLoader loader;
     private final DSLContext jooq;
     private final ParseInfo info;
     private final Future<DSLContext> future;
 
     private InputBuffer inputBuffer = null;
 
-    public DbCsvTraceModel(final FileSystem zipfs, final DSLContext jooq,
-        final ParseInfo info, final Future<DSLContext> future)
+    public DbCsvTraceModel(final FileSystem zipfs, final DbLoader loader,
+        final ParseInfo info)
     {
         this.zipfs = Objects.requireNonNull(zipfs);
-        this.jooq = Objects.requireNonNull(jooq);
         this.info = Objects.requireNonNull(info);
-        this.future = Objects.requireNonNull(future);
+        this.loader = Objects.requireNonNull(loader);
+
+        jooq = loader.getJooq();
+        future = executor.submit(loader::loadAll);
     }
 
     @Override
@@ -148,13 +164,6 @@ public final class DbCsvTraceModel
             .collect(Collectors.toList());
     }
 
-    @Override
-    public void dispose()
-        throws IOException
-    {
-        zipfs.close();
-    }
-
     private InputBuffer readInputBuffer()
         throws IOException
     {
@@ -168,5 +177,30 @@ public final class DbCsvTraceModel
             buf.flip();
             return new CharSequenceInputBuffer(buf);
         }
+    }
+
+    @Override
+    public void dispose()
+        throws IOException, SQLException
+    {
+        IOException exception = null;
+        try {
+            zipfs.close();
+        } catch (IOException e) {
+            exception = e;
+        }
+
+        future.cancel(true);
+
+        try {
+            loader.close();
+        } catch (SQLException e) {
+            if (exception != null)
+                exception.addSuppressed(e);
+            throw e;
+        }
+
+        if (exception != null)
+            throw exception;
     }
 }

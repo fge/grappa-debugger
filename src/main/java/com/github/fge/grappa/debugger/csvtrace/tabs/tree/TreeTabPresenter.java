@@ -11,7 +11,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @ParametersAreNonnullByDefault
 public class TreeTabPresenter
@@ -82,10 +81,8 @@ public class TreeTabPresenter
     public void needChildren(final ParseTreeNode value)
     {
         taskRunner.computeOrFail(
-            view::waitForChildren, () -> {
-                TimeUnit.SECONDS.sleep(3L);
-                return getNodeChildren(value.getId());
-            },
+            view::waitForChildren,
+            () -> getNodeChildren(value.getId()),
             view::setTreeChildren,
             throwable -> mainView.showError("Tree expand error",
                 "Unable to extend parse tree node", throwable)

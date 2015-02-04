@@ -26,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("InstanceVariableMayNotBeInitialized")
 public class MainWindowPresenterTest
 {
     private final GuiTaskRunner taskRunner = new GuiTaskRunner(
@@ -44,10 +45,19 @@ public class MainWindowPresenterTest
     }
 
     @Test
-    public void handleCloseWindowTest()
+    public void handleCloseWindowNoPresenterTest()
     {
         presenter.handleCloseWindow();
-        verifyZeroInteractions(view);
+        verify(factory).close(presenter);
+    }
+
+    @Test
+    public void handleCloseWindowWithPresenterTest()
+    {
+        presenter.tracePresenter = mock(CsvTracePresenter.class);
+
+        presenter.handleCloseWindow();
+        verify(presenter.tracePresenter).dispose();
         verify(factory).close(presenter);
     }
 
@@ -123,7 +133,7 @@ public class MainWindowPresenterTest
         doThrow(exception).when(presenter).getModel(same(path));
 
         presenter.handleLoadFile();
-        
+
         verify(presenter).handleLoadFileError(same(exception));
         verify(presenter, never()).createTabPresenter(any());
         assertThat(presenter.tracePresenter).isNull();

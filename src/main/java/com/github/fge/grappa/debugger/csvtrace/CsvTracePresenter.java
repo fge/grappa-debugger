@@ -7,7 +7,6 @@ import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.util.Objects;
 
 @NonFinalForTesting
@@ -41,7 +40,7 @@ public class CsvTracePresenter
     {
         try {
             model.dispose();
-        } catch (IOException e) {
+        } catch (Exception e) {
             mainView.showError("Trace file error", "Problem closing trace file",
                 e);
         }

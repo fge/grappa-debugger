@@ -1,5 +1,7 @@
 package com.github.fge.grappa.debugger.common.db;
 
+import com.github.fge.filesystem.MoreFiles;
+import com.github.fge.filesystem.RecursionMode;
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -65,6 +67,9 @@ public final class DbLoader
 
     private final Path matchersPath;
     private final Path nodesPath;
+
+    private final Path dbPath;
+
     private final Connection connection;
     private final DSLContext jooq;
     private final DbLoadStatus status;
@@ -80,8 +85,8 @@ public final class DbLoader
         matchersPath = zipfs.getPath(MATCHERS_PATH);
         nodesPath = zipfs.getPath(NODES_PATH);
 
-        final Path tmpdir = Files.createTempDirectory("grappa-debugger");
-        final String url = H2_URI_PREFIX + tmpdir.resolve("db").toAbsolutePath()
+        dbPath = Files.createTempDirectory("grappa-debugger");
+        final String url = H2_URI_PREFIX + dbPath.resolve("db").toAbsolutePath()
             + H2_URI_POSTFIX;
         connection = DriverManager.getConnection(url, H2_USERNAME, H2_PASSWORD);
         jooq = DSL.using(connection, SQLDialect.H2);
@@ -138,8 +143,30 @@ public final class DbLoader
 
     @Override
     public void close()
-        throws SQLException
+        throws SQLException, IOException
     {
-        connection.close();
+        IOException ioException = null;
+        SQLException sqlException = null;
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            sqlException = e;
+        }
+
+        try {
+            MoreFiles.deleteRecursive(dbPath, RecursionMode.KEEP_GOING);
+        } catch (IOException e) {
+            ioException = e;
+        }
+
+        if (sqlException != null) {
+            if (ioException != null)
+                sqlException.addSuppressed(ioException);
+            throw sqlException;
+        }
+
+        if (ioException != null)
+            throw ioException;
     }
 }

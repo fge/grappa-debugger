@@ -4,11 +4,13 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class CsvTracePresenterTest
 {
@@ -31,5 +33,13 @@ public class CsvTracePresenterTest
 
         view = mock(CsvTraceView.class);
         presenter.setView(view);
+    }
+
+    @Test
+    public void disposeTest()
+        throws Exception
+    {
+        presenter.dispose();
+        verify(model).dispose();
     }
 }

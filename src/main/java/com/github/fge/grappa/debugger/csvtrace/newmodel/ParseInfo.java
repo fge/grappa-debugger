@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.newmodel;
 
 import java.time.LocalDateTime;
 
-public final class ParseInfo
+public class ParseInfo
 {
     private final LocalDateTime time;
     private final int treeDepth;
