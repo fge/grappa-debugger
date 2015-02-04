@@ -68,8 +68,6 @@ public class JavafxTreeTabView
         final int length = buffer.length();
         final int realStart = Math.min(start, length);
         final int realEnd = Math.min(end, length);
-        //final List<Text> list = getSuccessfulMatchFragments(length, realStart,
-        //    realEnd);
 
         final ObservableList<Node> nodes = display.inputText.getChildren();
 
