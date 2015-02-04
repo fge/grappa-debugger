@@ -186,8 +186,9 @@ public final class LazyTreeCellLoadingExample
             final ProgressBar progressBar = new ProgressBar();
 
             // listener to observe *current* tree item's child loading status:
-            final ChangeListener<LazyTreeItem.ChildrenLoadedStatus> listener = (obs,
-                oldStatus, newStatus) -> {
+            final ChangeListener<LazyTreeItem.ChildrenLoadedStatus> listener
+                = (obs, oldStatus, newStatus) ->
+            {
                 final boolean loading
                     = newStatus == LazyTreeItem.ChildrenLoadedStatus.LOADING;
                 cell.setGraphic(loading ? progressBar : null);
@@ -195,8 +196,9 @@ public final class LazyTreeCellLoadingExample
 
             // listener for tree item property
             // ensures that listener above is attached to current tree item:
-            cell.treeItemProperty().addListener((obs, oldItem, newItem) -> {
-
+            final ChangeListener<TreeItem<Long>> treeItemChangeListener
+                = (obs, oldItem, newItem) ->
+            {
                 // if we were displaying an item, (and no longer are...),
                 // stop observing its child loading status:
                 if (oldItem != null)
@@ -208,8 +210,8 @@ public final class LazyTreeCellLoadingExample
 
                     // update graphic to display progress bar if needed:
                     final LazyTreeItem lazyTreeItem = (LazyTreeItem) newItem;
-                    final boolean loading
-                        = lazyTreeItem.getChildrenLoadedStatus()
+                    final boolean loading =
+                        lazyTreeItem.getChildrenLoadedStatus()
                             == LazyTreeItem.ChildrenLoadedStatus.LOADING;
                     cell.setGraphic(loading ? progressBar : null);
 
@@ -218,7 +220,9 @@ public final class LazyTreeCellLoadingExample
                     lazyTreeItem.childrenLoadedStatusProperty().addListener(
                         listener);
                 }
-            });
+            };
+
+            cell.treeItemProperty().addListener(treeItemChangeListener);
 
             // change text if item changes:
             cell.itemProperty().addListener((obs, oldItem, newItem) -> {
