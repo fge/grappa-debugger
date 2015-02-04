@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
@@ -38,6 +39,11 @@ import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 public final class DbCsvTraceModel
     implements CsvTraceModel
 {
+    // Keep jooq quiet
+    static {
+        LogManager.getLogManager().reset();
+    }
+
     private static final Charset UTF8 = StandardCharsets.UTF_8;
 
     private static final String INPUT_TEXT_PATH = "/input.txt";
