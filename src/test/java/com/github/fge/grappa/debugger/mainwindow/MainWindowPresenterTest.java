@@ -2,13 +2,25 @@ package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.sql.SQLException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -58,5 +70,62 @@ public class MainWindowPresenterTest
 
         inOrder.verify(view).chooseFile();
         inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void handleLoadFileTest()
+        throws IOException, SQLException
+    {
+        final Path path = mock(Path.class);
+        final CsvTraceModel model = mock(CsvTraceModel.class);
+        final CsvTracePresenter tracePresenter
+            = mock(CsvTracePresenter.class);
+
+        when(view.chooseFile()).thenReturn(path);
+        doReturn(model).when(presenter).getModel(same(path));
+        doReturn(tracePresenter).when(presenter)
+            .createTabPresenter(same(model));
+
+        presenter.handleLoadFile();
+
+        verify(view).attachTrace(tracePresenter);
+        verify(tracePresenter).loadTrace();
+
+        assertThat(presenter.tracePresenter).isSameAs(tracePresenter);
+    }
+
+    @Test
+    public void handleLoadFileOtherWindowTest()
+    {
+        presenter.tracePresenter = mock(CsvTracePresenter.class);
+
+        final MainWindowPresenter otherPresenter
+            = mock(MainWindowPresenter.class);
+        when(factory.createWindow()).thenReturn(otherPresenter);
+
+        final Path path = mock(Path.class);
+        when(view.chooseFile()).thenReturn(path);
+
+        presenter.handleLoadFile();
+
+        verify(presenter, never()).loadTab(any(Path.class));
+        verify(otherPresenter).loadTab(same(path));
+    }
+
+    @Test
+    public void handleLoadFileErrorTest()
+        throws IOException, SQLException
+    {
+        final Path path = mock(Path.class);
+        when(view.chooseFile()).thenReturn(path);
+
+        final SQLException exception = new SQLException();
+        doThrow(exception).when(presenter).getModel(same(path));
+
+        presenter.handleLoadFile();
+        
+        verify(presenter).handleLoadFileError(same(exception));
+        verify(presenter, never()).createTabPresenter(any());
+        assertThat(presenter.tracePresenter).isNull();
     }
 }

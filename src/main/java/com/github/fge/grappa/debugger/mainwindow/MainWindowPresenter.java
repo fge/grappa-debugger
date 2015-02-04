@@ -101,35 +101,57 @@ public class MainWindowPresenter
         window.loadTab(path);
     }
 
+    @VisibleForTesting
     void loadTab(final Path path)
     {
         taskRunner.computeOrFail(
             () -> getModel(path),
             model -> {
-                tracePresenter = new CsvTracePresenter(view, taskRunner, model);
+                tracePresenter = createTabPresenter(model);
                 view.attachTrace(tracePresenter);
                 tracePresenter.loadTrace();
             },
             this::handleLoadFileError);
     }
 
+    @VisibleForTesting
+    CsvTracePresenter createTabPresenter(final CsvTraceModel model)
+    {
+        return new CsvTracePresenter(view, taskRunner, model);
+    }
+
+    @VisibleForTesting
     CsvTraceModel getModel(final Path path)
         throws IOException, SQLException
     {
         final URI uri = URI.create("jar:" + path.toUri());
+
         final FileSystem zipfs = FileSystems.newFileSystem(uri, ZIPFS_ENV);
         final ParseInfo info = readInfo(zipfs);
+
         final DbLoadStatus status = new DbLoadStatus(info.getNrMatchers(),
             info.getNrInvocations());
+
         executor.submit(() -> checkLoadStatus(status, info));
-        final DbLoader loader = new DbLoader(zipfs, status);
+
+        final DbLoader loader = createDbLoader(zipfs, status);
+
         final DSLContext jooq = loader.getJooq();
         final Callable<DSLContext> callable = loader::loadAll;
         final Future<DSLContext> future = executor.submit(callable);
+
         return new DbCsvTraceModel(zipfs, jooq, info, future);
     }
 
-    private void handleLoadFileError(final Throwable throwable)
+    @VisibleForTesting
+    DbLoader createDbLoader(final FileSystem zipfs, final DbLoadStatus status)
+        throws IOException, SQLException
+    {
+        return new DbLoader(zipfs, status);
+    }
+
+    @VisibleForTesting
+    void handleLoadFileError(final Throwable throwable)
     {
         view.showError("Trace file error", "Unable to load trace file",
             throwable);
