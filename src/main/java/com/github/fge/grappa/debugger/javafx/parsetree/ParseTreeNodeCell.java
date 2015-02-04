@@ -12,12 +12,14 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import javax.annotation.Nullable;
+
 public final class ParseTreeNodeCell
     extends TreeCell<ParseTreeNode>
 {
     private final Text text = new Text();
     private final ProgressBar bar = new ProgressBar();
-    final HBox hBox = new HBox();
+    final HBox hBox = new HBox(text);
 
     public ParseTreeNodeCell(final TreeTabDisplay display)
     {
@@ -47,45 +49,48 @@ public final class ParseTreeNodeCell
                 final TreeItem<ParseTreeNode> oldValue,
                 final TreeItem<ParseTreeNode> newValue)
             {
-                // FIXME: this cast is needed, unfortunately :(
-                final ParseTreeItem treeItem = (ParseTreeItem) newValue;
-
-                setText(null);
-                
-                if (treeItem == null) {
-                    setGraphic(null);
+                if (newValue == null)
                     return;
-                }
 
-                final ParseTreeNode item = treeItem.getValue();
-
-                final String msg = String.format("%s (%s)",
-                    item.getRuleInfo().getName(),
-                    item.isSuccess() ? "SUCCESS" : "FAILURE");
-                text.setText(msg);
+                final ParseTreeItem item = (ParseTreeItem) newValue;
 
                 final ObservableList<Node> children = hBox.getChildren();
-                children.clear();
-                children.add(text);
-
-                final boolean loadInProgress
-                    = treeItem.waitingChildrenProperty().get();
-                if (loadInProgress)
+                final String txt = stringValue(newValue.getValue());
+                text.setText(txt);
+                if (!item.loadingProperty().get()) {
+                    children.remove(bar);
+                    return;
+                }
+                if (!children.contains(bar))
                     children.add(bar);
-                setGraphic(hBox);
             }
         };
 
         treeItemProperty().addListener(listener);
+
+        itemProperty().addListener(new ChangeListener<ParseTreeNode>()
+        {
+            @Override
+            public void changed(
+                final ObservableValue<? extends ParseTreeNode> observable,
+                final ParseTreeNode oldValue, final ParseTreeNode newValue)
+            {
+                if (newValue == null) {
+                    setGraphic(null);
+                    return;
+                }
+                text.setText(stringValue(newValue));
+                setGraphic(hBox);
+            }
+        });
     }
 
-    @Override
-    protected void updateItem(final ParseTreeNode item, final boolean empty)
+    @Nullable
+    private static String stringValue(@Nullable final ParseTreeNode node)
     {
-        super.updateItem(item, empty);
-        setText(null);
-        if (empty || item == null)
-            setGraphic(null);
+        return node == null ? null
+            : String.format("%s (%s)", node.getRuleInfo().getName(),
+                node.isSuccess() ? "SUCCESS" : "FAILURE");
     }
 }
 

@@ -145,7 +145,7 @@ public class JavafxTreeTabView
     @Override
     public void waitForChildren()
     {
-        display.currentItem.waitingChildrenProperty().setValue(true);
+        display.currentItem.loadingProperty().setValue(true);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class JavafxTreeTabView
             .map(node -> new ParseTreeItem(display, node))
             .collect(Collectors.toList());
         display.currentItem.getChildren().setAll(items);
-        display.currentItem.waitingChildrenProperty().setValue(false);
+        display.currentItem.loadingProperty().setValue(false);
     }
 
     private List<Text> getFailedMatchFragments(final int length,
