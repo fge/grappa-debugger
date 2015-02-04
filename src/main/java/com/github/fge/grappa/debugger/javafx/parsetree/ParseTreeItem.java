@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.javafx.parsetree;
 
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabDisplay;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
@@ -9,6 +11,9 @@ import javafx.scene.control.TreeItem;
 public final class ParseTreeItem
     extends TreeItem<ParseTreeNode>
 {
+    private final ObjectProperty<Boolean> waitingChildrenProperty
+        = new SimpleObjectProperty<>(false);
+
     private final boolean leaf;
 
     public ParseTreeItem(final TreeTabDisplay display,
@@ -32,6 +37,11 @@ public final class ParseTreeItem
                 display.needChildren(ParseTreeItem.this);
             }
         });
+    }
+
+    public ObjectProperty<Boolean> waitingChildrenProperty()
+    {
+        return waitingChildrenProperty;
     }
 
     @Override

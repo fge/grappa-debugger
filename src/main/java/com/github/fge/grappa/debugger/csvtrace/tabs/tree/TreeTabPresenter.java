@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
-import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.BasePresenter;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -11,7 +11,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @ParametersAreNonnullByDefault
 public class TreeTabPresenter
@@ -82,10 +81,8 @@ public class TreeTabPresenter
     public void needChildren(final ParseTreeNode value)
     {
         taskRunner.computeOrFail(
-            view::waitForChildren, () -> {
-                TimeUnit.SECONDS.sleep(5L);
-                return getNodeChildren(value.getId());
-            },
+            view::waitForChildren,
+            () -> getNodeChildren(value.getId()),
             view::setTreeChildren,
             throwable -> mainView.showError("Tree expand error",
                 "Unable to extend parse tree node", throwable)

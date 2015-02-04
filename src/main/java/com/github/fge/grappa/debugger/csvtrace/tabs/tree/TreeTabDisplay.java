@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeItem;
-import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeNodeCellFactory;
+import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeNodeCell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -66,7 +66,7 @@ public class TreeTabDisplay
     @Override
     public void init()
     {
-        parseTree.setCellFactory(new ParseTreeNodeCellFactory(this));
+        parseTree.setCellFactory(param -> new ParseTreeNodeCell(this));
     }
 
     public void parseTreeNodeShowEvent(final ParseTreeNode node)
