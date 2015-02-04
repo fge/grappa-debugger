@@ -44,9 +44,7 @@ public final class LazyTreeCellLoadingExample
         tree.setCellFactory(new CustomCellFactory());
 
         final Button debugButton = new Button("Debug");
-        debugButton.setOnAction(evt -> {
-            dumpData(tree.getRoot(), 0);
-        });
+        debugButton.setOnAction(evt -> dumpData(tree.getRoot(), 0));
 
         primaryStage.setScene(new Scene(new BorderPane(tree, null, null,
             debugButton, null), 400, 250));
@@ -67,7 +65,6 @@ public final class LazyTreeCellLoadingExample
     private static final class LazyTreeItem
         extends TreeItem<Long>
     {
-
         // possible load statuses:
         enum ChildrenLoadedStatus
         {
@@ -78,7 +75,7 @@ public final class LazyTreeCellLoadingExample
         private final ObjectProperty<ChildrenLoadedStatus> childrenLoadedStatus
             = new SimpleObjectProperty<>(ChildrenLoadedStatus.NOT_LOADED);
 
-        public LazyTreeItem(final Long value)
+        private LazyTreeItem(final Long value)
         {
             super(value);
         }
@@ -87,39 +84,38 @@ public final class LazyTreeCellLoadingExample
         @Override
         public ObservableList<TreeItem<Long>> getChildren()
         {
-            if (getChildrenLoadedStatus() == ChildrenLoadedStatus.NOT_LOADED) {
+            if (getChildrenLoadedStatus() == ChildrenLoadedStatus.NOT_LOADED)
                 lazilyLoadChildren();
-            }
             return super.getChildren();
         }
 
         // load child nodes in background, updating status accordingly:
         private void lazilyLoadChildren()
         {
-
             // change current status to "loading":
             setChildrenLoadedStatus(ChildrenLoadedStatus.LOADING);
             final long value = getValue();
 
             // background task to load children:
-            final Task<List<LazyTreeItem>> loadTask = new Task<List<LazyTreeItem>>()
-            {
-
-                @Override
-                protected List<LazyTreeItem> call()
-                    throws Exception
+            final Task<List<LazyTreeItem>> loadTask
+                = new Task<List<LazyTreeItem>>()
                 {
-                    final List<LazyTreeItem> children = new ArrayList<>();
-                    for (int i = 0; i < 10; i++) {
-                        children.add(new LazyTreeItem(10 * value + i));
+
+                    @Override
+                    protected List<LazyTreeItem> call()
+                        throws Exception
+                    {
+                        final List<LazyTreeItem> children = new ArrayList<>();
+                        for (int i = 0; i < 10; i++) {
+                            children.add(new LazyTreeItem(10 * value + i));
+                        }
+
+                        // for testing (loading is so lazy it falls asleep)
+                        Thread.sleep(3000);
+                        return children;
                     }
 
-                    // for testing (loading is so lazy it falls asleep)
-                    Thread.sleep(3000);
-                    return children;
-                }
-
-            };
+                };
 
             // when loading is complete:
             // 1. set actual child nodes to loaded nodes
@@ -144,19 +140,19 @@ public final class LazyTreeCellLoadingExample
 
         // normal property accessor methods:
 
-        public final ObjectProperty<ChildrenLoadedStatus>
+        public ObjectProperty<ChildrenLoadedStatus>
         childrenLoadedStatusProperty()
         {
             return childrenLoadedStatus;
         }
 
-        public final LazyTreeCellLoadingExample.LazyTreeItem
+        public LazyTreeCellLoadingExample.LazyTreeItem
             .ChildrenLoadedStatus getChildrenLoadedStatus()
         {
             return childrenLoadedStatusProperty().get();
         }
 
-        public final void setChildrenLoadedStatus(
+        public void setChildrenLoadedStatus(
             final LazyTreeCellLoadingExample.LazyTreeItem.ChildrenLoadedStatus childrenLoadedStatus)
         {
             childrenLoadedStatusProperty().set(childrenLoadedStatus);
@@ -192,11 +188,9 @@ public final class LazyTreeCellLoadingExample
             // listener to observe *current* tree item's child loading status:
             final ChangeListener<LazyTreeItem.ChildrenLoadedStatus> listener = (obs,
                 oldStatus, newStatus) -> {
-                if (newStatus == LazyTreeItem.ChildrenLoadedStatus.LOADING) {
-                    cell.setGraphic(progressBar);
-                } else {
-                    cell.setGraphic(null);
-                }
+                final boolean loading
+                    = newStatus == LazyTreeItem.ChildrenLoadedStatus.LOADING;
+                cell.setGraphic(loading ? progressBar : null);
             };
 
             // listener for tree item property
@@ -205,22 +199,19 @@ public final class LazyTreeCellLoadingExample
 
                 // if we were displaying an item, (and no longer are...),
                 // stop observing its child loading status:
-                if (oldItem != null) {
+                if (oldItem != null)
                     ((LazyTreeItem) oldItem).childrenLoadedStatusProperty()
                         .removeListener(listener);
-                }
 
                 // if there is a new item the cell is displaying:
                 if (newItem != null) {
 
                     // update graphic to display progress bar if needed:
                     final LazyTreeItem lazyTreeItem = (LazyTreeItem) newItem;
-                    if (lazyTreeItem.getChildrenLoadedStatus()
-                        == LazyTreeItem.ChildrenLoadedStatus.LOADING) {
-                        cell.setGraphic(progressBar);
-                    } else {
-                        cell.setGraphic(null);
-                    }
+                    final boolean loading
+                        = lazyTreeItem.getChildrenLoadedStatus()
+                            == LazyTreeItem.ChildrenLoadedStatus.LOADING;
+                    cell.setGraphic(loading ? progressBar : null);
 
                     // observe loaded status of current item in case it changes
                     // while we are still displaying this item:
