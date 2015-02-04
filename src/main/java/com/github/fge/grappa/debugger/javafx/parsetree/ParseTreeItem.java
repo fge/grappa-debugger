@@ -28,8 +28,6 @@ public final class ParseTreeItem
                 final ObservableValue<? extends Boolean> observable,
                 final Boolean oldValue, final Boolean newValue)
             {
-                if (oldValue == newValue)
-                    return;
                 if (!newValue) {
                     getChildren().clear();
                     return;
