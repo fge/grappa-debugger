@@ -15,8 +15,10 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public final class GrappaDebugger
     extends Application
@@ -95,7 +97,8 @@ public final class GrappaDebugger
     @Override
     public void stop()
     {
-        windows.keySet().forEach(MainWindowPresenter::handleCloseWindow);
+        final Set<MainWindowPresenter> set = new HashSet<>(windows.keySet());
+        set.forEach(this::close);
         taskRunner.dispose();
     }
 
