@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.stats.JavafxStatsTabView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.JavafxTreeTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -42,5 +44,20 @@ public final class JavafxCsvTraceView
         tabView.getDisplay().setPresenter(presenter);
         presenter.setView(tabView);
         display.treeTab.setContent(tabView.getNode());
+    }
+
+    @Override
+    public void loadStatsTab(final StatsTabPresenter presenter)
+    {
+        final JavafxStatsTabView tabView;
+        try {
+            tabView = new JavafxStatsTabView();
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load statistics", e);
+            return;
+        }
+        tabView.getDisplay().setPresenter(presenter);
+        presenter.setView(tabView);
+        display.statsTab.setContent(tabView.getNode());
     }
 }

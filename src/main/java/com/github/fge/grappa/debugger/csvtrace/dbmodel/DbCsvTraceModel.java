@@ -106,8 +106,8 @@ public class DbCsvTraceModel
             info.getNrCodePoints(), inputBuffer);
     }
 
+    @Nonnull
     @SuppressWarnings("AutoUnboxing")
-    @Nullable
     @Override
     public ParseTree getParseTree()
         throws ExecutionException
@@ -220,6 +220,13 @@ public class DbCsvTraceModel
 
         if (exception != null)
             throw exception;
+    }
+
+    @Override
+    public ParseTreeNode getNodeById(final int id)
+        throws ExecutionException
+    {
+        return getParseTreeNodeFromId(id);
     }
 
     private ParseInfo readInfo()

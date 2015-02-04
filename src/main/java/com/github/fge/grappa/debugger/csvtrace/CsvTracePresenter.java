@@ -31,6 +31,7 @@ public class CsvTracePresenter
     public void loadTrace()
     {
         loadTreeTab();
+        loadStatsTab();
     }
 
     private void loadTreeTab()
@@ -45,6 +46,8 @@ public class CsvTracePresenter
     {
         final StatsTabPresenter statsTab
             = new StatsTabPresenter(taskRunner, mainView, model);
+        view.loadStatsTab(statsTab);
+        statsTab.load();
     }
 
     @Override

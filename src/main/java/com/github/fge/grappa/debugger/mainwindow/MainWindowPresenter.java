@@ -14,8 +14,6 @@ import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -24,7 +22,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 @ParametersAreNonnullByDefault
 public class MainWindowPresenter
@@ -32,11 +29,6 @@ public class MainWindowPresenter
 {
     private static final Map<String, ?> ZIPFS_ENV
         = Collections.singletonMap("readonly", "true");
-
-    private static final Charset UTF8 = StandardCharsets.UTF_8;
-    private final Pattern SEMICOLON = Pattern.compile(";");
-
-    private static final String INFO_PATH = "/info.csv";
 
     private final GuiTaskRunner taskRunner;
 

@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -20,7 +19,7 @@ public interface CsvTraceModel
     InputText getInputText()
         throws IOException;
 
-    @Nullable
+    @Nonnull
     ParseTree getParseTree()
         throws ExecutionException, IOException;
 
@@ -28,6 +27,10 @@ public interface CsvTraceModel
     List<ParseTreeNode> getNodeChildren(int nodeId)
         throws ExecutionException;
 
+    // TODO: replace with better exception
     void dispose()
         throws Exception;
+
+    ParseTreeNode getNodeById(int id)
+        throws ExecutionException;
 }

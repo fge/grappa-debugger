@@ -98,7 +98,7 @@ public final class GrappaDebugger
     public void stop()
     {
         final Set<MainWindowPresenter> set = new HashSet<>(windows.keySet());
-        set.forEach(this::close);
+        set.forEach(MainWindowPresenter::handleCloseWindow);
         taskRunner.dispose();
     }
 

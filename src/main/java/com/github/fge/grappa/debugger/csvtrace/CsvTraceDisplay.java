@@ -14,6 +14,10 @@ public class CsvTraceDisplay
 {
     @FXML
     protected Tab treeTab;
+
+    @FXML
+    protected Tab statsTab;
+
     @Override
     public void init()
     {

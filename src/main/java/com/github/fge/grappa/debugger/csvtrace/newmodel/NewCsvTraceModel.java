@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -238,5 +239,12 @@ public final class NewCsvTraceModel
         throws IOException
     {
         zipfs.close();
+    }
+
+    @Override
+    public ParseTreeNode getNodeById(final int id)
+        throws ExecutionException
+    {
+        throw new UnsupportedOperationException();
     }
 }
