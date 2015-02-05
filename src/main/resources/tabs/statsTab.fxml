@@ -100,7 +100,8 @@
                 sortType="DESCENDING"/>
             <TableColumn fx:id="callDetail" text="Non empty/empty/failures"
                 sortable="false"/>
-            <TableColumn fx:id="callGraph" text="Graph" sortable="false"/>
+            <TableColumn fx:id="callGraph" text="Graph" sortable="false"
+                prefWidth="200.0"/>
         </columns>
     </TableView>
 </SplitPane>
