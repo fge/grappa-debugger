@@ -116,6 +116,7 @@ public final class JavafxStatsTabView
         }
 
         display.invocationStatsTable.getItems().setAll(stats);
+        display.invocationStatsTable.sort();
         display.tableRefresh.setDisable(false);
     }
 

@@ -82,6 +82,7 @@ public class StatsTabDisplay
         setColumnValue(ruleType, r -> r.getRuleInfo().getType());
         setColumnValue(nrCalls, r -> r.getEmptyMatches() + r.getFailedMatches()
             + r.getNonEmptyMatches());
+        invocationStatsTable.getSortOrder().add(nrCalls);
         setColumnValue(callDetail, r -> String.format("%d / %d / %d",
             r.getNonEmptyMatches(), r.getEmptyMatches(), r.getFailedMatches()));
         callGraph.setCellValueFactory(param ->

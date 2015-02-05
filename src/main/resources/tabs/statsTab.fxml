@@ -96,9 +96,11 @@
             <TableColumn fx:id="ruleName" text="Rule"/>
             <TableColumn fx:id="ruleClass" text="Rule class"/>
             <TableColumn fx:id="ruleType" text="Rule type"/>
-            <TableColumn fx:id="nrCalls" text="Invocations"/>
-            <TableColumn fx:id="callDetail" text="Non empty/empty/failures"/>
-            <TableColumn fx:id="callGraph" text="Graph"/>
+            <TableColumn fx:id="nrCalls" text="Invocations"
+                sortType="DESCENDING"/>
+            <TableColumn fx:id="callDetail" text="Non empty/empty/failures"
+                sortable="false"/>
+            <TableColumn fx:id="callGraph" text="Graph" sortable="false"/>
         </columns>
     </TableView>
 </SplitPane>
