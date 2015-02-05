@@ -18,7 +18,6 @@ import static com.github.fge.grappa.debugger.javafx.JavafxUtils.setColumnValue;
 public class StatsTabDisplay
     extends JavafxDisplay<StatsTabPresenter>
 {
-
     /*
      * General match information
      */

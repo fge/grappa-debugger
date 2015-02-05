@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -68,19 +67,19 @@ public final class CallGraphTableCell
         r = RECTANGLE_SUPPLIER.get();
         expr = columnWidth.multiply(nonEmptyRatio);
         r.widthProperty().bind(expr);
-        r.setFill(Color.rgb(78, 164, 78));
+        r.setFill(JavafxUtils.FILL_COLOR_1);
         nodes.add(r);
 
         r = RECTANGLE_SUPPLIER.get();
         expr = columnWidth.multiply(emptyRatio);
         r.widthProperty().bind(expr);
-        r.setFill(Color.rgb(234, 160, 41));
+        r.setFill(JavafxUtils.FILL_COLOR_2);
         nodes.add(r);
 
         r = RECTANGLE_SUPPLIER.get();
         expr = columnWidth.multiply(failureRatio);
         r.widthProperty().bind(expr);
-        r.setFill(Color.rgb(224, 97, 49));
+        r.setFill(JavafxUtils.FILL_COLOR_3);
         nodes.add(r);
 
         setGraphic(hbox);

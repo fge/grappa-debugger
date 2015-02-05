@@ -3,11 +3,22 @@ package com.github.fge.grappa.debugger.javafx;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.paint.Color;
 
 import java.util.function.Function;
 
 public final class JavafxUtils
 {
+    public static final Color FILL_COLOR_1
+        = Color.rgb(78, 164, 78);
+    public static final Color FILL_COLOR_2
+        = Color.rgb(234, 160, 41);
+    public static final Color FILL_COLOR_3
+        = Color.rgb(224, 97, 49);
+    public static final Color FILL_COLOR_4
+        = Color.rgb(72, 164, 192);
+
+
     @SuppressWarnings("ProhibitedExceptionThrown")
     private JavafxUtils()
     {
