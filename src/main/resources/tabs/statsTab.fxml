@@ -90,18 +90,25 @@
                     onMouseClicked="#refreshInvocationStatistics"/>
             </ToolBar>
         </top>
+        <center>
+            <TableView fx:id="invocationStatsTable">
+                <columns>
+                    <TableColumn fx:id="ruleName" text="Rule"/>
+                    <TableColumn fx:id="ruleClass" text="Rule class"/>
+                    <TableColumn fx:id="ruleType" text="Rule type"/>
+                    <TableColumn fx:id="nrCalls" text="Invocations"
+                        sortType="DESCENDING"/>
+                    <TableColumn fx:id="callDetail" text="N / E / F (*)"
+                        sortable="false"/>
+                    <TableColumn fx:id="callGraph" text="Graph" sortable="false"
+                        prefWidth="200.0"/>
+                </columns>
+            </TableView>
+        </center>
+        <bottom>
+            <ToolBar>
+                <Label text="(*) N = non empty matches; E = empty matches; F = failed matches"/>
+            </ToolBar>
+        </bottom>
     </BorderPane>
-    <TableView fx:id="invocationStatsTable">
-        <columns>
-            <TableColumn fx:id="ruleName" text="Rule"/>
-            <TableColumn fx:id="ruleClass" text="Rule class"/>
-            <TableColumn fx:id="ruleType" text="Rule type"/>
-            <TableColumn fx:id="nrCalls" text="Invocations"
-                sortType="DESCENDING"/>
-            <TableColumn fx:id="callDetail" text="Non empty/empty/failures"
-                sortable="false"/>
-            <TableColumn fx:id="callGraph" text="Graph" sortable="false"
-                prefWidth="200.0"/>
-        </columns>
-    </TableView>
 </SplitPane>
