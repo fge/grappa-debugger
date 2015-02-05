@@ -4,10 +4,12 @@ import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 
 public interface MainWindowView
 {
+    @Nullable
     Path chooseFile();
 
     void setWindowTitle(String windowTitle);

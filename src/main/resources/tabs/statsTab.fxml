@@ -91,7 +91,7 @@
             </ToolBar>
         </top>
         <center>
-            <TableView fx:id="invocationStatsTable">
+            <TableView fx:id="invocationStatsTable" editable="false">
                 <columns>
                     <TableColumn fx:id="ruleName" text="Rule"/>
                     <TableColumn fx:id="ruleClass" text="Rule class"/>
@@ -101,7 +101,7 @@
                     <TableColumn fx:id="callDetail" text="N / E / F (*)"
                         sortable="false"/>
                     <TableColumn fx:id="callGraph" text="Graph" sortable="false"
-                        prefWidth="200.0"/>
+                        prefWidth="150.0" resizable="false"/>
                 </columns>
             </TableView>
         </center>

@@ -87,6 +87,8 @@ public class StatsTabDisplay
             r.getNonEmptyMatches(), r.getEmptyMatches(), r.getFailedMatches()));
         setColumnValue(callGraph, Function.identity());
         callGraph.setCellFactory(CallGraphTableCell::new);
+        invocationStatsTable.setColumnResizePolicy(
+            TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     public void refreshInvocationStatistics(final Event event)
