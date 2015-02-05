@@ -16,9 +16,6 @@
 <SplitPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabDisplay"
     orientation="VERTICAL" dividerPositions="0.5">
-    <padding>
-        <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
-    </padding>
     <SplitPane dividerPositions="0.5">
         <BorderPane>
             <top>
@@ -79,21 +76,22 @@
         </BorderPane>
         <PieChart fx:id="matchersChart" labelsVisible="false">
             <padding>
-                <Insets top="5.0" bottom="5.0" right="5.0"
-                    left="5.0"/>
+                <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
             </padding>
         </PieChart>
     </SplitPane>
     <BorderPane>
         <top>
             <ToolBar>
-                <Label text="Top 10 rules"/>
+                <Label text="Rule invocation statistics"/>
+                <Label fx:id="completionStatus"
+                    text="(incomplete; click to refresh)"/>
                 <Button text="Refresh" fx:id="tableRefresh"
-                    onMouseClicked="#refreshTopTen"/>
+                    onMouseClicked="#refreshInvocationStatistics"/>
             </ToolBar>
         </top>
     </BorderPane>
-    <TableView fx:id="topTen">
+    <TableView fx:id="invocationStatsTable">
         <columns>
             <TableColumn fx:id="ruleName" text="Rule"/>
             <TableColumn fx:id="ruleClass" text="Rule class"/>

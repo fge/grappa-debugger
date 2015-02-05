@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
+import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
@@ -44,5 +45,10 @@ public interface CsvTraceModel
 
     @Nonnull
     Map<MatcherType, Integer> getMatchersByType()
-        throws GrappaDebuggerException, InterruptedException;
+        throws GrappaDebuggerException;
+
+    boolean isLoadComplete();
+
+    @Nonnull
+    List<RuleInvocationStatistics> getRuleInvocationStatistics();
 }

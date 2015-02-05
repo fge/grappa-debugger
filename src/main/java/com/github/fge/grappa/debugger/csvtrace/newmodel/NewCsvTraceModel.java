@@ -3,6 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace.newmodel;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
+import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
@@ -277,6 +278,20 @@ public final class NewCsvTraceModel
     @Override
     public Map<MatcherType, Integer> getMatchersByType()
         throws GrappaDebuggerException
+    {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public boolean isLoadComplete()
+    {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    public List<RuleInvocationStatistics> getRuleInvocationStatistics()
     {
         // TODO
         return null;

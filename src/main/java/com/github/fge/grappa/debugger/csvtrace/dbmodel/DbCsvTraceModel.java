@@ -5,6 +5,8 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.common.db.DbLoader;
+import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.common.db.RuleInvocationStatisticsMapper;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
@@ -14,7 +16,9 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -33,6 +37,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +48,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -57,6 +63,13 @@ public class DbCsvTraceModel
     static {
         LogManager.getLogManager().reset();
     }
+
+    private static final Condition EMPTY_MATCHES_CONDITION = NODES.SUCCESS.eq(1)
+        .and(NODES.START_INDEX.equal(NODES.END_INDEX));
+    private static final Condition NONEMPTY_MATCHES_CONDITION
+        = NODES.SUCCESS.eq(1).and(NODES.START_INDEX.ne(NODES.END_INDEX));
+    private static final Condition FAILED_MATCHES_CONDITION
+        = NODES.SUCCESS.eq(0);
 
     private final Pattern SEMICOLON = Pattern.compile(";");
     private static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -275,6 +288,42 @@ public class DbCsvTraceModel
             .forEach(r -> ret.put(MatcherType.valueOf(r.value1()), r.value2()));
 
         return ret;
+    }
+
+    @Override
+    public boolean isLoadComplete()
+    {
+        try {
+            return status.waitReady(1L, TimeUnit.MICROSECONDS);
+        } catch (InterruptedException ignored) {
+            return false;
+        }
+    }
+
+    @Nonnull
+    @Override
+    public List<RuleInvocationStatistics> getRuleInvocationStatistics()
+    {
+        final Field<Integer> emptyMatches = DSL.decode()
+            .when(EMPTY_MATCHES_CONDITION, 1).otherwise(0);
+        final Field<Integer> nonEmptyMatches = DSL.decode()
+            .when(NONEMPTY_MATCHES_CONDITION, 1).otherwise(0);
+        final Field<Integer> failedMatches = DSL.decode()
+            .when(FAILED_MATCHES_CONDITION, 1).otherwise(0);
+
+        final List<RuleInvocationStatistics> list = new ArrayList<>();
+        jooq.select(MATCHERS.NAME, MATCHERS.MATCHER_TYPE, MATCHERS.CLASS_NAME,
+            DSL.sum(emptyMatches).as("emptyMatches"),
+            DSL.sum(nonEmptyMatches).as("nonEmptyMatches"),
+            DSL.sum(failedMatches).as("failedMatches"))
+            .from(MATCHERS, NODES)
+            .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
+            .groupBy(MATCHERS.NAME, MATCHERS.MATCHER_TYPE, MATCHERS.CLASS_NAME)
+            .fetch()
+            .map(new RuleInvocationStatisticsMapper())
+            .forEach(list::add);
+
+        return list;
     }
 
     private ParseInfo readInfo()

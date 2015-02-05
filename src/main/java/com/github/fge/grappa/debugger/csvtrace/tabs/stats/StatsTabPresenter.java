@@ -40,5 +40,20 @@ public class StatsTabPresenter
             throwable -> mainView.showError("Load error",
                 "Unable to load matcher statistics", throwable)
         );
+
+        handleRefreshInvocationStatistics();
+    }
+
+    public void handleRefreshInvocationStatistics()
+    {
+        final boolean complete = model.isLoadComplete();
+
+        taskRunner.computeOrFail(
+            view::disableTableRefresh,
+            model::getRuleInvocationStatistics,
+            stats -> view.displayRuleInvocationStatistics(complete, stats),
+            throwable -> mainView.showError("Load error",
+                "Unable to load matcher statistics", throwable)
+        );
     }
 }

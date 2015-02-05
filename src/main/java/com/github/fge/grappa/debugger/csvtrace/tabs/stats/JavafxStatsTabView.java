@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.stats;
 
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.matchers.MatcherType;
@@ -103,5 +104,24 @@ public final class JavafxStatsTabView
         fmt = String.format("Matchers by type (%d total)", totalMatchers);
 
         display.matchersChart.setTitle(fmt);
+    }
+
+    @Override
+    public void displayRuleInvocationStatistics(final boolean complete,
+        final List<RuleInvocationStatistics> stats)
+    {
+        if (complete) {
+            display.completionStatus.setVisible(false);
+            display.tableRefresh.setVisible(false);
+        }
+
+        display.invocationStatsTable.getItems().setAll(stats);
+        display.tableRefresh.setDisable(false);
+    }
+
+    @Override
+    public void disableTableRefresh()
+    {
+        display.tableRefresh.setDisable(true);
     }
 }
