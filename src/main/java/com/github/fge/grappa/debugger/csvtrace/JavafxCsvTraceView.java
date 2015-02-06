@@ -49,6 +49,8 @@ public final class JavafxCsvTraceView
     @Override
     public void loadStatsTab(final StatsTabPresenter presenter)
     {
+        Objects.requireNonNull(presenter);
+
         final JavafxStatsTabView tabView;
         try {
             tabView = new JavafxStatsTabView();

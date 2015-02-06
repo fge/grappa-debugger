@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import javafx.scene.control.Button?>
+<SplitPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabDisplay"
+    orientation="VERTICAL" dividerPositions="0.5">
+    <SplitPane dividerPositions="0.5">
+        <BorderPane>
+            <top>
+                <ToolBar>
+                    <Label text="General information"/>
+                </ToolBar>
+            </top>
+            <center>
+                <GridPane gridLinesVisible="false" hgap="5.0" vgap="5.0">
+                    <padding>
+                        <Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+                    </padding>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                    </rowConstraints>
+
+                    <Label text="Date:" GridPane.rowIndex="0"
+                        GridPane.columnIndex="0"/>
+                    <Label fx:id="parseDate" GridPane.rowIndex="0"
+                        GridPane.columnIndex="1"/>
+
+                    <Label text="Total parse time:"
+                        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="totalParseTime"
+                        GridPane.rowIndex="1" GridPane.columnIndex="1"
+                        text="(not available yet)"/>
+
+                    <Label text="Parse tree depth:"
+                        GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label fx:id="treeDepth" GridPane.rowIndex="2"
+                        GridPane.columnIndex="1"/>
+
+                    <Label text="Number of rules:"
+                        GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <Label fx:id="nrRules" GridPane.rowIndex="3"
+                        GridPane.columnIndex="1"/>
+
+                    <Label text="Avg. rule invocations per line:"
+                        GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <Label fx:id="invPerLine" GridPane.rowIndex="4"
+                        GridPane.columnIndex="1"/>
+
+                    <Label text="Avg. rule invocations per char:"
+                        GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <Label fx:id="invPerChar" GridPane.rowIndex="5"
+                        GridPane.columnIndex="1"/>
+                </GridPane>
+            </center>
+        </BorderPane>
+        <PieChart fx:id="matchersChart" labelsVisible="false">
+            <padding>
+                <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
+            </padding>
+        </PieChart>
+    </SplitPane>
+    <BorderPane>
+        <top>
+            <ToolBar>
+                <Label text="Rule invocation statistics"/>
+                <Label fx:id="completionStatus"
+                    text="(incomplete; click to refresh)"/>
+                <Button text="Refresh" fx:id="tableRefresh"
+                    onMouseClicked="#refreshInvocationStatistics"/>
+            </ToolBar>
+        </top>
+        <center>
+            <TableView fx:id="invocationStatsTable" editable="false">
+                <columns>
+                    <TableColumn fx:id="ruleName" text="Rule"/>
+                    <TableColumn fx:id="ruleClass" text="Rule class"/>
+                    <TableColumn fx:id="ruleType" text="Rule type"/>
+                    <TableColumn fx:id="nrCalls" text="Invocations"
+                        sortType="DESCENDING"/>
+                    <TableColumn fx:id="callDetail" text="N / E / F (*)"
+                        sortable="false"/>
+                    <TableColumn fx:id="callGraph" text="Graph" sortable="false"
+                        prefWidth="150.0" resizable="false"/>
+                </columns>
+            </TableView>
+        </center>
+        <bottom>
+            <ToolBar>
+                <Label text="(*) N = non empty matches; E = empty matches; F = failed matches"/>
+            </ToolBar>
+        </bottom>
+    </BorderPane>
+</SplitPane>
