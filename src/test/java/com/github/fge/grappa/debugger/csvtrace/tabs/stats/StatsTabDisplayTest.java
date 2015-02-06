@@ -26,7 +26,7 @@ public class StatsTabDisplayTest
     @Test
     public void t()
     {
-        display.refreshInvocationStatistics(mock(Event.class));
+        display.refreshInvocationStatisticsEvent(mock(Event.class));
 
         verify(presenter).handleRefreshInvocationStatistics();
     }

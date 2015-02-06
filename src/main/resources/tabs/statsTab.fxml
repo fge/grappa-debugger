@@ -87,7 +87,7 @@
                 <Label fx:id="completionStatus"
                     text="(incomplete; click to refresh)"/>
                 <Button text="Refresh" fx:id="tableRefresh"
-                    onMouseClicked="#refreshInvocationStatistics"/>
+                    onMouseClicked="#refreshInvocationStatisticsEvent"/>
             </ToolBar>
         </top>
         <center>

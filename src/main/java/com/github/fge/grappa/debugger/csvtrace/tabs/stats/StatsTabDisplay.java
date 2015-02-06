@@ -91,7 +91,7 @@ public class StatsTabDisplay
             TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public void refreshInvocationStatistics(final Event event)
+    public void refreshInvocationStatisticsEvent(final Event event)
     {
         presenter.handleRefreshInvocationStatistics();
     }
