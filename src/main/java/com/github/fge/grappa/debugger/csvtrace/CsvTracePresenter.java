@@ -6,6 +6,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -34,7 +35,8 @@ public class CsvTracePresenter
         loadStatsTab();
     }
 
-    private void loadTreeTab()
+    @VisibleForTesting
+    void loadTreeTab()
     {
         final TreeTabPresenter treeTab
             = new TreeTabPresenter(taskRunner, mainView, model);
@@ -42,7 +44,8 @@ public class CsvTracePresenter
         treeTab.load();
     }
 
-    private void loadStatsTab()
+    @VisibleForTesting
+    void loadStatsTab()
     {
         final StatsTabPresenter statsTab
             = new StatsTabPresenter(taskRunner, mainView, model);

@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -8,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -36,8 +38,21 @@ public class CsvTracePresenterTest
     }
 
     @Test
+    public void loadTraceTest()
+    {
+        doNothing().when(presenter).loadTreeTab();
+        doNothing().when(presenter).loadStatsTab();
+
+        presenter.loadTrace();
+
+        verify(presenter).loadTreeTab();
+        verify(presenter).loadTreeTab();
+    }
+
+
+    @Test
     public void disposeTest()
-        throws Exception
+        throws GrappaDebuggerException
     {
         presenter.dispose();
         verify(model).dispose();

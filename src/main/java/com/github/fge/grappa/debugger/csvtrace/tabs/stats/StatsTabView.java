@@ -9,14 +9,20 @@ import java.util.Map;
 
 public interface StatsTabView
 {
-    void showParseInfo(ParseInfo info);
+    void displayParseInfo(ParseInfo info);
 
     void displayTotalParseTime(long totalParseTime);
 
     void displayMatchersByType(Map<MatcherType, Integer> matchersByType);
 
-    void displayRuleInvocationStatistics(boolean complete,
+    void disableTableRefresh();
+
+    void displayRuleInvocationStatistics(
         List<RuleInvocationStatistics> stats);
 
-    void disableTableRefresh();
+    default void displayInvocationStatisticsIncomplete()
+    {
+    }
+
+    void displayInvocationStatisticsComplete();
 }

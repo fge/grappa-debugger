@@ -27,7 +27,7 @@ public final class JavafxStatsTabView
     }
 
     @Override
-    public void showParseInfo(final ParseInfo info)
+    public void displayParseInfo(final ParseInfo info)
     {
         Objects.requireNonNull(info);
 
@@ -107,14 +107,15 @@ public final class JavafxStatsTabView
     }
 
     @Override
-    public void displayRuleInvocationStatistics(final boolean complete,
+    public void disableTableRefresh()
+    {
+        display.tableRefresh.setDisable(true);
+    }
+
+    @Override
+    public void displayRuleInvocationStatistics(
         final List<RuleInvocationStatistics> stats)
     {
-        if (complete) {
-            display.completionStatus.setVisible(false);
-            display.tableRefresh.setVisible(false);
-        }
-
         display.invocationStatsTable.getSortOrder().setAll(display.nrCalls);
         display.invocationStatsTable.getItems().setAll(stats);
         display.invocationStatsTable.sort();
@@ -122,8 +123,9 @@ public final class JavafxStatsTabView
     }
 
     @Override
-    public void disableTableRefresh()
+    public void displayInvocationStatisticsComplete()
     {
-        display.tableRefresh.setDisable(true);
+        display.completionStatus.setVisible(false);
+        display.tableRefresh.setVisible(false);
     }
 }

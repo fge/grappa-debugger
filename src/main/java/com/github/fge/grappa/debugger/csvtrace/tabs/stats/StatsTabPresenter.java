@@ -5,6 +5,7 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.google.common.annotations.VisibleForTesting;
 
 public class StatsTabPresenter
     extends BasePresenter<StatsTabView>
@@ -23,25 +24,50 @@ public class StatsTabPresenter
 
     public void load()
     {
+        loadParseInfo();
+        loadTotalParseTime();
+        loadMatchersByType();
+        handleRefreshInvocationStatistics();
+    }
+
+    @VisibleForTesting
+    void loadParseInfo()
+    {
         final ParseInfo info = model.getParseInfo();
+        view.displayParseInfo(info);
+    }
 
-        view.showParseInfo(info);
-
+    @VisibleForTesting
+    void loadTotalParseTime()
+    {
         taskRunner.computeOrFail(
             () -> model.getNodeById(0).getNanos(),
             view::displayTotalParseTime,
-            throwable -> mainView.showError("Load error",
-                "Unable to load parse tree", throwable)
+            this::handleLoadTotalParseTimeError
         );
+    }
 
+    @VisibleForTesting
+    void handleLoadTotalParseTimeError(final Throwable throwable)
+    {
+       mainView.showError("Load error", "Unable to load parse tree", throwable);
+    }
+
+    @VisibleForTesting
+    void loadMatchersByType()
+    {
         taskRunner.computeOrFail(
             model::getMatchersByType,
             view::displayMatchersByType,
-            throwable -> mainView.showError("Load error",
-                "Unable to load matcher statistics", throwable)
+            this::handleLoadMatchersByTypeError
         );
+    }
 
-        handleRefreshInvocationStatistics();
+    @VisibleForTesting
+    void handleLoadMatchersByTypeError(final Throwable throwable)
+    {
+       mainView.showError("Load error", "Unable to load matcher statistics",
+           throwable);
     }
 
     public void handleRefreshInvocationStatistics()
@@ -51,9 +77,21 @@ public class StatsTabPresenter
         taskRunner.computeOrFail(
             view::disableTableRefresh,
             model::getRuleInvocationStatistics,
-            stats -> view.displayRuleInvocationStatistics(complete, stats),
-            throwable -> mainView.showError("Load error",
-                "Unable to load matcher statistics", throwable)
+            stats -> {
+                if (complete)
+                    view.displayInvocationStatisticsComplete();
+                else
+                    view.displayInvocationStatisticsIncomplete();
+                view.displayRuleInvocationStatistics(stats);
+            },
+            this::handleRefreshInvocationStatisticsError
         );
+    }
+
+    @VisibleForTesting
+    void handleRefreshInvocationStatisticsError(final Throwable throwable)
+    {
+        mainView.showError("Load error", "Unable to load matcher statistics",
+            throwable);
     }
 }
