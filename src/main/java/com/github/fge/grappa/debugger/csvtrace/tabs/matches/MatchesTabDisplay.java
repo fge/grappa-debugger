@@ -102,8 +102,8 @@ public class MatchesTabDisplay
     }
 
     @FXML
-    void refreshStatistics(final Event event)
+    void refreshStatisticsEvent(final Event event)
     {
-        // TODO
+        presenter.handleRefreshStatisticsEvent();
     }
 }
