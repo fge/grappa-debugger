@@ -12,14 +12,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import org.fxmisc.easybind.EasyBind;
 
-import javax.annotation.Nullable;
-
 public final class ParseTreeNodeCell
     extends TreeCell<ParseTreeNode>
 {
     private final Text text = new Text();
-    private final ProgressBar bar = new ProgressBar();
-    final HBox hBox = new HBox(text);
+    private final ProgressBar progressBar = new ProgressBar();
+    private final HBox hBox = new HBox(text);
 
     public ParseTreeNodeCell(final TreeTabDisplay display)
     {
@@ -54,12 +52,12 @@ public final class ParseTreeNodeCell
             {
                 final ObservableList<Node> children = hBox.getChildren();
                 if (newValue == null || !newValue.booleanValue()) {
-                    children.remove(bar);
+                    children.remove(progressBar);
                     return;
                 }
 
-                if (!children.contains(bar))
-                    children.add(bar);
+                if (!children.contains(progressBar))
+                    children.add(progressBar);
             }
         });
 
@@ -74,18 +72,12 @@ public final class ParseTreeNodeCell
                     setGraphic(null);
                     return;
                 }
-                text.setText(stringValue(newValue));
+                text.setText(String.format("%s (%s)",
+                    newValue.getRuleInfo().getName(),
+                    newValue.isSuccess() ? "SUCCESS" : "FAILURE"));
                 setGraphic(hBox);
             }
         });
-    }
-
-    @Nullable
-    private static String stringValue(@Nullable final ParseTreeNode node)
-    {
-        return node == null ? null
-            : String.format("%s (%s)", node.getRuleInfo().getName(),
-                node.isSuccess() ? "SUCCESS" : "FAILURE");
     }
 }
 
