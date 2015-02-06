@@ -32,7 +32,7 @@ public final class ParseTreeItem
                     getChildren().clear();
                     return;
                 }
-                display.needChildren(ParseTreeItem.this);
+                display.needChildrenEvent(ParseTreeItem.this);
             }
         });
     }

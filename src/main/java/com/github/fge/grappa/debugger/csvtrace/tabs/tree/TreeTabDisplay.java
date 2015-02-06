@@ -74,9 +74,9 @@ public class TreeTabDisplay
         presenter.handleParseTreeNodeShow(node);
     }
 
-    public void needChildren(final ParseTreeItem parseTreeItem)
+    public void needChildrenEvent(final ParseTreeItem parseTreeItem)
     {
         currentItem = parseTreeItem;
-        presenter.needChildren(currentItem.getValue());
+        presenter.handleNeedChildren(currentItem.getValue());
     }
 }

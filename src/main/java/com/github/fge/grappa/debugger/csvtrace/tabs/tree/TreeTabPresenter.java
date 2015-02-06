@@ -78,7 +78,7 @@ public class TreeTabPresenter
         return model.getNodeChildren(nodeId);
     }
 
-    public void needChildren(final ParseTreeNode value)
+    public void handleNeedChildren(final ParseTreeNode value)
     {
         taskRunner.computeOrFail(
             view::waitForChildren,
