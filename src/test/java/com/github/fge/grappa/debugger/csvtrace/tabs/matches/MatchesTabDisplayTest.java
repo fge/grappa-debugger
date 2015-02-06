@@ -28,6 +28,6 @@ public class MatchesTabDisplayTest
     {
         display.refreshStatisticsEvent(mock(Event.class));
 
-        verify(presenter).handleRefreshStatisticsEvent();
+        verify(presenter).handleRefreshStatistics();
     }
 }

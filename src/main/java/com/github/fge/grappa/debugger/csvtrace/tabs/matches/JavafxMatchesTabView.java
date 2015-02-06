@@ -13,4 +13,32 @@ public final class JavafxMatchesTabView
     {
         super("/tabs/matchesTab.fxml");
     }
+
+    @Override
+    public void disableTabRefresh()
+    {
+        // TODO
+
+    }
+
+    @Override
+    public void displayInvocationStatisticsComplete()
+    {
+        // TODO
+
+    }
+
+    @Override
+    public void displayInvocationStatisticsIncomplete()
+    {
+        // TODO
+
+    }
+
+    @Override
+    public void displayRuleInvocationStatistics(final Object stats)
+    {
+        // TODO
+
+    }
 }

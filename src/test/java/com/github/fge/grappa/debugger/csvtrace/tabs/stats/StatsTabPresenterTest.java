@@ -177,7 +177,7 @@ public class StatsTabPresenterTest
     }
 
     @Test
-    public void handleRefreshInvocationStatisticsError()
+    public void handleRefreshStatisticsError()
     {
         final RuntimeException oops = new RuntimeException();
 

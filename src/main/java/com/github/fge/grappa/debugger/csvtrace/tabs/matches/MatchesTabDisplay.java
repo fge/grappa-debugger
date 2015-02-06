@@ -104,6 +104,6 @@ public class MatchesTabDisplay
     @FXML
     void refreshStatisticsEvent(final Event event)
     {
-        presenter.handleRefreshStatisticsEvent();
+        presenter.handleRefreshStatistics();
     }
 }

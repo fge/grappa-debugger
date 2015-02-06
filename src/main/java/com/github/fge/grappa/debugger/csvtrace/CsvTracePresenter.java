@@ -33,24 +33,41 @@ public class CsvTracePresenter
     {
         loadTreeTab();
         loadStatsTab();
+        loadMatchesTab();
     }
 
     @VisibleForTesting
     void loadTreeTab()
     {
-        final TreeTabPresenter treeTab
-            = new TreeTabPresenter(taskRunner, mainView, model);
+        final TreeTabPresenter treeTab = createTreeTabPresenter();
         view.loadTreeTab(treeTab);
         treeTab.load();
     }
 
     @VisibleForTesting
+    TreeTabPresenter createTreeTabPresenter()
+    {
+        return new TreeTabPresenter(taskRunner, mainView, model);
+    }
+
+    @VisibleForTesting
     void loadStatsTab()
     {
-        final StatsTabPresenter statsTab
-            = new StatsTabPresenter(taskRunner, mainView, model);
+        final StatsTabPresenter statsTab = createStatsTabPresenter();
         view.loadStatsTab(statsTab);
         statsTab.load();
+    }
+
+    @VisibleForTesting
+    StatsTabPresenter createStatsTabPresenter()
+    {
+        return new StatsTabPresenter(taskRunner, mainView, model);
+    }
+
+    public void loadMatchesTab()
+    {
+        // TODO
+
     }
 
     @Override

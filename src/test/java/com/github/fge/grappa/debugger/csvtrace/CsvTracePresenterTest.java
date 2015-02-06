@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -10,6 +12,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -46,9 +49,35 @@ public class CsvTracePresenterTest
         presenter.loadTrace();
 
         verify(presenter).loadTreeTab();
-        verify(presenter).loadTreeTab();
+        verify(presenter).loadStatsTab();
+        verify(presenter).loadMatchesTab();
     }
 
+    @Test
+    public void loadTreeTabTest()
+    {
+        final TreeTabPresenter tabPresenter = mock(TreeTabPresenter.class);
+
+        doReturn(tabPresenter).when(presenter).createTreeTabPresenter();
+
+        presenter.loadTreeTab();
+
+        verify(view).loadTreeTab(tabPresenter);
+        verify(tabPresenter).load();
+    }
+
+    @Test
+    public void loadStatsTabTest()
+    {
+        final StatsTabPresenter tabPresenter = mock(StatsTabPresenter.class);
+
+        doReturn(tabPresenter).when(presenter).createStatsTabPresenter();
+
+        presenter.loadStatsTab();
+
+        verify(view).loadStatsTab(tabPresenter);
+        verify(tabPresenter).load();
+    }
 
     @Test
     public void disposeTest()
