@@ -8,9 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import org.fxmisc.easybind.EasyBind;
 
 import javax.annotation.Nullable;
 
@@ -24,6 +24,7 @@ public final class ParseTreeNodeCell
     public ParseTreeNodeCell(final TreeTabDisplay display)
     {
         setEditable(false);
+
         selectedProperty().addListener(new ChangeListener<Boolean>()
         {
             @SuppressWarnings("AutoUnboxing")
@@ -40,33 +41,27 @@ public final class ParseTreeNodeCell
             }
         });
 
-        final ChangeListener<TreeItem<ParseTreeNode>> listener
-            = new ChangeListener<TreeItem<ParseTreeNode>>()
+        final ObservableValue<Boolean> loading
+            = EasyBind.select(treeItemProperty())
+            .selectObject(item -> ((ParseTreeItem) item).loadingProperty());
+
+        loading.addListener(new ChangeListener<Boolean>()
         {
             @Override
             public void changed(
-                final ObservableValue<? extends TreeItem<ParseTreeNode>> unused,
-                final TreeItem<ParseTreeNode> oldValue,
-                final TreeItem<ParseTreeNode> newValue)
+                final ObservableValue<? extends Boolean> observable,
+                final Boolean oldValue, final Boolean newValue)
             {
-                if (newValue == null)
-                    return;
-
-                final ParseTreeItem item = (ParseTreeItem) newValue;
-
                 final ObservableList<Node> children = hBox.getChildren();
-                final String txt = stringValue(newValue.getValue());
-                text.setText(txt);
-                if (!item.loadingProperty().get()) {
+                if (newValue == null || !newValue.booleanValue()) {
                     children.remove(bar);
                     return;
                 }
+
                 if (!children.contains(bar))
                     children.add(bar);
             }
-        };
-
-        treeItemProperty().addListener(listener);
+        });
 
         itemProperty().addListener(new ChangeListener<ParseTreeNode>()
         {

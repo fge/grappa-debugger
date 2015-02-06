@@ -58,13 +58,14 @@ targetCompatibility = javaVersion; // defaults to sourceCompatibility
 dependencies {
     provided(group: "com.google.code.findbugs", name: "jsr305",
         version: "3.0.0");
-    compile(group: "com.github.fge", name: "throwing-lambdas",
-        version: "0.3.0");
-    compile(group: "com.github.fge", name: "java7-fs-more", version: "0.1.0");
     compile(group: "com.github.fge", name: "grappa",
         version: "2.0.0-alpha.3-SNAPSHOT");
     compile(group: "org.controlsfx", name: "openjfx-dialogs",
         version: "1.0.2");
+    compile(group: "org.fxmisc.easybind", name: "easybind", version: "1.0.3");
+    compile(group: "com.github.fge", name: "throwing-lambdas",
+        version: "0.3.0");
+    compile(group: "com.github.fge", name: "java7-fs-more", version: "0.1.0");
     compile(group: "com.h2database", name: "h2", version: "1.4.184");
     compile(group: "org.jooq", name: "jooq", version: "3.5.1");
     // Uncomment this when the code generation needs to be rerun
