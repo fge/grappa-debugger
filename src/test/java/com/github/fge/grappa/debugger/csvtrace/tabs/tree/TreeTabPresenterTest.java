@@ -11,8 +11,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
@@ -73,7 +71,9 @@ public class TreeTabPresenterTest
     public void loadParseTreeErrorTest()
         throws GrappaDebuggerException
     {
-        final IOException exception = new IOException();
+        final Exception cause = new Exception();
+        final GrappaDebuggerException exception
+            = new GrappaDebuggerException(cause);
         when(model.getParseTree()).thenThrow(exception);
 
         presenter.loadParseTree();

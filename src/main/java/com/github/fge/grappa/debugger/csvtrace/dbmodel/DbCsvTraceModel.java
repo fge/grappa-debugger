@@ -302,7 +302,7 @@ public class DbCsvTraceModel
 
     @Nonnull
     @Override
-    public List<RuleInvocationStatistics> getRuleInvocationStatistics()
+    public List<RuleInvocationStatistics> getMatches()
     {
         final Field<Integer> emptyMatches = DSL.decode()
             .when(EMPTY_MATCHES_CONDITION, 1).otherwise(0);

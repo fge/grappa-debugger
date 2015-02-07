@@ -12,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 import java.util.function.Function;
@@ -26,7 +26,7 @@ public class MatchesTabDisplay
      * Top bar
      */
     @FXML
-    protected ToolBar completionStatus;
+    protected BorderPane completionBar;
 
     @FXML
     protected Button tabRefresh;
@@ -38,7 +38,7 @@ public class MatchesTabDisplay
      * General stats
      */
     @FXML
-    protected Label nrInvocations;
+    protected Label nrMatches;
 
     @FXML
     protected Text successRate;
@@ -62,7 +62,7 @@ public class MatchesTabDisplay
      * Invocation table
      */
     @FXML
-    protected TableView<RuleInvocationStatistics> invocationStatsTable;
+    protected TableView<RuleInvocationStatistics> matchesTable;
 
     @FXML
     protected TableColumn<RuleInvocationStatistics, String> ruleName;
@@ -97,13 +97,13 @@ public class MatchesTabDisplay
             r.getNonEmptyMatches(), r.getEmptyMatches(), r.getFailedMatches()));
         setColumnValue(callGraph, Function.identity());
         callGraph.setCellFactory(CallGraphTableCell::new);
-        invocationStatsTable.setColumnResizePolicy(
-            TableView.CONSTRAINED_RESIZE_POLICY);
+
+        matchesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     @FXML
-    void refreshStatisticsEvent(final Event event)
+    void refreshMatchesEvent(final Event event)
     {
-        presenter.handleRefreshStatistics();
+        presenter.handleRefreshMatches();
     }
 }

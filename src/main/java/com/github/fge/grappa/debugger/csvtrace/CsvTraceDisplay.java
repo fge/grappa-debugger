@@ -18,6 +18,9 @@ public class CsvTraceDisplay
     @FXML
     protected Tab statsTab;
 
+    @FXML
+    protected Tab invocationsTab;
+
     @Override
     public void init()
     {

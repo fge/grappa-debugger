@@ -21,6 +21,7 @@
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.CsvTraceDisplay">
     <Tab text="Parse tree" closable="false" fx:id="treeTab"/>
-    <Tab text="Statistics" closable="false" fx:id="statsTab"/>
+    <Tab text="Matcher statistics" closable="false" fx:id="statsTab"/>
+    <Tab text="Invocation statistics" closable="false" fx:id="invocationsTab"/>
 </TabPane>
 

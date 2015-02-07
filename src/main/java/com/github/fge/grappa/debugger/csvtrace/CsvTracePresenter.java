@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.TracePresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -64,10 +65,16 @@ public class CsvTracePresenter
         return new StatsTabPresenter(taskRunner, mainView, model);
     }
 
-    public void loadMatchesTab()
+    void loadMatchesTab()
     {
-        // TODO
+        final MatchesTabPresenter matchesTab = createMatchesTabPresenter();
+        view.loadMatchesTab(matchesTab);
+        matchesTab.load();
+    }
 
+    MatchesTabPresenter createMatchesTabPresenter()
+    {
+        return new MatchesTabPresenter(taskRunner, model, mainView);
     }
 
     @Override

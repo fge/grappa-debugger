@@ -76,7 +76,7 @@ public class StatsTabPresenter
 
         taskRunner.computeOrFail(
             view::disableTableRefresh,
-            model::getRuleInvocationStatistics,
+            model::getMatches,
             stats -> {
                 if (complete)
                     view.displayInvocationStatisticsComplete();

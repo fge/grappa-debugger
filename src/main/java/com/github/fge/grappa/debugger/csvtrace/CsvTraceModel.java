@@ -50,5 +50,5 @@ public interface CsvTraceModel
     boolean isLoadComplete();
 
     @Nonnull
-    List<RuleInvocationStatistics> getRuleInvocationStatistics();
+    List<RuleInvocationStatistics> getMatches();
 }

@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -45,6 +46,7 @@ public class CsvTracePresenterTest
     {
         doNothing().when(presenter).loadTreeTab();
         doNothing().when(presenter).loadStatsTab();
+        doNothing().when(presenter).loadMatchesTab();
 
         presenter.loadTrace();
 
@@ -76,6 +78,20 @@ public class CsvTracePresenterTest
         presenter.loadStatsTab();
 
         verify(view).loadStatsTab(tabPresenter);
+        verify(tabPresenter).load();
+    }
+
+    @Test
+    public void loadMatchesTabTest()
+    {
+        final MatchesTabPresenter tabPresenter
+            = mock(MatchesTabPresenter.class);
+
+        doReturn(tabPresenter).when(presenter).createMatchesTabPresenter();
+
+        presenter.loadMatchesTab();
+
+        verify(view).loadMatchesTab(tabPresenter);
         verify(tabPresenter).load();
     }
 

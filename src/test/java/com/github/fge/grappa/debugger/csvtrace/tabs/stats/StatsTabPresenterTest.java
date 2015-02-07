@@ -150,7 +150,7 @@ public class StatsTabPresenterTest
 
         //noinspection AutoBoxing
         when(model.isLoadComplete()).thenReturn(true);
-        when(model.getRuleInvocationStatistics()).thenReturn(stats);
+        when(model.getMatches()).thenReturn(stats);
 
         presenter.handleRefreshInvocationStatistics();
 
@@ -167,7 +167,7 @@ public class StatsTabPresenterTest
 
         //noinspection AutoBoxing
         when(model.isLoadComplete()).thenReturn(false);
-        when(model.getRuleInvocationStatistics()).thenReturn(stats);
+        when(model.getMatches()).thenReturn(stats);
 
         presenter.handleRefreshInvocationStatistics();
 
@@ -181,7 +181,7 @@ public class StatsTabPresenterTest
     {
         final RuntimeException oops = new RuntimeException();
 
-        when(model.getRuleInvocationStatistics()).thenThrow(oops);
+        when(model.getMatches()).thenThrow(oops);
 
         presenter.handleRefreshInvocationStatistics();
 

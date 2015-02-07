@@ -16,12 +16,13 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.ProgressBar?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabDisplay">
+    fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabDisplay"
+    fx:id="completionBar">
     <top>
-        <ToolBar fx:id="completionStatus">
+        <ToolBar>
             <Label text="Loading not complete yet; click to refresh:"/>
             <Button text="Refresh" fx:id="tabRefresh"
-                onMouseClicked="#refreshInvocationStatistics"/>
+                onMouseClicked="#refreshStatisticsEvent"/>
             <ProgressBar fx:id="loadProgressBar" visible="false"/>
         </ToolBar>
     </top>
@@ -52,9 +53,9 @@
                                 <RowConstraints vgrow="SOMETIMES"/>
                             </rowConstraints>
 
-                            <Label text="Number of rule invocations:"
+                            <Label text="Number of matches:"
                                 GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <Label fx:id="nrInvocations" GridPane.rowIndex="0"
+                            <Label fx:id="nrMatches" GridPane.rowIndex="0"
                                 GridPane.columnIndex="1"/>
 
                             <Label text="Success rate:"
@@ -65,25 +66,26 @@
 
                             <Label text="Top rule accounts for:"
                                 GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <Text fx:id="topRulePct" GridPane.rowIndex="1"
+                            <Text fx:id="topRulePct" GridPane.rowIndex="2"
                                 GridPane.columnIndex="1"
                                 text="(not available yet)"/>
 
                             <Label text="Top 5 rules account for:"
-                                GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <Text fx:id="topFiveRulePct" GridPane.rowIndex="2"
+                                GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <Text fx:id="topFiveRulePct" GridPane.rowIndex="3"
                                 GridPane.columnIndex="1"
                                 text="(not available yet)"/>
 
                             <Label text="Top 10 rules account for:"
-                                GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                            <Text fx:id="topTenRulePct" GridPane.rowIndex="3"
+                                GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                            <Text fx:id="topTenRulePct" GridPane.rowIndex="4"
                                 GridPane.columnIndex="1"
                                 text="(not available yet)"/>
                         </GridPane>
                     </center>
                 </BorderPane>
-                <PieChart fx:id="invocationsChart" labelsVisible="false">
+                <PieChart fx:id="invocationsChart" labelsVisible="false"
+                    title="Matches by status">
                     <padding>
                         <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
                     </padding>
@@ -91,7 +93,7 @@
             </SplitPane>
             <BorderPane>
                 <center>
-                    <TableView fx:id="invocationStatsTable" editable="false">
+                    <TableView fx:id="matchesTable" editable="false">
                         <columns>
                             <TableColumn fx:id="ruleName" text="Rule"/>
                             <TableColumn fx:id="ruleClass" text="Rule class"/>

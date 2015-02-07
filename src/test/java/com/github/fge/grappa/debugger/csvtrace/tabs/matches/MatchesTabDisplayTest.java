@@ -26,8 +26,8 @@ public class MatchesTabDisplayTest
     @Test
     public void refreshStatisticsEventTest()
     {
-        display.refreshStatisticsEvent(mock(Event.class));
+        display.refreshMatchesEvent(mock(Event.class));
 
-        verify(presenter).handleRefreshStatistics();
+        verify(presenter).handleRefreshMatches();
     }
 }

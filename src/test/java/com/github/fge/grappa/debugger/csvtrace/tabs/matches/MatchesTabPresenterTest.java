@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -36,6 +37,17 @@ public class MatchesTabPresenterTest
         model = mock(CsvTraceModel.class);
         view = mock(MatchesTabView.class);
         presenter = spy(new MatchesTabPresenter(taskRunner, model, mainView));
+        presenter.setView(view);
+    }
+
+    @Test
+    public void loadTest()
+    {
+        doNothing().when(presenter).handleRefreshMatches();
+
+        presenter.load();
+
+        verify(presenter).handleRefreshMatches();
     }
 
     @Test
@@ -46,13 +58,13 @@ public class MatchesTabPresenterTest
 
         //noinspection AutoBoxing
         when(model.isLoadComplete()).thenReturn(true);
-        when(model.getRuleInvocationStatistics()).thenReturn(stats);
+        when(model.getMatches()).thenReturn(stats);
 
-        presenter.handleRefreshStatistics();
+        presenter.handleRefreshMatches();
 
         verify(view).disableTabRefresh();
-        verify(view).displayInvocationStatisticsComplete();
-        verify(view).displayRuleInvocationStatistics(same(stats));
+        verify(view).showMatchesLoadingComplete();
+        verify(view).showMatches(same(stats));
     }
 
     @Test
@@ -63,13 +75,13 @@ public class MatchesTabPresenterTest
 
         //noinspection AutoBoxing
         when(model.isLoadComplete()).thenReturn(false);
-        when(model.getRuleInvocationStatistics()).thenReturn(stats);
+        when(model.getMatches()).thenReturn(stats);
 
-        presenter.handleRefreshStatistics();
+        presenter.handleRefreshMatches();
 
         verify(view).disableTabRefresh();
-        verify(view).displayInvocationStatisticsIncomplete();
-        verify(view).displayRuleInvocationStatistics(same(stats));
+        verify(view).showMatchesLoadingIncomplete();
+        verify(view).showMatches(same(stats));
     }
 
     @Test
@@ -77,15 +89,15 @@ public class MatchesTabPresenterTest
     {
         final RuntimeException oops = new RuntimeException();
 
-        when(model.getRuleInvocationStatistics()).thenThrow(oops);
+        when(model.getMatches()).thenThrow(oops);
 
-        presenter.handleRefreshStatistics();
+        presenter.handleRefreshMatches();
 
         verify(view).disableTabRefresh();
-        verify(view, never()).displayInvocationStatisticsIncomplete();
-        verify(view, never()).displayInvocationStatisticsComplete();
+        verify(view, never()).showMatchesLoadingIncomplete();
+        verify(view, never()).showMatchesLoadingComplete();
         //noinspection unchecked
-        verify(view, never()).displayRuleInvocationStatistics(anyList());
-        verify(presenter).handleRefreshStatisticsError(same(oops));
+        verify(view, never()).showMatches(anyList());
+        verify(presenter).handleRefreshMatchesError(same(oops));
     }
 }

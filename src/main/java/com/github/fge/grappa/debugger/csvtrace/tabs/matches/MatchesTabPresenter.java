@@ -21,26 +21,30 @@ public class MatchesTabPresenter
         this.mainView = mainView;
     }
 
-    public void handleRefreshStatistics()
+    public void load()
+    {
+        handleRefreshMatches();
+    }
+
+    @VisibleForTesting
+    void handleRefreshMatches()
     {
         final boolean complete = model.isLoadComplete();
 
         taskRunner.computeOrFail(
             view::disableTabRefresh,
-            model::getRuleInvocationStatistics,
+            model::getMatches,
             stats -> {
                 if (complete)
-                    view.displayInvocationStatisticsComplete();
+                    view.showMatchesLoadingComplete();
                 else
-                    view.displayInvocationStatisticsIncomplete();
-                view.displayRuleInvocationStatistics(stats);
-            },
-            this::handleRefreshStatisticsError
-        );
+                    view.showMatchesLoadingIncomplete();
+                view.showMatches(stats);
+            }, this::handleRefreshMatchesError);
     }
 
     @VisibleForTesting
-    void handleRefreshStatisticsError(final Throwable throwable)
+    void handleRefreshMatchesError(final Throwable throwable)
     {
         mainView.showError("Load error", "Unable to load matcher statistics",
             throwable);
