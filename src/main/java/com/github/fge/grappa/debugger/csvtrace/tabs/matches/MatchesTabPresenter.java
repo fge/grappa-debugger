@@ -44,7 +44,8 @@ public class MatchesTabPresenter
 
         taskRunner.computeOrFail(
             view::disableTabRefresh,
-            () -> new MatchersData(model), (data) -> {
+            this::getMatchersData,
+            data -> {
                 updateTab(data);
                 final Runnable postRefresh = complete
                     ? view::showMatchesLoadingComplete
@@ -58,13 +59,21 @@ public class MatchesTabPresenter
     }
 
     @VisibleForTesting
+    MatchersData getMatchersData()
+    {
+        return new MatchersData(model);
+    }
+
+    @VisibleForTesting
     void updateTab(final MatchersData data)
     {
-        view.showMatches(data.matches);
-        view.showMatchesStats(data.nonEmpty, data.empty, data.failures);
-        view.showTopOne(data.topOne, data.total);
-        view.showTopFive(data.topFive, data.total);
-        view.showTopTen(data.topTen, data.total);
+        view.showMatches(data.getMatches());
+        view.showMatchesStats(data.getNonEmpty(), data.getEmpty(),
+            data.getFailures());
+        final int total = data.getTotal();
+        view.showTopOne(data.getTopOne(), total);
+        view.showTopFive(data.getTopFive(), total);
+        view.showTopTen(data.getTopTen(), total);
     }
 
     @VisibleForTesting
@@ -105,6 +114,46 @@ public class MatchesTabPresenter
             topTen = size >= 10
                 ? top.stream().mapToInt(Integer::intValue).sum()
                 : null;
+        }
+
+        List<RuleInvocationStatistics> getMatches()
+        {
+            return matches;
+        }
+
+        int getNonEmpty()
+        {
+            return nonEmpty;
+        }
+
+        int getEmpty()
+        {
+            return empty;
+        }
+
+        int getFailures()
+        {
+            return failures;
+        }
+
+        int getTotal()
+        {
+            return total;
+        }
+
+        Integer getTopOne()
+        {
+            return topOne;
+        }
+
+        Integer getTopFive()
+        {
+            return topFive;
+        }
+
+        Integer getTopTen()
+        {
+            return topTen;
         }
     }
 }
