@@ -7,14 +7,24 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ProgressBar?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:id="pane"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.linechart.LineChartTabDisplay">
     <top>
         <ToolBar fx:id="toolbar">
             <HBox fx:id="hbox" alignment="CENTER" spacing="5.0">
-                <Button text="Refresh"/>
-                <Label text="Layout testing"/>
+                <Label text="Lines to display:"/>
+                <ComboBox fx:id="linesDisplayed"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="prevLines" text="Previous"/>
+                <Label fx:id="currentLines" text="(no data)"/>
+                <Button fx:id="nextLines" text="Next"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="tabRefresh" text="Refresh"/>
+                <ProgressBar fx:id="progressBar" visible="false"/>
             </HBox>
         </ToolBar>
     </top>

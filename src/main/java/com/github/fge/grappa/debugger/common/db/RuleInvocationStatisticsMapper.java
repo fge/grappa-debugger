@@ -9,6 +9,7 @@ public final class RuleInvocationStatisticsMapper
 {
     private final RecordMapper<Record, RuleInfo> ruleInfoMapper
         = new RuleInfoMapper();
+
     /**
      * A callback method indicating that the next record has been fetched.
      *
