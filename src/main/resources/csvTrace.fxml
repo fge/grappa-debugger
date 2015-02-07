@@ -5,7 +5,7 @@
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.CsvTraceDisplay">
     <Tab text="Parse tree" closable="false" fx:id="treeTab"/>
-    <Tab text="Matcher statistics" closable="false" fx:id="statsTab"/>
-    <Tab text="Invocation statistics" closable="false" fx:id="invocationsTab"/>
+    <Tab text="Rules" closable="false" fx:id="rulesTab"/>
+    <Tab text="Matches" closable="false" fx:id="matchesTab"/>
 </TabPane>
 

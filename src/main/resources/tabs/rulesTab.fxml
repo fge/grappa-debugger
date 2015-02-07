@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabDisplay">
+    fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabDisplay">
     <center>
         <SplitPane orientation="VERTICAL" dividerPositions="0.5">
             <SplitPane dividerPositions="0.5">

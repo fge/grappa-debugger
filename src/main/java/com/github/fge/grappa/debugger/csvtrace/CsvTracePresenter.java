@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.TracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
@@ -33,7 +33,7 @@ public class CsvTracePresenter
     public void loadTrace()
     {
         loadTreeTab();
-        loadStatsTab();
+        loadRulesTab();
         loadMatchesTab();
     }
 
@@ -52,17 +52,17 @@ public class CsvTracePresenter
     }
 
     @VisibleForTesting
-    void loadStatsTab()
+    void loadRulesTab()
     {
-        final StatsTabPresenter statsTab = createStatsTabPresenter();
-        view.loadStatsTab(statsTab);
-        statsTab.load();
+        final RulesTabPresenter rulesTab = createRulesTabPresenter();
+        view.loadRulesTab(rulesTab);
+        rulesTab.load();
     }
 
     @VisibleForTesting
-    StatsTabPresenter createStatsTabPresenter()
+    RulesTabPresenter createRulesTabPresenter()
     {
-        return new StatsTabPresenter(taskRunner, mainView, model);
+        return new RulesTabPresenter(taskRunner, mainView, model);
     }
 
     void loadMatchesTab()

@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs.stats;
+package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class StatsTabPresenterTest
+public class RulesTabPresenterTest
 {
     private final GuiTaskRunner taskRunner = new GuiTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run
@@ -34,16 +34,16 @@ public class StatsTabPresenterTest
 
     private MainWindowView mainView;
     private CsvTraceModel model;
-    private StatsTabView view;
-    private StatsTabPresenter presenter;
+    private RulesTabView view;
+    private RulesTabPresenter presenter;
 
     @BeforeMethod
     public void init()
     {
         mainView = mock(MainWindowView.class);
         model = mock(CsvTraceModel.class);
-        view = mock(StatsTabView.class);
-        presenter = spy(new StatsTabPresenter(taskRunner, mainView, model));
+        view = mock(RulesTabView.class);
+        presenter = spy(new RulesTabPresenter(taskRunner, mainView, model));
         presenter.setView(view);
     }
 

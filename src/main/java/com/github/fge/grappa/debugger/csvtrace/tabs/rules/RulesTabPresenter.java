@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs.stats;
+package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
@@ -7,14 +7,14 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.annotations.VisibleForTesting;
 
-public class StatsTabPresenter
-    extends BasePresenter<StatsTabView>
+public class RulesTabPresenter
+    extends BasePresenter<RulesTabView>
 {
     private final GuiTaskRunner taskRunner;
     private final MainWindowView mainView;
     private final CsvTraceModel model;
 
-    public StatsTabPresenter(final GuiTaskRunner taskRunner,
+    public RulesTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
     {
         this.taskRunner = taskRunner;

@@ -16,10 +16,10 @@ public class CsvTraceDisplay
     protected Tab treeTab;
 
     @FXML
-    protected Tab statsTab;
+    protected Tab rulesTab;
 
     @FXML
-    protected Tab invocationsTab;
+    protected Tab matchesTab;
 
     @Override
     public void init()

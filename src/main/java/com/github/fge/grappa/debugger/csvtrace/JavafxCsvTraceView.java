@@ -5,8 +5,8 @@ import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches
     .JavafxMatchesTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.stats.JavafxStatsTabView;
-import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.rules.JavafxRulesTabView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.JavafxTreeTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -50,20 +50,20 @@ public final class JavafxCsvTraceView
     }
 
     @Override
-    public void loadStatsTab(final StatsTabPresenter presenter)
+    public void loadRulesTab(final RulesTabPresenter presenter)
     {
         Objects.requireNonNull(presenter);
 
-        final JavafxStatsTabView tabView;
+        final JavafxRulesTabView tabView;
         try {
-            tabView = new JavafxStatsTabView();
+            tabView = new JavafxRulesTabView();
         } catch (IOException e) {
             parentView.showError("Load error", "Unable to load statistics", e);
             return;
         }
         tabView.getDisplay().setPresenter(presenter);
         presenter.setView(tabView);
-        display.statsTab.setContent(tabView.getNode());
+        display.rulesTab.setContent(tabView.getNode());
     }
 
     @Override
@@ -80,6 +80,6 @@ public final class JavafxCsvTraceView
         }
         tabView.getDisplay().setPresenter(presenter);
         presenter.setView(tabView);
-        display.invocationsTab.setContent(tabView.getNode());
+        display.matchesTab.setContent(tabView.getNode());
     }
 }

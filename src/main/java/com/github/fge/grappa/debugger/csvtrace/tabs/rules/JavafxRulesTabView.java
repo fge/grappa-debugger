@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs.stats;
+package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.common.JavafxView;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
@@ -15,14 +15,14 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
-public final class JavafxStatsTabView
-    extends JavafxView<StatsTabPresenter, StatsTabDisplay>
-    implements StatsTabView
+public final class JavafxRulesTabView
+    extends JavafxView<RulesTabPresenter, RulesTabDisplay>
+    implements RulesTabView
 {
-    public JavafxStatsTabView()
+    public JavafxRulesTabView()
         throws IOException
     {
-        super("/tabs/statsTab.fxml");
+        super("/tabs/rulesTab.fxml");
     }
 
     @Override

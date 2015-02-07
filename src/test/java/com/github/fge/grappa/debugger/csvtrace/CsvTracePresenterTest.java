@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.stats.StatsTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -45,13 +45,13 @@ public class CsvTracePresenterTest
     public void loadTraceTest()
     {
         doNothing().when(presenter).loadTreeTab();
-        doNothing().when(presenter).loadStatsTab();
+        doNothing().when(presenter).loadRulesTab();
         doNothing().when(presenter).loadMatchesTab();
 
         presenter.loadTrace();
 
         verify(presenter).loadTreeTab();
-        verify(presenter).loadStatsTab();
+        verify(presenter).loadRulesTab();
         verify(presenter).loadMatchesTab();
     }
 
@@ -71,13 +71,13 @@ public class CsvTracePresenterTest
     @Test
     public void loadStatsTabTest()
     {
-        final StatsTabPresenter tabPresenter = mock(StatsTabPresenter.class);
+        final RulesTabPresenter tabPresenter = mock(RulesTabPresenter.class);
 
-        doReturn(tabPresenter).when(presenter).createStatsTabPresenter();
+        doReturn(tabPresenter).when(presenter).createRulesTabPresenter();
 
-        presenter.loadStatsTab();
+        presenter.loadRulesTab();
 
-        verify(view).loadStatsTab(tabPresenter);
+        verify(view).loadRulesTab(tabPresenter);
         verify(tabPresenter).load();
     }
 

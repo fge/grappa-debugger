@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.tabs.stats;
+package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
@@ -18,8 +18,8 @@ import java.util.function.Function;
 
 import static com.github.fge.grappa.debugger.javafx.JavafxUtils.setColumnValue;
 
-public class StatsTabDisplay
-    extends JavafxDisplay<StatsTabPresenter>
+public class RulesTabDisplay
+    extends JavafxDisplay<RulesTabPresenter>
 {
     /*
      * General match information
