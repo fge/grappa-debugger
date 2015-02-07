@@ -9,7 +9,6 @@ import javafx.scene.chart.PieChart;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -63,8 +62,6 @@ public final class JavafxStatsTabView
         final int totalMatchers = matchersByType.values().stream()
             .mapToInt(Integer::intValue).sum();
 
-        final List<PieChart.Data> list = new ArrayList<>(4);
-
         MatcherType type;
         int nr;
         double pct;
@@ -75,34 +72,35 @@ public final class JavafxStatsTabView
         nr = matchersByType.computeIfAbsent(type, zero);
         pct = 100.0 * nr / totalMatchers;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = new PieChart.Data(fmt, pct);
-        list.add(data);
+        data = display.terminalsPie;
+        data.setName(fmt);
+        data.setPieValue(nr);
 
         type = MatcherType.COMPOSITE;
         nr = matchersByType.computeIfAbsent(type, zero);
         pct = 100.0 * nr / totalMatchers;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = new PieChart.Data(fmt, pct);
-        list.add(data);
+        data = display.compositesPie;
+        data.setName(fmt);
+        data.setPieValue(nr);
 
         type = MatcherType.PREDICATE;
         nr = matchersByType.computeIfAbsent(type, zero);
         pct = 100.0 * nr / totalMatchers;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = new PieChart.Data(fmt, pct);
-        list.add(data);
+        data = display.predicatesPie;
+        data.setName(fmt);
+        data.setPieValue(nr);
 
         type = MatcherType.ACTION;
         nr = matchersByType.computeIfAbsent(type, zero);
         pct = 100.0 * nr / totalMatchers;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = new PieChart.Data(fmt, pct);
-        list.add(data);
-
-        display.matchersChart.getData().setAll(list);
+        data = display.actionsPie;
+        data.setName(fmt);
+        data.setPieValue(nr);
 
         fmt = String.format("Matchers by type (%d total)", totalMatchers);
-
         display.matchersChart.setTitle(fmt);
     }
 

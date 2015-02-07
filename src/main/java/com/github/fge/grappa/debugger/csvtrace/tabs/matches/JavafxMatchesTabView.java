@@ -79,7 +79,7 @@ public final class JavafxMatchesTabView
         type = "Failed matches";
         pct = 100.0 * nr / total;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = display.failedMatchesPie;
+        data = display.failedPie;
         data.setName(fmt);
         data.setPieValue((double) nr);
 
@@ -87,7 +87,7 @@ public final class JavafxMatchesTabView
         type = "Empty matches";
         pct = 100.0 * nr / total;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = display.emptyMatchesPie;
+        data = display.emptyPie;
         data.setName(fmt);
         data.setPieValue((double) nr);
 
@@ -95,7 +95,7 @@ public final class JavafxMatchesTabView
         type = "Non empty matches";
         pct = 100.0 * nr / total;
         fmt = String.format("%s (%d; %.02f%%)", type, nr, pct);
-        data = display.nonEmptyMatchesPie;
+        data = display.nonEmptyPie;
         data.setName(fmt);
         data.setPieValue((double) nr);
 

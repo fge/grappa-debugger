@@ -4,6 +4,8 @@ import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.javafx.CallGraphTableCell;
 import com.github.fge.grappa.matchers.MatcherType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -43,6 +45,11 @@ public class StatsTabDisplay
     @FXML
     protected PieChart matchersChart;
 
+    protected final PieChart.Data terminalsPie = new PieChart.Data("", 0.0);
+    protected final PieChart.Data compositesPie = new PieChart.Data("", 0.0);
+    protected final PieChart.Data predicatesPie = new PieChart.Data("", 0.0);
+    protected final PieChart.Data actionsPie = new PieChart.Data("", 0.0);
+
     /*
      * Top 10 table
      */
@@ -78,6 +85,13 @@ public class StatsTabDisplay
     @Override
     public void init()
     {
+        final ObservableList<PieChart.Data> list
+            = FXCollections.observableArrayList();
+
+        list.addAll(terminalsPie, compositesPie, predicatesPie, actionsPie);
+
+        matchersChart.setData(list);
+
         setColumnValue(ruleName, r -> r.getRuleInfo().getName());
         setColumnValue(ruleClass, r -> r.getRuleInfo().getClassName());
         setColumnValue(ruleType, r -> r.getRuleInfo().getType());

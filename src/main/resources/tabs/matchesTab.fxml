@@ -19,11 +19,11 @@
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabDisplay"
     fx:id="completionBar">
     <top>
-        <ToolBar>
-            <Label text="Loading not complete yet; click to refresh:"/>
+        <ToolBar nodeOrientation="RIGHT_TO_LEFT">
+            <ProgressBar fx:id="loadProgressBar" visible="false"/>
             <Button text="Refresh" fx:id="tabRefresh"
                 onMouseClicked="#refreshTabEvent"/>
-            <ProgressBar fx:id="loadProgressBar" visible="false"/>
+            <Label text="Loading not complete yet; click to refresh:"/>
         </ToolBar>
     </top>
     <center>

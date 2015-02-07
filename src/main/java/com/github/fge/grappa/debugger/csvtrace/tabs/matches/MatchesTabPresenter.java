@@ -44,16 +44,17 @@ public class MatchesTabPresenter
 
         taskRunner.computeOrFail(
             view::disableTabRefresh,
-            () -> new MatchersData(model),
-            this::updateTab,
+            () -> new MatchersData(model), (data) -> {
+                updateTab(data);
+                final Runnable postRefresh = complete
+                    ? view::showMatchesLoadingComplete
+                    : view::showMatchesLoadingIncomplete;
+
+                taskRunner.executeFront(postRefresh);
+            },
             this::handleTabRefreshError
         );
 
-        final Runnable postRefresh = complete
-            ? view::showMatchesLoadingComplete
-            : view::showMatchesLoadingIncomplete;
-
-        taskRunner.executeFront(postRefresh);
     }
 
     @VisibleForTesting

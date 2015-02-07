@@ -60,9 +60,9 @@ public class MatchesTabDisplay
     @FXML
     protected PieChart invocationsChart;
 
-    protected PieChart.Data failedMatchesPie = new PieChart.Data("", 0.0);
-    protected PieChart.Data emptyMatchesPie = new PieChart.Data("", 0.0);
-    protected PieChart.Data nonEmptyMatchesPie = new PieChart.Data("", 0.0);
+    protected final PieChart.Data failedPie = new PieChart.Data("", 0.0);
+    protected final PieChart.Data emptyPie = new PieChart.Data("", 0.0);
+    protected final PieChart.Data nonEmptyPie = new PieChart.Data("", 0.0);
 
     /*
      * Invocation table
@@ -107,7 +107,7 @@ public class MatchesTabDisplay
         final ObservableList<PieChart.Data> list
             = FXCollections.observableArrayList();
 
-        list.addAll(failedMatchesPie, emptyMatchesPie, nonEmptyMatchesPie);
+        list.addAll(failedPie, emptyPie, nonEmptyPie);
 
         invocationsChart.setData(list);
 
