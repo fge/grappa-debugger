@@ -10,8 +10,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ProgressBar?>
+
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-    fx:id="pane"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.linechart.LineChartTabDisplay">
     <top>
         <ToolBar fx:id="toolbar">
@@ -23,9 +23,26 @@
                 <Label fx:id="currentLines" text="(no data)"/>
                 <Button fx:id="nextLines" text="Next"/>
                 <Separator orientation="VERTICAL"/>
-                <Button fx:id="tabRefresh" text="Refresh"/>
-                <ProgressBar fx:id="progressBar" visible="false"/>
+                <HBox fx:id="refreshBox">
+                    <Button fx:id="tabRefresh" text="Refresh"/>
+                    <ProgressBar fx:id="progressBar" visible="false"/>
+                </HBox>
             </HBox>
         </ToolBar>
     </top>
+    <center>
+        <StackedAreaChart fx:id="chart" legendSide="TOP"
+            title="Matcher status by line" animated="false">
+            <xAxis>
+                <NumberAxis fx:id="xAxis" minorTickVisible="false"
+                    tickMarkVisible="false" autoRanging="false"
+                    label="Line number" forceZeroInRange="false"
+                    tickUnit="1.0"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis minorTickVisible="false" autoRanging="true"
+                    forceZeroInRange="true"/>
+            </yAxis>
+        </StackedAreaChart>
+    </center>
 </BorderPane>

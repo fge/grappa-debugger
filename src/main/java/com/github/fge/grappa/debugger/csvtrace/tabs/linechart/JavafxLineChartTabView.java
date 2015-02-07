@@ -32,13 +32,6 @@ public final class JavafxLineChartTabView
         display.xAxis.setLowerBound(startLine);
         display.xAxis.setUpperBound(startLine + nrLines - 1);
 
-        final int maxDepth = list.stream()
-            .mapToInt(s -> s.getNrFailures() + s.getNrStarted()
-                + s.getNrSuccess() + s.getNrWaiting()
-            ).max().orElseGet(() -> 0);
-
-        display.yAxis.setUpperBound(maxDepth);
-
         XYChart.Data<Number, Number> data;
 
         int lineNr = startLine;
@@ -56,20 +49,23 @@ public final class JavafxLineChartTabView
             display.failureSeries.getData().add(data);
             lineNr++;
         }
+
+        display.currentLines.setText(String.format("Lines %d-%d",
+            startLine, startLine + nrLines - 1));
+
+        display.progressBar.setVisible(false);
     }
 
     @Override
     public void showLoadComplete()
     {
-        display.tabRefresh.setVisible(false);
-        display.progressBar.setVisible(false);
+        display.refreshBox.getChildren().remove(display.tabRefresh);
     }
 
     @Override
     public void showLoadIncomplete()
     {
         display.tabRefresh.setDisable(false);
-        display.progressBar.setVisible(false);
     }
 
     private Stream<XYChart.Series<Number, Number>> allSeries()

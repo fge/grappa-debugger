@@ -32,7 +32,6 @@ public class LineChartTabPresenter
 
     public void load()
     {
-        handleChangeLinesDisplayed(25);
     }
 
     @VisibleForTesting

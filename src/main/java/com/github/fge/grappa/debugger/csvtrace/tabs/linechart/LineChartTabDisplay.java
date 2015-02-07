@@ -11,17 +11,14 @@ import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 public class LineChartTabDisplay
     extends JavafxDisplay<LineChartTabPresenter>
 {
-    @FXML
-    protected BorderPane pane;
-
     @FXML
     protected ToolBar toolbar;
 
@@ -29,7 +26,19 @@ public class LineChartTabDisplay
     protected HBox hbox;
 
     @FXML
+    protected Button prevLines;
+
+    @FXML
+    protected Button nextLines;
+
+    @FXML
+    protected Label currentLines;
+
+    @FXML
     protected ComboBox<Integer> linesDisplayed;
+
+    @FXML
+    protected HBox refreshBox;
 
     @FXML
     protected Button tabRefresh;
@@ -37,9 +46,11 @@ public class LineChartTabDisplay
     @FXML
     protected ProgressBar progressBar;
 
-    protected NumberAxis xAxis;
-    protected NumberAxis yAxis;
+    @FXML
     protected StackedAreaChart<Number, Number> chart;
+
+    @FXML
+    protected NumberAxis xAxis;
 
     protected final XYChart.Series<Number, Number> waitingSeries
         = new XYChart.Series<>();
@@ -53,9 +64,10 @@ public class LineChartTabDisplay
     @Override
     public void init()
     {
+        // We want the hbox to fill the toolbar width
         hbox.minWidthProperty().bind(toolbar.widthProperty());
 
-        linesDisplayed.getItems().addAll(10, 25, 50, 100);
+        linesDisplayed.getItems().addAll(10, 25, 50);
         linesDisplayed.valueProperty().addListener(new ChangeListener<Integer>()
         {
             @Override
@@ -72,22 +84,6 @@ public class LineChartTabDisplay
             }
         });
 
-        xAxis = new NumberAxis();
-        xAxis.setLabel("Line number");
-        xAxis.setForceZeroInRange(false);
-        xAxis.setTickUnit(1.0);
-        xAxis.setTickMarkVisible(false);
-
-        yAxis = new NumberAxis();
-        yAxis.setTickMarkVisible(false);
-        yAxis.setTickMarkVisible(false);
-
-
-        chart = new StackedAreaChart<>(xAxis, yAxis);
-
-        chart.setAnimated(false);
-        chart.setTitle("Matcher status by line");
-
         waitingSeries.setName("Waiting for children");
         startedSeries.setName("Started this line");
         successSeries.setName("Succeeded this line");
@@ -100,8 +96,6 @@ public class LineChartTabDisplay
         data.add(startedSeries);
         data.add(successSeries);
         data.add(failureSeries);
-
-        pane.setCenter(chart);
     }
 
     @VisibleForTesting
