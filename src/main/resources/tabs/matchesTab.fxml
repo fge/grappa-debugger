@@ -22,7 +22,7 @@
         <ToolBar>
             <Label text="Loading not complete yet; click to refresh:"/>
             <Button text="Refresh" fx:id="tabRefresh"
-                onMouseClicked="#refreshStatisticsEvent"/>
+                onMouseClicked="#refreshTabEvent"/>
             <ProgressBar fx:id="loadProgressBar" visible="false"/>
         </ToolBar>
     </top>
@@ -85,7 +85,7 @@
                     </center>
                 </BorderPane>
                 <PieChart fx:id="invocationsChart" labelsVisible="false"
-                    title="Matches by status">
+                    animated="false">
                     <padding>
                         <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
                     </padding>

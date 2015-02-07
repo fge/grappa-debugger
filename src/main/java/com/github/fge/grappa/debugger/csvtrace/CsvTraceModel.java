@@ -51,4 +51,7 @@ public interface CsvTraceModel
 
     @Nonnull
     List<RuleInvocationStatistics> getMatches();
+
+    @Nonnull
+    List<Integer> getTopMatcherCount();
 }

@@ -4,6 +4,8 @@ import com.github.fge.grappa.debugger.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.javafx.CallGraphTableCell;
 import com.github.fge.grappa.matchers.MatcherType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -58,6 +60,10 @@ public class MatchesTabDisplay
     @FXML
     protected PieChart invocationsChart;
 
+    protected PieChart.Data failedMatchesPie = new PieChart.Data("", 0.0);
+    protected PieChart.Data emptyMatchesPie = new PieChart.Data("", 0.0);
+    protected PieChart.Data nonEmptyMatchesPie = new PieChart.Data("", 0.0);
+
     /*
      * Invocation table
      */
@@ -98,12 +104,19 @@ public class MatchesTabDisplay
         setColumnValue(callGraph, Function.identity());
         callGraph.setCellFactory(CallGraphTableCell::new);
 
+        final ObservableList<PieChart.Data> list
+            = FXCollections.observableArrayList();
+
+        list.addAll(failedMatchesPie, emptyMatchesPie, nonEmptyMatchesPie);
+
+        invocationsChart.setData(list);
+
         matchesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     @FXML
-    void refreshMatchesEvent(final Event event)
+    void refreshTabEvent(final Event event)
     {
-        presenter.handleRefreshMatches();
+        presenter.handleTabRefresh();
     }
 }

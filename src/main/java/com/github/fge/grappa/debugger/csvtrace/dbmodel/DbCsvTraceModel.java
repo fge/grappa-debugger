@@ -326,6 +326,23 @@ public class DbCsvTraceModel
         return list;
     }
 
+    @Nonnull
+    @Override
+    public List<Integer> getTopMatcherCount()
+    {
+        final List<Integer> list = new ArrayList<>(10);
+
+        final Field<Integer> nrMatches = DSL.count().as("nrMatches");
+        jooq.select(nrMatches)
+            .from(NODES)
+            .groupBy(NODES.MATCHER_ID)
+            .orderBy(nrMatches.desc())
+            .limit(10)
+            .forEach(r -> list.add(r.value1()));
+
+        return list;
+    }
+
     private ParseInfo readInfo()
         throws IOException
     {
