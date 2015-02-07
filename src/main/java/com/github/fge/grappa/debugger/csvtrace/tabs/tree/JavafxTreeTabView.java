@@ -9,7 +9,7 @@ import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeItem;
-import com.github.fge.grappa.debugger.stats.TracingCharEscaper;
+import com.github.fge.grappa.debugger.common.TracingCharEscaper;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.escape.CharEscaper;
 import javafx.collections.ObservableList;

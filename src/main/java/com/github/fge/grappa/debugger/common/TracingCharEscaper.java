@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.stats;
+package com.github.fge.grappa.debugger.common;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.escape.ArrayBasedCharEscaper;
