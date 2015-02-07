@@ -21,6 +21,9 @@ public class CsvTraceDisplay
     @FXML
     protected Tab matchesTab;
 
+    @FXML
+    protected Tab lineChartTab;
+
     @Override
     public void init()
     {

@@ -2,6 +2,10 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.JavafxView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.linechart
+    .JavafxLineChartTabView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.linechart
+    .LineChartTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches
     .JavafxMatchesTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
@@ -33,9 +37,9 @@ public final class JavafxCsvTraceView
     }
 
     @Override
-    public void loadTreeTab(final TreeTabPresenter presenter)
+    public void loadTreeTab(final TreeTabPresenter tabPresenter)
     {
-        Objects.requireNonNull(presenter);
+        Objects.requireNonNull(tabPresenter);
 
         final JavafxTreeTabView tabView;
         try {
@@ -44,15 +48,15 @@ public final class JavafxCsvTraceView
             parentView.showError("Load error", "Unable to load parse tree", e);
             return;
         }
-        tabView.getDisplay().setPresenter(presenter);
-        presenter.setView(tabView);
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
         display.treeTab.setContent(tabView.getNode());
     }
 
     @Override
-    public void loadRulesTab(final RulesTabPresenter presenter)
+    public void loadRulesTab(final RulesTabPresenter tabPresenter)
     {
-        Objects.requireNonNull(presenter);
+        Objects.requireNonNull(tabPresenter);
 
         final JavafxRulesTabView tabView;
         try {
@@ -61,15 +65,15 @@ public final class JavafxCsvTraceView
             parentView.showError("Load error", "Unable to load statistics", e);
             return;
         }
-        tabView.getDisplay().setPresenter(presenter);
-        presenter.setView(tabView);
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
         display.rulesTab.setContent(tabView.getNode());
     }
 
     @Override
-    public void loadMatchesTab(final MatchesTabPresenter presenter)
+    public void loadMatchesTab(final MatchesTabPresenter tabPresenter)
     {
-        Objects.requireNonNull(presenter);
+        Objects.requireNonNull(tabPresenter);
 
         final JavafxMatchesTabView tabView;
         try {
@@ -78,8 +82,25 @@ public final class JavafxCsvTraceView
             parentView.showError("Load error", "Unable to load statistics", e);
             return;
         }
-        tabView.getDisplay().setPresenter(presenter);
-        presenter.setView(tabView);
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
         display.matchesTab.setContent(tabView.getNode());
+    }
+
+    @Override
+    public void loadLineChartTab(final LineChartTabPresenter tabPresenter)
+    {
+        Objects.requireNonNull(tabPresenter);
+
+        final JavafxLineChartTabView tabView;
+        try {
+            tabView = new JavafxLineChartTabView();
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load statistics", e);
+            return;
+        }
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
+        display.lineChartTab.setContent(tabView.getNode());
     }
 }

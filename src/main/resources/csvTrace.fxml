@@ -7,5 +7,6 @@
     <Tab text="Parse tree" closable="false" fx:id="treeTab"/>
     <Tab text="Rules" closable="false" fx:id="rulesTab"/>
     <Tab text="Matches" closable="false" fx:id="matchesTab"/>
+    <Tab text="Line chart" closable="false" fx:id="lineChartTab"/>
 </TabPane>
 
