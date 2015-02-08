@@ -24,13 +24,13 @@ public class TreeDepthTabDisplayTest
     }
 
     @Test
-    public void changeNumberOfLinesEventTest()
+    public void displayLinesEvent()
     {
         final int nrLines = 42;
 
-        display.changeNumberOfLinesEvent(nrLines);
+        display.displayLinesEvent(nrLines);
 
-        verify(presenter).handleChangeNumberOfLines(nrLines);
+        verify(presenter).handleDisplayLines(nrLines);
     }
 
     @Test

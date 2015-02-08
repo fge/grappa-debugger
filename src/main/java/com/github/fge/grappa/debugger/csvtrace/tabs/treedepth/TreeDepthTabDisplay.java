@@ -60,15 +60,15 @@ public class TreeDepthTabDisplay
                 if (newValue == null)
                     return;
                 //noinspection AutoUnboxing
-                changeNumberOfLinesEvent(newValue);
+                displayLinesEvent(newValue);
             }
         });
     }
 
     @VisibleForTesting
-    void changeNumberOfLinesEvent(final int nrLines)
+    void displayLinesEvent(final int nrLines)
     {
-        presenter.handleChangeNumberOfLines(nrLines);
+        presenter.handleDisplayLines(nrLines);
     }
 
     @FXML
