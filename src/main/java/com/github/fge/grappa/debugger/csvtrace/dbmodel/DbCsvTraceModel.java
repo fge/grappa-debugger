@@ -5,12 +5,10 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.common.db.DbLoader;
-import com.github.fge.grappa.debugger.common.db.LineMatcherStatusMapper;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatisticsMapper;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.LineMatcherStatus;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
@@ -25,7 +23,6 @@ import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
-import org.parboiled.support.IndexRange;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
@@ -55,19 +52,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
 import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 
+@SuppressWarnings({ "AutoBoxing", "AutoUnboxing" })
 public class DbCsvTraceModel
     implements CsvTraceModel
 {
-    // Keep jooq quiet
-    static {
-        LogManager.getLogManager().reset();
-    }
-
     private static final Condition EMPTY_MATCHES_CONDITION = NODES.SUCCESS.eq(1)
         .and(NODES.START_INDEX.equal(NODES.END_INDEX));
     private static final Condition NONEMPTY_MATCHES_CONDITION
@@ -170,7 +162,6 @@ public class DbCsvTraceModel
     }
 
     @Nonnull
-    @SuppressWarnings("AutoUnboxing")
     @Override
     public ParseTree getParseTree()
         throws GrappaDebuggerException
@@ -182,7 +173,6 @@ public class DbCsvTraceModel
     }
 
     @Nonnull
-    @SuppressWarnings("AutoUnboxing")
     private ParseTreeNode getParseTreeNodeFromId(final Integer id)
         throws GrappaDebuggerException
     {
@@ -347,52 +337,6 @@ public class DbCsvTraceModel
             .forEach(r -> list.add(r.value1()));
 
         return list;
-    }
-
-    @Nonnull
-    @Override
-    public List<LineMatcherStatus> getLineMatcherStatus(final int startLine,
-        final int nrLines)
-        throws GrappaDebuggerException
-    {
-        loadInputBuffer();
-        return IntStream.range(startLine, startLine + nrLines)
-                .mapToObj(inputBuffer::getLineRange)
-                .map(this::getMatcherStatusForRange)
-                .collect(Collectors.toList());
-    }
-
-    private LineMatcherStatus getMatcherStatusForRange(final IndexRange range)
-    {
-        final Condition inRange
-            = NODES.END_INDEX.between(range.start, range.end - 1);
-        final Condition successCondition = inRange.and(NODES.SUCCESS.eq(1));
-        final Condition failureCondition = inRange.and(NODES.SUCCESS.eq(0));
-
-        final Condition startedCondition
-            = NODES.START_INDEX.between(range.start, range.end - 1)
-                .and(NODES.END_INDEX.ge(range.end));
-
-        final Condition waitingCondition = NODES.START_INDEX.lt(range.start)
-            .and(NODES.END_INDEX.ge(range.end));
-
-        final Field<Integer> success = DSL.decode().when(successCondition, 1)
-            .otherwise(0);
-        final Field<Integer> failure = DSL.decode().when(failureCondition, 1)
-            .otherwise(0);
-        final Field<Integer> started = DSL.decode().when(startedCondition, 1)
-            .otherwise(0);
-        final Field<Integer> waiting = DSL.decode().when(waitingCondition, 1)
-            .otherwise(0);
-
-        return jooq.select(
-            DSL.sum(success).as("nrSuccess"),
-            DSL.sum(failure).as("nrFailures"),
-            DSL.sum(started).as("nrStarted"),
-            DSL.sum(waiting).as("nrWaiting")
-        ).from(NODES)
-        .fetchOne()
-        .map(new LineMatcherStatusMapper());
     }
 
     private ParseInfo readInfo()

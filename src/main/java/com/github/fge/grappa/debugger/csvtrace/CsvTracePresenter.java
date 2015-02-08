@@ -2,8 +2,6 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.TracePresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.linechart
-    .LineChartTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
@@ -37,7 +35,6 @@ public class CsvTracePresenter
         loadTreeTab();
         loadRulesTab();
         loadMatchesTab();
-        loadLineChartTab();
     }
 
     @VisibleForTesting
@@ -80,22 +77,6 @@ public class CsvTracePresenter
     MatchesTabPresenter createMatchesTabPresenter()
     {
         return new MatchesTabPresenter(taskRunner, model, mainView);
-    }
-
-
-    @VisibleForTesting
-    void loadLineChartTab()
-    {
-        final LineChartTabPresenter lineChartTab
-            = createLineChartTabPresenter();
-        view.loadLineChartTab(lineChartTab);
-        lineChartTab.load();
-    }
-
-    @VisibleForTesting
-    LineChartTabPresenter createLineChartTabPresenter()
-    {
-        return new LineChartTabPresenter(taskRunner, model, mainView);
     }
 
     @Override

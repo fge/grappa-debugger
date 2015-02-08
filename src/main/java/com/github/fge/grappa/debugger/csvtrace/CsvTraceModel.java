@@ -3,7 +3,6 @@ package com.github.fge.grappa.debugger.csvtrace;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.LineMatcherStatus;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
 import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
@@ -55,8 +54,4 @@ public interface CsvTraceModel
 
     @Nonnull
     List<Integer> getTopMatcherCount();
-
-    @Nonnull
-    List<LineMatcherStatus> getLineMatcherStatus(int startLine, int nrLines)
-        throws GrappaDebuggerException;
 }

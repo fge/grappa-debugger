@@ -2,8 +2,6 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.csvtrace.tabs.linechart
-    .LineChartTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
@@ -50,14 +48,12 @@ public class CsvTracePresenterTest
         doNothing().when(presenter).loadTreeTab();
         doNothing().when(presenter).loadRulesTab();
         doNothing().when(presenter).loadMatchesTab();
-        doNothing().when(presenter).loadLineChartTab();
 
         presenter.loadTrace();
 
         verify(presenter).loadTreeTab();
         verify(presenter).loadRulesTab();
         verify(presenter).loadMatchesTab();
-        verify(presenter).loadLineChartTab();
     }
 
     @Test
@@ -97,20 +93,6 @@ public class CsvTracePresenterTest
         presenter.loadMatchesTab();
 
         verify(view).loadMatchesTab(same(tabPresenter));
-        verify(tabPresenter).load();
-    }
-
-    @Test
-    public void loadLineChartTabTest()
-    {
-        final LineChartTabPresenter tabPresenter
-            = mock(LineChartTabPresenter.class);
-
-        doReturn(tabPresenter).when(presenter).createLineChartTabPresenter();
-
-        presenter.loadLineChartTab();
-
-        verify(view).loadLineChartTab(same(tabPresenter));
         verify(tabPresenter).load();
     }
 
