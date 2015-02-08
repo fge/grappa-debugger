@@ -13,11 +13,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 
 public class TreeDepthTabDisplay
     extends JavafxDisplay<TreeDepthTabPresenter>
 {
+    @FXML
+    protected ToolBar toolbar;
+
+    @FXML
+    protected HBox hbox;
+
     @FXML
     protected ComboBox<Integer> linesDisplayed;
 
@@ -45,12 +52,17 @@ public class TreeDepthTabDisplay
     @FXML
     protected NumberAxis xAxis;
 
+    @FXML
+    protected NumberAxis yAxis;
+
     protected final XYChart.Series<Number, Number> series
         = new XYChart.Series<>();
 
     @Override
     public void init()
     {
+        hbox.minWidthProperty().bind(toolbar.widthProperty());
+
         linesDisplayed.getItems().addAll(10, 25, 50);
         linesDisplayed.valueProperty().addListener(new ChangeListener<Integer>()
         {

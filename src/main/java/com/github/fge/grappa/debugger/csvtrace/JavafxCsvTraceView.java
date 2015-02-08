@@ -8,6 +8,10 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.rules.JavafxRulesTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.JavafxTreeTabView;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
+    .JavafxTreeDepthTabView;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
+    .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 
@@ -81,5 +85,22 @@ public final class JavafxCsvTraceView
         tabView.getDisplay().setPresenter(tabPresenter);
         tabPresenter.setView(tabView);
         display.matchesTab.setContent(tabView.getNode());
+    }
+
+    @Override
+    public void loadTreeDepthTab(final TreeDepthTabPresenter tabPresenter)
+    {
+        Objects.requireNonNull(tabPresenter);
+
+        final JavafxTreeDepthTabView tabView;
+        try {
+            tabView = new JavafxTreeDepthTabView();
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load statistics", e);
+            return;
+        }
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
+        display.treeDepthTab.setContent(tabView.getNode());
     }
 }

@@ -5,6 +5,8 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
+    .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -48,12 +50,14 @@ public class CsvTracePresenterTest
         doNothing().when(presenter).loadTreeTab();
         doNothing().when(presenter).loadRulesTab();
         doNothing().when(presenter).loadMatchesTab();
+        doNothing().when(presenter).loadTreeDepthTab();
 
         presenter.loadTrace();
 
         verify(presenter).loadTreeTab();
         verify(presenter).loadRulesTab();
         verify(presenter).loadMatchesTab();
+        verify(presenter).loadTreeDepthTab();
     }
 
     @Test
@@ -93,6 +97,20 @@ public class CsvTracePresenterTest
         presenter.loadMatchesTab();
 
         verify(view).loadMatchesTab(same(tabPresenter));
+        verify(tabPresenter).load();
+    }
+
+    @Test
+    public void loadTreeDepthTabTest()
+    {
+        final TreeDepthTabPresenter tabPresenter
+            = mock(TreeDepthTabPresenter.class);
+
+        doReturn(tabPresenter).when(presenter).createTreeDepthTabPresenter();
+
+        presenter.loadTreeDepthTab();
+
+        verify(view).loadTreeDepthTab(same(tabPresenter));
         verify(tabPresenter).load();
     }
 

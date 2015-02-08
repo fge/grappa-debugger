@@ -22,7 +22,7 @@ public class CsvTraceDisplay
     protected Tab matchesTab;
 
     @FXML
-    protected Tab lineChartTab;
+    protected Tab treeDepthTab;
 
     @Override
     public void init()

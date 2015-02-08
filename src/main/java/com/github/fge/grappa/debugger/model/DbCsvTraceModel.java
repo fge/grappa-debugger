@@ -38,6 +38,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -181,15 +182,11 @@ public class DbCsvTraceModel
     {
         loadInputBuffer();
 
-        final List<Integer> result
-            = new ArrayList<>(wantedLines - startLine + 1);
-
-        final List<IndexRange> ranges
-            = IntStream.range(startLine, startLine + wantedLines)
+        return IntStream.range(startLine, startLine + wantedLines)
             .mapToObj(inputBuffer::getLineRange)
+            .map(this::getDepthFromRange)
+            .filter(depth -> depth != null)
             .collect(Collectors.toList());
-
-        return result;
     }
 
     @Nonnull
@@ -388,13 +385,20 @@ public class DbCsvTraceModel
          *
          * - the end index is strictly less than the start of the range, or
          * - the start index is greater than or equal to the end of the range.
-         *
-         * Therefore what we should select is the opposites, that is nodes for
-         * which the end index is greater than or equal to the start of the
-         * range AND the start index is strictly less than the end of the range.
          */
-        final Condition inRange = NODES.END_INDEX.ge(range.start)
-            .and(NODES.START_INDEX.lt(range.end));
+        final Condition notApplicable = NODES.START_INDEX.ge(range.end)
+            .or(NODES.END_INDEX.lt(range.start));
+
+        final Condition unresolved = NODES.START_INDEX.le(range.start)
+            .and(NODES.END_INDEX.ge(range.end));
+        final Condition resolved
+            = NODES.END_INDEX.between(range.start, range.end - 1);
+        final Condition started
+            = NODES.START_INDEX.between(range.start, range.end - 1);
+
+        //final Condition selected = unresolved.or(resolved).or(started);
+        final Condition selected = DSL.not(notApplicable);
+
 
         /*
          * And what we want is the maximum value of the depth range PLUS ONE
@@ -402,8 +406,8 @@ public class DbCsvTraceModel
         final Field<Integer> depth = DSL.maxDistinct(NODES.LEVEL).plus(1);
 
         final Record1<Integer> record = jooq.select(depth).from(NODES)
-            .where(inRange).fetchOne();
+            .where(selected).fetchOne();
 
-        return record.value1();
+        return Optional.ofNullable(record.value1()).orElse(0);
     }
 }

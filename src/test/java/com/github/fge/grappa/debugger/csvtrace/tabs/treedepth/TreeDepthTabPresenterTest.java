@@ -251,4 +251,14 @@ public class TreeDepthTabPresenterTest
         verify(presenter).handleDisplayLinesError(same(exception));
         verify(presenter).adjustToolbar();
     }
+
+    @Test
+    public void loadTest()
+    {
+        doNothing().when(presenter).handleDisplayedLines(anyInt());
+
+        presenter.load();
+
+        verify(presenter).handleDisplayedLines(25);
+    }
 }
