@@ -123,7 +123,12 @@ public final class DbLoader
     private void doDdl(final DSLContext jooq)
     {
         H2_DDL.forEach(jooq::execute);
+
         jooq.createIndex("nodes_parent_id").on(NODES, NODES.PARENT_ID)
+            .execute();
+        jooq.createIndex("nodes_start_index").on(NODES, NODES.START_INDEX)
+            .execute();
+        jooq.createIndex("nodes_end_index").on(NODES, NODES.END_INDEX)
             .execute();
     }
 
