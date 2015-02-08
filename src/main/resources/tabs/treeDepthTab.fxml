@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.AreaChart?>
+<?import com.github.fge.grappa.debugger.javafx.SmoothedAreaChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabDisplay">
     <top>
@@ -37,7 +38,7 @@
         </ToolBar>
     </top>
     <center>
-        <AreaChart fx:id="chart" legendVisible="false"
+        <SmoothedAreaChart fx:id="chart" legendVisible="false"
             title="Tree depth by line" animated="false">
             <xAxis>
                 <NumberAxis fx:id="xAxis" tickUnit="1.0" autoRanging="false"
@@ -46,9 +47,9 @@
             </xAxis>
             <yAxis>
                 <NumberAxis fx:id="yAxis" minorTickVisible="false"
-                    autoRanging="false" tickUnit="1.0" forceZeroInRange="true"
-                    label="Tree depth"/>
+                    autoRanging="false"
+                    tickUnit="1.0" forceZeroInRange="true" label="Tree depth"/>
             </yAxis>
-        </AreaChart>
+        </SmoothedAreaChart>
     </center>
 </BorderPane>

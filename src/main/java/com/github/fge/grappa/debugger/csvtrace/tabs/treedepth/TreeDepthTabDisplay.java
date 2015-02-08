@@ -1,12 +1,12 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
 import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
+import com.github.fge.grappa.debugger.javafx.SmoothedAreaChart;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -47,7 +47,7 @@ public class TreeDepthTabDisplay
     protected ProgressBar progressBar;
 
     @FXML
-    protected AreaChart<Number, Number> chart;
+    protected SmoothedAreaChart<Number, Number> chart;
 
     @FXML
     protected NumberAxis xAxis;
