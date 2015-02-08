@@ -5,6 +5,7 @@ import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedAreaChart;
@@ -102,5 +103,17 @@ public class LineChartTabDisplay
     protected void changeLinesDisplayedEvent(final int nrLines)
     {
         presenter.handleChangeLinesDisplayed(nrLines);
+    }
+
+    @FXML
+    protected void previousLinesEvent(final Event event)
+    {
+        presenter.handlePreviousLines();
+    }
+
+    @FXML
+    protected void nextLinesEvent(final Event event)
+    {
+        presenter.handleNextLines();
     }
 }

@@ -22,6 +22,8 @@ public final class JavafxLineChartTabView
     public void disableTabRefresh()
     {
         display.tabRefresh.setDisable(true);
+        display.prevLines.setDisable(true);
+        display.nextLines.setDisable(true);
         display.progressBar.setVisible(true);
     }
 
@@ -68,13 +70,33 @@ public final class JavafxLineChartTabView
         display.tabRefresh.setDisable(false);
     }
 
+    @Override
+    public void disablePrevious()
+    {
+        display.prevLines.setDisable(true);
+    }
+
+    @Override
+    public void disableNext()
+    {
+        display.nextLines.setDisable(true);
+    }
+
+    @Override
+    public void enablePrevious()
+    {
+        display.prevLines.setDisable(false);
+    }
+
+    @Override
+    public void enableNext()
+    {
+        display.nextLines.setDisable(false);
+    }
+
     private Stream<XYChart.Series<Number, Number>> allSeries()
     {
-        return Stream.of(
-            display.waitingSeries,
-            display.startedSeries,
-            display.successSeries,
-            display.failureSeries
-        );
+        return Stream.of(display.waitingSeries, display.startedSeries,
+            display.successSeries, display.failureSeries);
     }
 }

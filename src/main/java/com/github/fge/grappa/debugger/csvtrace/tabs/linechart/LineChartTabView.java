@@ -14,4 +14,12 @@ public interface LineChartTabView
     void showLoadComplete();
 
     void showLoadIncomplete();
+
+    void disablePrevious();
+
+    void disableNext();
+
+    void enablePrevious();
+
+    void enableNext();
 }

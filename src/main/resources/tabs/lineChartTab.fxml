@@ -18,11 +18,17 @@
             <HBox fx:id="hbox" alignment="CENTER" spacing="5.0">
                 <Label text="Lines to display:"/>
                 <ComboBox fx:id="linesDisplayed"/>
+
                 <Separator orientation="VERTICAL"/>
-                <Button fx:id="prevLines" text="Previous"/>
+
+                <Button fx:id="prevLines" text="Previous"
+                    onMouseClicked="#previousLinesEvent"/>
                 <Label fx:id="currentLines" text="(no data)"/>
-                <Button fx:id="nextLines" text="Next"/>
+                <Button fx:id="nextLines" text="Next"
+                    onMouseClicked="#nextLinesEvent"/>
+
                 <Separator orientation="VERTICAL"/>
+
                 <HBox fx:id="refreshBox">
                     <Button fx:id="tabRefresh" text="Refresh"/>
                     <ProgressBar fx:id="progressBar" visible="false"/>
@@ -34,14 +40,13 @@
         <StackedAreaChart fx:id="chart" legendSide="TOP"
             title="Matcher status by line" animated="false">
             <xAxis>
-                <NumberAxis fx:id="xAxis" minorTickVisible="false"
-                    tickMarkVisible="false" autoRanging="false"
-                    label="Line number" forceZeroInRange="false"
-                    tickUnit="1.0"/>
+                <NumberAxis fx:id="xAxis" tickUnit="1.0" autoRanging="false"
+                    minorTickVisible="false" forceZeroInRange="false"
+                    label="Line number"/>
             </xAxis>
             <yAxis>
                 <NumberAxis minorTickVisible="false" autoRanging="true"
-                    forceZeroInRange="true"/>
+                    forceZeroInRange="true" label="Matchers"/>
             </yAxis>
         </StackedAreaChart>
     </center>

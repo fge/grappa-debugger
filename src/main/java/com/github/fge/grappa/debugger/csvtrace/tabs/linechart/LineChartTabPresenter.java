@@ -16,11 +16,13 @@ public class LineChartTabPresenter
     private final CsvTraceModel model;
     private final MainWindowView mainView;
 
+    private final int totalLines;
+
     @VisibleForTesting
     int startLine = 1;
 
     @VisibleForTesting
-    int nrLines = 25;
+    int nrLines = 0;
 
     public LineChartTabPresenter(final GuiTaskRunner taskRunner,
         final CsvTraceModel model, final MainWindowView mainView)
@@ -28,6 +30,8 @@ public class LineChartTabPresenter
         this.taskRunner = taskRunner;
         this.model = model;
         this.mainView = mainView;
+
+        totalLines = model.getParseInfo().getNrLines();
     }
 
     public void load()
@@ -37,7 +41,8 @@ public class LineChartTabPresenter
     @VisibleForTesting
     void handleChangeLinesDisplayed(final int nrLines)
     {
-        this.nrLines = nrLines;
+        this.nrLines = Math.min(nrLines, totalLines);
+        adjustStartLine();
 
         final boolean loadComplete = model.isLoadComplete();
 
@@ -47,6 +52,21 @@ public class LineChartTabPresenter
             list -> doChangeLinesDisplayed(list, loadComplete),
             this::handleLineMatcherLoadError
         );
+    }
+
+    @VisibleForTesting
+    void adjustStartLine()
+    {
+        if (startLine <= 1) {
+            startLine = 1;
+            view.disablePrevious();
+        } else
+            view.enablePrevious();
+        if (startLine >= totalLines) {
+            startLine = totalLines - nrLines + 1;
+            view.disableNext();
+        } else
+            view.enableNext();
     }
 
     @VisibleForTesting
@@ -60,6 +80,7 @@ public class LineChartTabPresenter
             : view::showLoadIncomplete;
 
         runnable.run();
+        adjustStartLine();
     }
 
     @VisibleForTesting
@@ -67,5 +88,19 @@ public class LineChartTabPresenter
     {
         mainView.showError("Line match load error",
             "Unable to load per line matcher statistics", throwable);
+    }
+
+    @VisibleForTesting
+    void handlePreviousLines()
+    {
+        startLine -= nrLines;
+        handleChangeLinesDisplayed(nrLines);
+    }
+
+    @VisibleForTesting
+    void handleNextLines()
+    {
+        startLine += nrLines;
+        handleChangeLinesDisplayed(nrLines);
     }
 }

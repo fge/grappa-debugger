@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.linechart;
 
+import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,5 +32,21 @@ public class LineChartTabDisplayTest
         display.changeLinesDisplayedEvent(theAnswer);
 
         verify(presenter).handleChangeLinesDisplayed(eq(theAnswer));
+    }
+
+    @Test
+    public void previousLinesEventTest()
+    {
+        display.previousLinesEvent(mock(Event.class));
+
+        verify(presenter).handlePreviousLines();
+    }
+
+    @Test
+    public void nextLinesEventTest()
+    {
+        display.nextLinesEvent(mock(Event.class));
+
+        verify(presenter).handleNextLines();
     }
 }
