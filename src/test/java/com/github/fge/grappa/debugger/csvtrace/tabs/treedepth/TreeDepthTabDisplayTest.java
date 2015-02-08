@@ -30,7 +30,7 @@ public class TreeDepthTabDisplayTest
 
         display.displayLinesEvent(nrLines);
 
-        verify(presenter).handleDisplayLines(nrLines);
+        verify(presenter).handleDisplayedLines(nrLines);
     }
 
     @Test

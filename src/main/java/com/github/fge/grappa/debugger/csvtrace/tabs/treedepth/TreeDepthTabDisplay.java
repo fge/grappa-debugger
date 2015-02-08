@@ -68,7 +68,7 @@ public class TreeDepthTabDisplay
     @VisibleForTesting
     void displayLinesEvent(final int nrLines)
     {
-        presenter.handleDisplayLines(nrLines);
+        presenter.handleDisplayedLines(nrLines);
     }
 
     @FXML

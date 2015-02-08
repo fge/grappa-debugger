@@ -7,7 +7,9 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +40,7 @@ public class TreeDepthTabPresenterTest
     {
         final int nrLines = 42;
 
-        presenter.handleDisplayLines(nrLines);
+        presenter.handleDisplayedLines(nrLines);
 
         verify(presenter).doDisplayLines(1, nrLines);
     }
@@ -51,7 +53,7 @@ public class TreeDepthTabPresenterTest
 
         presenter.startLine = startLine;
 
-        presenter.handleDisplayLines(nrLines);
+        presenter.handleDisplayedLines(nrLines);
 
         verify(presenter).doDisplayLines(startLine, nrLines);
     }
@@ -62,11 +64,11 @@ public class TreeDepthTabPresenterTest
         final int oldLineNr = 20;
         final int newLineNr = 42;
 
-        presenter.nrLines = oldLineNr;
+        presenter.displayedLines = oldLineNr;
 
-        presenter.handleDisplayLines(newLineNr);
+        presenter.handleDisplayedLines(newLineNr);
 
-        assertThat(presenter.nrLines).isEqualTo(newLineNr);
+        assertThat(presenter.displayedLines).isEqualTo(newLineNr);
         verify(presenter).doDisplayLines(1, newLineNr);
     }
 
@@ -79,7 +81,7 @@ public class TreeDepthTabPresenterTest
         when(info.getNrLines()).thenReturn(availableLines);
         presenter = spy(new TreeDepthTabPresenter(model));
 
-        presenter.handleDisplayLines(wantedLines);
+        presenter.handleDisplayedLines(wantedLines);
 
         verify(presenter).doDisplayLines(1, availableLines);
     }
@@ -97,7 +99,7 @@ public class TreeDepthTabPresenterTest
 
         presenter.startLine = startLine;
 
-        presenter.handleDisplayLines(wantedLines);
+        presenter.handleDisplayedLines(wantedLines);
 
         verify(presenter).doDisplayLines(realStartLine, wantedLines);
         assertThat(presenter.startLine).isEqualTo(realStartLine);
@@ -112,10 +114,77 @@ public class TreeDepthTabPresenterTest
 
         presenter.startLine = startLine;
 
-        presenter.handleDisplayLines(wantedLines);
+        presenter.handleDisplayedLines(wantedLines);
 
         verify(presenter).doDisplayLines(realStartLine, wantedLines);
         assertThat(presenter.startLine).isEqualTo(realStartLine);
+    }
 
+    @Test
+    public void adjustToolbarLoadIncomplete()
+    {
+        when(model.isLoadComplete()).thenReturn(false);
+
+        presenter.adjustToolbar();
+
+        verify(view).enableTabRefresh();
+    }
+
+    @Test
+    public void adjustToolbarLoadComplete()
+    {
+        when(model.isLoadComplete()).thenReturn(true);
+
+        presenter.adjustToolbar();
+        presenter.adjustToolbar();
+
+        verify(view, times(1)).disableRefresh();
+    }
+
+    @Test
+    public void adjustToolbarNotFirstLine()
+    {
+        presenter.startLine = 5;
+
+        presenter.adjustToolbar();
+
+        verify(view).enablePrevious();
+    }
+
+    @Test
+    public void adjustToolbarFirstLine()
+    {
+        presenter.startLine = 1;
+
+        presenter.adjustToolbar();
+
+        verify(view, never()).enablePrevious();
+    }
+
+    @Test
+    public void adjustToolbarNotLastLinesBatch()
+    {
+        presenter.adjustToolbar();
+
+        verify(view).enableNext();
+    }
+
+    @Test
+    public void adjustToolbarLastLinesBatch()
+    {
+        final int displayedLines = 25;
+        final int nrLines = 42;
+        final int realStartLine = 18;
+
+        when(info.getNrLines()).thenReturn(nrLines);
+        presenter = spy(new TreeDepthTabPresenter(model));
+        presenter.setView(view);
+
+        presenter.startLine = realStartLine;
+        presenter.displayedLines = displayedLines;
+
+        presenter.adjustToolbar();
+
+        verify(view, never()).enableNext();
     }
 }

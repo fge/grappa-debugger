@@ -13,4 +13,28 @@ public final class JavafxTreeDepthTabView
     {
         super("/tabs/treeDepthTab.fxml");
     }
+
+    @Override
+    public void enableTabRefresh()
+    {
+        display.tabRefresh.setDisable(false);
+    }
+
+    @Override
+    public void disableRefresh()
+    {
+        display.refreshBox.getChildren().remove(display.tabRefresh);
+    }
+
+    @Override
+    public void enablePrevious()
+    {
+        display.prevLines.setDisable(false);
+    }
+
+    @Override
+    public void enableNext()
+    {
+        display.nextLines.setDisable(false);
+    }
 }

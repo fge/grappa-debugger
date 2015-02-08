@@ -10,63 +10,87 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class TreeDepthTabPresenter
     extends BasePresenter<TreeDepthTabView>
 {
-    private final int availableLines;
+    private final CsvTraceModel model;
+    private final int nrLines;
 
     @VisibleForTesting
     int startLine = 1;
 
     @VisibleForTesting
-    int nrLines;
+    int displayedLines = 25;
+
+    private boolean refreshDisabled = false;
 
     public TreeDepthTabPresenter(final CsvTraceModel model)
     {
-        availableLines = model.getParseInfo().getNrLines();
+        this.model = model;
+        nrLines = model.getParseInfo().getNrLines();
     }
 
     @VisibleForTesting
-    void handleDisplayLines(final int nrLines)
+    void handleDisplayedLines(final int displayedLines)
     {
-        this.nrLines = nrLines;
+        this.displayedLines = displayedLines;
 
-        int actualLines = nrLines;
-        if (actualLines > availableLines)
-            actualLines = availableLines;
+        int wantedLines = displayedLines;
+        if (wantedLines > nrLines)
+            wantedLines = nrLines;
 
         int actualStartLine = startLine;
 
-        if (actualStartLine + actualLines > availableLines)
-            actualStartLine = availableLines - actualLines + 1;
+        if (actualStartLine > nrLines - wantedLines + 1)
+            actualStartLine = nrLines - wantedLines + 1;
         else if (actualStartLine < 1)
             actualStartLine = 1;
 
         startLine = actualStartLine;
 
-        doDisplayLines(startLine, actualLines);
+        doDisplayLines(startLine, wantedLines);
     }
 
     @VisibleForTesting
     void handlePreviousLines()
     {
-        startLine -= nrLines;
-        handleDisplayLines(nrLines);
+        startLine -= displayedLines;
+        handleDisplayedLines(displayedLines);
     }
 
     @VisibleForTesting
     void handleNextLines()
     {
-        startLine += nrLines;
-        handleDisplayLines(nrLines);
+        // TODO: possible overflow
+        startLine += displayedLines;
+        handleDisplayedLines(displayedLines);
     }
 
     @VisibleForTesting
     void handleChartRefreshEvent()
     {
-        // TODO
+        handleDisplayedLines(displayedLines);
     }
 
     @VisibleForTesting
     void doDisplayLines(final int startLine, final int nrLines)
     {
         // TODO
+    }
+
+    @VisibleForTesting
+    void adjustToolbar()
+    {
+        if (!refreshDisabled) {
+            if (model.isLoadComplete()) {
+                refreshDisabled = true;
+                view.disableRefresh();
+            } else {
+                view.enableTabRefresh();
+            }
+        }
+
+        if (startLine != 1)
+            view.enablePrevious();
+
+        if (startLine < nrLines - displayedLines + 1)
+            view.enableNext();
     }
 }
