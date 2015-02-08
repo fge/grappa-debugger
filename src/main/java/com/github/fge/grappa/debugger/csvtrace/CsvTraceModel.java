@@ -54,4 +54,7 @@ public interface CsvTraceModel
     void dispose()
         throws GrappaDebuggerException;
 
+    @Nonnull
+    List<Integer> getDepths(int startLine, int wantedLines)
+        throws GrappaDebuggerException;
 }

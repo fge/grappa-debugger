@@ -1,7 +1,9 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -10,6 +12,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class TreeDepthTabPresenter
     extends BasePresenter<TreeDepthTabView>
 {
+    private final GuiTaskRunner taskRunner;
+    private final MainWindowView mainView;
     private final CsvTraceModel model;
     private final int nrLines;
 
@@ -21,8 +25,11 @@ public class TreeDepthTabPresenter
 
     private boolean refreshDisabled = false;
 
-    public TreeDepthTabPresenter(final CsvTraceModel model)
+    public TreeDepthTabPresenter(final GuiTaskRunner taskRunner,
+        final MainWindowView mainView, final CsvTraceModel model)
     {
+        this.taskRunner = taskRunner;
+        this.mainView = mainView;
         this.model = model;
         nrLines = model.getParseInfo().getNrLines();
     }
@@ -72,7 +79,21 @@ public class TreeDepthTabPresenter
     @VisibleForTesting
     void doDisplayLines(final int startLine, final int nrLines)
     {
-        // TODO
+        taskRunner.computeOrFail(
+            view::disableToolbar,
+            () -> model.getDepths(startLine, nrLines),
+            depths -> view.displayDepths(startLine, nrLines, depths),
+            this::handleDisplayLinesError
+        );
+
+        taskRunner.executeFront(this::adjustToolbar);
+    }
+
+    @VisibleForTesting
+    void handleDisplayLinesError(final Throwable throwable)
+    {
+        mainView.showError("Loading error", "Unable to load tree depths",
+            throwable);
     }
 
     @VisibleForTesting

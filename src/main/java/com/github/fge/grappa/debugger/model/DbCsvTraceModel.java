@@ -18,6 +18,7 @@ import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
+import org.parboiled.support.IndexRange;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
@@ -46,6 +47,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
 import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
@@ -96,21 +98,14 @@ public class DbCsvTraceModel
         status = loader.getStatus();
     }
 
-    @Nonnull
     @Override
-    public ParseInfo getParseInfo()
+    public boolean isLoadComplete()
     {
-        return info;
-    }
-
-    @Nonnull
-    @Override
-    public InputText getInputText()
-        throws GrappaDebuggerException
-    {
-        loadInputBuffer();
-        return new InputText(info.getNrLines(), info.getNrChars(),
-            info.getNrCodePoints(), inputBuffer);
+        try {
+            return status.waitReady(1L, TimeUnit.MICROSECONDS);
+        } catch (InterruptedException ignored) {
+            return false;
+        }
     }
 
     @Override
@@ -133,6 +128,23 @@ public class DbCsvTraceModel
         } catch (InterruptedException e) {
             throw new GrappaDebuggerException(e);
         }
+    }
+
+    @Nonnull
+    @Override
+    public ParseInfo getParseInfo()
+    {
+        return info;
+    }
+
+    @Nonnull
+    @Override
+    public InputText getInputText()
+        throws GrappaDebuggerException
+    {
+        loadInputBuffer();
+        return new InputText(info.getNrLines(), info.getNrChars(),
+            info.getNrCodePoints(), inputBuffer);
     }
 
     @Nonnull
@@ -162,31 +174,22 @@ public class DbCsvTraceModel
             .collect(Collectors.toList());
     }
 
+    @Nonnull
     @Override
-    public void dispose()
+    public List<Integer> getDepths(final int startLine, final int wantedLines)
         throws GrappaDebuggerException
     {
-        Exception exception = null;
-        try {
-            zipfs.close();
-        } catch (IOException e) {
-            exception = e;
-        }
+        loadInputBuffer();
 
-        future.cancel(true);
-        executor.shutdownNow();
+        final List<Integer> result
+            = new ArrayList<>(wantedLines - startLine + 1);
 
-        try {
-            loader.close();
-        } catch (SQLException | IOException e) {
-            if (exception != null)
-                exception.addSuppressed(e);
-            else
-                exception = e;
-        }
+        final List<IndexRange> ranges
+            = IntStream.range(startLine, startLine + wantedLines)
+            .mapToObj(inputBuffer::getLineRange)
+            .collect(Collectors.toList());
 
-        if (exception != null)
-            throw new GrappaDebuggerException(exception);
+        return result;
     }
 
     @Nonnull
@@ -211,16 +214,6 @@ public class DbCsvTraceModel
             .forEach(r -> ret.put(MatcherType.valueOf(r.value1()), r.value2()));
 
         return ret;
-    }
-
-    @Override
-    public boolean isLoadComplete()
-    {
-        try {
-            return status.waitReady(1L, TimeUnit.MICROSECONDS);
-        } catch (InterruptedException ignored) {
-            return false;
-        }
     }
 
     @Nonnull
@@ -264,6 +257,34 @@ public class DbCsvTraceModel
             .forEach(r -> list.add(r.value1()));
 
         return list;
+    }
+
+
+    @Override
+    public void dispose()
+        throws GrappaDebuggerException
+    {
+        Exception exception = null;
+        try {
+            zipfs.close();
+        } catch (IOException e) {
+            exception = e;
+        }
+
+        future.cancel(true);
+        executor.shutdownNow();
+
+        try {
+            loader.close();
+        } catch (SQLException | IOException e) {
+            if (exception != null)
+                exception.addSuppressed(e);
+            else
+                exception = e;
+        }
+
+        if (exception != null)
+            throw new GrappaDebuggerException(exception);
     }
 
     private ParseInfo readInfo()
@@ -358,5 +379,31 @@ public class DbCsvTraceModel
         } catch (IOException e) {
             throw new GrappaDebuggerException(e);
         }
+    }
+
+    private Integer getDepthFromRange(final IndexRange range)
+    {
+        /*
+         * The nodes which we should NOT select are nodes for which:
+         *
+         * - the end index is strictly less than the start of the range, or
+         * - the start index is greater than or equal to the end of the range.
+         *
+         * Therefore what we should select is the opposites, that is nodes for
+         * which the end index is greater than or equal to the start of the
+         * range AND the start index is strictly less than the end of the range.
+         */
+        final Condition inRange = NODES.END_INDEX.ge(range.start)
+            .and(NODES.START_INDEX.lt(range.end));
+
+        /*
+         * And what we want is the maximum value of the depth range PLUS ONE
+         */
+        final Field<Integer> depth = DSL.maxDistinct(NODES.LEVEL).plus(1);
+
+        final Record1<Integer> record = jooq.select(depth).from(NODES)
+            .where(inRange).fetchOne();
+
+        return record.value1();
     }
 }

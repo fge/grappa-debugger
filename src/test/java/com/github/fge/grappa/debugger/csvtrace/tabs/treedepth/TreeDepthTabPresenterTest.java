@@ -1,11 +1,22 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
+import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -15,9 +26,14 @@ import static org.mockito.Mockito.when;
 
 public class TreeDepthTabPresenterTest
 {
+    private final GuiTaskRunner taskRunner = new GuiTaskRunner(
+        MoreExecutors.newDirectExecutorService(), Runnable::run
+    );
+
     private TreeDepthTabView view;
     private ParseInfo info;
     private CsvTraceModel model;
+    private MainWindowView mainView;
     private TreeDepthTabPresenter presenter;
 
     @BeforeMethod
@@ -31,7 +47,9 @@ public class TreeDepthTabPresenterTest
         model = mock(CsvTraceModel.class);
         when(model.getParseInfo()).thenReturn(info);
 
-        presenter = spy(new TreeDepthTabPresenter(model));
+        mainView = mock(MainWindowView.class);
+
+        presenter = spy(new TreeDepthTabPresenter(taskRunner, mainView, model));
         presenter.setView(view);
     }
 
@@ -79,7 +97,9 @@ public class TreeDepthTabPresenterTest
         final int availableLines = 25;
 
         when(info.getNrLines()).thenReturn(availableLines);
-        presenter = spy(new TreeDepthTabPresenter(model));
+        presenter = spy(new TreeDepthTabPresenter(taskRunner, mainView, model));
+
+        doNothing().when(presenter).doDisplayLines(anyInt(), anyInt());
 
         presenter.handleDisplayedLines(wantedLines);
 
@@ -95,7 +115,9 @@ public class TreeDepthTabPresenterTest
         final int realStartLine = 18;
 
         when(info.getNrLines()).thenReturn(availableLines);
-        presenter = spy(new TreeDepthTabPresenter(model));
+        presenter = spy(new TreeDepthTabPresenter(taskRunner, mainView, model));
+
+        doNothing().when(presenter).doDisplayLines(anyInt(), anyInt());
 
         presenter.startLine = startLine;
 
@@ -177,7 +199,7 @@ public class TreeDepthTabPresenterTest
         final int realStartLine = 18;
 
         when(info.getNrLines()).thenReturn(nrLines);
-        presenter = spy(new TreeDepthTabPresenter(model));
+        presenter = spy(new TreeDepthTabPresenter(taskRunner, mainView, model));
         presenter.setView(view);
 
         presenter.startLine = realStartLine;
@@ -186,5 +208,47 @@ public class TreeDepthTabPresenterTest
         presenter.adjustToolbar();
 
         verify(view, never()).enableNext();
+    }
+
+    @Test
+    public void doDisplayLinesSuccessTest()
+        throws GrappaDebuggerException
+    {
+        final int startLine = 10;
+        final int wantedLines = 25;
+        final List<Integer> depths = mock(List.class);
+
+        when(model.getDepths(startLine, wantedLines)).thenReturn(depths);
+
+        presenter.doDisplayLines(startLine, wantedLines);
+
+        verify(view).disableToolbar();
+        verify(model).getDepths(startLine, wantedLines);
+        verify(view).displayDepths(eq(startLine), eq(wantedLines),
+            same(depths));
+        verify(presenter).adjustToolbar();
+    }
+
+    @Test
+    public void doDisplayLinesFailureTest()
+        throws GrappaDebuggerException
+    {
+        final int startLine = 10;
+        final int wantedLines = 25;
+
+        final Exception cause = new Exception();
+        final GrappaDebuggerException exception
+            = new GrappaDebuggerException(cause);
+
+        when(model.getDepths(startLine, wantedLines)).thenThrow(exception);
+
+        presenter.doDisplayLines(startLine, wantedLines);
+
+        verify(view).disableToolbar();
+        verify(model).getDepths(startLine, wantedLines);
+        //noinspection unchecked
+        verify(view, never()).displayDepths(anyInt(), anyInt(), anyList());
+        verify(presenter).handleDisplayLinesError(same(exception));
+        verify(presenter).adjustToolbar();
     }
 }

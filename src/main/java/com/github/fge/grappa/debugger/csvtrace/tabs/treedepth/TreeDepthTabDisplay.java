@@ -8,6 +8,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -39,10 +40,13 @@ public class TreeDepthTabDisplay
     protected ProgressBar progressBar;
 
     @FXML
-    protected AreaChart<Integer, Integer> chart;
+    protected AreaChart<Number, Number> chart;
 
     @FXML
     protected NumberAxis xAxis;
+
+    protected final XYChart.Series<Number, Number> series
+        = new XYChart.Series<>();
 
     @Override
     public void init()
@@ -63,6 +67,8 @@ public class TreeDepthTabDisplay
                 displayLinesEvent(newValue);
             }
         });
+        
+        chart.getData().add(series);
     }
 
     @VisibleForTesting
