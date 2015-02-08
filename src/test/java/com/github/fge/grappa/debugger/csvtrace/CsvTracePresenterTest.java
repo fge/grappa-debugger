@@ -57,7 +57,7 @@ public class CsvTracePresenterTest
         verify(presenter).loadTreeTab();
         verify(presenter).loadRulesTab();
         verify(presenter).loadMatchesTab();
-        verify(presenter).loadTreeDepthTab();
+        //verify(presenter).loadTreeDepthTab();
     }
 
     @Test

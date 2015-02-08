@@ -4,10 +4,6 @@ import java.util.List;
 
 public interface TreeDepthTabView
 {
-    void enableTabRefresh();
-
-    void disableRefresh();
-
     void enablePrevious();
 
     void enableNext();
@@ -15,4 +11,8 @@ public interface TreeDepthTabView
     void disableToolbar();
 
     void displayDepths(int startLine, int wantedLines, List<Integer> depths);
+
+    void setMaxLines(int nrLines);
+
+    void wakeUp();
 }

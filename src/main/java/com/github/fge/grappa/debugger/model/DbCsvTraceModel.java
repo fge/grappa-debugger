@@ -389,13 +389,6 @@ public class DbCsvTraceModel
         final Condition notApplicable = NODES.START_INDEX.ge(range.end)
             .or(NODES.END_INDEX.lt(range.start));
 
-        final Condition unresolved = NODES.START_INDEX.le(range.start)
-            .and(NODES.END_INDEX.ge(range.end));
-        final Condition resolved
-            = NODES.END_INDEX.between(range.start, range.end - 1);
-        final Condition started
-            = NODES.START_INDEX.between(range.start, range.end - 1);
-
         //final Condition selected = unresolved.or(resolved).or(started);
         final Condition selected = DSL.not(notApplicable);
 

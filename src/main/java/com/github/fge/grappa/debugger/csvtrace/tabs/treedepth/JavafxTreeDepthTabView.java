@@ -18,18 +18,6 @@ public final class JavafxTreeDepthTabView
     }
 
     @Override
-    public void enableTabRefresh()
-    {
-        display.tabRefresh.setDisable(false);
-    }
-
-    @Override
-    public void disableRefresh()
-    {
-        display.refreshBox.getChildren().remove(display.tabRefresh);
-    }
-
-    @Override
     public void enablePrevious()
     {
         display.prevLines.setDisable(false);
@@ -44,11 +32,10 @@ public final class JavafxTreeDepthTabView
     @Override
     public void disableToolbar()
     {
+        display.requiredLine.setDisable(true);
         display.linesDisplayed.setDisable(true);
         display.prevLines.setDisable(true);
         display.nextLines.setDisable(true);
-        display.tabRefresh.setDisable(true);
-        display.progressBar.setVisible(true);
     }
 
     @Override
@@ -81,10 +68,29 @@ public final class JavafxTreeDepthTabView
         final int tickUnit = maxDepth / 15;
         display.yAxis.setTickUnit(Math.max(tickUnit, 1));
 
-        display.progressBar.setVisible(false);
         display.linesDisplayed.setDisable(false);
 
         display.currentLines.setText(String.format("Lines %d-%d", startLine,
             endLine));
+
+        display.requiredLine.setText(String.valueOf(startLine));
+        display.requiredLine.setDisable(false);
+    }
+
+    @Override
+    public void setMaxLines(final int nrLines)
+    {
+        display.totalLines.setText(String.format("/ %d", nrLines));
+    }
+
+    @Override
+    public void wakeUp()
+    {
+        display.requiredLine.setDisable(false);
+        display.linesDisplayed.setDisable(false);
+        display.prevLines.setDisable(false);
+        display.nextLines.setDisable(false);
+        display.pane.getChildren().remove(display.waitLabel);
+        display.chart.setVisible(true);
     }
 }

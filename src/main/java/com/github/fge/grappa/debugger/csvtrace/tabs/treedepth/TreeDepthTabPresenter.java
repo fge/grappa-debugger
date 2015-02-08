@@ -23,8 +23,6 @@ public class TreeDepthTabPresenter
     @VisibleForTesting
     int displayedLines = 25;
 
-    private boolean refreshDisabled = false;
-
     public TreeDepthTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
     {
@@ -37,7 +35,24 @@ public class TreeDepthTabPresenter
     @Override
     public void load()
     {
+        taskRunner.runOrFail(
+            model::waitForNodes,
+            this::wakeUp,
+            this::handleDisplayLinesError
+        );
+    }
+
+    @VisibleForTesting
+    void wakeUp()
+    {
+        view.wakeUp();
         handleDisplayedLines(displayedLines);
+    }
+
+    @Override
+    protected void init()
+    {
+        view.setMaxLines(nrLines);
     }
 
     @VisibleForTesting
@@ -83,6 +98,13 @@ public class TreeDepthTabPresenter
     }
 
     @VisibleForTesting
+    void handleRequiredLine(final int lineNr)
+    {
+        startLine = lineNr;
+        handleDisplayedLines(displayedLines);
+    }
+
+    @VisibleForTesting
     void doDisplayLines(final int startLine, final int nrLines)
     {
         taskRunner.computeOrFail(
@@ -105,15 +127,6 @@ public class TreeDepthTabPresenter
     @VisibleForTesting
     void adjustToolbar()
     {
-        if (!refreshDisabled) {
-            if (model.isLoadComplete()) {
-                refreshDisabled = true;
-                view.disableRefresh();
-            } else {
-                view.enableTabRefresh();
-            }
-        }
-
         if (startLine != 1)
             view.enablePrevious();
 

@@ -5,6 +5,7 @@ import com.github.fge.grappa.debugger.javafx.SmoothedAreaChart;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
@@ -12,15 +13,22 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 public class TreeDepthTabDisplay
     extends JavafxDisplay<TreeDepthTabPresenter>
 {
     @FXML
     protected ToolBar toolbar;
+
+    @FXML
+    protected TextField requiredLine;
+
+    @FXML
+    protected Label totalLines;
 
     @FXML
     protected HBox hbox;
@@ -38,13 +46,10 @@ public class TreeDepthTabDisplay
     protected Button nextLines;
 
     @FXML
-    protected HBox refreshBox;
+    protected StackPane pane;
 
     @FXML
-    protected Button tabRefresh;
-
-    @FXML
-    protected ProgressBar progressBar;
+    protected Label waitLabel;
 
     @FXML
     protected SmoothedAreaChart<Number, Number> chart;
@@ -64,6 +69,7 @@ public class TreeDepthTabDisplay
         hbox.minWidthProperty().bind(toolbar.widthProperty());
 
         linesDisplayed.getItems().addAll(10, 25, 50);
+        linesDisplayed.valueProperty().setValue(25);
         linesDisplayed.valueProperty().addListener(new ChangeListener<Integer>()
         {
             @Override
@@ -105,5 +111,18 @@ public class TreeDepthTabDisplay
     void chartRefreshEvent(final Event event)
     {
         presenter.handleChartRefreshEvent();
+    }
+
+    // FIXME: cannot test :(
+    @FXML
+    void requiredLineEvent(final ActionEvent event)
+    {
+        final String input = requiredLine.getText();
+        if (input == null) // Can this happen?
+            return;
+        try {
+            presenter.handleRequiredLine(Integer.parseInt(input));
+        } catch (NumberFormatException ignored) {
+        }
     }
 }

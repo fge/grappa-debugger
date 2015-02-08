@@ -17,10 +17,10 @@ import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -143,27 +143,6 @@ public class TreeDepthTabPresenterTest
     }
 
     @Test
-    public void adjustToolbarLoadIncomplete()
-    {
-        when(model.isLoadComplete()).thenReturn(false);
-
-        presenter.adjustToolbar();
-
-        verify(view).enableTabRefresh();
-    }
-
-    @Test
-    public void adjustToolbarLoadComplete()
-    {
-        when(model.isLoadComplete()).thenReturn(true);
-
-        presenter.adjustToolbar();
-        presenter.adjustToolbar();
-
-        verify(view, times(1)).disableRefresh();
-    }
-
-    @Test
     public void adjustToolbarNotFirstLine()
     {
         presenter.startLine = 5;
@@ -253,12 +232,38 @@ public class TreeDepthTabPresenterTest
     }
 
     @Test
-    public void loadTest()
+    public void loadSuccessTest()
+        throws GrappaDebuggerException
     {
-        doNothing().when(presenter).handleDisplayedLines(anyInt());
+        doNothing().when(presenter).wakeUp();
 
         presenter.load();
 
-        verify(presenter).handleDisplayedLines(25);
+        verify(model).waitForNodes();
+        verify(presenter).wakeUp();
+    }
+
+    @Test
+    public void loadFailureTest()
+        throws GrappaDebuggerException
+    {
+        final Exception cause = new Exception();
+        final GrappaDebuggerException exception
+            = new GrappaDebuggerException(cause);
+
+        doThrow(exception).when(model).waitForNodes();
+
+        presenter.load();
+
+        verify(presenter).handleDisplayLinesError(same(exception));
+    }
+
+    @Test
+    public void wakeUpTest()
+    {
+        presenter.wakeUp();
+
+        verify(view).wakeUp();
+        verify(presenter).handleDisplayedLines(presenter.displayedLines);
     }
 }
