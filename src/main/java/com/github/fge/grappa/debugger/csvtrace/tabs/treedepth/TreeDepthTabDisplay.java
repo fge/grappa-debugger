@@ -68,27 +68,24 @@ public class TreeDepthTabDisplay
     @VisibleForTesting
     void changeNumberOfLinesEvent(final int nrLines)
     {
-        // TODO
-
+        presenter.handleChangeNumberOfLines(nrLines);
     }
 
     @FXML
     void previousLinesEvent(final Event event)
     {
-        // TODO
-
+        presenter.handlePreviousLines();
     }
 
     @FXML
     void nextLinesEvent(final Event event)
     {
-        // TODO
-
+        presenter.handleNextLines();
     }
 
-    public void chartRefreshEvent(final Event event)
+    @FXML
+    void chartRefreshEvent(final Event event)
     {
-        // TODO
-
+        presenter.handleChartRefreshEvent();
     }
 }
