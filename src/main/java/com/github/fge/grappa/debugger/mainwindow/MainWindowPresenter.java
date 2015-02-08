@@ -44,6 +44,11 @@ public class MainWindowPresenter
         this.taskRunner = Objects.requireNonNull(taskRunner);
     }
 
+    @Override
+    public void load()
+    {
+    }
+
     public void handleCloseWindow()
     {
         if (tracePresenter != null)
@@ -82,7 +87,7 @@ public class MainWindowPresenter
             model -> {
                 tracePresenter = createTabPresenter(model);
                 view.attachTrace(tracePresenter);
-                tracePresenter.loadTrace();
+                tracePresenter.load();
             },
             this::handleLoadFileError);
     }

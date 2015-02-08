@@ -52,7 +52,7 @@ public class CsvTracePresenterTest
         doNothing().when(presenter).loadMatchesTab();
         doNothing().when(presenter).loadTreeDepthTab();
 
-        presenter.loadTrace();
+        presenter.load();
 
         verify(presenter).loadTreeTab();
         verify(presenter).loadRulesTab();

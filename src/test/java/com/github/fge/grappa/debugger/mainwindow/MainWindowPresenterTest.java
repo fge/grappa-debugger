@@ -99,7 +99,7 @@ public class MainWindowPresenterTest
         presenter.handleLoadFile();
 
         verify(view).attachTrace(tracePresenter);
-        verify(tracePresenter).loadTrace();
+        verify(tracePresenter).load();
 
         assertThat(presenter.tracePresenter).isSameAs(tracePresenter);
     }

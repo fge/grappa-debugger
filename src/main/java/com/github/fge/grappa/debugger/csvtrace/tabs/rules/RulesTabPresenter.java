@@ -22,6 +22,7 @@ public class RulesTabPresenter
         this.model = model;
     }
 
+    @Override
     public void load()
     {
         loadParseInfo();

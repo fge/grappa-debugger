@@ -11,11 +11,15 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
+<?import javafx.scene.control.TextField?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabDisplay">
     <top>
         <ToolBar fx:id="toolbar">
             <HBox alignment="CENTER" spacing="5.0" fx:id="hbox">
+                <Label text="Go to line:"/>
+                <TextField fx:id="requiredLine"/>
+                <Label fx:id="totalLines" text="/ 1000"/>
                 <Label text="Lines to display:"/>
                 <ComboBox fx:id="linesDisplayed"/>
 
@@ -46,9 +50,9 @@
                     label="Line number"/>
             </xAxis>
             <yAxis>
-                <NumberAxis fx:id="yAxis" minorTickVisible="false"
-                    autoRanging="false"
-                    tickUnit="1.0" forceZeroInRange="true" label="Tree depth"/>
+                <NumberAxis fx:id="yAxis" forceZeroInRange="true"
+                    minorTickVisible="false" autoRanging="false"
+                    label="Tree depth"/>
             </yAxis>
         </SmoothedAreaChart>
     </center>

@@ -34,6 +34,7 @@ public class TreeDepthTabPresenter
         nrLines = model.getParseInfo().getNrLines();
     }
 
+    @Override
     public void load()
     {
         handleDisplayedLines(displayedLines);

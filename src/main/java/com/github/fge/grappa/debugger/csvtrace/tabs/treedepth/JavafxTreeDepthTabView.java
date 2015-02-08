@@ -78,6 +78,8 @@ public final class JavafxTreeDepthTabView
         }
 
         display.yAxis.setUpperBound(maxDepth);
+        final int tickUnit = maxDepth / 15;
+        display.yAxis.setTickUnit(Math.max(tickUnit, 1));
 
         display.progressBar.setVisible(false);
         display.linesDisplayed.setDisable(false);

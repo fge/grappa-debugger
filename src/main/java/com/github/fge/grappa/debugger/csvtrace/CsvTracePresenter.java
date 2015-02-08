@@ -5,9 +5,8 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
-    .TreeDepthTabPresenter;
-import com.github.fge.grappa.debugger.javafx.TracePresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
@@ -18,7 +17,7 @@ import java.util.Objects;
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
 public class CsvTracePresenter
-    extends TracePresenter<CsvTraceView>
+    extends BasePresenter<CsvTraceView>
 {
     private final MainWindowView mainView;
     private final GuiTaskRunner taskRunner;
@@ -33,7 +32,7 @@ public class CsvTracePresenter
     }
 
     @Override
-    public void loadTrace()
+    public void load()
     {
         loadTreeTab();
         loadRulesTab();
@@ -98,7 +97,6 @@ public class CsvTracePresenter
         return new TreeDepthTabPresenter(taskRunner, mainView, model);
     }
 
-    @Override
     public void dispose()
     {
         try {

@@ -19,8 +19,8 @@ import javafx.util.Pair;
  * An {@link AreaChart} with smoothed lines
  *
  * <p>Code totally salvaged from <a
- * href="http://fxexperience.com/2012/01/curve-fitting-and-styling-areachart/">here</a>
- * </p>
+ * href="http://fxexperience.com/2012/01/curve-fitting-and-styling-areachart/"
+ * >here</a>.</p>
  *
  * @param <X> x axis data type
  * @param <Y> y axis data type

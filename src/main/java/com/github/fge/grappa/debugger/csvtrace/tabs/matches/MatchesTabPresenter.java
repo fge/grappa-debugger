@@ -25,6 +25,7 @@ public class MatchesTabPresenter
         this.mainView = mainView;
     }
 
+    @Override
     public void load()
     {
         handleTabRefresh();
