@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.csvtrace.newmodel;
+package com.github.fge.grappa.debugger.model;
 
 import java.time.LocalDateTime;
 

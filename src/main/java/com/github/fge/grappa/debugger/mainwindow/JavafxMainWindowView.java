@@ -1,12 +1,12 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.common.JavafxView;
-import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.JavafxCsvTraceView;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
 import com.github.fge.grappa.debugger.javafx.AlertFactory;
+import com.github.fge.grappa.debugger.javafx.JavafxView;
+import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;

@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
-import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
+import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
 
 public class RulesTabPresenter

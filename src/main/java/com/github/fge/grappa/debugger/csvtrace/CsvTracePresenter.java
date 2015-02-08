@@ -1,10 +1,11 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.common.TracePresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
+import com.github.fge.grappa.debugger.javafx.TracePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
@@ -84,7 +85,7 @@ public class CsvTracePresenter
     {
         try {
             model.dispose();
-        } catch (Exception e) {
+        } catch (GrappaDebuggerException e) {
             mainView.showError("Trace file error", "Problem closing trace file",
                 e);
         }

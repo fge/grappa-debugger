@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
-import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

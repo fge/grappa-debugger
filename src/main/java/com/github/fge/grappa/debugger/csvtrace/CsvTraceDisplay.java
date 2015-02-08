@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
-import com.github.fge.grappa.debugger.common.JavafxDisplay;
+import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;

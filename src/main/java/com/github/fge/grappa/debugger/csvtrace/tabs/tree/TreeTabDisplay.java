@@ -1,9 +1,9 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
-import com.github.fge.grappa.debugger.common.JavafxDisplay;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
 import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeItem;
 import com.github.fge.grappa.debugger.javafx.parsetree.ParseTreeNodeCell;
+import com.github.fge.grappa.debugger.model.ParseTreeNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;

@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
-import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.Nonnull;

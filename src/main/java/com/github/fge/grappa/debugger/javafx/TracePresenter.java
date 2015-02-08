@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.common;
+package com.github.fge.grappa.debugger.javafx;
 
 public abstract class TracePresenter<V>
     extends BasePresenter<V>

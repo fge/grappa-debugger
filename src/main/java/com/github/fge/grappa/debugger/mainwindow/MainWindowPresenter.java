@@ -1,14 +1,14 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
-import com.github.fge.grappa.debugger.common.db.DbLoader;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
-import com.github.fge.grappa.debugger.csvtrace.dbmodel.DbCsvTraceModel;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
+import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.model.DbCsvTraceModel;
+import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
+import com.github.fge.grappa.debugger.model.db.DbLoader;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;

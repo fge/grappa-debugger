@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.javafx;
 
-import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;

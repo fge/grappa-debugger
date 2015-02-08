@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.common;
+package com.github.fge.grappa.debugger.javafx;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;

@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
-import com.github.fge.grappa.debugger.common.JavafxDisplay;
-import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.javafx.CallGraphTableCell;
+import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
+import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.common.db;
+package com.github.fge.grappa.debugger.model.db;
 
 import com.github.fge.grappa.debugger.jooq.tables.records.MatchersRecord;
 

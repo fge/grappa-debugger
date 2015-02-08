@@ -13,8 +13,8 @@
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabDisplay">
     <top>
-        <ToolBar fx:id="toolbar">
-            <HBox fx:id="hbox" alignment="CENTER" spacing="5.0">
+        <ToolBar>
+            <HBox alignment="CENTER" spacing="5.0">
                 <Label text="Lines to display:"/>
                 <ComboBox fx:id="linesDisplayed"/>
 
@@ -30,7 +30,7 @@
 
                 <HBox fx:id="refreshBox" alignment="CENTER" spacing="5.0">
                     <Button fx:id="tabRefresh" text="Refresh"
-                        onMouseClicked="#chartRefresh"/>
+                        onMouseClicked="#chartRefreshEvent"/>
                     <ProgressBar fx:id="progressBar" visible="false"/>
                 </HBox>
             </HBox>

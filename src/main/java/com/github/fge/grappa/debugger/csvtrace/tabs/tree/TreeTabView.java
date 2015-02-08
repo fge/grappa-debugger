@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
-import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.InputText;
+import com.github.fge.grappa.debugger.model.ParseTree;
+import com.github.fge.grappa.debugger.model.ParseTreeNode;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

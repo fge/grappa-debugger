@@ -1,18 +1,13 @@
-package com.github.fge.grappa.debugger.csvtrace.dbmodel;
+package com.github.fge.grappa.debugger.model;
 
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
-import com.github.fge.grappa.debugger.common.db.DbLoadStatus;
-import com.github.fge.grappa.debugger.common.db.DbLoader;
-import com.github.fge.grappa.debugger.common.db.RuleInvocationStatistics;
-import com.github.fge.grappa.debugger.common.db.RuleInvocationStatisticsMapper;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.InputText;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseInfo;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTree;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.ParseTreeNode;
-import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
+import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
+import com.github.fge.grappa.debugger.model.db.DbLoader;
+import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.RuleInvocationStatisticsMapper;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -49,7 +44,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.LogManager;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -119,26 +113,6 @@ public class DbCsvTraceModel
             info.getNrCodePoints(), inputBuffer);
     }
 
-    private synchronized void loadInputBuffer()
-        throws GrappaDebuggerException
-    {
-        if (inputBuffer != null)
-            return;
-
-        final Path path = zipfs.getPath(INPUT_TEXT_PATH);
-
-        try (
-            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
-        ) {
-            final CharBuffer buf = CharBuffer.allocate(info.getNrChars());
-            reader.read(buf);
-            buf.flip();
-            inputBuffer = new CharSequenceInputBuffer(buf);
-        } catch (IOException e) {
-            throw new GrappaDebuggerException(e);
-        }
-    }
-
     @Override
     public void waitForNodes()
         throws GrappaDebuggerException
@@ -170,53 +144,6 @@ public class DbCsvTraceModel
 
         return new ParseTree(node, info.getNrInvocations(),
             info.getTreeDepth());
-    }
-
-    @Nonnull
-    private ParseTreeNode getParseTreeNodeFromId(final Integer id)
-        throws GrappaDebuggerException
-    {
-        final DSLContext dsl;
-        try {
-            dsl = future.get();
-        } catch (InterruptedException | CancellationException
-            | ExecutionException e) {
-            throw new GrappaDebuggerException(e);
-        }
-
-        final Record nodeRecord = dsl.select(NODES.fields())
-            .from(NODES)
-            .where(NODES.ID.equal(id))
-            .fetchOne();
-        final Integer matcherId = nodeRecord.getValue(NODES.MATCHER_ID);
-        final RuleInfo ruleInfo = getRuleInfoFromId(matcherId);
-        final int nrChildren = dsl.select(DSL.count())
-            .from(NODES)
-            .where(NODES.PARENT_ID.equal(id))
-            .fetchOne()
-            .value1();
-        return new ParseTreeNode(
-            nodeRecord.getValue(NODES.PARENT_ID),
-            nodeRecord.getValue(NODES.ID),
-            nodeRecord.getValue(NODES.LEVEL),
-            nodeRecord.getValue(NODES.SUCCESS) == 1,
-            ruleInfo,
-            nodeRecord.getValue(NODES.START_INDEX),
-            nodeRecord.getValue(NODES.END_INDEX),
-            nodeRecord.getValue(NODES.TIME),
-            nrChildren != 0
-        );
-    }
-
-    private RuleInfo getRuleInfoFromId(final Integer matcherId)
-    {
-        final Record matcherRecord = jooq.select(MATCHERS.fields())
-            .from(MATCHERS)
-            .where(MATCHERS.ID.equal(matcherId))
-            .fetchOne();
-        return new RuleInfo(matcherRecord.getValue(MATCHERS.CLASS_NAME),
-            MatcherType.valueOf(matcherRecord.getValue(MATCHERS.MATCHER_TYPE)),
-            matcherRecord.getValue(MATCHERS.NAME));
     }
 
     @Nonnull
@@ -363,6 +290,73 @@ public class DbCsvTraceModel
 
             return new ParseInfo(time, treeDepth, nrMatchers, nrLines, nrChars,
                 nrCodePoints, nrInvocations);
+        }
+    }
+
+    @Nonnull
+    private ParseTreeNode getParseTreeNodeFromId(final Integer id)
+        throws GrappaDebuggerException
+    {
+        final DSLContext dsl;
+        try {
+            dsl = future.get();
+        } catch (InterruptedException | CancellationException
+            | ExecutionException e) {
+            throw new GrappaDebuggerException(e);
+        }
+
+        final Record nodeRecord = dsl.select(NODES.fields())
+            .from(NODES)
+            .where(NODES.ID.equal(id))
+            .fetchOne();
+        final Integer matcherId = nodeRecord.getValue(NODES.MATCHER_ID);
+        final RuleInfo ruleInfo = getRuleInfoFromId(matcherId);
+        final int nrChildren = dsl.select(DSL.count())
+            .from(NODES)
+            .where(NODES.PARENT_ID.equal(id))
+            .fetchOne()
+            .value1();
+        return new ParseTreeNode(
+            nodeRecord.getValue(NODES.PARENT_ID),
+            nodeRecord.getValue(NODES.ID),
+            nodeRecord.getValue(NODES.LEVEL),
+            nodeRecord.getValue(NODES.SUCCESS) == 1,
+            ruleInfo,
+            nodeRecord.getValue(NODES.START_INDEX),
+            nodeRecord.getValue(NODES.END_INDEX),
+            nodeRecord.getValue(NODES.TIME),
+            nrChildren != 0
+        );
+    }
+
+    private RuleInfo getRuleInfoFromId(final Integer matcherId)
+    {
+        final Record matcherRecord = jooq.select(MATCHERS.fields())
+            .from(MATCHERS)
+            .where(MATCHERS.ID.equal(matcherId))
+            .fetchOne();
+        return new RuleInfo(matcherRecord.getValue(MATCHERS.CLASS_NAME),
+            MatcherType.valueOf(matcherRecord.getValue(MATCHERS.MATCHER_TYPE)),
+            matcherRecord.getValue(MATCHERS.NAME));
+    }
+
+    private synchronized void loadInputBuffer()
+        throws GrappaDebuggerException
+    {
+        if (inputBuffer != null)
+            return;
+
+        final Path path = zipfs.getPath(INPUT_TEXT_PATH);
+
+        try (
+            final BufferedReader reader = Files.newBufferedReader(path, UTF8);
+        ) {
+            final CharBuffer buf = CharBuffer.allocate(info.getNrChars());
+            reader.read(buf);
+            buf.flip();
+            inputBuffer = new CharSequenceInputBuffer(buf);
+        } catch (IOException e) {
+            throw new GrappaDebuggerException(e);
         }
     }
 }

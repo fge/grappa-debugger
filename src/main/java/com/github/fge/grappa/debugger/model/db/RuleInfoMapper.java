@@ -1,7 +1,7 @@
-package com.github.fge.grappa.debugger.common.db;
+package com.github.fge.grappa.debugger.model.db;
 
-import com.github.fge.grappa.debugger.csvtrace.newmodel.RuleInfo;
 import com.github.fge.grappa.debugger.jooq.Tables;
+import com.github.fge.grappa.debugger.model.RuleInfo;
 import com.github.fge.grappa.matchers.MatcherType;
 import org.jooq.Converter;
 import org.jooq.Record;

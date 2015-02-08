@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
-import com.github.fge.grappa.debugger.common.JavafxDisplay;
+import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
