@@ -10,8 +10,6 @@ public interface TreeDepthTabView
 
     void displayChart(Map<Integer, Integer> depthMap);
 
-    void setTreeDepth(int depth);
-
     void updateStartLine(int startLine);
 
     void updateToolbar(boolean disablePrev, boolean disableNext,

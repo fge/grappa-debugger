@@ -42,7 +42,6 @@ public class TreeDepthTabPresenter
     {
         final ParseInfo parseInfo = model.getParseInfo();
         view.setMaxLines(parseInfo.getNrLines());
-        view.setTreeDepth(parseInfo.getTreeDepth());
     }
 
     public void handleChangeVisibleLines(final int visibleLines)

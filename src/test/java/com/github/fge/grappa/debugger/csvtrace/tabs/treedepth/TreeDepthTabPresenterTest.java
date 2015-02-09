@@ -67,7 +67,6 @@ public class TreeDepthTabPresenterTest
         presenter.init();
 
         verify(view).setMaxLines(theAnswer);
-        verify(view).setTreeDepth(depth);
     }
 
     @Test
