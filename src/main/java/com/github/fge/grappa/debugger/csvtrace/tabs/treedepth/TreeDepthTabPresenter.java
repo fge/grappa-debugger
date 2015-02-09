@@ -48,7 +48,7 @@ public class TreeDepthTabPresenter
     public void handleChangeVisibleLines(final int visibleLines)
     {
         this.visibleLines = visibleLines;
-        refreshChart();
+        handleChangeStartLine(startLine);
     }
 
     public void handleChangeStartLine(final int startLine)

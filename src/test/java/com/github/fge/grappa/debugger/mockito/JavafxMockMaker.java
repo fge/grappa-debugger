@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class JavafxMockMaker
     implements MockMaker
 {
-
     private final MockMaker wrapped = new CglibMockMaker();
     private boolean jfxIsSetup = false;
 

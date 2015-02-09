@@ -95,7 +95,7 @@ public class TreeDepthTabPresenterTest
         presenter.handleChangeVisibleLines(theAnswer);
 
         assertThat(presenter.visibleLines).isEqualTo(theAnswer);
-        verify(presenter).refreshChart();
+        verify(presenter).handleChangeStartLine(presenter.startLine);
     }
 
     @SuppressWarnings("AutoBoxing")
