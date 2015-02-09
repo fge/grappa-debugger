@@ -2,11 +2,11 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.ParseTreeNode;
-import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -53,14 +53,14 @@ public class RulesTabPresenterTest
         doNothing().when(presenter).loadParseInfo();
         doNothing().when(presenter).loadTotalParseTime();
         doNothing().when(presenter).loadMatchersByType();
-        doNothing().when(presenter).handleRefreshInvocationStatistics();
+        doNothing().when(presenter).handleRefreshRules();
 
         presenter.load();
 
         verify(presenter).loadParseInfo();
         verify(presenter).loadTotalParseTime();
         verify(presenter).loadMatchersByType();
-        verify(presenter).handleRefreshInvocationStatistics();
+        verify(presenter).handleRefreshRules();
     }
 
     @Test
@@ -143,53 +143,67 @@ public class RulesTabPresenterTest
     }
 
     @Test
-    public void handleRefreshInvocationStatisticsComplete()
+    public void handleRefreshRulesSuccessTest()
+        throws GrappaDebuggerException
     {
         @SuppressWarnings("unchecked")
-        final List<RuleInvocationStatistics> stats = mock(List.class);
+        final List<PerClassStatistics> list = mock(List.class);
+
+        when(model.getRulesByClass()).thenReturn(list);
+
+        presenter.handleRefreshRules();
+
+        verify(view).disableRefreshRules();
+        verify(model).getRulesByClass();
+        verify(presenter).doHandleRefreshRules(same(list));
+    }
+
+    @Test
+    public void handleRefreshRulesFailureTest()
+        throws GrappaDebuggerException
+    {
+        final Exception cause = new Exception();
+        final GrappaDebuggerException exception
+            = new GrappaDebuggerException(cause);
+
+        when(model.getRulesByClass()).thenThrow(exception);
+
+        presenter.handleRefreshRules();
+
+        verify(view).disableRefreshRules();
+        verify(model).getRulesByClass();
+        //noinspection unchecked
+        verify(presenter, never()).doHandleRefreshRules(anyList());
+        verify(presenter).handleRefreshRulesError(same(exception));
+    }
+
+    @Test
+    public void doHandleRefreshRulesCompleteTest()
+    {
+        @SuppressWarnings("unchecked")
+        final List<PerClassStatistics> stats = mock(List.class);
 
         //noinspection AutoBoxing
         when(model.isLoadComplete()).thenReturn(true);
-        when(model.getMatches()).thenReturn(stats);
 
-        presenter.handleRefreshInvocationStatistics();
+        presenter.doHandleRefreshRules(stats);
 
-        verify(view).disableTableRefresh();
-        verify(view).displayInvocationStatisticsComplete();
-        verify(view).displayRuleInvocationStatistics(same(stats));
+        verify(view).displayRules(same(stats));
+        verify(view).hideRefreshRules();
     }
 
     @Test
-    public void handleRefreshInvocationStatisticsIncomplete()
+    public void doHandleRefreshRulesIncompleteTest()
     {
         @SuppressWarnings("unchecked")
-        final List<RuleInvocationStatistics> stats = mock(List.class);
+        final List<PerClassStatistics> stats = mock(List.class);
 
         //noinspection AutoBoxing
         when(model.isLoadComplete()).thenReturn(false);
-        when(model.getMatches()).thenReturn(stats);
 
-        presenter.handleRefreshInvocationStatistics();
+        presenter.doHandleRefreshRules(stats);
 
-        verify(view).disableTableRefresh();
-        verify(view).displayInvocationStatisticsIncomplete();
-        verify(view).displayRuleInvocationStatistics(same(stats));
-    }
-
-    @Test
-    public void handleRefreshStatisticsError()
-    {
-        final RuntimeException oops = new RuntimeException();
-
-        when(model.getMatches()).thenThrow(oops);
-
-        presenter.handleRefreshInvocationStatistics();
-
-        verify(view).disableTableRefresh();
-        verify(view, never()).displayInvocationStatisticsIncomplete();
-        verify(view, never()).displayInvocationStatisticsComplete();
-        //noinspection unchecked
-        verify(view, never()).displayRuleInvocationStatistics(anyList());
-        verify(presenter).handleRefreshInvocationStatisticsError(same(oops));
+        verify(view).displayRules(same(stats));
+        verify(view).enableRefreshRules();
     }
 }

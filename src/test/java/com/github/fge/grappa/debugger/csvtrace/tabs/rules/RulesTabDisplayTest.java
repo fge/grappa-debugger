@@ -24,10 +24,10 @@ public class RulesTabDisplayTest
     }
 
     @Test
-    public void t()
+    public void refreshRulesEventTest()
     {
-        display.refreshInvocationStatisticsEvent(mock(Event.class));
+        display.refreshRulesEvent(mock(Event.class));
 
-        verify(presenter).handleRefreshInvocationStatistics();
+        verify(presenter).handleRefreshRules();
     }
 }

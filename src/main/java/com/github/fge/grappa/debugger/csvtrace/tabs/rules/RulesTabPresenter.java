@@ -5,7 +5,10 @@ import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.google.common.annotations.VisibleForTesting;
+
+import java.util.List;
 
 public class RulesTabPresenter
     extends BasePresenter<RulesTabView>
@@ -28,7 +31,7 @@ public class RulesTabPresenter
         loadParseInfo();
         loadTotalParseTime();
         loadMatchersByType();
-        handleRefreshInvocationStatistics();
+        handleRefreshRules();
     }
 
     @VisibleForTesting
@@ -71,28 +74,30 @@ public class RulesTabPresenter
            throwable);
     }
 
-    public void handleRefreshInvocationStatistics()
+    public void handleRefreshRules()
     {
-        final boolean complete = model.isLoadComplete();
-
         taskRunner.computeOrFail(
-            view::disableTableRefresh,
-            model::getMatches,
-            stats -> {
-                if (complete)
-                    view.displayInvocationStatisticsComplete();
-                else
-                    view.displayInvocationStatisticsIncomplete();
-                view.displayRuleInvocationStatistics(stats);
-            },
-            this::handleRefreshInvocationStatisticsError
+            view::disableRefreshRules,
+            model::getRulesByClass,
+            this::doHandleRefreshRules,
+            this::handleRefreshRulesError
         );
     }
 
     @VisibleForTesting
-    void handleRefreshInvocationStatisticsError(final Throwable throwable)
+    void doHandleRefreshRules(final List<PerClassStatistics> stats)
     {
-        mainView.showError("Load error", "Unable to load matcher statistics",
+        view.displayRules(stats);
+
+        final Runnable runnable = model.isLoadComplete()
+            ? view::hideRefreshRules : view::enableRefreshRules;
+        runnable.run();
+    }
+
+    @VisibleForTesting
+    void handleRefreshRulesError(final Throwable throwable)
+    {
+        mainView.showError("Database error", "Unable to refresh rules",
             throwable);
     }
 }

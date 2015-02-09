@@ -1,9 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
-import com.github.fge.grappa.debugger.javafx.CallGraphTableCell;
 import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
-import com.github.fge.grappa.matchers.MatcherType;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -13,8 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
-import java.util.function.Function;
 
 import static com.github.fge.grappa.debugger.javafx.JavafxUtils.setColumnValue;
 
@@ -42,6 +39,9 @@ public class RulesTabDisplay
     @FXML
     protected Label invPerChar;
 
+    /*
+     * Matchers pie chart
+     */
     @FXML
     protected PieChart matchersChart;
 
@@ -51,7 +51,7 @@ public class RulesTabDisplay
     protected final PieChart.Data actionsPie = new PieChart.Data("", 0.0);
 
     /*
-     * Top 10 table
+     * Rules table
      */
     @FXML
     protected Label completionStatus;
@@ -60,26 +60,22 @@ public class RulesTabDisplay
     protected Button tableRefresh;
 
     @FXML
-    protected TableView<RuleInvocationStatistics> invocationStatsTable;
+    protected TableView<PerClassStatistics> rulesTable;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, String> ruleName;
+    protected TableColumn<PerClassStatistics, String> className;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, String> ruleClass;
+    protected TableColumn<PerClassStatistics, Integer> ruleCount;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, MatcherType> ruleType;
+    protected TableColumn<PerClassStatistics, String> rulePct;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, Integer> nrCalls;
+    protected TableColumn<PerClassStatistics, Integer> invCount;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, String> callDetail;
-
-    @FXML
-    protected TableColumn<RuleInvocationStatistics, RuleInvocationStatistics>
-        callGraph;
+    protected TableColumn<PerClassStatistics, String> invPct;
 
     @SuppressWarnings("AutoBoxing")
     @Override
@@ -92,21 +88,28 @@ public class RulesTabDisplay
 
         matchersChart.setData(list);
 
-        setColumnValue(ruleName, r -> r.getRuleInfo().getName());
-        setColumnValue(ruleClass, r -> r.getRuleInfo().getClassName());
-        setColumnValue(ruleType, r -> r.getRuleInfo().getType());
-        setColumnValue(nrCalls, r -> r.getEmptyMatches() + r.getFailedMatches()
-            + r.getNonEmptyMatches());
-        setColumnValue(callDetail, r -> String.format("%d / %d / %d",
-            r.getNonEmptyMatches(), r.getEmptyMatches(), r.getFailedMatches()));
-        setColumnValue(callGraph, Function.identity());
-        callGraph.setCellFactory(CallGraphTableCell::new);
-        invocationStatsTable.setColumnResizePolicy(
-            TableView.CONSTRAINED_RESIZE_POLICY);
+        setColumnValue(className, PerClassStatistics::getClassName);
+        setColumnValue(ruleCount, PerClassStatistics::getNrRules);
+        setColumnValue(invCount, PerClassStatistics::getNrCalls);
+        rulePct.setCellValueFactory(param -> {
+            final int total = param.getTableView().getItems().stream()
+                .mapToInt(PerClassStatistics::getNrRules).sum();
+            final int thisRule = param.getValue().getNrRules();
+            final String s = String.format("%.02f%%", 100.0 * thisRule / total);
+            return new SimpleStringProperty(s);
+        });
+        invPct.setCellValueFactory(param -> {
+            final int total = param.getTableView().getItems().stream()
+                .mapToInt(PerClassStatistics::getNrCalls).sum();
+            final int thisRule = param.getValue().getNrCalls();
+            final String s = String.format("%.02f%%", 100.0 * thisRule / total);
+            return new SimpleStringProperty(s);
+        });
+        rulesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public void refreshInvocationStatisticsEvent(final Event event)
+    public void refreshRulesEvent(final Event event)
     {
-        presenter.handleRefreshInvocationStatistics();
+        presenter.handleRefreshRules();
     }
 }

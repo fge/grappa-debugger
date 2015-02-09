@@ -3,6 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.scene.chart.PieChart;
@@ -105,25 +106,29 @@ public final class JavafxRulesTabView
     }
 
     @Override
-    public void disableTableRefresh()
+    public void disableRefreshRules()
     {
         display.tableRefresh.setDisable(true);
     }
 
     @Override
-    public void displayRuleInvocationStatistics(
-        final List<RuleInvocationStatistics> stats)
+    public void displayRules(final List<PerClassStatistics> stats)
     {
-        display.invocationStatsTable.getSortOrder().setAll(display.nrCalls);
-        display.invocationStatsTable.getItems().setAll(stats);
-        display.invocationStatsTable.sort();
-        display.tableRefresh.setDisable(false);
+        display.rulesTable.getSortOrder().setAll(display.ruleCount);
+        display.rulesTable.getItems().setAll(stats);
+        display.rulesTable.sort();
     }
 
     @Override
-    public void displayInvocationStatisticsComplete()
+    public void hideRefreshRules()
     {
         display.completionStatus.setVisible(false);
         display.tableRefresh.setVisible(false);
+    }
+
+    @Override
+    public void enableRefreshRules()
+    {
+        display.tableRefresh.setDisable(false);
     }
 }

@@ -6,6 +6,8 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.model.db.DbLoader;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.db.PerClassStatisticsMapper;
 import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import com.github.fge.grappa.debugger.model.db.RuleInvocationStatisticsMapper;
 import com.github.fge.grappa.matchers.MatcherType;
@@ -33,7 +35,6 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -215,6 +216,22 @@ public class DbCsvTraceModel
 
     @Nonnull
     @Override
+    public List<PerClassStatistics> getRulesByClass()
+        throws GrappaDebuggerException
+    {
+        waitForMatchers();
+
+        return jooq.select(MATCHERS.CLASS_NAME, DSL.count().as("nrCalls"),
+            DSL.countDistinct(NODES.MATCHER_ID).as("nrRules"))
+            .from(MATCHERS, NODES)
+            .where(NODES.MATCHER_ID.eq(MATCHERS.ID))
+            .groupBy(MATCHERS.CLASS_NAME)
+            .fetch()
+            .map(new PerClassStatisticsMapper());
+    }
+
+    @Nonnull
+    @Override
     public List<RuleInvocationStatistics> getMatches()
     {
         final Field<Integer> emptyMatches = DSL.decode()
@@ -224,8 +241,8 @@ public class DbCsvTraceModel
         final Field<Integer> failedMatches = DSL.decode()
             .when(FAILED_MATCHES_CONDITION, 1).otherwise(0);
 
-        final List<RuleInvocationStatistics> list = new ArrayList<>();
-        jooq.select(MATCHERS.NAME, MATCHERS.MATCHER_TYPE, MATCHERS.CLASS_NAME,
+        return jooq.select(MATCHERS.NAME, MATCHERS.MATCHER_TYPE,
+            MATCHERS.CLASS_NAME,
             DSL.sum(emptyMatches).as("emptyMatches"),
             DSL.sum(nonEmptyMatches).as("nonEmptyMatches"),
             DSL.sum(failedMatches).as("failedMatches"))
@@ -233,27 +250,20 @@ public class DbCsvTraceModel
             .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
             .groupBy(MATCHERS.NAME, MATCHERS.MATCHER_TYPE, MATCHERS.CLASS_NAME)
             .fetch()
-            .map(new RuleInvocationStatisticsMapper())
-            .forEach(list::add);
-
-        return list;
+            .map(new RuleInvocationStatisticsMapper());
     }
 
     @Nonnull
     @Override
     public List<Integer> getTopMatcherCount()
     {
-        final List<Integer> list = new ArrayList<>(10);
-
         final Field<Integer> nrMatches = DSL.count().as("nrMatches");
-        jooq.select(nrMatches)
+
+        return jooq.select(nrMatches)
             .from(NODES)
             .groupBy(NODES.MATCHER_ID)
             .orderBy(nrMatches.desc())
-            .limit(10)
-            .forEach(r -> list.add(r.value1()));
-
-        return list;
+            .limit(10).fetch().map(Record1::value1);
     }
 
 

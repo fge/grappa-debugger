@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabDisplay">
     <center>
@@ -85,35 +86,29 @@
             <BorderPane>
                 <top>
                     <ToolBar>
-                        <Label text="Rule invocation statistics"/>
+                        <Label text="Matchers by class"/>
                         <Label fx:id="completionStatus"
                             text="(incomplete; click to refresh)"/>
                         <Button text="Refresh" fx:id="tableRefresh"
-                            onMouseClicked="#refreshInvocationStatisticsEvent"/>
+                            onMouseClicked="#refreshRulesEvent"/>
                     </ToolBar>
                 </top>
                 <center>
-                    <TableView fx:id="invocationStatsTable" editable="false">
+                    <TableView fx:id="rulesTable" editable="false">
                         <columns>
-                            <TableColumn fx:id="ruleName" text="Rule"/>
-                            <TableColumn fx:id="ruleClass" text="Rule class"/>
-                            <TableColumn fx:id="ruleType" text="Rule type"/>
-                            <TableColumn fx:id="nrCalls" text="Invocations"
-                                sortType="DESCENDING"/>
-                            <TableColumn fx:id="callDetail" text="N / E / F (*)"
+                            <TableColumn fx:id="className" text="Class"
                                 sortable="false"/>
-                            <TableColumn fx:id="callGraph" text="Graph"
-                                sortable="false" prefWidth="150.0"
-                                resizable="false"/>
+                            <TableColumn fx:id="ruleCount"
+                                text="Number of rules" sortType="DESCENDING"/>
+                            <TableColumn fx:id="rulePct" text="\% of rules"
+                                sortable="false"/>
+                            <TableColumn fx:id="invCount"
+                                text="Invocations"/>
+                            <TableColumn fx:id="invPct" sortable="false"
+                                text="Invocation (%)"/>
                         </columns>
                     </TableView>
                 </center>
-                <bottom>
-                    <ToolBar>
-                        <Label
-                            text="(*) N = non empty matches; E = empty matches; F = failed matches"/>
-                    </ToolBar>
-                </bottom>
             </BorderPane>
         </SplitPane>
     </center>

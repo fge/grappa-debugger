@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.model.ParseInfo;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 
 import java.util.List;
@@ -15,14 +15,11 @@ public interface RulesTabView
 
     void displayMatchersByType(Map<MatcherType, Integer> matchersByType);
 
-    void disableTableRefresh();
+    void disableRefreshRules();
 
-    void displayRuleInvocationStatistics(
-        List<RuleInvocationStatistics> stats);
+    void displayRules(List<PerClassStatistics> stats);
 
-    default void displayInvocationStatisticsIncomplete()
-    {
-    }
+    void hideRefreshRules();
 
-    void displayInvocationStatisticsComplete();
+    void enableRefreshRules();
 }
