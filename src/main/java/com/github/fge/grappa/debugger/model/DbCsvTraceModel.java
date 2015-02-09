@@ -420,18 +420,27 @@ public class DbCsvTraceModel
     @Override
     public Map<Integer, Integer> getDepthMap(final int startLine,
         final int wantedLines)
+        throws GrappaDebuggerException
     {
+        loadInputBuffer();
+
         final List<IndexRange> ranges
             = IntStream.range(startLine, startLine + wantedLines)
             .mapToObj(inputBuffer::getLineRange)
             .collect(Collectors.toList());
 
+        final int startIndex = ranges.get(0).start;
+        final int endIndex = ranges.get(ranges.size() - 1).end;
+        final Condition indexCondition = NODES.START_INDEX.lt(endIndex)
+            .and(NODES.END_INDEX.ge(startIndex));
+
         final Field<Integer> lineField = getLineField(startLine, ranges);
 
         final Map<Integer, Integer> ret = new HashMap<>();
 
-        jooq.select(lineField, DSL.max(NODES.LEVEL).as("depth"))
+        jooq.select(lineField, DSL.max(NODES.LEVEL))
             .from(NODES)
+            .where(indexCondition)
             .groupBy(lineField)
             .forEach(r -> ret.put(r.value1(), r.value2() + 1));
 
@@ -457,9 +466,7 @@ public class DbCsvTraceModel
 
     private static Condition activeThisRange(final IndexRange range)
     {
-        final Condition notApplicable = NODES.START_INDEX.ge(range.end)
-            .or(NODES.END_INDEX.lt(range.start));
-
-        return DSL.not(notApplicable);
+        return NODES.START_INDEX.lt(range.end)
+            .and(NODES.END_INDEX.ge(range.start));
     }
 }

@@ -13,10 +13,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 
 import javax.annotation.Nullable;
 
@@ -48,10 +48,13 @@ public class TreeDepthTabDisplay
     protected Button nextLines;
 
     @FXML
-    protected StackPane pane;
+    protected HBox refreshBox;
 
     @FXML
-    protected Label waitLabel;
+    protected ProgressBar loadInProgress;
+
+    @FXML
+    protected Button refreshButton;
 
     @FXML
     protected SmoothedAreaChart<Number, Number> chart;

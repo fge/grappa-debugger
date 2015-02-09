@@ -130,10 +130,10 @@ public final class DbLoader
         jooq.createIndex("nodes_parent_id").on(NODES, NODES.PARENT_ID)
             .execute();
         // Unused...
-//        jooq.createIndex("nodes_start_index").on(NODES, NODES.START_INDEX)
-//            .execute();
-//        jooq.createIndex("nodes_end_index").on(NODES, NODES.END_INDEX)
-//            .execute();
+        jooq.createIndex("nodes_start_index").on(NODES, NODES.START_INDEX)
+            .execute();
+        jooq.createIndex("nodes_end_index").on(NODES, NODES.END_INDEX)
+            .execute();
     }
 
     private void insertMatchers(final DSLContext jooq)

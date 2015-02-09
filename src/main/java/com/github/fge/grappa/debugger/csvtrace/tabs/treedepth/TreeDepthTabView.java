@@ -1,18 +1,19 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
-import java.util.List;
+import java.util.Map;
 
 public interface TreeDepthTabView
 {
-    void enablePrevious();
-
-    void enableNext();
-
     void disableToolbar();
-
-    void displayDepths(int startLine, int wantedLines, List<Integer> depths);
 
     void setMaxLines(int nrLines);
 
-    void wakeUp();
+    void displayChart(Map<Integer, Integer> same);
+
+    void setTreeDepth(int depth);
+
+    void updateStartLine(int startLine);
+
+    void updateToolbar(boolean disablePrev, boolean disableNext,
+        boolean disableRefresh);
 }

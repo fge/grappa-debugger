@@ -6,6 +6,8 @@ import javafx.scene.chart.XYChart;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public final class JavafxTreeDepthTabView
     extends JavafxView<TreeDepthTabPresenter, TreeDepthTabDisplay>
@@ -18,28 +20,15 @@ public final class JavafxTreeDepthTabView
     }
 
     @Override
-    public void enablePrevious()
-    {
-        display.prevLines.setDisable(false);
-    }
-
-    @Override
-    public void enableNext()
-    {
-        display.nextLines.setDisable(false);
-    }
-
-    @Override
     public void disableToolbar()
     {
-        display.requiredLine.setDisable(true);
-        display.linesDisplayed.setDisable(true);
-        display.prevLines.setDisable(true);
-        display.nextLines.setDisable(true);
+        Stream.of(display.requiredLine, display.linesDisplayed,
+            display.prevLines, display.nextLines, display.refreshButton
+        ).forEach(node -> node.setDisable(true));
+        display.loadInProgress.setVisible(true);
     }
 
-    @Override
-    public void displayDepths(final int startLine, final int wantedLines,
+    void displayDepths(final int startLine, final int wantedLines,
         final List<Integer> depths)
     {
         final ObservableList<XYChart.Data<Number, Number>> list
@@ -84,13 +73,37 @@ public final class JavafxTreeDepthTabView
     }
 
     @Override
-    public void wakeUp()
+    public void displayChart(final Map<Integer, Integer> same)
     {
-        display.requiredLine.setDisable(false);
+        // TODO
+    }
+
+    @Override
+    public void setTreeDepth(final int depth)
+    {
+        display.yAxis.setUpperBound(depth);
+        final int tick = Math.min(depth / 15, 1);
+        display.yAxis.setTickUnit(tick);
+    }
+
+    @Override
+    public void updateStartLine(final int startLine)
+    {
+        display.requiredLine.setText(String.valueOf(startLine));
+    }
+
+    @Override
+    public void updateToolbar(final boolean disablePrev,
+        final boolean disableNext, final boolean disableRefresh)
+    {
         display.linesDisplayed.setDisable(false);
-        display.prevLines.setDisable(false);
-        display.nextLines.setDisable(false);
-        display.pane.getChildren().remove(display.waitLabel);
-        display.chart.setVisible(true);
+        display.prevLines.setDisable(disablePrev);
+        display.nextLines.setDisable(disableNext);
+        if (disableRefresh)
+            display.hbox.getChildren().remove(display.refreshBox);
+        else {
+            display.refreshButton.setDisable(false);
+            display.loadInProgress.setVisible(false);
+        }
     }
 }

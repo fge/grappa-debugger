@@ -4,6 +4,7 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -38,7 +39,9 @@ public class TreeDepthTabPresenter
     @Override
     protected void init()
     {
-        view.setMaxLines(model.getParseInfo().getNrLines());
+        final ParseInfo parseInfo = model.getParseInfo();
+        view.setMaxLines(parseInfo.getNrLines());
+        view.setTreeDepth(parseInfo.getTreeDepth());
     }
 
     public void handleChangeVisibleLines(final int visibleLines)
@@ -85,7 +88,31 @@ public class TreeDepthTabPresenter
     @VisibleForTesting
     void doRefreshChart(final int startLine, final int visibleLines)
     {
-        // TODO
+        taskRunner.computeOrFail(
+            view::disableToolbar,
+            () -> model.getDepthMap(startLine, visibleLines),
+            depthMap -> {
+                view.displayChart(depthMap);
+                updateToolbar(startLine, visibleLines);
+            },
+            this::handleRefreshChartError
+        );
+    }
 
+    @VisibleForTesting
+    void handleRefreshChartError(final Throwable throwable)
+    {
+        mainView.showError("Chart refresh error", "Unable to refresh chart",
+            throwable);
+    }
+
+    public void updateToolbar(final int startLine, final int visibleLines)
+    {
+        view.updateStartLine(startLine);
+
+        final int nrLines = model.getParseInfo().getNrLines();
+        final boolean disableNext = startLine >= nrLines - visibleLines;
+
+        view.updateToolbar(startLine == 1, disableNext, model.isLoadComplete());
     }
 }

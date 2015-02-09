@@ -7,53 +7,58 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabDisplay">
     <top>
         <ToolBar fx:id="toolbar">
             <HBox alignment="CENTER" spacing="5.0" fx:id="hbox">
+
                 <Label text="Go to line:"/>
                 <TextField fx:id="requiredLine" prefWidth="100.0"
-                    onAction="#requiredLineEvent" disable="true"/>
+                    onAction="#changeStartLineEvent"/>
                 <Label fx:id="totalLines"/>
 
                 <Separator orientation="VERTICAL"/>
 
                 <Label text="Lines to display:"/>
-                <ComboBox fx:id="linesDisplayed" disable="true"/>
+                <ComboBox fx:id="linesDisplayed"/>
 
                 <Separator orientation="VERTICAL"/>
 
                 <Button fx:id="prevLines" text="Previous"
-                    onMouseClicked="#previousLinesEvent" disable="true"/>
+                    onMouseClicked="#previousLinesEvent"/>
                 <Label fx:id="currentLines" text="(no data)"/>
                 <Button fx:id="nextLines" text="Next"
-                    onMouseClicked="#nextLinesEvent" disable="true"/>
+                    onMouseClicked="#nextLinesEvent"/>
+
+                <HBox fx:id="refreshBox" spacing="5.0">
+                    <Separator orientation="VERTICAL"/>
+                    <Label text="Load incomplete; click to refresh:"/>
+                    <Button text="Refresh" fx:id="refreshButton"
+                        onAction="#chartRefreshEvent"/>
+                    <ProgressBar fx:id="loadInProgress" visible="false"/>
+                </HBox>
             </HBox>
         </ToolBar>
     </top>
     <center>
-        <StackPane fx:id="pane">
-            <SmoothedAreaChart fx:id="chart" legendVisible="false"
-                title="Tree depth by line" animated="false" visible="false">
-                <xAxis>
-                    <NumberAxis fx:id="xAxis" tickUnit="1.0" autoRanging="false"
-                        minorTickVisible="false" forceZeroInRange="false"
-                        label="Line number"/>
-                </xAxis>
-                <yAxis>
-                    <NumberAxis fx:id="yAxis" forceZeroInRange="true"
-                        minorTickVisible="false" autoRanging="false"
-                        label="Tree depth"/>
-                </yAxis>
-            </SmoothedAreaChart>
-            <Label text="Please wait..." fx:id="waitLabel"/>
-        </StackPane>
+        <SmoothedAreaChart fx:id="chart" legendVisible="false"
+            title="Tree depth by line" animated="false" visible="false">
+            <xAxis>
+                <NumberAxis fx:id="xAxis" tickUnit="1.0" autoRanging="false"
+                    minorTickVisible="false" forceZeroInRange="false"
+                    label="Line number"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" forceZeroInRange="true"
+                    minorTickVisible="false" autoRanging="false"
+                    label="Tree depth"/>
+            </yAxis>
+        </SmoothedAreaChart>
     </center>
 </BorderPane>
