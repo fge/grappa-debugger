@@ -48,4 +48,16 @@ public class TreeDepthTabPresenter
     public void handleChangeStartLine(final int startLine)
     {
     }
+
+    public void handlePreviousLines()
+    {
+    }
+
+    public void handleNextLines()
+    {
+    }
+
+    public void handleChartRefresh()
+    {
+    }
 }

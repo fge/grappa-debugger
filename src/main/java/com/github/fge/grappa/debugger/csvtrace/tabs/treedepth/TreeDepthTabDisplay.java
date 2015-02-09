@@ -94,16 +94,19 @@ public class TreeDepthTabDisplay
     @FXML
     void previousLinesEvent(final Event event)
     {
+        presenter.handlePreviousLines();
     }
 
     @FXML
     void nextLinesEvent(final Event event)
     {
+        presenter.handleNextLines();
     }
 
     @FXML
     void chartRefreshEvent(final Event event)
     {
+        presenter.handleChartRefresh();
     }
 
     @FXML

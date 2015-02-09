@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
+import javafx.event.Event;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -29,7 +30,7 @@ public class TreeDepthTabDisplayTest
     }
 
     @Test
-    public void displayGraphEventTest()
+    public void changeVisibleLinesEventTest()
     {
         final int nrLines = 42;
 
@@ -70,5 +71,29 @@ public class TreeDepthTabDisplayTest
         display.doChangeStartLineEvent(input);
 
         verify(presenter, never()).handleChangeStartLine(anyInt());
+    }
+
+    @Test
+    public void previousLinesEventTest()
+    {
+        display.previousLinesEvent(mock(Event.class));
+
+        verify(presenter).handlePreviousLines();
+    }
+
+    @Test
+    public void nextLinesEventTest()
+    {
+        display.nextLinesEvent(mock(Event.class));
+
+        verify(presenter).handleNextLines();
+    }
+
+    @Test
+    public void chartRefreshEventTest()
+    {
+        display.chartRefreshEvent(mock(Event.class));
+
+        verify(presenter).handleChartRefresh();
     }
 }
