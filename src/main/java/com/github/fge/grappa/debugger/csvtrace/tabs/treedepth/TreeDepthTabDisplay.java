@@ -116,9 +116,9 @@ public class TreeDepthTabDisplay
     }
 
     @VisibleForTesting
-    void changeVisibleLinesEvent(final int nrLines)
+    void changeVisibleLinesEvent(final int visibleLines)
     {
-        presenter.handleChangeVisibleLines(nrLines);
+        presenter.handleChangeVisibleLines(visibleLines);
     }
 
     @VisibleForTesting

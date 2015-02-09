@@ -20,7 +20,7 @@ public class TreeDepthTabPresenter
     int startLine = 1;
 
     @VisibleForTesting
-    int displayedLines = 25;
+    int visibleLines = 25;
 
     public TreeDepthTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
@@ -41,12 +41,18 @@ public class TreeDepthTabPresenter
         view.setMaxLines(model.getParseInfo().getNrLines());
     }
 
-    public void handleChangeVisibleLines(final int nrLines)
+    public void handleChangeVisibleLines(final int visibleLines)
     {
+        this.visibleLines = visibleLines;
+        refreshChart();
     }
 
     public void handleChangeStartLine(final int startLine)
     {
+        final int totalLines = model.getParseInfo().getNrLines();
+        final int maxLastLine = Math.max(1, totalLines - visibleLines + 1);
+        this.startLine = Math.min(startLine, maxLastLine);
+        refreshChart();
     }
 
     public void handlePreviousLines()
@@ -55,9 +61,19 @@ public class TreeDepthTabPresenter
 
     public void handleNextLines()
     {
+        final int beforeOverflow = Integer.MAX_VALUE - visibleLines + 1;
+        final int nextStartLine = startLine > beforeOverflow
+            ? beforeOverflow
+            : startLine + visibleLines;
+        handleChangeStartLine(nextStartLine);
     }
 
     public void handleChartRefresh()
+    {
+    }
+
+    @VisibleForTesting
+    void refreshChart()
     {
     }
 }
