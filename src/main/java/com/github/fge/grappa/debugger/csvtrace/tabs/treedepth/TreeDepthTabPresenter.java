@@ -72,6 +72,7 @@ public class TreeDepthTabPresenter
 
     public void handleChartRefresh()
     {
+        refreshChart();
     }
 
     @VisibleForTesting

@@ -155,4 +155,12 @@ public class TreeDepthTabPresenterTest
         presenter.handleNextLines();
         verify(presenter).handleChangeStartLine(expected);
     }
+
+    @Test
+    public void handleChartRefreshTest()
+    {
+        presenter.handleChartRefresh();
+
+        verify(presenter).refreshChart();
+    }
 }

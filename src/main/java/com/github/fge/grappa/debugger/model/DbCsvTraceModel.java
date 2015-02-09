@@ -416,9 +416,16 @@ public class DbCsvTraceModel
         return Optional.ofNullable(record.value1()).orElse(0);
     }
 
+    @Nonnull
+    @Override
     public Map<Integer, Integer> getDepthMap(final int startLine,
-        final List<IndexRange> ranges)
+        final int wantedLines)
     {
+        final List<IndexRange> ranges
+            = IntStream.range(startLine, startLine + wantedLines)
+            .mapToObj(inputBuffer::getLineRange)
+            .collect(Collectors.toList());
+
         final Field<Integer> lineField = getLineField(startLine, ranges);
 
         final Map<Integer, Integer> ret = new HashMap<>();
@@ -426,7 +433,10 @@ public class DbCsvTraceModel
         jooq.select(lineField, DSL.max(NODES.LEVEL).as("depth"))
             .from(NODES)
             .groupBy(lineField)
-            .forEach(r -> ret.put(r.value1(), r.value2()));
+            .forEach(r -> ret.put(r.value1(), r.value2() + 1));
+
+        IntStream.range(startLine, startLine + wantedLines)
+            .forEach(line -> ret.putIfAbsent(line, 0));
 
         return ret;
     }
