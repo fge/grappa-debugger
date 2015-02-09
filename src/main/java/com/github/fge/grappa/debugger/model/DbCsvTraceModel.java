@@ -13,6 +13,7 @@ import com.github.fge.grappa.debugger.model.db.MatchStatisticsMapper;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.jooq.CaseConditionStep;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -36,6 +37,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -412,5 +414,42 @@ public class DbCsvTraceModel
             .where(selected).fetchOne();
 
         return Optional.ofNullable(record.value1()).orElse(0);
+    }
+
+    public Map<Integer, Integer> getDepthMap(final int startLine,
+        final List<IndexRange> ranges)
+    {
+        final Field<Integer> lineField = getLineField(startLine, ranges);
+
+        final Map<Integer, Integer> ret = new HashMap<>();
+
+        jooq.select(lineField, DSL.max(NODES.LEVEL).as("depth"))
+            .from(NODES)
+            .groupBy(lineField)
+            .forEach(r -> ret.put(r.value1(), r.value2()));
+
+        return ret;
+    }
+
+    private Field<Integer> getLineField(final int startLine,
+        final List<IndexRange> ranges)
+    {
+        CaseConditionStep<Integer> step = DSL.decode()
+            .when(activeThisRange(ranges.get(0)), startLine);
+
+        final int size = ranges.size();
+
+        for (int i = 1; i < size; i++)
+            step = step.when(activeThisRange(ranges.get(i)), startLine + i);
+
+        return step.as("line");
+    }
+
+    private static Condition activeThisRange(final IndexRange range)
+    {
+        final Condition notApplicable = NODES.START_INDEX.ge(range.end)
+            .or(NODES.END_INDEX.lt(range.start));
+
+        return DSL.not(notApplicable);
     }
 }

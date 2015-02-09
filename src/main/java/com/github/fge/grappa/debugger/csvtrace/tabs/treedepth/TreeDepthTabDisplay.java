@@ -18,6 +18,8 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import javax.annotation.Nullable;
+
 public class TreeDepthTabDisplay
     extends JavafxDisplay<TreeDepthTabPresenter>
 {
@@ -82,46 +84,49 @@ public class TreeDepthTabDisplay
                 if (newValue == null)
                     return;
                 //noinspection AutoUnboxing
-                displayLinesEvent(newValue);
+                changeVisibleLinesEvent(newValue);
             }
         });
         
         chart.getData().add(series);
     }
 
-    @VisibleForTesting
-    void displayLinesEvent(final int nrLines)
-    {
-        presenter.handleDisplayedLines(nrLines);
-    }
-
     @FXML
     void previousLinesEvent(final Event event)
     {
-        presenter.handlePreviousLines();
     }
 
     @FXML
     void nextLinesEvent(final Event event)
     {
-        presenter.handleNextLines();
     }
 
     @FXML
     void chartRefreshEvent(final Event event)
     {
-        presenter.handleChartRefreshEvent();
     }
 
-    // FIXME: cannot test :(
     @FXML
-    void requiredLineEvent(final ActionEvent event)
+    void changeStartLineEvent(final ActionEvent event)
     {
-        final String input = requiredLine.getText();
-        if (input == null) // Can this happen?
+        doChangeStartLineEvent(requiredLine.getText());
+    }
+
+    @VisibleForTesting
+    void changeVisibleLinesEvent(final int nrLines)
+    {
+        presenter.handleChangeVisibleLines(nrLines);
+    }
+
+    @VisibleForTesting
+    void doChangeStartLineEvent(@Nullable final String input)
+    {
+        if (input == null)
             return;
         try {
-            presenter.handleRequiredLine(Integer.parseInt(input));
+            final int startLine = Integer.parseInt(input);
+            if (startLine >= 1)
+                presenter.handleChangeStartLine(startLine);
         } catch (NumberFormatException ignored) {
         }
     }
