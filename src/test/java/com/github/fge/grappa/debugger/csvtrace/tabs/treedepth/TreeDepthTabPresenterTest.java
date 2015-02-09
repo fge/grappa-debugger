@@ -163,4 +163,30 @@ public class TreeDepthTabPresenterTest
 
         verify(presenter).refreshChart();
     }
+
+    @DataProvider
+    public Iterator<Object[]> chartValues()
+    {
+        final List<Object[]> list = new ArrayList<>();
+
+        list.add(Stream.of(42, 25, 25).toArray());
+        list.add(Stream.of(25, 25, 25).toArray());
+        list.add(Stream.of(20, 25, 20).toArray());
+
+
+        return list.iterator();
+    }
+
+    @Test(dataProvider = "chartValues")
+    public void refreshChartTest(final int nrLines, final int visibleLines,
+        final int expected)
+    {
+        when(info.getNrLines()).thenReturn(nrLines);
+
+        presenter.visibleLines = visibleLines;
+
+        presenter.refreshChart();
+
+        verify(presenter).doRefreshChart(1, expected);
+    }
 }

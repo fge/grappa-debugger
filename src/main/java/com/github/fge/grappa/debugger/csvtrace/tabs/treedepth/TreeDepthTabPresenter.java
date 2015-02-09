@@ -78,5 +78,14 @@ public class TreeDepthTabPresenter
     @VisibleForTesting
     void refreshChart()
     {
+        final int nrLines = model.getParseInfo().getNrLines();
+        doRefreshChart(startLine, Math.min(nrLines, visibleLines));
+    }
+
+    @VisibleForTesting
+    void doRefreshChart(final int startLine, final int visibleLines)
+    {
+        // TODO
+
     }
 }
