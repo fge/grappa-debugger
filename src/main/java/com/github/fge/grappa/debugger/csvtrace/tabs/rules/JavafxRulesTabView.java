@@ -4,7 +4,6 @@ import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.scene.chart.PieChart;
 
@@ -43,7 +42,6 @@ public final class JavafxRulesTabView
 
         ratio = (double) nrInvocations / info.getNrChars();
         display.invPerChar.setText(String.format("%.2f", ratio));
-
 
         display.treeDepth.setText(String.valueOf(info.getTreeDepth()));
     }
@@ -102,19 +100,19 @@ public final class JavafxRulesTabView
         data.setPieValue(nr);
 
         fmt = String.format("Matchers by type (%d total)", totalMatchers);
-        display.matchersChart.setTitle(fmt);
+        display.rulesChart.setTitle(fmt);
     }
 
     @Override
     public void disableRefreshRules()
     {
-        display.tableRefresh.setDisable(true);
+        display.rulesRefresh.setDisable(true);
     }
 
     @Override
     public void displayRules(final List<PerClassStatistics> stats)
     {
-        display.rulesTable.getSortOrder().setAll(display.ruleCount);
+        display.rulesTable.getSortOrder().setAll(display.invCount);
         display.rulesTable.getItems().setAll(stats);
         display.rulesTable.sort();
     }
@@ -123,12 +121,12 @@ public final class JavafxRulesTabView
     public void hideRefreshRules()
     {
         display.completionStatus.setVisible(false);
-        display.tableRefresh.setVisible(false);
+        display.rulesRefresh.setVisible(false);
     }
 
     @Override
     public void enableRefreshRules()
     {
-        display.tableRefresh.setDisable(false);
+        display.rulesRefresh.setDisable(false);
     }
 }

@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.HBox;
 
 import static com.github.fge.grappa.debugger.javafx.JavafxUtils.setColumnValue;
 
@@ -21,6 +23,7 @@ public class RulesTabDisplay
     /*
      * General match information
      */
+
     @FXML
     protected Label parseDate;
 
@@ -40,10 +43,11 @@ public class RulesTabDisplay
     protected Label invPerChar;
 
     /*
-     * Matchers pie chart
+     * Rules pie chart
      */
+
     @FXML
-    protected PieChart matchersChart;
+    protected PieChart rulesChart;
 
     protected final PieChart.Data terminalsPie = new PieChart.Data("", 0.0);
     protected final PieChart.Data compositesPie = new PieChart.Data("", 0.0);
@@ -51,19 +55,30 @@ public class RulesTabDisplay
     protected final PieChart.Data actionsPie = new PieChart.Data("", 0.0);
 
     /*
-     * Rules table
+     * Rules toolbar
      */
+
+    @FXML
+    protected ToolBar toolbar;
+
+    @FXML
+    protected HBox hbox;
+
     @FXML
     protected Label completionStatus;
 
     @FXML
-    protected Button tableRefresh;
+    protected Button rulesRefresh;
+
+    /*
+     * Rules table
+     */
 
     @FXML
     protected TableView<PerClassStatistics> rulesTable;
 
     @FXML
-    protected TableColumn<PerClassStatistics, String> className;
+    protected TableColumn<PerClassStatistics, String> ruleClass;
 
     @FXML
     protected TableColumn<PerClassStatistics, Integer> ruleCount;
@@ -81,14 +96,25 @@ public class RulesTabDisplay
     @Override
     public void init()
     {
+        /*
+         * Rules pie chart
+         */
         final ObservableList<PieChart.Data> list
             = FXCollections.observableArrayList();
 
         list.addAll(terminalsPie, compositesPie, predicatesPie, actionsPie);
 
-        matchersChart.setData(list);
+        rulesChart.setData(list);
 
-        setColumnValue(className, PerClassStatistics::getClassName);
+        /*
+         * Rules table toolbar
+         */
+        hbox.minWidthProperty().bind(toolbar.widthProperty());
+
+        /*
+         * Rules table
+         */
+        setColumnValue(ruleClass, PerClassStatistics::getClassName);
         setColumnValue(ruleCount, PerClassStatistics::getNrRules);
         setColumnValue(invCount, PerClassStatistics::getNrCalls);
         rulePct.setCellValueFactory(param -> {

@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.layout.HBox?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabDisplay">
     <center>
@@ -77,7 +78,7 @@
                         </GridPane>
                     </center>
                 </BorderPane>
-                <PieChart fx:id="matchersChart" labelsVisible="false">
+                <PieChart fx:id="rulesChart" labelsVisible="false">
                     <padding>
                         <Insets top="5.0" bottom="5.0" right="5.0" left="5.0"/>
                     </padding>
@@ -85,18 +86,20 @@
             </SplitPane>
             <BorderPane>
                 <top>
-                    <ToolBar>
-                        <Label text="Matchers by class"/>
-                        <Label fx:id="completionStatus"
-                            text="(incomplete; click to refresh)"/>
-                        <Button text="Refresh" fx:id="tableRefresh"
-                            onMouseClicked="#refreshRulesEvent"/>
+                    <ToolBar fx:id="toolbar">
+                        <HBox fx:id="hbox" alignment="CENTER">
+                            <Label text="Rules by class"/>
+                            <Label fx:id="completionStatus"
+                                text="(incomplete; click to refresh)"/>
+                            <Button text="Refresh" fx:id="rulesRefresh"
+                                onMouseClicked="#refreshRulesEvent"/>
+                        </HBox>
                     </ToolBar>
                 </top>
                 <center>
                     <TableView fx:id="rulesTable" editable="false">
                         <columns>
-                            <TableColumn fx:id="className" text="Class"
+                            <TableColumn fx:id="ruleClass" text="Class"
                                 sortable="false"/>
                             <TableColumn fx:id="ruleCount"
                                 text="Number of rules" sortType="DESCENDING"/>

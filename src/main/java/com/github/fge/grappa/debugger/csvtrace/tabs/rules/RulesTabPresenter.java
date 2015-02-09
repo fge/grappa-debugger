@@ -34,6 +34,10 @@ public class RulesTabPresenter
         handleRefreshRules();
     }
 
+    /*
+     * General information
+     */
+
     @VisibleForTesting
     void loadParseInfo()
     {
@@ -54,8 +58,12 @@ public class RulesTabPresenter
     @VisibleForTesting
     void handleLoadTotalParseTimeError(final Throwable throwable)
     {
-       mainView.showError("Load error", "Unable to load parse tree", throwable);
+       mainView.showError("Load error", "Unable to load parse time", throwable);
     }
+
+    /*
+     * Matchers chart
+     */
 
     @VisibleForTesting
     void loadMatchersByType()
@@ -74,6 +82,9 @@ public class RulesTabPresenter
            throwable);
     }
 
+    /*
+     * Rules table
+     */
     public void handleRefreshRules()
     {
         taskRunner.computeOrFail(
