@@ -57,12 +57,14 @@ public class TreeDepthTabPresenter
 
     public void handlePreviousLines()
     {
+        final int nextStartLine = Math.max(startLine - visibleLines, 1);
+        handleChangeStartLine(nextStartLine);
     }
 
     public void handleNextLines()
     {
         final int beforeOverflow = Integer.MAX_VALUE - visibleLines + 1;
-        final int nextStartLine = startLine > beforeOverflow
+        final int nextStartLine = startLine >= beforeOverflow
             ? beforeOverflow
             : startLine + visibleLines;
         handleChangeStartLine(nextStartLine);

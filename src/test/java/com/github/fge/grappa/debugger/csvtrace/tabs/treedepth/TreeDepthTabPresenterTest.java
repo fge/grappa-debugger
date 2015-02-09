@@ -107,12 +107,36 @@ public class TreeDepthTabPresenterTest
     }
 
     @DataProvider
+    public Iterator<Object[]> prevLineValues()
+    {
+        final List<Object[]> list = new ArrayList<>();
+
+        list.add(Stream.of(25, 26, 1).toArray());
+        list.add(Stream.of(25, 40, 15).toArray());
+        list.add(Stream.of(50, 20, 1).toArray());
+
+        return list.iterator();
+    }
+
+    @Test(dataProvider = "prevLineValues")
+    public void handlePreviousLinesTest(final int visibleLines,
+        final int currentStartLine, final int expected)
+    {
+        presenter.visibleLines = visibleLines;
+        presenter.startLine = currentStartLine;
+
+        presenter.handlePreviousLines();
+        verify(presenter).handleChangeStartLine(expected);
+    }
+
+    @DataProvider
     public Iterator<Object[]> nextLineValues()
     {
         final List<Object[]> list = new ArrayList<>();
 
         list.add(Stream.of(25, 1, 26).toArray());
         list.add(Stream.of(42, 1, 43).toArray());
+        list.add(Stream.of(42, 12, 54).toArray());
         list.add(Stream.of(20, Integer.MAX_VALUE, Integer.MAX_VALUE - 19)
             .toArray());
         list.add(Stream.of(25, Integer.MAX_VALUE - 24,
