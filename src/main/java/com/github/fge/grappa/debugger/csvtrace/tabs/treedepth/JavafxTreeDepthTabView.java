@@ -78,6 +78,7 @@ public final class JavafxTreeDepthTabView
     public void updateToolbar(final boolean disablePrev,
         final boolean disableNext, final boolean disableRefresh)
     {
+        display.requiredLine.setDisable(false);
         display.linesDisplayed.setDisable(false);
         display.prevLines.setDisable(disablePrev);
         display.nextLines.setDisable(disableNext);

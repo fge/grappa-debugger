@@ -38,7 +38,7 @@ public class CsvTracePresenter
         loadRulesTab();
         loadMatchesTab();
         // DISABLED: horrible performance :(
-        //loadTreeDepthTab();
+        loadTreeDepthTab();
     }
 
     @VisibleForTesting

@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -67,6 +68,16 @@ public class TreeDepthTabPresenterTest
 
         verify(view).setMaxLines(theAnswer);
         verify(view).setTreeDepth(depth);
+    }
+
+    @Test
+    public void loadTest()
+    {
+        doNothing().when(presenter).handleChartRefresh();
+
+        presenter.load();
+
+        verify(presenter).handleChartRefresh();
     }
 
     @Test
@@ -258,6 +269,7 @@ public class TreeDepthTabPresenterTest
         list.add(Stream.of(25, 1, 25, false, true, true, false).toArray());
         list.add(Stream.of(42, 2, 25, false, false, false, false).toArray());
         list.add(Stream.of(42, 2, 25, true, false, false, true).toArray());
+        list.add(Stream.of(151, 101, 50, true, false, false, true).toArray());
 
         return list.iterator();
     }

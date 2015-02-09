@@ -34,6 +34,7 @@ public class TreeDepthTabPresenter
     @Override
     public void load()
     {
+        handleChartRefresh();
     }
 
     @Override
@@ -111,7 +112,7 @@ public class TreeDepthTabPresenter
         view.updateStartLine(startLine);
 
         final int nrLines = model.getParseInfo().getNrLines();
-        final boolean disableNext = startLine >= nrLines - visibleLines;
+        final boolean disableNext = startLine > nrLines - visibleLines;
 
         view.updateToolbar(startLine == 1, disableNext, model.isLoadComplete());
     }
