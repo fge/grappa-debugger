@@ -11,8 +11,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -24,6 +24,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("InstanceVariableMayNotBeInitialized")
 public class TreeDepthTabPresenterTest
 {
     private final GuiTaskRunner taskRunner = new GuiTaskRunner(
@@ -52,6 +53,7 @@ public class TreeDepthTabPresenterTest
         presenter.setView(view);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test
     public void initTest()
     {
@@ -85,10 +87,11 @@ public class TreeDepthTabPresenterTest
         verify(presenter).refreshChart();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @DataProvider
     public Iterator<Object[]> startLineValues()
     {
-        final List<Object[]> list = new ArrayList<>();
+        final Collection<Object[]> list = new ArrayList<>();
 
         list.add(Stream.of(42, 25, 1, 1).toArray());
         list.add(Stream.of(42, 25, 10, 10).toArray());
@@ -99,6 +102,7 @@ public class TreeDepthTabPresenterTest
         return list.iterator();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test(dataProvider = "startLineValues")
     public void handleChangeStartLineTest(final int nrLines,
         final int visibleLines, final int requested, final int expected)
@@ -114,10 +118,11 @@ public class TreeDepthTabPresenterTest
         verify(presenter).refreshChart();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @DataProvider
     public Iterator<Object[]> prevLineValues()
     {
-        final List<Object[]> list = new ArrayList<>();
+        final Collection<Object[]> list = new ArrayList<>();
 
         list.add(Stream.of(25, 26, 1).toArray());
         list.add(Stream.of(25, 40, 15).toArray());
@@ -137,10 +142,11 @@ public class TreeDepthTabPresenterTest
         verify(presenter).handleChangeStartLine(expected);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @DataProvider
     public Iterator<Object[]> nextLineValues()
     {
-        final List<Object[]> list = new ArrayList<>();
+        final Collection<Object[]> list = new ArrayList<>();
 
         list.add(Stream.of(25, 1, 26).toArray());
         list.add(Stream.of(42, 1, 43).toArray());
@@ -172,10 +178,11 @@ public class TreeDepthTabPresenterTest
         verify(presenter).refreshChart();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @DataProvider
     public Iterator<Object[]> chartValues()
     {
-        final List<Object[]> list = new ArrayList<>();
+        final Collection<Object[]> list = new ArrayList<>();
 
         list.add(Stream.of(42, 25, 25).toArray());
         list.add(Stream.of(25, 25, 25).toArray());
@@ -185,6 +192,7 @@ public class TreeDepthTabPresenterTest
         return list.iterator();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test(dataProvider = "chartValues")
     public void refreshChartTest(final int nrLines, final int visibleLines,
         final int expected)
@@ -240,10 +248,11 @@ public class TreeDepthTabPresenterTest
         verify(presenter).updateToolbar(startLine, visibleLines);
     }
 
+    @SuppressWarnings("AutoBoxing")
     @DataProvider
     public Iterator<Object[]> updateToolbarData()
     {
-        final List<Object[]> list = new ArrayList<>();
+        final Collection<Object[]> list = new ArrayList<>();
 
         list.add(Stream.of(42, 1, 25, false, true, false, false).toArray());
         list.add(Stream.of(25, 1, 25, false, true, true, false).toArray());
@@ -253,6 +262,7 @@ public class TreeDepthTabPresenterTest
         return list.iterator();
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Test(dataProvider = "updateToolbarData")
     public void updateToolbarTest(final int nrLines, final int startLine,
         final int visibleLines, final boolean loaded,

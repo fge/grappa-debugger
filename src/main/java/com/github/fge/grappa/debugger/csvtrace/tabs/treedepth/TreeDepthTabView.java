@@ -8,7 +8,7 @@ public interface TreeDepthTabView
 
     void setMaxLines(int nrLines);
 
-    void displayChart(Map<Integer, Integer> same);
+    void displayChart(Map<Integer, Integer> depthMap);
 
     void setTreeDepth(int depth);
 

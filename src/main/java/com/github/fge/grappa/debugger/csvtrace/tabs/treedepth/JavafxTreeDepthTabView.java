@@ -5,8 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public final class JavafxTreeDepthTabView
@@ -28,44 +28,6 @@ public final class JavafxTreeDepthTabView
         display.loadInProgress.setVisible(true);
     }
 
-    void displayDepths(final int startLine, final int wantedLines,
-        final List<Integer> depths)
-    {
-        final ObservableList<XYChart.Data<Number, Number>> list
-            = display.series.getData();
-
-        list.clear();
-
-        display.xAxis.setLowerBound(startLine);
-        final int endLine = startLine + wantedLines - 1;
-        display.xAxis.setUpperBound(endLine);
-
-        int lineNr = startLine;
-        XYChart.Data<Number, Number> data;
-
-        int maxDepth = 5;
-
-        for (final Integer depth: depths) {
-            if (depth > maxDepth)
-                maxDepth = depth;
-            data = new XYChart.Data<>(lineNr, depth);
-            list.add(data);
-            lineNr++;
-        }
-
-        display.yAxis.setUpperBound(maxDepth);
-        final int tickUnit = maxDepth / 15;
-        display.yAxis.setTickUnit(Math.max(tickUnit, 1));
-
-        display.linesDisplayed.setDisable(false);
-
-        display.currentLines.setText(String.format("Lines %d-%d", startLine,
-            endLine));
-
-        display.requiredLine.setText(String.valueOf(startLine));
-        display.requiredLine.setDisable(false);
-    }
-
     @Override
     public void setMaxLines(final int nrLines)
     {
@@ -73,9 +35,29 @@ public final class JavafxTreeDepthTabView
     }
 
     @Override
-    public void displayChart(final Map<Integer, Integer> same)
+    public void displayChart(final Map<Integer, Integer> depthMap)
     {
-        // TODO
+        final ObservableList<XYChart.Data<Number, Number>> list
+            = display.series.getData();
+
+        list.clear();
+
+        final Function<Map.Entry<Integer, Integer>, XYChart.Data<Number, Number>>
+            toData
+            = entry -> new XYChart.Data<>(entry.getKey(), entry.getValue());
+
+        final Integer startLine = depthMap.keySet().stream()
+            .min(Integer::compare).get();
+        final Integer endLine = depthMap.keySet().stream()
+            .max(Integer::compare).get();
+
+        display.xAxis.setLowerBound(startLine.doubleValue());
+        display.xAxis.setUpperBound(endLine.doubleValue());
+
+        depthMap.entrySet().stream().map(toData).forEach(list::add);
+
+        display.currentLines.setText(String.format("Lines %d-%d", startLine,
+            endLine));
     }
 
     @Override
