@@ -8,6 +8,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 import static com.github.fge.grappa.debugger.jooq.Tables.MATCHERS;
 import static com.github.fge.grappa.debugger.jooq.Tables.NODES;
 
+@ParametersAreNonnullByDefault
 public final class DbLoader
     implements AutoCloseable
 {
@@ -37,25 +39,25 @@ public final class DbLoader
 
     private static final List<String> H2_DDL = Arrays.asList(
        "create table matchers ("
-            + "id integer not null,"
-            + "class_name varchar(255) not null,"
-            + "matcher_type varchar(30) not null,"
-            + "name varchar(1024) not null"
+            + " id integer not null,"
+            + " class_name varchar(255) not null,"
+            + " matcher_type varchar(30) not null,"
+            + " name varchar(1024) not null"
             + ");",
         "create table nodes ("
-            + "id integer not null,"
-            + "parent_id integer not null,"
-            + "level integer not null,"
-            + "success integer not null,"
-            + "matcher_id integer not null,"
-            + "start_index integer not null,"
-            + "end_index integer not null,"
-            + "time long not null"
+            + " id integer not null,"
+            + " parent_id integer not null,"
+            + " level integer not null,"
+            + " success integer not null,"
+            + " matcher_id integer not null,"
+            + " start_index integer not null,"
+            + " end_index integer not null,"
+            + " time long not null"
             + ");",
         "alter table matchers add primary key(id);",
         "alter table nodes add primary key(id);",
         "alter table nodes add foreign key (matcher_id)"
-            + "references matchers(id)"
+            + " references matchers(id)"
     );
 
 
@@ -73,6 +75,7 @@ public final class DbLoader
 
     private final Connection connection;
     private final DSLContext jooq;
+
     private DbLoadStatus status;
 
     public DbLoader(final FileSystem zipfs)
@@ -126,10 +129,11 @@ public final class DbLoader
 
         jooq.createIndex("nodes_parent_id").on(NODES, NODES.PARENT_ID)
             .execute();
-        jooq.createIndex("nodes_start_index").on(NODES, NODES.START_INDEX)
-            .execute();
-        jooq.createIndex("nodes_end_index").on(NODES, NODES.END_INDEX)
-            .execute();
+        // Unused...
+//        jooq.createIndex("nodes_start_index").on(NODES, NODES.START_INDEX)
+//            .execute();
+//        jooq.createIndex("nodes_end_index").on(NODES, NODES.END_INDEX)
+//            .execute();
     }
 
     private void insertMatchers(final DSLContext jooq)

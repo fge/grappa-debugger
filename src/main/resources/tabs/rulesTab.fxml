@@ -87,7 +87,7 @@
             <BorderPane>
                 <top>
                     <ToolBar fx:id="toolbar">
-                        <HBox fx:id="hbox" alignment="CENTER">
+                        <HBox fx:id="hbox" alignment="CENTER" spacing="5.0">
                             <Label text="Rules by class"/>
                             <Label fx:id="completionStatus"
                                 text="(incomplete; click to refresh)"/>

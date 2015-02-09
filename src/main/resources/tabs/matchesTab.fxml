@@ -15,15 +15,18 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.HBox?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabDisplay"
     fx:id="completionBar">
     <top>
-        <ToolBar nodeOrientation="RIGHT_TO_LEFT">
-            <ProgressBar fx:id="loadProgressBar" visible="false"/>
-            <Button text="Refresh" fx:id="tabRefresh"
-                onMouseClicked="#refreshTabEvent"/>
-            <Label text="Loading not complete yet; click to refresh:"/>
+        <ToolBar fx:id="toolbar">
+            <HBox fx:id="hbox" alignment="CENTER" spacing="0.5">
+                <Label text="Loading not complete yet; click to refresh:"/>
+                <Button text="Refresh" fx:id="tabRefresh"
+                    onMouseClicked="#refreshTabEvent"/>
+                <ProgressBar fx:id="loadProgressBar" visible="false"/>
+            </HBox>
         </ToolBar>
     </top>
     <center>

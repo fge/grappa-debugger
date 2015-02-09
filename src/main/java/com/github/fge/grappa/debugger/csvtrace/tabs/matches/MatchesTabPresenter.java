@@ -4,7 +4,7 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.Nonnull;
@@ -80,7 +80,7 @@ public class MatchesTabPresenter
     @VisibleForTesting
     static class MatchersData
     {
-        private final List<RuleInvocationStatistics> matches;
+        private final List<MatchStatistics> matches;
         private final int nonEmpty;
         private final int empty;
         private final int failures;
@@ -91,15 +91,15 @@ public class MatchesTabPresenter
 
         private MatchersData(@Nonnull final CsvTraceModel model)
         {
-            matches = model.getMatches();
+            matches = model.getMatchStatistics();
             nonEmpty = matches.stream()
-                .mapToInt(RuleInvocationStatistics::getNonEmptyMatches)
+                .mapToInt(MatchStatistics::getNonEmptyMatches)
                 .sum();
             empty = matches.stream()
-                .mapToInt(RuleInvocationStatistics::getEmptyMatches)
+                .mapToInt(MatchStatistics::getEmptyMatches)
                 .sum();
             failures = matches.stream()
-                .mapToInt(RuleInvocationStatistics::getFailedMatches)
+                .mapToInt(MatchStatistics::getFailedMatches)
                 .sum();
 
             total = nonEmpty + empty + failures;
@@ -117,7 +117,7 @@ public class MatchesTabPresenter
                 : null;
         }
 
-        List<RuleInvocationStatistics> getMatches()
+        List<MatchStatistics> getMatches()
         {
             return matches;
         }

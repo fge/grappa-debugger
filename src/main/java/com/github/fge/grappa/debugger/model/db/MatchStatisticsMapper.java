@@ -4,8 +4,8 @@ import com.github.fge.grappa.debugger.model.RuleInfo;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 
-public final class RuleInvocationStatisticsMapper
-    implements RecordMapper<Record, RuleInvocationStatistics>
+public final class MatchStatisticsMapper
+    implements RecordMapper<Record, MatchStatistics>
 {
     private final RecordMapper<Record, RuleInfo> ruleInfoMapper
         = new RuleInfoMapper();
@@ -17,10 +17,10 @@ public final class RuleInvocationStatisticsMapper
      */
     @SuppressWarnings("AutoUnboxing")
     @Override
-    public RuleInvocationStatistics map(final Record record)
+    public MatchStatistics map(final Record record)
     {
         final RuleInfo info = ruleInfoMapper.map(record);
-        return new RuleInvocationStatistics(info,
+        return new MatchStatistics(info,
             record.getValue("nonEmptyMatches", Integer.class),
             record.getValue("emptyMatches", Integer.class),
             record.getValue("failedMatches", Integer.class)

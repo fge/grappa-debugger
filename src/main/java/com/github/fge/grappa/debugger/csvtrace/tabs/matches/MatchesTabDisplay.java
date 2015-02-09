@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.javafx.CallGraphTableCell;
 import com.github.fge.grappa.debugger.javafx.JavafxDisplay;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +14,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.util.function.Function;
@@ -27,6 +29,12 @@ public class MatchesTabDisplay
     /*
      * Top bar
      */
+    @FXML
+    protected ToolBar toolbar;
+
+    @FXML
+    public HBox hbox;
+
     @FXML
     protected BorderPane completionBar;
 
@@ -68,31 +76,39 @@ public class MatchesTabDisplay
      * Invocation table
      */
     @FXML
-    protected TableView<RuleInvocationStatistics> matchesTable;
+    protected TableView<MatchStatistics> matchesTable;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, String> ruleName;
+    protected TableColumn<MatchStatistics, String> ruleName;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, String> ruleClass;
+    protected TableColumn<MatchStatistics, String> ruleClass;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, MatcherType> ruleType;
+    protected TableColumn<MatchStatistics, MatcherType> ruleType;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, Integer> nrCalls;
+    protected TableColumn<MatchStatistics, Integer> nrCalls;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, String> callDetail;
+    protected TableColumn<MatchStatistics, String> callDetail;
 
     @FXML
-    protected TableColumn<RuleInvocationStatistics, RuleInvocationStatistics>
+    protected TableColumn<MatchStatistics, MatchStatistics>
         callGraph;
 
 
     @Override
     public void init()
     {
+        /*
+         * Top toolbar
+         */
+        hbox.minWidthProperty().bind(toolbar.widthProperty());
+
+        /*
+         * Rules table
+         */
         setColumnValue(ruleName, r -> r.getRuleInfo().getName());
         setColumnValue(ruleClass, r -> r.getRuleInfo().getClassName());
         setColumnValue(ruleType, r -> r.getRuleInfo().getType());

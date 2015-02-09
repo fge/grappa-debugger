@@ -1,9 +1,11 @@
 package com.github.fge.grappa.debugger.model.db;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+@ParametersAreNonnullByDefault
 public final class DbLoadStatus
 {
     private final CountDownLatch matchersLatch = new CountDownLatch(1);

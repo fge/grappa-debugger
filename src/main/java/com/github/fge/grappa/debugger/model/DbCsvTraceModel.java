@@ -8,8 +8,8 @@ import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.model.db.DbLoader;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.github.fge.grappa.debugger.model.db.PerClassStatisticsMapper;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatisticsMapper;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatisticsMapper;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -176,6 +176,7 @@ public class DbCsvTraceModel
             .collect(Collectors.toList());
     }
 
+    // Unused...
     @Nonnull
     @Override
     public List<Integer> getDepths(final int startLine, final int wantedLines)
@@ -232,7 +233,7 @@ public class DbCsvTraceModel
 
     @Nonnull
     @Override
-    public List<RuleInvocationStatistics> getMatches()
+    public List<MatchStatistics> getMatchStatistics()
     {
         final Field<Integer> emptyMatches = DSL.decode()
             .when(EMPTY_MATCHES_CONDITION, 1).otherwise(0);
@@ -250,7 +251,7 @@ public class DbCsvTraceModel
             .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
             .groupBy(MATCHERS.NAME, MATCHERS.MATCHER_TYPE, MATCHERS.CLASS_NAME)
             .fetch()
-            .map(new RuleInvocationStatisticsMapper());
+            .map(new MatchStatisticsMapper());
     }
 
     @Nonnull
@@ -388,6 +389,7 @@ public class DbCsvTraceModel
         }
     }
 
+    // Unused...
     private Integer getDepthFromRange(final IndexRange range)
     {
         /*
@@ -399,9 +401,7 @@ public class DbCsvTraceModel
         final Condition notApplicable = NODES.START_INDEX.ge(range.end)
             .or(NODES.END_INDEX.lt(range.start));
 
-        //final Condition selected = unresolved.or(resolved).or(started);
         final Condition selected = DSL.not(notApplicable);
-
 
         /*
          * And what we want is the maximum value of the depth range PLUS ONE

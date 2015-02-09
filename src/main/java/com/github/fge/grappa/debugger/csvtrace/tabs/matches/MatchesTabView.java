@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -15,7 +15,7 @@ public interface MatchesTabView
 
     void showMatchesLoadingIncomplete();
 
-    void showMatches(List<RuleInvocationStatistics> stats);
+    void showMatches(List<MatchStatistics> stats);
 
     void showMatchesStats(int nonEmpty, int empty, int failures);
 

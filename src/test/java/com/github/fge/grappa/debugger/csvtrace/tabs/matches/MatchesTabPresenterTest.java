@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -126,7 +126,7 @@ public class MatchesTabPresenterTest
             = mock(MatchesTabPresenter.MatchersData.class);
 
         @SuppressWarnings("unchecked")
-        final List<RuleInvocationStatistics> matches = mock(List.class);
+        final List<MatchStatistics> matches = mock(List.class);
 
         when(data.getMatches()).thenReturn(matches);
 

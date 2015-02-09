@@ -45,7 +45,7 @@ public final class JavafxCsvTraceView
         try {
             tabView = new JavafxTreeTabView(taskRunner);
         } catch (IOException e) {
-            parentView.showError("Load error", "Unable to load parse tree", e);
+            parentView.showError("Load error", "Unable to load tree tab", e);
             return;
         }
         tabView.getDisplay().setPresenter(tabPresenter);
@@ -62,7 +62,7 @@ public final class JavafxCsvTraceView
         try {
             tabView = new JavafxRulesTabView();
         } catch (IOException e) {
-            parentView.showError("Load error", "Unable to load statistics", e);
+            parentView.showError("Load error", "Unable to load rules tab", e);
             return;
         }
         tabView.getDisplay().setPresenter(tabPresenter);
@@ -79,7 +79,7 @@ public final class JavafxCsvTraceView
         try {
             tabView = new JavafxMatchesTabView();
         } catch (IOException e) {
-            parentView.showError("Load error", "Unable to load statistics", e);
+            parentView.showError("Load error", "Unable to load matches tab", e);
             return;
         }
         tabView.getDisplay().setPresenter(tabPresenter);
@@ -87,6 +87,7 @@ public final class JavafxCsvTraceView
         display.matchesTab.setContent(tabView.getNode());
     }
 
+    // UNUSED...
     @Override
     public void loadTreeDepthTab(final TreeDepthTabPresenter tabPresenter)
     {

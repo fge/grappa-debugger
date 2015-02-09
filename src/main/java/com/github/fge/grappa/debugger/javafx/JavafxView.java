@@ -6,7 +6,6 @@ import javafx.scene.Node;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public abstract class JavafxView<P, D extends JavafxDisplay<P>>
@@ -23,12 +22,6 @@ public abstract class JavafxView<P, D extends JavafxDisplay<P>>
         final FXMLLoader loader = new FXMLLoader(url);
         node = loader.load();
         display = loader.getController();
-    }
-
-    protected JavafxView(final Node node, final D display)
-    {
-        this.node = Objects.requireNonNull(node);
-        this.display = Objects.requireNonNull(display);
     }
 
     @SuppressWarnings("unchecked")

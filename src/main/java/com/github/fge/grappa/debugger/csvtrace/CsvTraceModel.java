@@ -6,7 +6,7 @@ import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.ParseTree;
 import com.github.fge.grappa.debugger.model.ParseTreeNode;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 
 import javax.annotation.Nonnull;
@@ -51,7 +51,7 @@ public interface CsvTraceModel
         throws GrappaDebuggerException;
 
     @Nonnull
-    List<RuleInvocationStatistics> getMatches();
+    List<MatchStatistics> getMatchStatistics();
 
     @Nonnull
     List<Integer> getTopMatcherCount();

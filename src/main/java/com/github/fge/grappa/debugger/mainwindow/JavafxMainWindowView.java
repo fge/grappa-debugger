@@ -86,12 +86,16 @@ public final class JavafxMainWindowView
     {
         Objects.requireNonNull(status);
         Objects.requireNonNull(info);
+
         final int processedMatchers = status.getProcessedMatchers();
         final int processedNodes = status.getProcessedNodes();
+
         final int current = status.getCurrent();
         final int total = status.getTotal();
+
         final double pct = (double) current / total;
 
+        @SuppressWarnings("AutoBoxing")
         final String msg = String.format("%d/%d matchers, %d/%d nodes",
             processedMatchers, info.getNrMatchers(),
             processedNodes, info.getNrInvocations()

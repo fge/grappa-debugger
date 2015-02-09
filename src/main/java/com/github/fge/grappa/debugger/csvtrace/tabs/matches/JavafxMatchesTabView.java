@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.javafx.JavafxView;
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import javafx.scene.chart.PieChart;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -43,7 +43,7 @@ public final class JavafxMatchesTabView
     }
 
     @Override
-    public void showMatches(final List<RuleInvocationStatistics> stats)
+    public void showMatches(final List<MatchStatistics> stats)
     {
         display.matchesTable.getSortOrder().setAll(display.nrCalls);
         display.matchesTable.getItems().setAll(stats);

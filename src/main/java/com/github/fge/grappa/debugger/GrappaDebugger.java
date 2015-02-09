@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+@ParametersAreNonnullByDefault
 public final class GrappaDebugger
     extends Application
     implements MainWindowFactory

@@ -23,7 +23,7 @@ public class MainWindowDisplay
     protected ProgressBar dbLoadProgress;
 
     @FXML
-    public Label dbLoadProgressMessage;
+    protected Label dbLoadProgressMessage;
 
     @Override
     public void init()

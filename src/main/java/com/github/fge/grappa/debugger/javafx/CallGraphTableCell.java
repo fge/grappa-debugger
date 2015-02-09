@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.javafx;
 
-import com.github.fge.grappa.debugger.model.db.RuleInvocationStatistics;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;
@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import java.util.function.Supplier;
 
 public final class CallGraphTableCell
-    extends TableCell<RuleInvocationStatistics, RuleInvocationStatistics>
+    extends TableCell<MatchStatistics, MatchStatistics>
 {
     // FIXME: unfortunately I cannot use Rectangle::new...
     // If I do, the rectangle is not visible :/
@@ -24,14 +24,14 @@ public final class CallGraphTableCell
     private final ReadOnlyDoubleProperty columnWidth;
 
     public CallGraphTableCell(
-        final TableColumn<RuleInvocationStatistics, RuleInvocationStatistics>
+        final TableColumn<MatchStatistics, MatchStatistics>
             column)
     {
         columnWidth = column.widthProperty();
     }
 
     @Override
-    protected void updateItem(final RuleInvocationStatistics item,
+    protected void updateItem(final MatchStatistics item,
         final boolean empty)
     {
         super.updateItem(item, empty);

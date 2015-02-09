@@ -31,7 +31,6 @@ public class MainWindowPresenter
         = Collections.singletonMap("readonly", "true");
 
     private final GuiTaskRunner taskRunner;
-
     private final MainWindowFactory windowFactory;
 
     @VisibleForTesting
@@ -88,8 +87,11 @@ public class MainWindowPresenter
                 tracePresenter = createTabPresenter(model);
                 view.attachTrace(tracePresenter);
                 tracePresenter.load();
+                view.setWindowTitle("Grappa debugger: "
+                    + path.toAbsolutePath());
             },
-            this::handleLoadFileError);
+            this::handleLoadFileError
+        );
     }
 
     @VisibleForTesting
@@ -98,6 +100,7 @@ public class MainWindowPresenter
         return new CsvTracePresenter(view, taskRunner, model);
     }
 
+    // TODO: split; too long
     @VisibleForTesting
     CsvTraceModel getModel(final Path path)
         throws IOException, SQLException

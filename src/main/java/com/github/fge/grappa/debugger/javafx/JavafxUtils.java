@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.javafx;
 
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.paint.Color;
 
@@ -36,20 +35,6 @@ public final class JavafxUtils
 
         return String.format("%d ms, %03d.%03d µs", value, nrMicroseconds,
             nrNanoseconds);
-    }
-
-    public static <S> void setDisplayNanos(final TableColumn<S, Long> column)
-    {
-        column.setCellFactory(param -> new TableCell<S, Long>()
-        {
-            @Override
-            protected void updateItem(final Long item, final boolean empty)
-            {
-                super.updateItem(item, empty);
-                //noinspection AutoUnboxing
-                setText(empty ? null : nanosToString(item));
-            }
-        });
     }
 
     public static <S, T> void setColumnValue(final TableColumn<S, T> column,
