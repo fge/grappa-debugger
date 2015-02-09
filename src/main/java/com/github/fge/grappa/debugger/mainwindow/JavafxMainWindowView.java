@@ -7,6 +7,7 @@ import com.github.fge.grappa.debugger.javafx.AlertFactory;
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -16,7 +17,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public final class JavafxMainWindowView
+@NonFinalForTesting
+public class JavafxMainWindowView
     extends JavafxView<MainWindowPresenter, MainWindowDisplay>
     implements MainWindowView
 {
