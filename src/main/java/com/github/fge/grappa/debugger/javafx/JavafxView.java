@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.javafx;
 
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
@@ -25,12 +26,14 @@ public abstract class JavafxView<P, D extends JavafxDisplay<P>>
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends Node> T getNode()
+    @NonFinalForTesting
+    public <T extends Node> T getNode()
     {
         return (T) node;
     }
 
-    public final D getDisplay()
+    @NonFinalForTesting
+    public D getDisplay()
     {
         return display;
     }

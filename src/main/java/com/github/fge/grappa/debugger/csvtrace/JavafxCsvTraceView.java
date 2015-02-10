@@ -14,13 +14,15 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
     .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
-public final class JavafxCsvTraceView
+@NonFinalForTesting
+public class JavafxCsvTraceView
     extends JavafxView<CsvTracePresenter, CsvTraceDisplay>
     implements CsvTraceView
 {

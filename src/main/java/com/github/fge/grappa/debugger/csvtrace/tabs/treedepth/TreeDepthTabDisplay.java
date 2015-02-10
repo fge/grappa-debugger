@@ -19,6 +19,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -104,6 +105,22 @@ public class TreeDepthTabDisplay
         });
         
         chart.getData().add(series);
+
+        xAxis.setTickLabelFormatter(new StringConverter<Number>()
+        {
+            @Override
+            public String toString(final Number object)
+            {
+                return String.valueOf(object.intValue());
+            }
+
+            @Override
+            public Number fromString(final String string)
+            {
+                //noinspection AutoBoxing
+                return Integer.parseInt(string);
+            }
+        });
     }
 
     @FXML

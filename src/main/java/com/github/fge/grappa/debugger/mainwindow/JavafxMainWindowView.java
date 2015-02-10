@@ -8,6 +8,7 @@ import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.google.common.annotations.VisibleForTesting;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -72,7 +73,7 @@ public class JavafxMainWindowView
     {
         final JavafxCsvTraceView view;
         try {
-            view = new JavafxCsvTraceView(taskRunner, this);
+            view = loadTraceView();
         } catch (IOException e) {
             showError("Tab creation error", "Unable to create tab", e);
             return;
@@ -80,6 +81,13 @@ public class JavafxMainWindowView
         presenter.setView(view);
         view.getDisplay().setPresenter(presenter);
         display.pane.setCenter(view.getNode());
+    }
+
+    @VisibleForTesting
+    JavafxCsvTraceView loadTraceView()
+        throws IOException
+    {
+        return new JavafxCsvTraceView(taskRunner, this);
     }
 
     @Override
