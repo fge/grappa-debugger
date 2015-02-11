@@ -123,13 +123,16 @@ public class CsvTracePresenter
 
     public void handleTabsRefreshEvent()
     {
-        tabs.forEach(TabPresenter::refresh);
-        if (model.isLoadComplete())
-            loadComplete();
+        taskRunner.run(view::disableTabsRefresh, () -> tabs.forEach(
+            TabPresenter::refresh), this::postTabsRefresh);
     }
 
-    public void loadComplete()
+    public void postTabsRefresh()
     {
-        view.showLoadComplete();
+        final Runnable runnable = model.isLoadComplete()
+            ? view::showLoadComplete
+            : view::enableTabsRefresh;
+
+        runnable.run();
     }
 }

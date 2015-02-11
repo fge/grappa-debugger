@@ -14,8 +14,11 @@ public interface CsvTraceView
 
     void loadMatchesTab(MatchesTabPresenter tabPresenter);
 
-    // UNUSED...
     void loadTreeDepthTab(TreeDepthTabPresenter tabPresenter);
 
     void showLoadComplete();
+
+    void disableTabsRefresh();
+
+    void enableTabsRefresh();
 }

@@ -9,6 +9,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresen
 import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
+import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,8 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -134,44 +136,39 @@ public class CsvTracePresenterTest
         presenter.tabs.add(tab1);
         presenter.tabs.add(tab2);
 
-        doNothing().when(presenter).loadComplete();
+        doNothing().when(presenter).postTabsRefresh();
 
         presenter.handleTabsRefreshEvent();
 
-        verify(tab1).refresh();
-        verify(tab2).refresh();
-    }
+        final InOrder inOrder = inOrder(presenter, tab1, tab2, view);
 
-    @Test(dependsOnMethods = "handleTabsRefreshEventTest")
-    public void handleTabRefreshIncompleteLoadTest()
-    {
-        //noinspection AutoBoxing
-        when(model.isLoadComplete()).thenReturn(false);
-        doNothing().when(presenter).loadComplete();
-
-        presenter.handleTabsRefreshEvent();
-
-        verify(presenter, never()).loadComplete();
-    }
-
-    @Test(dependsOnMethods = "handleTabsRefreshEventTest")
-    public void handleTabsRefreshEventLastTimeTest()
-    {
-        //noinspection AutoBoxing
-        when(model.isLoadComplete()).thenReturn(true);
-        doNothing().when(presenter).loadComplete();
-
-        presenter.handleTabsRefreshEvent();
-
-        verify(presenter).loadComplete();
+        inOrder.verify(view).disableTabsRefresh();
+        inOrder.verify(tab1).refresh();
+        inOrder.verify(tab2).refresh();
+        inOrder.verify(presenter).postTabsRefresh();
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test
-    public void loadCompleteTest()
+    public void postTabsRefreshLoadIncompleteTest()
     {
-        presenter.loadComplete();
+        //noinspection AutoBoxing
+        when(model.isLoadComplete()).thenReturn(false);
 
-        verify(view).showLoadComplete();
+        presenter.postTabsRefresh();
+
+        verify(view, only()).enableTabsRefresh();
+    }
+
+    @Test
+    public void postTabsRefreshLoadCompleteTest()
+    {
+        //noinspection AutoBoxing
+        when(model.isLoadComplete()).thenReturn(true);
+
+        presenter.postTabsRefresh();
+
+        verify(view, only()).showLoadComplete();
     }
 
     @Test

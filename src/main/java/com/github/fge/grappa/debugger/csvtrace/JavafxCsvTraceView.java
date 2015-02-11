@@ -113,4 +113,18 @@ public class JavafxCsvTraceView
         // TODO
 
     }
+
+    @Override
+    public void disableTabsRefresh()
+    {
+        // TODO
+
+    }
+
+    @Override
+    public void enableTabsRefresh()
+    {
+        // TODO
+
+    }
 }
