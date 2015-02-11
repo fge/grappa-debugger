@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.common.OnBackgroundThread;
+import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
@@ -29,9 +31,7 @@ public class CsvTracePresenter
     private final CsvTraceModel model;
 
     @VisibleForTesting
-    protected final Collection<TabPresenter<?>> tabs
-        = new ArrayList<>();
-
+    protected final Collection<TabPresenter<?>> tabs = new ArrayList<>();
 
     public CsvTracePresenter(final MainWindowView mainView,
         final GuiTaskRunner taskRunner, final CsvTraceModel model)
@@ -41,6 +41,7 @@ public class CsvTracePresenter
         this.model = Objects.requireNonNull(model);
     }
 
+    @OnUiThread
     @Override
     public void load()
     {
@@ -50,6 +51,7 @@ public class CsvTracePresenter
         loadTreeDepthTab();
     }
 
+    @OnUiThread
     @VisibleForTesting
     void loadTreeTab()
     {
@@ -59,12 +61,14 @@ public class CsvTracePresenter
         tabs.add(tabPresenter);
     }
 
+    @OnUiThread
     @VisibleForTesting
     TreeTabPresenter createTreeTabPresenter()
     {
         return new TreeTabPresenter(taskRunner, mainView, model);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void loadRulesTab()
     {
@@ -74,12 +78,14 @@ public class CsvTracePresenter
         tabs.add(tabPresenter);
     }
 
+    @OnUiThread
     @VisibleForTesting
     RulesTabPresenter createRulesTabPresenter()
     {
         return new RulesTabPresenter(taskRunner, mainView, model);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void loadMatchesTab()
     {
@@ -89,13 +95,14 @@ public class CsvTracePresenter
         tabs.add(tabPresenter);
     }
 
+    @OnUiThread
     @VisibleForTesting
     MatchesTabPresenter createMatchesTabPresenter()
     {
         return new MatchesTabPresenter(taskRunner, model, mainView);
     }
 
-    // UNUSED...
+    @OnUiThread
     @VisibleForTesting
     void loadTreeDepthTab()
     {
@@ -106,6 +113,7 @@ public class CsvTracePresenter
         tabs.add(tabPresenter);
     }
 
+    @OnUiThread
     @VisibleForTesting
     TreeDepthTabPresenter createTreeDepthTabPresenter()
     {
@@ -122,6 +130,7 @@ public class CsvTracePresenter
         }
     }
 
+    @OnUiThread
     public void handleTabsRefreshEvent()
     {
         taskRunner.run(
@@ -131,7 +140,9 @@ public class CsvTracePresenter
         );
     }
 
-    public void postTabsRefresh()
+    @OnUiThread
+    @VisibleForTesting
+    void postTabsRefresh()
     {
         final Runnable runnable = model.isLoadComplete()
             ? view::showLoadComplete
@@ -140,7 +151,9 @@ public class CsvTracePresenter
         runnable.run();
     }
 
-    public void doRefreshTabs()
+    @OnBackgroundThread
+    @VisibleForTesting
+    void doRefreshTabs()
     {
         final ThrowingConsumer<CountDownLatch> await = CountDownLatch::await;
 
