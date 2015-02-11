@@ -6,10 +6,10 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.model.db.DbLoader;
-import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
-import com.github.fge.grappa.debugger.model.db.PerClassStatisticsMapper;
 import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.debugger.model.db.MatchStatisticsMapper;
+import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.db.PerClassStatisticsMapper;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -41,7 +41,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -175,21 +174,6 @@ public class DbCsvTraceModel
         return result.stream()
             .map(Record1::value1)
             .map(function)
-            .collect(Collectors.toList());
-    }
-
-    // Unused...
-    @Nonnull
-    @Override
-    public List<Integer> getDepths(final int startLine, final int wantedLines)
-        throws GrappaDebuggerException
-    {
-        loadInputBuffer();
-
-        return IntStream.range(startLine, startLine + wantedLines)
-            .mapToObj(inputBuffer::getLineRange)
-            .map(this::getDepthFromRange)
-            .filter(depth -> depth != null)
             .collect(Collectors.toList());
     }
 
@@ -389,31 +373,6 @@ public class DbCsvTraceModel
         } catch (IOException e) {
             throw new GrappaDebuggerException(e);
         }
-    }
-
-    // Unused...
-    private Integer getDepthFromRange(final IndexRange range)
-    {
-        /*
-         * The nodes which we should NOT select are nodes for which:
-         *
-         * - the end index is strictly less than the start of the range, or
-         * - the start index is greater than or equal to the end of the range.
-         */
-        final Condition notApplicable = NODES.START_INDEX.ge(range.end)
-            .or(NODES.END_INDEX.lt(range.start));
-
-        final Condition selected = DSL.not(notApplicable);
-
-        /*
-         * And what we want is the maximum value of the depth range PLUS ONE
-         */
-        final Field<Integer> depth = DSL.maxDistinct(NODES.LEVEL).plus(1);
-
-        final Record1<Integer> record = jooq.select(depth).from(NODES)
-            .where(selected).fetchOne();
-
-        return Optional.ofNullable(record.value1()).orElse(0);
     }
 
     @Nonnull

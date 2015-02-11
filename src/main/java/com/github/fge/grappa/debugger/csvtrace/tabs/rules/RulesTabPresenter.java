@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
@@ -11,7 +11,7 @@ import com.google.common.annotations.VisibleForTesting;
 import java.util.List;
 
 public class RulesTabPresenter
-    extends BasePresenter<RulesTabView>
+    extends TabPresenter<RulesTabView>
 {
     private final GuiTaskRunner taskRunner;
     private final MainWindowView mainView;
@@ -34,6 +34,11 @@ public class RulesTabPresenter
         handleRefreshRules();
     }
 
+    @Override
+    public void refresh()
+    {
+        handleRefreshRules();
+    }
     /*
      * General information
      */

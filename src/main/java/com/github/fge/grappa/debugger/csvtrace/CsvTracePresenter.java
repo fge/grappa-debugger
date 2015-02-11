@@ -23,6 +23,8 @@ public class CsvTracePresenter
     private final GuiTaskRunner taskRunner;
     private final CsvTraceModel model;
 
+
+
     public CsvTracePresenter(final MainWindowView mainView,
         final GuiTaskRunner taskRunner, final CsvTraceModel model)
     {
@@ -37,7 +39,6 @@ public class CsvTracePresenter
         loadTreeTab();
         loadRulesTab();
         loadMatchesTab();
-        // DISABLED: horrible performance :(
         loadTreeDepthTab();
     }
 
@@ -107,5 +108,11 @@ public class CsvTracePresenter
             mainView.showError("Trace file error", "Problem closing trace file",
                 e);
         }
+    }
+
+    public void handleTabsRefreshEvent()
+    {
+        // TODO
+
     }
 }

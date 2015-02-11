@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class TreeDepthTabPresenter
-    extends BasePresenter<TreeDepthTabView>
+    extends TabPresenter<TreeDepthTabView>
 {
     private final GuiTaskRunner taskRunner;
     private final MainWindowView mainView;
@@ -33,6 +33,12 @@ public class TreeDepthTabPresenter
 
     @Override
     public void load()
+    {
+        handleChartRefresh();
+    }
+
+    @Override
+    public void refresh()
     {
         handleChartRefresh();
     }

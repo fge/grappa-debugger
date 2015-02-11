@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.google.common.annotations.VisibleForTesting;
@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class MatchesTabPresenter
-    extends BasePresenter<MatchesTabView>
+    extends TabPresenter<MatchesTabView>
 {
     private final GuiTaskRunner taskRunner;
     private final CsvTraceModel model;
@@ -27,6 +27,12 @@ public class MatchesTabPresenter
 
     @Override
     public void load()
+    {
+        handleTabRefresh();
+    }
+
+    @Override
+    public void refresh()
     {
         handleTabRefresh();
     }

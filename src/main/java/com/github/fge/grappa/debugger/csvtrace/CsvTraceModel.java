@@ -60,10 +60,6 @@ public interface CsvTraceModel
         throws GrappaDebuggerException;
 
     @Nonnull
-    List<Integer> getDepths(int startLine, int wantedLines)
-        throws GrappaDebuggerException;
-
-    @Nonnull
     Map<Integer, Integer> getDepthMap(int startLine, int wantedLines)
         throws GrappaDebuggerException;
 }

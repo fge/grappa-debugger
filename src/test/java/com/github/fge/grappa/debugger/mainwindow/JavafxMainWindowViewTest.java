@@ -105,4 +105,10 @@ public class JavafxMainWindowViewTest
 
         assertThat(display.pane.getCenter()).isSameAs(node);
     }
+
+    @Test
+    public void reportProgressTest()
+    {
+
+    }
 }

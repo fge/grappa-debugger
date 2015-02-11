@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
-import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.debugger.model.ParseTreeNode;
 import com.google.common.annotations.VisibleForTesting;
@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public class TreeTabPresenter
-    extends BasePresenter<TreeTabView>
+    extends TabPresenter<TreeTabView>
 {
     private final CsvTraceModel model;
     private final GuiTaskRunner taskRunner;
@@ -33,6 +33,12 @@ public class TreeTabPresenter
     {
         loadInputText();
         loadParseTree();
+    }
+
+    @Override
+    public void refresh()
+    {
+        // Nothing; the tree requires the full nodes table to display anyway
     }
 
     @VisibleForTesting

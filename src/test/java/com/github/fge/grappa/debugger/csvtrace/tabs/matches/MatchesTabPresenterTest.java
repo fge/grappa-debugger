@@ -57,6 +57,16 @@ public class MatchesTabPresenterTest
     }
 
     @Test
+    public void refreshTest()
+    {
+        doNothing().when(presenter).handleTabRefresh();
+
+        presenter.refresh();
+
+        verify(presenter).handleTabRefresh();
+    }
+
+    @Test
     public void handleTabRefreshSuccessIncompleteTest()
     {
         //noinspection AutoBoxing
