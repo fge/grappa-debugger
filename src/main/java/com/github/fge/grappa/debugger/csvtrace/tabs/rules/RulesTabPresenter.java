@@ -9,6 +9,7 @@ import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class RulesTabPresenter
     extends TabPresenter<RulesTabView>
@@ -35,9 +36,10 @@ public class RulesTabPresenter
     }
 
     @Override
-    public void refresh()
+    public CountDownLatch refresh()
     {
         handleRefreshRules();
+        return new CountDownLatch(1);
     }
     /*
      * General information

@@ -153,13 +153,13 @@ public final class GuiTaskRunner
         this.frontExecutor = Objects.requireNonNull(frontExecutor);
     }
 
-    public void executeFront(final Runnable runnable)
+    public void executeFront(@OnUiThread final Runnable runnable)
     {
         Objects.requireNonNull(runnable);
         frontExecutor.execute(runnable);
     }
 
-    public void executeBackground(final Runnable runnable)
+    public void executeBackground(@OnBackgroundThread final Runnable runnable)
     {
         Objects.requireNonNull(runnable);
         executor.submit(runnable);
@@ -172,7 +172,8 @@ public final class GuiTaskRunner
      * @param task the background task
      * @param after the task to run on the ui thread
      */
-    public void run(final Runnable task, final Runnable after)
+    public void run(@OnBackgroundThread final Runnable task,
+        @OnUiThread final Runnable after)
     {
         Objects.requireNonNull(task);
         Objects.requireNonNull(after);
@@ -191,8 +192,9 @@ public final class GuiTaskRunner
      * @param consumer the UI thread task consuming that value
      * @param <T> type parameter of the produced/consume value
      */
-    public <T> void compute(final Supplier<? extends T> supplier,
-        final Consumer<? super T> consumer)
+    public <T> void compute(
+        @OnBackgroundThread final Supplier<? extends T> supplier,
+        @OnUiThread final Consumer<? super T> consumer)
     {
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(consumer);
@@ -211,8 +213,9 @@ public final class GuiTaskRunner
      * @param task the background task
      * @param after the task to run on the ui thread
      */
-    public void run(final Runnable before, final Runnable task,
-        final Runnable after)
+    public void run(@OnUiThread final Runnable before,
+        @OnBackgroundThread final Runnable task,
+        @OnUiThread final Runnable after)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(task);
@@ -235,9 +238,9 @@ public final class GuiTaskRunner
      * @param consumer the UI thread task consuming that value
      * @param <T> type parameter of the produced/consume value
      */
-    public <T> void compute(final Runnable before,
-        final Supplier<? extends T> supplier,
-        final Consumer<? super T> consumer)
+    public <T> void compute(@OnUiThread final Runnable before,
+        @OnBackgroundThread final Supplier<? extends T> supplier,
+        @OnUiThread final Consumer<? super T> consumer)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(supplier);
@@ -266,8 +269,9 @@ public final class GuiTaskRunner
      *
      * @see ThrowingRunnable#doRun()
      */
-    public void runOrFail(final ThrowingRunnable task, final Runnable after,
-        final Consumer<Throwable> onError)
+    public void runOrFail(@OnBackgroundThread final ThrowingRunnable task,
+        @OnUiThread final Runnable after,
+        @OnUiThread final Consumer<Throwable> onError)
     {
         Objects.requireNonNull(task);
         Objects.requireNonNull(after);
@@ -297,8 +301,9 @@ public final class GuiTaskRunner
      * @param <T> type parameter of the produced/consumed value
      */
     public <T> void computeOrFail(
-        final ThrowingSupplier<? extends T> supplier,
-        final Consumer<? super T> consumer, final Consumer<Throwable> onError)
+        @OnBackgroundThread final ThrowingSupplier<? extends T> supplier,
+        @OnUiThread final Consumer<? super T> consumer,
+        @OnUiThread final Consumer<Throwable> onError)
     {
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(consumer);
@@ -332,8 +337,10 @@ public final class GuiTaskRunner
      *
      * @see ThrowingRunnable#doRun()
      */
-    public void runOrFail(final Runnable before, final ThrowingRunnable task,
-        final Runnable after, final Consumer<Throwable> onError)
+    public void runOrFail(@OnUiThread final Runnable before,
+        @OnBackgroundThread final ThrowingRunnable task,
+        @OnUiThread final Runnable after,
+        @OnUiThread final Consumer<Throwable> onError)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(task);
@@ -369,9 +376,10 @@ public final class GuiTaskRunner
      * @param onError the exception handler
      * @param <T> parameter type of the produced/consumed value
      */
-    public <T> void computeOrFail(final Runnable before,
-        final ThrowingSupplier<? extends T> supplier,
-        final Consumer<? super T> consumer, final Consumer<Throwable> onError)
+    public <T> void computeOrFail(@OnUiThread final Runnable before,
+        @OnBackgroundThread final ThrowingSupplier<? extends T> supplier,
+        @OnUiThread final Consumer<? super T> consumer,
+        @OnUiThread final Consumer<Throwable> onError)
     {
         Objects.requireNonNull(before);
         Objects.requireNonNull(supplier);

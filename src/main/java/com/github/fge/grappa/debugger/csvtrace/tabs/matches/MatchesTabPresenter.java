@@ -9,6 +9,7 @@ import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class MatchesTabPresenter
     extends TabPresenter<MatchesTabView>
@@ -32,9 +33,10 @@ public class MatchesTabPresenter
     }
 
     @Override
-    public void refresh()
+    public CountDownLatch refresh()
     {
         handleTabRefresh();
+        return new CountDownLatch(1);
     }
 
     @VisibleForTesting

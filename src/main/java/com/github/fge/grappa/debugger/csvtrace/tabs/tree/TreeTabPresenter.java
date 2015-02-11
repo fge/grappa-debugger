@@ -11,6 +11,7 @@ import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 @ParametersAreNonnullByDefault
 public class TreeTabPresenter
@@ -36,9 +37,9 @@ public class TreeTabPresenter
     }
 
     @Override
-    public void refresh()
+    public CountDownLatch refresh()
     {
-        // Nothing; the tree requires the full nodes table to display anyway
+        return new CountDownLatch(0);
     }
 
     @VisibleForTesting

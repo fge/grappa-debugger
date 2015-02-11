@@ -8,6 +8,7 @@ import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CountDownLatch;
 
 @ParametersAreNonnullByDefault
 public class TreeDepthTabPresenter
@@ -38,9 +39,10 @@ public class TreeDepthTabPresenter
     }
 
     @Override
-    public void refresh()
+    public CountDownLatch refresh()
     {
         handleChartRefresh();
+        return new CountDownLatch(1);
     }
 
     @Override

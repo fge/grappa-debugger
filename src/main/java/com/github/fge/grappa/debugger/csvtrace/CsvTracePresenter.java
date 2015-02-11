@@ -5,18 +5,19 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
-    .TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.github.fge.lambdas.consumers.ThrowingConsumer;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
@@ -123,8 +124,11 @@ public class CsvTracePresenter
 
     public void handleTabsRefreshEvent()
     {
-        taskRunner.run(view::disableTabsRefresh, () -> tabs.forEach(
-            TabPresenter::refresh), this::postTabsRefresh);
+        taskRunner.run(
+            view::disableTabsRefresh,
+            this::doRefreshTabs,
+            this::postTabsRefresh
+        );
     }
 
     public void postTabsRefresh()
@@ -134,5 +138,12 @@ public class CsvTracePresenter
             : view::enableTabsRefresh;
 
         runnable.run();
+    }
+
+    public void doRefreshTabs()
+    {
+        final ThrowingConsumer<CountDownLatch> await = CountDownLatch::await;
+
+        tabs.stream().map(TabPresenter::refresh).forEach(await.orDoNothing());
     }
 }

@@ -6,6 +6,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
+
 import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -14,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.same;
@@ -130,23 +132,40 @@ public class CsvTracePresenterTest
     @Test
     public void handleTabsRefreshEventTest()
     {
-        final TabPresenter<?> tab1 = mock(TabPresenter.class);
-        final TabPresenter<?> tab2 = mock(TabPresenter.class);
-
-        presenter.tabs.add(tab1);
-        presenter.tabs.add(tab2);
-
+        doNothing().when(presenter).doRefreshTabs();
         doNothing().when(presenter).postTabsRefresh();
 
         presenter.handleTabsRefreshEvent();
 
-        final InOrder inOrder = inOrder(presenter, tab1, tab2, view);
+        final InOrder inOrder = inOrder(presenter, view);
 
         inOrder.verify(view).disableTabsRefresh();
-        inOrder.verify(tab1).refresh();
-        inOrder.verify(tab2).refresh();
+        inOrder.verify(presenter).doRefreshTabs();
         inOrder.verify(presenter).postTabsRefresh();
         inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void doRefreshTabsTest()
+        throws InterruptedException
+    {
+        final CountDownLatch latch1 = mock(CountDownLatch.class);
+        final TabPresenter<?> tab1 = mock(TabPresenter.class);
+        when(tab1.refresh()).thenReturn(latch1);
+
+        final CountDownLatch latch2 = mock(CountDownLatch.class);
+        final TabPresenter<?> tab2 = mock(TabPresenter.class);
+        when(tab2.refresh()).thenReturn(latch2);
+
+        presenter.tabs.add(tab1);
+        presenter.tabs.add(tab2);
+
+        presenter.doRefreshTabs();
+
+        verify(tab1, only()).refresh();
+        verify(tab2, only()).refresh();
+        verify(latch1, only()).await();
+        verify(latch2, only()).await();
     }
 
     @Test
