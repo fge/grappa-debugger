@@ -7,6 +7,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
     .TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -14,6 +15,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -71,6 +73,8 @@ public class CsvTracePresenterTest
 
         verify(view).loadTreeTab(tabPresenter);
         verify(tabPresenter).load();
+
+        assertThat(presenter.tabs).contains(tabPresenter);
     }
 
     @Test
@@ -84,6 +88,8 @@ public class CsvTracePresenterTest
 
         verify(view).loadRulesTab(same(tabPresenter));
         verify(tabPresenter).load();
+
+        assertThat(presenter.tabs).contains(tabPresenter);
     }
 
     @Test
@@ -98,6 +104,8 @@ public class CsvTracePresenterTest
 
         verify(view).loadMatchesTab(same(tabPresenter));
         verify(tabPresenter).load();
+
+        assertThat(presenter.tabs).contains(tabPresenter);
     }
 
     @Test
@@ -112,7 +120,25 @@ public class CsvTracePresenterTest
 
         verify(view).loadTreeDepthTab(same(tabPresenter));
         verify(tabPresenter).load();
+
+        assertThat(presenter.tabs).contains(tabPresenter);
     }
+
+    @Test
+    public void handleTabsRefreshEventTest()
+    {
+        final TabPresenter<?> tab1 = mock(TabPresenter.class);
+        final TabPresenter<?> tab2 = mock(TabPresenter.class);
+
+        presenter.tabs.add(tab1);
+        presenter.tabs.add(tab2);
+
+        presenter.handleTabsRefreshEvent();
+
+        verify(tab1).refresh();
+        verify(tab2).refresh();
+    }
+
 
     @Test
     public void disposeTest()

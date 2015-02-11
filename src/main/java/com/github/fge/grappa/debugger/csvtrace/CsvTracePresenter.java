@@ -5,13 +5,17 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
+    .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.javafx.BasePresenter;
+import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 @NonFinalForTesting
@@ -23,6 +27,9 @@ public class CsvTracePresenter
     private final GuiTaskRunner taskRunner;
     private final CsvTraceModel model;
 
+    @VisibleForTesting
+    protected final Collection<TabPresenter<?>> tabs
+        = new ArrayList<>();
 
 
     public CsvTracePresenter(final MainWindowView mainView,
@@ -45,9 +52,10 @@ public class CsvTracePresenter
     @VisibleForTesting
     void loadTreeTab()
     {
-        final TreeTabPresenter treeTab = createTreeTabPresenter();
-        view.loadTreeTab(treeTab);
-        treeTab.load();
+        final TreeTabPresenter tabPresenter = createTreeTabPresenter();
+        view.loadTreeTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
     }
 
     @VisibleForTesting
@@ -59,9 +67,10 @@ public class CsvTracePresenter
     @VisibleForTesting
     void loadRulesTab()
     {
-        final RulesTabPresenter rulesTab = createRulesTabPresenter();
-        view.loadRulesTab(rulesTab);
-        rulesTab.load();
+        final RulesTabPresenter tabPresenter = createRulesTabPresenter();
+        view.loadRulesTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
     }
 
     @VisibleForTesting
@@ -73,9 +82,10 @@ public class CsvTracePresenter
     @VisibleForTesting
     void loadMatchesTab()
     {
-        final MatchesTabPresenter matchesTab = createMatchesTabPresenter();
-        view.loadMatchesTab(matchesTab);
-        matchesTab.load();
+        final MatchesTabPresenter tabPresenter = createMatchesTabPresenter();
+        view.loadMatchesTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
     }
 
     @VisibleForTesting
@@ -88,10 +98,11 @@ public class CsvTracePresenter
     @VisibleForTesting
     void loadTreeDepthTab()
     {
-        final TreeDepthTabPresenter treeDepthTab
+        final TreeDepthTabPresenter tabPresenter
             = createTreeDepthTabPresenter();
-        view.loadTreeDepthTab(treeDepthTab);
-        treeDepthTab.load();
+        view.loadTreeDepthTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
     }
 
     @VisibleForTesting
@@ -112,7 +123,6 @@ public class CsvTracePresenter
 
     public void handleTabsRefreshEvent()
     {
-        // TODO
-
+        tabs.forEach(TabPresenter::refresh);
     }
 }
