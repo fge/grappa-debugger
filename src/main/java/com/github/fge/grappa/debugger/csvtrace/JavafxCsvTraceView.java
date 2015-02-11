@@ -106,4 +106,11 @@ public class JavafxCsvTraceView
         tabPresenter.setView(tabView);
         display.treeDepthTab.setContent(tabView.getNode());
     }
+
+    @Override
+    public void showLoadComplete()
+    {
+        // TODO
+
+    }
 }

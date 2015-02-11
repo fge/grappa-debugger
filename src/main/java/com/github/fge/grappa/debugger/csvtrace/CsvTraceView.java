@@ -16,4 +16,6 @@ public interface CsvTraceView
 
     // UNUSED...
     void loadTreeDepthTab(TreeDepthTabPresenter tabPresenter);
+
+    void showLoadComplete();
 }

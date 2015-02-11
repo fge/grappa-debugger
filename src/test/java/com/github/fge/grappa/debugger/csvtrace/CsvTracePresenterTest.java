@@ -5,8 +5,7 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
-    .TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -20,8 +19,10 @@ import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CsvTracePresenterTest
 {
@@ -133,12 +134,45 @@ public class CsvTracePresenterTest
         presenter.tabs.add(tab1);
         presenter.tabs.add(tab2);
 
+        doNothing().when(presenter).loadComplete();
+
         presenter.handleTabsRefreshEvent();
 
         verify(tab1).refresh();
         verify(tab2).refresh();
     }
 
+    @Test(dependsOnMethods = "handleTabsRefreshEventTest")
+    public void handleTabRefreshIncompleteLoadTest()
+    {
+        //noinspection AutoBoxing
+        when(model.isLoadComplete()).thenReturn(false);
+        doNothing().when(presenter).loadComplete();
+
+        presenter.handleTabsRefreshEvent();
+
+        verify(presenter, never()).loadComplete();
+    }
+
+    @Test(dependsOnMethods = "handleTabsRefreshEventTest")
+    public void handleTabsRefreshEventLastTimeTest()
+    {
+        //noinspection AutoBoxing
+        when(model.isLoadComplete()).thenReturn(true);
+        doNothing().when(presenter).loadComplete();
+
+        presenter.handleTabsRefreshEvent();
+
+        verify(presenter).loadComplete();
+    }
+
+    @Test
+    public void loadCompleteTest()
+    {
+        presenter.loadComplete();
+
+        verify(view).showLoadComplete();
+    }
 
     @Test
     public void disposeTest()

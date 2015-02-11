@@ -102,10 +102,10 @@
                             <TableColumn fx:id="ruleClass" text="Class"
                                 sortable="false"/>
                             <TableColumn fx:id="ruleCount"
-                                text="Number of rules" sortType="DESCENDING"/>
+                                text="Number of rules"/>
                             <TableColumn fx:id="rulePct" text="\% of rules"
                                 sortable="false"/>
-                            <TableColumn fx:id="invCount"
+                            <TableColumn fx:id="invCount" sortType="DESCENDING"
                                 text="Invocations"/>
                             <TableColumn fx:id="invPct" sortable="false"
                                 text="Invocation (%)"/>

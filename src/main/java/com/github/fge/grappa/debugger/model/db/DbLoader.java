@@ -129,9 +129,8 @@ public final class DbLoader
 
         jooq.createIndex("nodes_parent_id").on(NODES, NODES.PARENT_ID)
             .execute();
-        jooq.createIndex("nodes_start_index").on(NODES, NODES.START_INDEX)
-            .execute();
-        jooq.createIndex("nodes_end_index").on(NODES, NODES.END_INDEX)
+        jooq.createIndex("nodes_indices")
+            .on(NODES, NODES.START_INDEX, NODES.END_INDEX)
             .execute();
     }
 

@@ -124,5 +124,12 @@ public class CsvTracePresenter
     public void handleTabsRefreshEvent()
     {
         tabs.forEach(TabPresenter::refresh);
+        if (model.isLoadComplete())
+            loadComplete();
+    }
+
+    public void loadComplete()
+    {
+        view.showLoadComplete();
     }
 }
