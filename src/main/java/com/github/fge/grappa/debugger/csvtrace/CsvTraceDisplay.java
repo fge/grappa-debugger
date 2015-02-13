@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -16,6 +17,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CsvTraceDisplay
     extends JavafxDisplay<CsvTracePresenter>
 {
+    @FXML
+    protected BorderPane pane;
+
     @FXML
     protected ToolBar toolbar;
 

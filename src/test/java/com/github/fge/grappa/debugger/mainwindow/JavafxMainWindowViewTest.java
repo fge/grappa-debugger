@@ -106,9 +106,9 @@ public class JavafxMainWindowViewTest
         assertThat(display.pane.getCenter()).isSameAs(node);
     }
 
-    @Test
+    @Test(enabled = false)
     public void reportProgressTest()
     {
-
+        // TODO
     }
 }

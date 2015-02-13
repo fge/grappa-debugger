@@ -1,8 +1,10 @@
 package com.github.fge.grappa.debugger.model.db;
 
 import com.github.fge.grappa.debugger.model.RuleInfo;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 
-public final class MatchStatistics
+@NonFinalForTesting
+public class MatchStatistics
 {
     private final RuleInfo ruleInfo;
     private final int nonEmptyMatches;

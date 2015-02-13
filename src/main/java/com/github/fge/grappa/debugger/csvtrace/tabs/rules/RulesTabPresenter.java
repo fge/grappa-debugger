@@ -2,6 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.common.OnBackgroundThread;
+import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -28,6 +30,7 @@ public class RulesTabPresenter
         this.model = model;
     }
 
+    @OnUiThread
     @Override
     public void load()
     {
@@ -36,6 +39,7 @@ public class RulesTabPresenter
         refresh();
     }
 
+    @OnUiThread
     @Override
     public CountDownLatch refresh()
     {
@@ -47,6 +51,7 @@ public class RulesTabPresenter
         return latch;
     }
 
+    @OnUiThread
     @VisibleForTesting
     void refreshMatchersByType(final CountDownLatch latch)
     {
@@ -57,6 +62,7 @@ public class RulesTabPresenter
         );
     }
 
+    @OnBackgroundThread
     @VisibleForTesting
     Map<MatcherType, Integer> doGetMatchersByType(final CountDownLatch latch)
         throws GrappaDebuggerException
@@ -68,6 +74,7 @@ public class RulesTabPresenter
         }
     }
 
+    @OnUiThread
     @VisibleForTesting
     void handleLoadMatchersByTypeError(final Throwable throwable)
     {
@@ -75,16 +82,18 @@ public class RulesTabPresenter
             throwable);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void refreshRulesByClass(final CountDownLatch latch)
     {
         taskRunner.computeOrFail(
             () -> doGetRulesByClass(latch),
             view::displayRules,
-            this::handleRefreshRulesError
+            this::handleRefreshRulesByClassError
         );
     }
 
+    @OnBackgroundThread
     @VisibleForTesting
     List<PerClassStatistics> doGetRulesByClass(final CountDownLatch latch)
         throws GrappaDebuggerException
@@ -96,13 +105,15 @@ public class RulesTabPresenter
         }
     }
 
+    @OnUiThread
     @VisibleForTesting
-    void handleRefreshRulesError(final Throwable throwable)
+    void handleRefreshRulesByClassError(final Throwable throwable)
     {
         mainView.showError("Database error", "Unable to refresh rules",
             throwable);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void loadParseInfo()
     {
@@ -110,13 +121,18 @@ public class RulesTabPresenter
         view.displayParseInfo(info);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void loadTotalParseTime()
     {
-        taskRunner.computeOrFail(() -> model.getNodeById(0).getNanos(),
-            view::displayTotalParseTime, this::handleLoadTotalParseTimeError);
+        taskRunner.computeOrFail(
+            () -> model.getNodeById(0).getNanos(),
+            view::displayTotalParseTime,
+            this::handleLoadTotalParseTimeError
+        );
     }
 
+    @OnUiThread
     @VisibleForTesting
     void handleLoadTotalParseTimeError(final Throwable throwable)
     {

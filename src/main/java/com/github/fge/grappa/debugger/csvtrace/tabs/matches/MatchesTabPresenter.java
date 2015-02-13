@@ -1,6 +1,8 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.common.OnBackgroundThread;
+import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.javafx.TabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
@@ -25,12 +27,14 @@ public class MatchesTabPresenter
         this.mainView = mainView;
     }
 
+    @OnUiThread
     @Override
     public void load()
     {
         refresh();
     }
 
+    @OnUiThread
     @Override
     public CountDownLatch refresh()
     {
@@ -39,6 +43,7 @@ public class MatchesTabPresenter
         return latch;
     }
 
+    @OnUiThread
     @VisibleForTesting
     void handleTabRefreshError(final Throwable throwable)
     {
@@ -46,6 +51,7 @@ public class MatchesTabPresenter
             throwable);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void handleTabRefresh(final CountDownLatch latch)
     {
@@ -63,12 +69,14 @@ public class MatchesTabPresenter
 
     }
 
+    @OnBackgroundThread
     @VisibleForTesting
     MatchersData getMatchersData()
     {
         return new MatchersData(model);
     }
 
+    @OnUiThread
     @VisibleForTesting
     void updateTab(final MatchersData data)
     {

@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.treedepth;
 
 import com.github.fge.grappa.debugger.javafx.JavafxView;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart.Data;
 
@@ -10,7 +11,8 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public final class JavafxTreeDepthTabView
+@NonFinalForTesting
+public class JavafxTreeDepthTabView
     extends JavafxView<TreeDepthTabPresenter, TreeDepthTabDisplay>
     implements TreeDepthTabView
 {

@@ -15,6 +15,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class JavafxCsvTraceView
 
         final JavafxTreeTabView tabView;
         try {
-            tabView = new JavafxTreeTabView(taskRunner);
+            tabView = getTreeTabView();
         } catch (IOException e) {
             parentView.showError("Load error", "Unable to load tree tab", e);
             return;
@@ -55,6 +56,13 @@ public class JavafxCsvTraceView
         display.treeTab.setContent(tabView.getNode());
     }
 
+    @VisibleForTesting
+    JavafxTreeTabView getTreeTabView()
+        throws IOException
+    {
+        return new JavafxTreeTabView(taskRunner);
+    }
+
     @Override
     public void loadRulesTab(final RulesTabPresenter tabPresenter)
     {
@@ -62,7 +70,7 @@ public class JavafxCsvTraceView
 
         final JavafxRulesTabView tabView;
         try {
-            tabView = new JavafxRulesTabView();
+            tabView = getRulesTabView();
         } catch (IOException e) {
             parentView.showError("Load error", "Unable to load rules tab", e);
             return;
@@ -72,6 +80,13 @@ public class JavafxCsvTraceView
         display.rulesTab.setContent(tabView.getNode());
     }
 
+    @VisibleForTesting
+    JavafxRulesTabView getRulesTabView()
+        throws IOException
+    {
+        return new JavafxRulesTabView();
+    }
+
     @Override
     public void loadMatchesTab(final MatchesTabPresenter tabPresenter)
     {
@@ -79,7 +94,7 @@ public class JavafxCsvTraceView
 
         final JavafxMatchesTabView tabView;
         try {
-            tabView = new JavafxMatchesTabView();
+            tabView = getMatchesTabView();
         } catch (IOException e) {
             parentView.showError("Load error", "Unable to load matches tab", e);
             return;
@@ -89,7 +104,13 @@ public class JavafxCsvTraceView
         display.matchesTab.setContent(tabView.getNode());
     }
 
-    // UNUSED...
+    @VisibleForTesting
+    JavafxMatchesTabView getMatchesTabView()
+        throws IOException
+    {
+        return new JavafxMatchesTabView();
+    }
+
     @Override
     public void loadTreeDepthTab(final TreeDepthTabPresenter tabPresenter)
     {
@@ -97,7 +118,7 @@ public class JavafxCsvTraceView
 
         final JavafxTreeDepthTabView tabView;
         try {
-            tabView = new JavafxTreeDepthTabView();
+            tabView = getTreeDepthTabView();
         } catch (IOException e) {
             parentView.showError("Load error", "Unable to load statistics", e);
             return;
@@ -107,24 +128,28 @@ public class JavafxCsvTraceView
         display.treeDepthTab.setContent(tabView.getNode());
     }
 
+    @VisibleForTesting
+    JavafxTreeDepthTabView getTreeDepthTabView()
+        throws IOException
+    {
+        return new JavafxTreeDepthTabView();
+    }
+
     @Override
     public void showLoadComplete()
     {
-        // TODO
-
+        display.pane.setTop(null);
     }
 
     @Override
     public void disableTabsRefresh()
     {
-        // TODO
-
+        display.refresh.setDisable(true);
     }
 
     @Override
     public void enableTabsRefresh()
     {
-        // TODO
-
+        display.refresh.setDisable(false);
     }
 }

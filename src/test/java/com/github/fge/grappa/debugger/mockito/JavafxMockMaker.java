@@ -11,6 +11,12 @@ import javax.swing.SwingUtilities;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Mock a JavaFX toolkit initialization with mockito
+ *
+ * <p>Code lifted straight from <a
+ * href="http://stackoverflow.com/a/28416730/1093528">here</a>.</p>
+ */
 @SuppressWarnings("ProhibitedExceptionThrown")
 public final class JavafxMockMaker
     implements MockMaker

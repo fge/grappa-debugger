@@ -173,7 +173,7 @@ public class RulesTabPresenterTest
 
         verify(presenter).doGetRulesByClass(same(latch));
         verify(view).displayRules(same(list));
-        verify(presenter, never()).handleRefreshRulesError(any());
+        verify(presenter, never()).handleRefreshRulesByClassError(any());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class RulesTabPresenterTest
 
         verify(presenter).doGetRulesByClass(same(latch));
         verifyZeroInteractions(view);
-        verify(presenter).handleRefreshRulesError(same(exception));
+        verify(presenter).handleRefreshRulesByClassError(same(exception));
     }
 
     @Test

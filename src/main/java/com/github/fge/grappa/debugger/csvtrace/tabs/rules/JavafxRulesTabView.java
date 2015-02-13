@@ -4,6 +4,7 @@ import com.github.fge.grappa.debugger.javafx.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.scene.chart.PieChart;
 
@@ -15,7 +16,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
-public final class JavafxRulesTabView
+@NonFinalForTesting
+public class JavafxRulesTabView
     extends JavafxView<RulesTabPresenter, RulesTabDisplay>
     implements RulesTabView
 {

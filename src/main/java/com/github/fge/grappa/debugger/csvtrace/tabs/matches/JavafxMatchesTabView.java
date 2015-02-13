@@ -2,6 +2,7 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.javafx.JavafxView;
 import com.github.fge.grappa.debugger.model.db.MatchStatistics;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.scene.chart.PieChart;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -12,7 +13,8 @@ import java.io.IOException;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public final class JavafxMatchesTabView
+@NonFinalForTesting
+public class JavafxMatchesTabView
     extends JavafxView<MatchesTabPresenter, MatchesTabDisplay>
     implements MatchesTabView
 {
