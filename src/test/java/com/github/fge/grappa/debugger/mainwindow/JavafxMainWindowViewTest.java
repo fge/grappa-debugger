@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
+import com.github.fge.grappa.debugger.JavafxViewTest;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceDisplay;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 public class JavafxMainWindowViewTest
+    extends JavafxViewTest
 {
     private final GuiTaskRunner taskRunner = new GuiTaskRunner(
         mock(ExecutorService.class), Runnable::run
@@ -35,11 +37,11 @@ public class JavafxMainWindowViewTest
 
     @BeforeMethod
     public void init()
-        throws IOException
     {
         stage = mock(Stage.class);
         alertFactory = mock(AlertFactory.class);
-        view = spy(new JavafxMainWindowView(stage, taskRunner, alertFactory));
+        view = javafxGet(() -> spy(new JavafxMainWindowView(stage, taskRunner,
+            alertFactory)));
         display = view.getDisplay();
     }
 
