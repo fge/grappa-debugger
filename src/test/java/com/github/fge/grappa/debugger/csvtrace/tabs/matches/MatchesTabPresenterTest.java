@@ -1,15 +1,15 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.google.common.util.concurrent.MoreExecutors;
-import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -17,7 +17,6 @@ import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -49,29 +48,16 @@ public class MatchesTabPresenterTest
     @Test
     public void loadTest()
     {
-        doNothing().when(presenter).handleTabRefresh();
+        doNothing().when(presenter).handleTabRefresh(any(CountDownLatch.class));
 
         presenter.load();
 
-        verify(presenter).handleTabRefresh();
+        verify(presenter).handleTabRefresh(any(CountDownLatch.class));
     }
 
     @Test
-    public void refreshTest()
+    public void handleTabRefreshTest()
     {
-        doNothing().when(presenter).handleTabRefresh();
-
-        presenter.refresh();
-
-        verify(presenter).handleTabRefresh();
-    }
-
-    @Test
-    public void handleTabRefreshSuccessIncompleteTest()
-    {
-        //noinspection AutoBoxing
-        when(model.isLoadComplete()).thenReturn(false);
-
         final MatchesTabPresenter.MatchersData data
             = mock(MatchesTabPresenter.MatchersData.class);
 
@@ -80,36 +66,12 @@ public class MatchesTabPresenterTest
         doNothing().when(presenter)
             .updateTab(any(MatchesTabPresenter.MatchersData.class));
 
-        presenter.handleTabRefresh();
+        final CountDownLatch latch = mock(CountDownLatch.class);
 
-        final InOrder inOrder = inOrder(view, presenter);
+        presenter.handleTabRefresh(latch);
 
-        inOrder.verify(view).disableTabRefresh();
-        inOrder.verify(presenter).updateTab(same(data));
-        inOrder.verify(view).showMatchesLoadingIncomplete();
-    }
-
-    @Test
-    public void handleTabRefreshSuccessCompleteTest()
-    {
-        //noinspection AutoBoxing
-        when(model.isLoadComplete()).thenReturn(true);
-
-        final MatchesTabPresenter.MatchersData data
-            = mock(MatchesTabPresenter.MatchersData.class);
-
-        doReturn(data).when(presenter).getMatchersData();
-
-        doNothing().when(presenter)
-            .updateTab(any(MatchesTabPresenter.MatchersData.class));
-
-        presenter.handleTabRefresh();
-
-        final InOrder inOrder = inOrder(view, presenter);
-
-        inOrder.verify(view).disableTabRefresh();
-        inOrder.verify(presenter).updateTab(same(data));
-        inOrder.verify(view).showMatchesLoadingComplete();
+        verify(latch).countDown();
+        verify(presenter).updateTab(same(data));
     }
 
     @Test
@@ -119,13 +81,14 @@ public class MatchesTabPresenterTest
 
         doThrow(exception).when(presenter).getMatchersData();
 
-        presenter.handleTabRefresh();
+        final CountDownLatch latch = mock(CountDownLatch.class);
 
-        verify(view).disableTabRefresh();
+        presenter.handleTabRefresh(latch);
+
+        verify(latch).countDown();
         verify(presenter, never())
             .updateTab(any(MatchesTabPresenter.MatchersData.class));
         verify(presenter).handleTabRefreshError(same(exception));
-        verifyNoMoreInteractions(view);
     }
 
     @SuppressWarnings({ "AutoBoxing", "UnnecessaryBoxing" })

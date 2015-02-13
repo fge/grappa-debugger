@@ -5,15 +5,11 @@ import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.HBox;
 
 import static com.github.fge.grappa.debugger.javafx.JavafxUtils.setColumnValue;
 
@@ -55,22 +51,6 @@ public class RulesTabDisplay
     protected final PieChart.Data actionsPie = new PieChart.Data("", 0.0);
 
     /*
-     * Rules toolbar
-     */
-
-    @FXML
-    protected ToolBar toolbar;
-
-    @FXML
-    protected HBox hbox;
-
-    @FXML
-    protected Label completionStatus;
-
-    @FXML
-    protected Button rulesRefresh;
-
-    /*
      * Rules table
      */
 
@@ -107,11 +87,6 @@ public class RulesTabDisplay
         rulesChart.setData(list);
 
         /*
-         * Rules table toolbar
-         */
-        hbox.minWidthProperty().bind(toolbar.widthProperty());
-
-        /*
          * Rules table
          */
         setColumnValue(ruleClass, PerClassStatistics::getClassName);
@@ -132,10 +107,5 @@ public class RulesTabDisplay
             return new SimpleStringProperty(s);
         });
         rulesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    }
-
-    public void refreshRulesEvent(final Event event)
-    {
-        presenter.handleRefreshRules();
     }
 }

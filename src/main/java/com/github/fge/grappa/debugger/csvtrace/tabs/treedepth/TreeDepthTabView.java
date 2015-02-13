@@ -12,6 +12,5 @@ public interface TreeDepthTabView
 
     void updateStartLine(int startLine);
 
-    void updateToolbar(boolean disablePrev, boolean disableNext,
-        boolean disableRefresh);
+    void updateToolbar(boolean disablePrev, boolean disableNext);
 }

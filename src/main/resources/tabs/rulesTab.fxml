@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<?import javafx.scene.layout.HBox?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabDisplay">
     <center>
@@ -84,35 +83,20 @@
                     </padding>
                 </PieChart>
             </SplitPane>
-            <BorderPane>
-                <top>
-                    <ToolBar fx:id="toolbar">
-                        <HBox fx:id="hbox" alignment="CENTER" spacing="5.0">
-                            <Label text="Rules by class"/>
-                            <Label fx:id="completionStatus"
-                                text="(incomplete; click to refresh)"/>
-                            <Button text="Refresh" fx:id="rulesRefresh"
-                                onMouseClicked="#refreshRulesEvent"/>
-                        </HBox>
-                    </ToolBar>
-                </top>
-                <center>
-                    <TableView fx:id="rulesTable" editable="false">
-                        <columns>
-                            <TableColumn fx:id="ruleClass" text="Class"
-                                sortable="false"/>
-                            <TableColumn fx:id="ruleCount"
-                                text="Number of rules"/>
-                            <TableColumn fx:id="rulePct" text="\% of rules"
-                                sortable="false"/>
-                            <TableColumn fx:id="invCount" sortType="DESCENDING"
-                                text="Invocations"/>
-                            <TableColumn fx:id="invPct" sortable="false"
-                                text="Invocation (%)"/>
-                        </columns>
-                    </TableView>
-                </center>
-            </BorderPane>
+                <TableView fx:id="rulesTable" editable="false">
+                    <columns>
+                        <TableColumn fx:id="ruleClass" text="Class"
+                            sortable="false"/>
+                        <TableColumn fx:id="ruleCount"
+                            text="Number of rules"/>
+                        <TableColumn fx:id="rulePct" text="\% of rules"
+                            sortable="false"/>
+                        <TableColumn fx:id="invCount" sortType="DESCENDING"
+                            text="Invocations"/>
+                        <TableColumn fx:id="invPct" sortable="false"
+                            text="Invocation (%)"/>
+                    </columns>
+                </TableView>
         </SplitPane>
     </center>
 </BorderPane>

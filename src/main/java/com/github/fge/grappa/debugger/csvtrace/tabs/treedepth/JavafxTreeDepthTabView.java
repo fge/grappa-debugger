@@ -24,9 +24,8 @@ public final class JavafxTreeDepthTabView
     public void disableToolbar()
     {
         Stream.of(display.requiredLine, display.linesDisplayed,
-            display.prevLines, display.nextLines, display.refreshButton
+            display.prevLines, display.nextLines
         ).forEach(node -> node.setDisable(true));
-        display.loadInProgress.setVisible(true);
     }
 
     @Override
@@ -73,17 +72,11 @@ public final class JavafxTreeDepthTabView
 
     @Override
     public void updateToolbar(final boolean disablePrev,
-        final boolean disableNext, final boolean disableRefresh)
+        final boolean disableNext)
     {
         display.requiredLine.setDisable(false);
         display.linesDisplayed.setDisable(false);
         display.prevLines.setDisable(disablePrev);
         display.nextLines.setDisable(disableNext);
-        if (disableRefresh)
-            display.hbox.getChildren().remove(display.refreshBox);
-        else {
-            display.refreshButton.setDisable(false);
-            display.loadInProgress.setVisible(false);
-        }
     }
 }

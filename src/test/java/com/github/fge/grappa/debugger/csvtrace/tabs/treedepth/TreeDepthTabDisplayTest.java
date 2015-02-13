@@ -88,12 +88,4 @@ public class TreeDepthTabDisplayTest
 
         verify(presenter).handleNextLines();
     }
-
-    @Test
-    public void chartRefreshEventTest()
-    {
-        display.chartRefreshEvent(mock(Event.class));
-
-        verify(presenter).handleChartRefresh();
-    }
 }

@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -72,11 +75,11 @@ public class TreeDepthTabPresenterTest
     @Test
     public void loadTest()
     {
-        doNothing().when(presenter).handleChartRefresh();
+        doNothing().when(presenter).refreshChart(any(CountDownLatch.class));
 
         presenter.load();
 
-        verify(presenter).handleChartRefresh();
+        verify(presenter).refreshChart(any(CountDownLatch.class));
     }
 
     @Test
@@ -125,7 +128,7 @@ public class TreeDepthTabPresenterTest
 
         assertThat(presenter.startLine).isEqualTo(expected);
 
-        verify(presenter).refreshChart();
+        verify(presenter).refreshChart(any(CountDownLatch.class));
     }
 
     @SuppressWarnings("AutoBoxing")
@@ -180,14 +183,6 @@ public class TreeDepthTabPresenterTest
         verify(presenter).handleChangeStartLine(expected);
     }
 
-    @Test
-    public void handleChartRefreshTest()
-    {
-        presenter.handleChartRefresh();
-
-        verify(presenter).refreshChart();
-    }
-
     @SuppressWarnings("AutoBoxing")
     @DataProvider
     public Iterator<Object[]> chartValues()
@@ -211,9 +206,11 @@ public class TreeDepthTabPresenterTest
 
         presenter.visibleLines = visibleLines;
 
-        presenter.refreshChart();
+        final CountDownLatch latch = mock(CountDownLatch.class);
 
-        verify(presenter).doRefreshChart(1, expected);
+        presenter.refreshChart(latch);
+
+        verify(presenter).doRefreshChart(eq(1), eq(expected), same(latch));
     }
 
     @Test
@@ -230,7 +227,9 @@ public class TreeDepthTabPresenterTest
         when(model.getDepthMap(anyInt(), anyInt()))
             .thenThrow(exception);
 
-        presenter.doRefreshChart(startLine, visibleLines);
+        final CountDownLatch latch = mock(CountDownLatch.class);
+
+        presenter.doRefreshChart(startLine, visibleLines, latch);
 
         verify(view).disableToolbar();
         verify(model).getDepthMap(startLine, visibleLines);
@@ -250,7 +249,9 @@ public class TreeDepthTabPresenterTest
         when(model.getDepthMap(anyInt(), anyInt()))
             .thenReturn(depthMap);
 
-        presenter.doRefreshChart(startLine, visibleLines);
+        final CountDownLatch latch = mock(CountDownLatch.class);
+
+        presenter.doRefreshChart(startLine, visibleLines, latch);
 
         verify(view).disableToolbar();
         verify(model).getDepthMap(startLine, visibleLines);
@@ -264,11 +265,11 @@ public class TreeDepthTabPresenterTest
     {
         final Collection<Object[]> list = new ArrayList<>();
 
-        list.add(Stream.of(42, 1, 25, false, true, false, false).toArray());
-        list.add(Stream.of(25, 1, 25, false, true, true, false).toArray());
-        list.add(Stream.of(42, 2, 25, false, false, false, false).toArray());
-        list.add(Stream.of(42, 2, 25, true, false, false, true).toArray());
-        list.add(Stream.of(151, 101, 50, true, false, false, true).toArray());
+        list.add(Stream.of(42, 1, 25, true, false).toArray());
+        list.add(Stream.of(25, 1, 25, true, true).toArray());
+        list.add(Stream.of(42, 2, 25, false, false).toArray());
+        list.add(Stream.of(42, 2, 25,false, false).toArray());
+        list.add(Stream.of(151, 101, 50, false, false).toArray());
 
         return list.iterator();
     }
@@ -276,12 +277,10 @@ public class TreeDepthTabPresenterTest
     @SuppressWarnings("AutoBoxing")
     @Test(dataProvider = "updateToolbarData")
     public void updateToolbarTest(final int nrLines, final int startLine,
-        final int visibleLines, final boolean loaded,
-        final boolean disablePrev, final boolean disableNext,
-        final boolean disableRefresh)
+        final int visibleLines, final boolean disablePrev,
+        final boolean disableNext)
     {
         when(info.getNrLines()).thenReturn(nrLines);
-        when(model.isLoadComplete()).thenReturn(loaded);
 
         presenter.startLine = startLine;
         presenter.visibleLines = visibleLines;
@@ -289,6 +288,6 @@ public class TreeDepthTabPresenterTest
         presenter.updateToolbar(startLine, visibleLines);
 
         verify(view).updateStartLine(startLine);
-        verify(view).updateToolbar(disablePrev, disableNext, disableRefresh);
+        verify(view).updateToolbar(disablePrev, disableNext);
     }
 }

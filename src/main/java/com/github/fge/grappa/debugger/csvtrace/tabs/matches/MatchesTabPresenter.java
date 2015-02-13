@@ -14,14 +14,13 @@ import java.util.concurrent.CountDownLatch;
 public class MatchesTabPresenter
     extends TabPresenter<MatchesTabView>
 {
-    private final GuiTaskRunner taskRunner;
     private final CsvTraceModel model;
     private final MainWindowView mainView;
 
     public MatchesTabPresenter(final GuiTaskRunner taskRunner,
         final CsvTraceModel model, final MainWindowView mainView)
     {
-        this.taskRunner = taskRunner;
+        super(taskRunner);
         this.model = model;
         this.mainView = mainView;
     }
@@ -29,14 +28,15 @@ public class MatchesTabPresenter
     @Override
     public void load()
     {
-        handleTabRefresh();
+        refresh();
     }
 
     @Override
     public CountDownLatch refresh()
     {
-        handleTabRefresh();
-        return new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
+        handleTabRefresh(latch);
+        return latch;
     }
 
     @VisibleForTesting
@@ -47,21 +47,17 @@ public class MatchesTabPresenter
     }
 
     @VisibleForTesting
-    void handleTabRefresh()
+    void handleTabRefresh(final CountDownLatch latch)
     {
-        final boolean complete = model.isLoadComplete();
-
         taskRunner.computeOrFail(
-            view::disableTabRefresh,
-            this::getMatchersData,
-            data -> {
-                updateTab(data);
-                final Runnable postRefresh = complete
-                    ? view::showMatchesLoadingComplete
-                    : view::showMatchesLoadingIncomplete;
-
-                taskRunner.executeFront(postRefresh);
+            () -> {
+                try {
+                    return getMatchersData();
+                } finally {
+                    latch.countDown();
+                }
             },
+            this::updateTab,
             this::handleTabRefreshError
         );
 

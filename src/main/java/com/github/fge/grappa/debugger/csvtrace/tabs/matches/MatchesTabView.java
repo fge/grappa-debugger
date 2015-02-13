@@ -9,12 +9,6 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public interface MatchesTabView
 {
-    void disableTabRefresh();
-
-    void showMatchesLoadingComplete();
-
-    void showMatchesLoadingIncomplete();
-
     void showMatches(List<MatchStatistics> stats);
 
     void showMatchesStats(int nonEmpty, int empty, int failures);

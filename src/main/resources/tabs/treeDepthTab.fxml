@@ -25,25 +25,17 @@
 
                 <Separator orientation="VERTICAL"/>
 
-                <Label text="Lines to display:"/>
-                <ComboBox fx:id="linesDisplayed"/>
-
-                <Separator orientation="VERTICAL"/>
-
                 <Button fx:id="prevLines" text="Previous"
                     onMouseClicked="#previousLinesEvent"/>
                 <Label fx:id="currentLines" text="(no data)"/>
                 <Button fx:id="nextLines" text="Next"
                     onMouseClicked="#nextLinesEvent"/>
 
-                <HBox fx:id="refreshBox">
-                    <Separator orientation="VERTICAL" fx:id="refreshSeparator"/>
-                    <Label text="Load incomplete; click to refresh:"
-                        fx:id="refreshText"/>
-                    <Button text="Refresh" fx:id="refreshButton"
-                        onAction="#chartRefreshEvent"/>
-                    <ProgressBar fx:id="loadInProgress" visible="false"/>
-                </HBox>
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Lines to display:"/>
+                <ComboBox fx:id="linesDisplayed"/>
+
             </HBox>
         </ToolBar>
     </top>

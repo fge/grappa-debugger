@@ -8,28 +8,21 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
 
 public class TreeDepthTabDisplay
     extends JavafxDisplay<TreeDepthTabPresenter>
 {
-    public Separator refreshSeparator;
-    public Label refreshText;
     @FXML
     protected ToolBar toolbar;
 
@@ -55,15 +48,6 @@ public class TreeDepthTabDisplay
     protected Button nextLines;
 
     @FXML
-    protected HBox refreshBox;
-
-    @FXML
-    protected ProgressBar loadInProgress;
-
-    @FXML
-    protected Button refreshButton;
-
-    @FXML
     protected SmoothedAreaChart<Number, Number> chart;
 
     @FXML
@@ -75,16 +59,10 @@ public class TreeDepthTabDisplay
     protected final XYChart.Series<Number, Number> series
         = new XYChart.Series<>();
 
-    protected Collection<Node> refreshNodes;
-
     @Override
     public void init()
     {
         hbox.minWidthProperty().bind(toolbar.widthProperty());
-
-        refreshNodes = Arrays.asList(
-            refreshSeparator, refreshText, refreshButton, loadInProgress
-        );
 
         linesDisplayed.getItems().addAll(10, 25, 50);
         linesDisplayed.valueProperty().setValue(25);
@@ -133,12 +111,6 @@ public class TreeDepthTabDisplay
     void nextLinesEvent(final Event event)
     {
         presenter.handleNextLines();
-    }
-
-    @FXML
-    void chartRefreshEvent(final Event event)
-    {
-        presenter.handleChartRefresh();
     }
 
     @FXML

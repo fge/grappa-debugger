@@ -23,26 +23,6 @@ public final class JavafxMatchesTabView
     }
 
     @Override
-    public void disableTabRefresh()
-    {
-        display.tabRefresh.setDisable(true);
-        display.loadProgressBar.setVisible(true);
-    }
-
-    @Override
-    public void showMatchesLoadingComplete()
-    {
-        display.completionBar.setTop(null);
-    }
-
-    @Override
-    public void showMatchesLoadingIncomplete()
-    {
-        display.tabRefresh.setDisable(false);
-        display.loadProgressBar.setVisible(false);
-    }
-
-    @Override
     public void showMatches(final List<MatchStatistics> stats)
     {
         display.matchesTable.getSortOrder().setAll(display.nrCalls);

@@ -15,11 +15,5 @@ public interface RulesTabView
 
     void displayMatchersByType(Map<MatcherType, Integer> matchersByType);
 
-    void disableRefreshRules();
-
     void displayRules(List<PerClassStatistics> stats);
-
-    void hideRefreshRules();
-
-    void enableRefreshRules();
 }

@@ -104,29 +104,10 @@ public final class JavafxRulesTabView
     }
 
     @Override
-    public void disableRefreshRules()
-    {
-        display.rulesRefresh.setDisable(true);
-    }
-
-    @Override
     public void displayRules(final List<PerClassStatistics> stats)
     {
         display.rulesTable.getSortOrder().setAll(display.invCount);
         display.rulesTable.getItems().setAll(stats);
         display.rulesTable.sort();
-    }
-
-    @Override
-    public void hideRefreshRules()
-    {
-        display.completionStatus.setVisible(false);
-        display.rulesRefresh.setVisible(false);
-    }
-
-    @Override
-    public void enableRefreshRules()
-    {
-        display.rulesRefresh.setDisable(false);
     }
 }
