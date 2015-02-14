@@ -2,7 +2,7 @@
 
 This project is licensed under both LGPLv3 and ASL 2.0. See file LICENSE for more details.
 
-The current version is **0.2.0**. You can download a self contained jar with a main on
+The current version is **0.3.0**. You can download a self contained jar with a main on
 [Bintray](https://bintray.com/fge/maven/grappa-debugger/view).
 
 ### Compatibility notes

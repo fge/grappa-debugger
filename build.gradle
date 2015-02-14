@@ -45,8 +45,8 @@ apply(plugin: "propdeps-eclipse");
 apply(plugin: "info.solidsoft.pitest");
 
 group = "com.github.fge";
-version = "0.3.0";
-description = "GUI application to debug grappa parsers";
+version = "0.3.1-SNAPSHOT";
+description = "GUI application to debug grappa/parboiled 1.x parsers";
 
 def javaVersion = JavaVersion.VERSION_1_8;
 sourceCompatibility = javaVersion;
