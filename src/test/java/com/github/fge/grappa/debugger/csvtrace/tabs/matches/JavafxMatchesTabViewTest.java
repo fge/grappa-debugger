@@ -53,7 +53,7 @@ public class JavafxMatchesTabViewTest
         tableData.setAll(oldStats);
         sortOrder.clear();
 
-        view.showMatches(newStats);
+        javafxDo(() -> view.showMatches(newStats));
 
         assertThat(tableData).containsExactlyElementsOf(newStats);
         assertThat(sortOrder).containsExactly(display.nrCalls);

@@ -29,7 +29,7 @@ public abstract class JavafxViewTest
         }
     }
 
-    private void onJavafxThread(final Runnable runnable)
+    protected void javafxDo(final Runnable runnable)
     {
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -49,7 +49,7 @@ public abstract class JavafxViewTest
     {
         final AtomicReference<T> ref = new AtomicReference<>();
 
-        onJavafxThread(() -> ref.set(supplier.get()));
+        javafxDo(() -> ref.set(supplier.get()));
 
         return ref.get();
     }
