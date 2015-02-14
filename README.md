@@ -9,9 +9,9 @@ The current version is **0.2.0**. You can download a self contained jar with a m
 
 This project requires Java 8 and JavaFX 8; it has been developed using JDK 1.8u25 from Oracle.
 
-It is recommended that you run this program with this very version; among other things, exception
-handling requires on the default uncaught exception handler working correctly with JavaFX.
-Apparently, this was not the case with earlier versions of JDK 8; unfortunately I don't know the
+It is recommended that you run this program with a version at least this recent. Among other things,
+exception handling relies on the default uncaught exception handler working correctly with JavaFX.
+Apparently, this was not the case with earlier versions of JDK 8. Unfortunately I don't know the
 full details.
 
 ## What this is
@@ -29,9 +29,12 @@ annotated with `@BuildParseTree` in order to produce its trace files**.
 
 ## Features
 
-The tracer will collect two elements (the input text and a list of tracing events) into a zip file.
-This application will load such a zip file and will offer you several means of analyzing the parsing
-process.
+The tracer will collect all tracing elements (the input text, list of matchers and parsing nodes)
+into a zip file.  This application will load such a zip file and will offer you several means of
+analyzing the parsing process.
+
+It uses an [H2 database](http://h2database.com) as a SQL backend and [JooQ](http://www.jooq.org) to
+query this backend.
 
 For more details, see [this wiki
 page](https://github.com/fge/grappa-debugger/wiki/Quick-overview).
