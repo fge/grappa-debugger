@@ -45,8 +45,8 @@ import java.util.function.Supplier;
  *     // ...
  *
  *     taskRunner.run(
- *         () -> { my(); background(); task(); here(); },
- *         () -> { postponed(); ui(); update(); here(); }
+ *         () -&gt; { my(); background(); task(); here(); },
+ *         () -&gt; { postponed(); ui(); update(); here(); }
  *     );
  * </pre>
  *
@@ -69,8 +69,8 @@ import java.util.function.Supplier;
  *
  * <pre>
  *     taskRunner.compute(
- *         () -> this::backgroundProducer,
- *         () -> this::frontendConsumer
+ *         () -&gt; this::backgroundProducer,
+ *         () -&gt; this::frontendConsumer
  *     );
  * </pre>
  *
