@@ -75,6 +75,7 @@ public class MainWindowPresenter
                 return;
         }
 
+        // TODO: need to close the zipfs if this is not a legal trace file!
         window.loadTab(path);
     }
 
