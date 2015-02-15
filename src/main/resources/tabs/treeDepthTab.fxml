@@ -35,7 +35,20 @@
 
                 <Label text="Lines to display:"/>
                 <ComboBox fx:id="linesDisplayed"/>
-
+                <!--
+                <ComboBox fx:id="linesDisplayed" onAction="#foo">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <Integer fx:value="10"/>
+                            <Integer fx:value="25"/>
+                            <Integer fx:value="50"/>
+                        </FXCollections>
+                    </items>
+                    <value>
+                        <Integer fx:value="25"/>
+                    </value>
+                </ComboBox>
+                -->
             </HBox>
         </ToolBar>
     </top>

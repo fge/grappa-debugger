@@ -137,4 +137,11 @@ public class TreeDepthTabDisplay
         } catch (NumberFormatException ignored) {
         }
     }
+
+//    public void foo(ActionEvent event)
+//    {
+//        ((ComboBox<Integer>) event.getSource()).getSelectionModel()
+//            .getSelectedItem();
+//
+//    }
 }
