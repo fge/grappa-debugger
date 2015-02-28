@@ -67,10 +67,10 @@ dependencies {
         version: "0.3.0");
     compile(group: "com.github.fge", name: "java7-fs-more", version: "0.1.0");
     compile(group: "com.h2database", name: "h2", version: "1.4.184");
-    compile(group: "org.jooq", name: "jooq", version: "3.5.1");
+    compile(group: "org.jooq", name: "jooq", version: "3.5.3");
     // Uncomment this when the code generation needs to be rerun
-    //compile(group: "org.jooq", name: "jooq-meta", version: "3.5.1");
-    //compile(group: "org.jooq", name: "jooq-codegen", version: "3.5.1");
+    //compile(group: "org.jooq", name: "jooq-meta", version: "3.5.3");
+    //compile(group: "org.jooq", name: "jooq-codegen", version: "3.5.3");
     testCompile(group: "org.testng", name: "testng", version: "6.8.21") {
         exclude(group: "org.apache.ant", module: "ant");
         exclude(group: "com.google.inject", module: "guice");
