@@ -2,12 +2,12 @@ package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.common.TabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
-
-import com.github.fge.grappa.debugger.javafx.TabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
+    .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.mockito.InOrder;

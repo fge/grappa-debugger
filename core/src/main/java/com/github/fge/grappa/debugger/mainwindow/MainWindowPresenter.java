@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
+import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
-import com.github.fge.grappa.debugger.javafx.BasePresenter;
 import com.github.fge.grappa.debugger.model.DbCsvTraceModel;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;

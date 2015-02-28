@@ -18,7 +18,7 @@ task libJar(type: Jar, dependsOn: jar) {
     };
     with jar;
     manifest {
-        attributes("Main-Class": "com.github.fge.grappa.debugger.GrappaDebugger");
+        attributes("Main-Class": "com.github.fge.grappa.debugger.javafx.GrappaDebugger");
     }
 }
 

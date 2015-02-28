@@ -10,7 +10,7 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
     minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" fx:id="pane"
     xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.github.fge.grappa.debugger.mainwindow.MainWindowDisplay">
+    fx:controller="com.github.fge.grappa.debugger.javafx.mainwindow.MainWindowDisplay">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">

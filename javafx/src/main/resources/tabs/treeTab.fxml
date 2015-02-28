@@ -12,10 +12,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
-
 <BorderPane xmlns="http://javafx.com/javafx/8"
     xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabDisplay">
+    fx:controller="com.github.fge.grappa.debugger.javafx.csvtrace.tabs.tree.TreeTabDisplay">
     <center>
         <SplitPane
             dividerPositions="0.5">
