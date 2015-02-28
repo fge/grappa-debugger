@@ -17,6 +17,7 @@ public abstract class BasePresenter<V>
         init();
     }
 
+    /// TODO: get rid of that
     protected void init()
     {
     }
