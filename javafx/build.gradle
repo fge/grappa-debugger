@@ -1,5 +1,5 @@
 dependencies {
-    compile project(":core");
+    compile project(":grappa-debugger-core");
     compile(group: "org.controlsfx", name: "openjfx-dialogs",
         version: "1.0.2");
     compile(group: "org.fxmisc.easybind", name: "easybind", version: "1.0.3");
