@@ -13,10 +13,8 @@ public final class MatchesData
 {
     private static final Comparator<MatchStatistics> STATISTICS_COMPARATOR
         = (o1, o2) -> {
-            final int c1 = o1.getEmptyMatches() + o1.getFailedMatches()
-                + o1.getNonEmptyMatches();
-            final int c2 = o2.getEmptyMatches() + o2.getFailedMatches()
-                + o2.getNonEmptyMatches();
+            final int c1 = nrMatches(o1);
+            final int c2 = nrMatches(o2);
             return Integer.compare(c2, c1);
         };
 
@@ -29,10 +27,6 @@ public final class MatchesData
     private Double topOne = null;
     private Double topFive = null;
     private Double topTen = null;
-
-    final Collector<MatchStatistics, MatchesData, MatchesData> collector
-        = Collector.of(MatchesData::new, MatchesData::accumulate,
-        MatchesData::combine, MatchesData::finish);
 
     public static Collector<MatchStatistics, MatchesData, MatchesData>
         asCollector()
@@ -83,7 +77,7 @@ public final class MatchesData
 
     public List<MatchStatistics> getAllStats()
     {
-        return allStats;
+        return Collections.unmodifiableList(allStats);
     }
 
     // Accumulator
@@ -117,34 +111,29 @@ public final class MatchesData
         if (nrMatchers == 0)
             return this;
 
-        int accumulated;
-        MatchStatistics stats;
-
-        stats = allStats.get(0);
-        accumulated = stats.getEmptyMatches() + stats.getNonEmptyMatches()
-            + stats.getFailedMatches();
+        int accumulated =  nrMatches(allStats.get(0));
         topOne = 100.0 * accumulated / totalMatches;
 
         if (nrMatchers < 5)
             return this;
 
-        for (int i = 1; i < 5; i++) {
-            stats = allStats.get(i);
-            accumulated += stats.getEmptyMatches()
-                + stats.getNonEmptyMatches() + stats.getFailedMatches();
-        }
+        for (int i = 1; i < 5; i++)
+            accumulated += nrMatches(allStats.get(i));
         topFive = 100.0 * accumulated / totalMatches;
 
         if (nrMatchers < 10)
             return this;
 
-        for (int i = 5; i < 10; i++) {
-            stats = allStats.get(i);
-            accumulated += stats.getEmptyMatches()
-                + stats.getNonEmptyMatches() + stats.getFailedMatches();
-        }
+        for (int i = 5; i < 10; i++)
+            accumulated += nrMatches(allStats.get(i));
         topTen = 100.0 * accumulated / totalMatches;
 
         return this;
+    }
+
+    private static int nrMatches(final MatchStatistics stats)
+    {
+        return stats.getEmptyMatches() + stats.getFailedMatches()
+            + stats.getNonEmptyMatches();
     }
 }
