@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.model.db;
+package com.github.fge.grappa.debugger.model.tabs.rules;
 
 import com.github.fge.grappa.debugger.jooq.Tables;
 import org.jooq.Record;

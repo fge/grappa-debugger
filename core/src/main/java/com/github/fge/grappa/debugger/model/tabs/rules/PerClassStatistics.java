@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.model.db;
+package com.github.fge.grappa.debugger.model.tabs.rules;
 
 public final class PerClassStatistics
 {

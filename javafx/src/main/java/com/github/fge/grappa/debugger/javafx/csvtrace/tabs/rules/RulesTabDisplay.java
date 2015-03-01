@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.javafx.csvtrace.tabs.rules;
 
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.javafx.common.JavafxDisplay;
-import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

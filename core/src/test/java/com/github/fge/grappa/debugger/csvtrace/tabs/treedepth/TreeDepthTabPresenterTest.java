@@ -4,7 +4,7 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;

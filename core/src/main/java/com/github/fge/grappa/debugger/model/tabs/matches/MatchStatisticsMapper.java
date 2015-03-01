@@ -1,6 +1,7 @@
-package com.github.fge.grappa.debugger.model.db;
+package com.github.fge.grappa.debugger.model.tabs.matches;
 
-import com.github.fge.grappa.debugger.model.RuleInfo;
+import com.github.fge.grappa.debugger.model.common.RuleInfo;
+import com.github.fge.grappa.debugger.model.common.RuleInfoMapper;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 

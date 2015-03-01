@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.javafx.custom;
 
 import com.github.fge.grappa.debugger.javafx.csvtrace.tabs.tree.TreeTabDisplay;
-import com.github.fge.grappa.debugger.model.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;

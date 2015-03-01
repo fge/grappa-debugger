@@ -4,7 +4,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.javafx.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeNodeCell;
-import com.github.fge.grappa.debugger.model.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;

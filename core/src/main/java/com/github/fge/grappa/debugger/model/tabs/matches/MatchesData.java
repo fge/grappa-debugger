@@ -1,7 +1,5 @@
 package com.github.fge.grappa.debugger.model.tabs.matches;
 
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;

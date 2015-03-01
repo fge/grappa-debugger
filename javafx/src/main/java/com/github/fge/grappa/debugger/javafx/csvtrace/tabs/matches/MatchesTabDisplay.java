@@ -3,7 +3,7 @@ package com.github.fge.grappa.debugger.javafx.csvtrace.tabs.matches;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.javafx.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.javafx.custom.CallGraphTableCell;
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
+import com.github.fge.grappa.debugger.model.tabs.matches.MatchStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.model.db;
 
 import com.github.fge.filesystem.MoreFiles;
 import com.github.fge.filesystem.RecursionMode;
-import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;

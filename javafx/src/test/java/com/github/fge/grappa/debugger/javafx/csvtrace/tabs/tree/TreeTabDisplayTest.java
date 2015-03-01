@@ -2,7 +2,7 @@ package com.github.fge.grappa.debugger.javafx.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
-import com.github.fge.grappa.debugger.model.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.javafx.custom;
 
 import com.github.fge.grappa.debugger.javafx.common.JavafxUtils;
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
+import com.github.fge.grappa.debugger.model.tabs.matches.MatchStatistics;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;

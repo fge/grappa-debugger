@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.model;
+package com.github.fge.grappa.debugger.model.common;
 
 import java.time.LocalDateTime;
 

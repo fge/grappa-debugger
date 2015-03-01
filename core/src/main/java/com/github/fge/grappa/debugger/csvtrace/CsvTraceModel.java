@@ -1,11 +1,11 @@
 package com.github.fge.grappa.debugger.csvtrace;
 
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
-import com.github.fge.grappa.debugger.model.InputText;
-import com.github.fge.grappa.debugger.model.ParseInfo;
-import com.github.fge.grappa.debugger.model.ParseTree;
-import com.github.fge.grappa.debugger.model.ParseTreeNode;
-import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
 import com.github.fge.grappa.debugger.model.tabs.matches.MatchesData;
 import com.github.fge.grappa.matchers.MatcherType;
 

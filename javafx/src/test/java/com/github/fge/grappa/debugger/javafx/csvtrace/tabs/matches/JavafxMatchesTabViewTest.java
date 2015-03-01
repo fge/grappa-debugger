@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.javafx.csvtrace.tabs.matches;
 
 import com.github.fge.grappa.debugger.JavafxViewTest;
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
+import com.github.fge.grappa.debugger.model.tabs.matches.MatchStatistics;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;

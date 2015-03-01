@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
-import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 
 import javax.annotation.Nullable;

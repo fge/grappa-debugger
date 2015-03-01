@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.model;
+package com.github.fge.grappa.debugger.model.tabs.tree;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.internal.NonFinalForTesting;

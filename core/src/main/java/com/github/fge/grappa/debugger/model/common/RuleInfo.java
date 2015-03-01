@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.model;
+package com.github.fge.grappa.debugger.model.common;
 
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.matchers.MatcherType;

@@ -7,8 +7,8 @@ import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.common.TabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.ParseInfo;
-import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
+import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.google.common.annotations.VisibleForTesting;
 

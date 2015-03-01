@@ -7,7 +7,7 @@ import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.csvtrace.JavafxCsvTraceView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.ParseInfo;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
