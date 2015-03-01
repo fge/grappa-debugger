@@ -4,7 +4,9 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabView;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.model.db.MatchStatistics;
+import com.github.fge.grappa.debugger.model.tabs.matches.MatchesData;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.google.common.annotations.VisibleForTesting;
 import javafx.scene.chart.PieChart;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -27,15 +29,27 @@ public class JavafxMatchesTabView
     }
 
     @Override
-    public void showMatches(final List<MatchStatistics> stats)
+    public void displayMatchesData(final MatchesData data)
+    {
+        showMatches(data.getAllStats());
+        showMatchesStats(data.getNonEmptyMatches(), data.getEmptyMatches(),
+            data.getFailedMatches());
+
+        showTopN(display.topRulePct, data.getTopOne());
+        showTopN(display.topFiveRulePct, data.getTopFive());
+        showTopN(display.topTenRulePct, data.getTopTen());
+    }
+
+    @SuppressWarnings("TypeMayBeWeakened")
+    @VisibleForTesting
+    void showMatches(final List<MatchStatistics> stats)
     {
         display.matchesTable.getSortOrder().setAll(display.nrCalls);
         display.matchesTable.getItems().setAll(stats);
         display.matchesTable.sort();
     }
 
-    @Override
-    public void showMatchesStats(final int nonEmpty, final int empty,
+    private void showMatchesStats(final int nonEmpty, final int empty,
         final int failures)
     {
         final int success = nonEmpty + empty;
@@ -87,34 +101,10 @@ public class JavafxMatchesTabView
         display.invocationsChart.setTitle(fmt);
     }
 
-    @Override
-    public void showTopOne(@Nullable final Integer topOne, final int total)
+    private void showTopN(final Text text, @Nullable final Double pct)
     {
-        doShowTopN(display.topRulePct, topOne, total);
-    }
-
-    @Override
-    public void showTopFive(@Nullable final Integer topFive, final int total)
-    {
-        doShowTopN(display.topFiveRulePct, topFive, total);
-    }
-
-    @Override
-    public void showTopTen(@Nullable final Integer topTen, final int total)
-    {
-        doShowTopN(display.topTenRulePct, topTen, total);
-    }
-
-    private void doShowTopN(final Text text, @Nullable final Integer integer,
-        final int total)
-    {
-        if (integer == null) {
-            text.setText("N/A");
-            return;
-        }
-
-        final double pct = 100.0 * integer / total;
-        final String fmt = String.format("%.02f%% of all invocations", pct);
-        text.setText(fmt);
+        final String message = pct == null ? "N/A"
+            : String.format("%.02f%% of all invocations", pct);
+        text.setText(message);
     }
 }

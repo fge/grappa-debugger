@@ -2,10 +2,12 @@ package com.github.fge.grappa.debugger.model.tabs.matches;
 
 import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collector;
 
 public final class MatchesData
 {
@@ -15,7 +17,7 @@ public final class MatchesData
                 + o1.getNonEmptyMatches();
             final int c2 = o2.getEmptyMatches() + o2.getFailedMatches()
                 + o2.getNonEmptyMatches();
-            return Integer.compare(c1, c2);
+            return Integer.compare(c2, c1);
         };
 
     private int nonEmptyMatches = 0;
@@ -27,6 +29,17 @@ public final class MatchesData
     private Double topOne = null;
     private Double topFive = null;
     private Double topTen = null;
+
+    final Collector<MatchStatistics, MatchesData, MatchesData> collector
+        = Collector.of(MatchesData::new, MatchesData::accumulate,
+        MatchesData::combine, MatchesData::finish);
+
+    public static Collector<MatchStatistics, MatchesData, MatchesData>
+        asCollector()
+    {
+        return Collector.of(MatchesData::new, MatchesData::accumulate,
+        MatchesData::combine, MatchesData::finish);
+    }
 
     private final List<MatchStatistics> allStats = new ArrayList<>();
 
@@ -50,16 +63,19 @@ public final class MatchesData
         return totalMatches;
     }
 
+    @Nullable
     public Double getTopOne()
     {
         return topOne;
     }
 
+    @Nullable
     public Double getTopFive()
     {
         return topFive;
     }
 
+    @Nullable
     public Double getTopTen()
     {
         return topTen;

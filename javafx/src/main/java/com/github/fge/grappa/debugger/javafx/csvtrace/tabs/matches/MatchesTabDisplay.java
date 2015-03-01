@@ -72,8 +72,7 @@ public class MatchesTabDisplay
     protected TableColumn<MatchStatistics, String> callDetail;
 
     @FXML
-    protected TableColumn<MatchStatistics, MatchStatistics>
-        callGraph;
+    protected TableColumn<MatchStatistics, MatchStatistics> callGraph;
 
 
     @Override

@@ -5,8 +5,8 @@ import com.github.fge.grappa.debugger.model.InputText;
 import com.github.fge.grappa.debugger.model.ParseInfo;
 import com.github.fge.grappa.debugger.model.ParseTree;
 import com.github.fge.grappa.debugger.model.ParseTreeNode;
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.tabs.matches.MatchesData;
 import com.github.fge.grappa.matchers.MatcherType;
 
 import javax.annotation.Nonnull;
@@ -50,16 +50,13 @@ public interface CsvTraceModel
     List<PerClassStatistics> getRulesByClass()
         throws GrappaDebuggerException;
 
-    @Nonnull
-    List<MatchStatistics> getMatchStatistics();
-
-    @Nonnull
-    List<Integer> getTopMatcherCount();
-
     void dispose()
         throws GrappaDebuggerException;
 
     @Nonnull
     Map<Integer, Integer> getDepthMap(int startLine, int wantedLines)
         throws GrappaDebuggerException;
+
+    @Nonnull
+    MatchesData getMatchesData();
 }

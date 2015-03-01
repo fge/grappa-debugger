@@ -6,10 +6,10 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.model.db.DbLoader;
-import com.github.fge.grappa.debugger.model.db.MatchStatistics;
 import com.github.fge.grappa.debugger.model.db.MatchStatisticsMapper;
 import com.github.fge.grappa.debugger.model.db.PerClassStatistics;
 import com.github.fge.grappa.debugger.model.db.PerClassStatisticsMapper;
+import com.github.fge.grappa.debugger.model.tabs.matches.MatchesData;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.lambdas.functions.ThrowingFunction;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -66,7 +66,10 @@ public class DbCsvTraceModel
     private static final Condition FAILED_MATCHES_CONDITION
         = NODES.SUCCESS.eq(0);
 
-    private final Pattern SEMICOLON = Pattern.compile(";");
+    private static final MatchStatisticsMapper MATCH_STATISTICS_MAPPER
+        = new MatchStatisticsMapper();
+
+    private static final Pattern SEMICOLON = Pattern.compile(";");
     private static final Charset UTF8 = StandardCharsets.UTF_8;
 
     private static final String INPUT_TEXT_PATH = "/input.txt";
@@ -219,7 +222,7 @@ public class DbCsvTraceModel
 
     @Nonnull
     @Override
-    public List<MatchStatistics> getMatchStatistics()
+    public MatchesData getMatchesData()
     {
         final Field<Integer> emptyMatches = DSL.decode()
             .when(EMPTY_MATCHES_CONDITION, 1).otherwise(0);
@@ -236,23 +239,10 @@ public class DbCsvTraceModel
             .from(MATCHERS, NODES)
             .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
             .groupBy(MATCHERS.NAME, MATCHERS.MATCHER_TYPE, MATCHERS.CLASS_NAME)
-            .fetch()
-            .map(new MatchStatisticsMapper());
+            .fetch().stream()
+            .map(MATCH_STATISTICS_MAPPER::map)
+            .collect(MatchesData.asCollector());
     }
-
-    @Nonnull
-    @Override
-    public List<Integer> getTopMatcherCount()
-    {
-        final Field<Integer> nrMatches = DSL.count().as("nrMatches");
-
-        return jooq.select(nrMatches)
-            .from(NODES)
-            .groupBy(NODES.MATCHER_ID)
-            .orderBy(nrMatches.desc())
-            .limit(10).fetch().map(Record1::value1);
-    }
-
 
     @Override
     public void dispose()
