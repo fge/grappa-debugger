@@ -28,12 +28,18 @@ public final class GrappaDebugger
     implements MainWindowFactory
 {
     private static final URL BASE_WINDOW_FXML;
+    private static final URL MATCH_HIGHLIGHT_CSS;
 
     static {
-        BASE_WINDOW_FXML = GrappaDebugger.class.getResource("/mainWindow.fxml");
+        final Class<GrappaDebugger> me = GrappaDebugger.class;
+        BASE_WINDOW_FXML = me.getResource("/mainWindow.fxml");
         if (BASE_WINDOW_FXML == null)
             throw new ExceptionInInitializerError("unable to load base window"
                 + " fxml");
+        MATCH_HIGHLIGHT_CSS = me.getResource("/css/match-highlight.css");
+        if (MATCH_HIGHLIGHT_CSS == null)
+            throw new ExceptionInInitializerError("unable to load match"
+                + " highlight CSS file");
     }
 
     private final AlertFactory alertFactory = new AlertFactory();
@@ -83,7 +89,9 @@ public final class GrappaDebugger
         }
 
         pane = view.getNode();
-        stage.setScene(new Scene(pane, 1024, 768));
+        final Scene scene = new Scene(pane, 1024, 768);
+        scene.getStylesheets().add(MATCH_HIGHLIGHT_CSS.toExternalForm());
+        stage.setScene(scene);
         stage.setTitle("Grappa debugger");
 
         presenter = new MainWindowPresenter(this, taskRunner);

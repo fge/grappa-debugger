@@ -15,7 +15,7 @@ import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.escape.CharEscaper;
 import javafx.scene.paint.Color;
-import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.richtext.CodeArea;
 import org.parboiled.support.Position;
 
 import javax.annotation.Nullable;
@@ -190,7 +190,7 @@ public class JavafxTreeTabView
 
     private void appendSuccessfulMatchFragments(final MatchFragments fragments)
     {
-        final InlineCssTextArea inputText = display.inputText;
+        final CodeArea inputText = display.inputText;
 
         final StringBuilder sb = new StringBuilder(fragments.beforeMatch)
             .append(fragments.match).append(fragments.afterMatch);
@@ -223,7 +223,7 @@ public class JavafxTreeTabView
 
     private void appendFailedMatchFragments(final MatchFragments fragments)
     {
-        final InlineCssTextArea inputText = display.inputText;
+        final CodeArea inputText = display.inputText;
 
         final StringBuilder sb = new StringBuilder(fragments.beforeMatch)
             .append(fragments.match).append(fragments.afterMatch);

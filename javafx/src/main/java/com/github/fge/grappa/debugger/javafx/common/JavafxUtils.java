@@ -4,6 +4,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.paint.Color;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 public final class JavafxUtils
@@ -17,12 +19,14 @@ public final class JavafxUtils
     public static final Color FILL_COLOR_4
         = Color.rgb(72, 164, 192);
 
-    public static final String STYLE_BEFOREMATCH = "-fx-fill: GRAY;";
-    public static final String STYLE_MATCHSUCCESS
-        = "-fx-fill: GREEN; -fx-underline: true;";
-    public static final String STYLE_MATCHFAILURE
-        = "-fx-fill: RED; -fx-underline: true;";
-    public static final String STYLE_AFTERMATCH = "-fx-fill: BLACK";
+    public static final List<String> STYLE_BEFOREMATCH
+        = Collections.singletonList("beforeMatch");
+    public static final List<String> STYLE_MATCHSUCCESS
+        = Collections.singletonList("matchSuccess");
+    public static final List<String> STYLE_MATCHFAILURE
+        = Collections.singletonList("matchFailure");
+    public static final List<String> STYLE_AFTERMATCH
+        = Collections.singletonList("afterMatch");
 
     @SuppressWarnings("ProhibitedExceptionThrown")
     private JavafxUtils()

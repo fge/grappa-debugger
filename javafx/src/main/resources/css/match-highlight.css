@@ -1,0 +1,17 @@
+.beforeMatch {
+    -fx-fill: gray;
+}
+
+.matchSuccess {
+    -fx-fill: green;
+    -fx-underline: true;
+}
+
+.matchFailure {
+    -fx-fill: red;
+    -fx-underline: true;
+}
+
+.afterMatch {
+    -fx-fill: black;
+}

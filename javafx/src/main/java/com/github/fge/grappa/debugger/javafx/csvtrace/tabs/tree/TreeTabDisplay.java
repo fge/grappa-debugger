@@ -6,9 +6,13 @@ import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeNodeCell;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeView;
-import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+
+import java.util.function.IntFunction;
 
 public class TreeTabDisplay
     extends JavafxDisplay<TreeTabPresenter>
@@ -56,7 +60,7 @@ public class TreeTabDisplay
     protected Label textInfo;
 
     @FXML
-    protected InlineCssTextArea inputText;
+    protected CodeArea inputText;
 
     protected ParseTreeItem currentItem;
 
@@ -64,6 +68,8 @@ public class TreeTabDisplay
     public void init()
     {
         parseTree.setCellFactory(param -> new ParseTreeNodeCell(this));
+        final IntFunction<Node> intFunction = LineNumberFactory.get(inputText);
+        inputText.setParagraphGraphicFactory(intFunction);
     }
 
     public void parseTreeNodeShowEvent(final ParseTreeNode node)
