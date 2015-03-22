@@ -158,23 +158,9 @@ public class JavafxTreeTabView
     private MatchFragments getFailedMatchFragments(final int length,
         final int realEnd)
     {
-        String fragment;
-        final String match;
-        String afterMatch = "";
-        String beforeMatch = "";
-
-        // Before match
-        fragment = buffer.extract(0, realEnd);
-        if (!fragment.isEmpty())
-            beforeMatch = fragment;
-
-        // Match
-        match = "\u2612";
-
-        // After match
-        fragment = buffer.extract(realEnd, length);
-        if (!fragment.isEmpty())
-            afterMatch = fragment;
+        final String beforeMatch = buffer.extract(0, realEnd);
+        final String match = "\u2612";
+        final String afterMatch = buffer.extract(realEnd, length);
 
         return new MatchFragments(beforeMatch, match, afterMatch);
     }
