@@ -216,6 +216,9 @@ public class JavafxTreeTabView
         fragment = fragments.afterMatch;
         end = start + fragment.length();
         inputText.setStyle(start, end, JavafxUtils.STYLE_AFTERMATCH);
+
+        final int pos = fragments.beforeMatch.length();
+        inputText.selectRange(pos, pos);
     }
 
     private void appendFailedMatchFragments(final MatchFragments fragments)
@@ -246,6 +249,9 @@ public class JavafxTreeTabView
         fragment = fragments.afterMatch;
         end = start + fragment.length();
         inputText.setStyle(start, end, JavafxUtils.STYLE_AFTERMATCH);
+
+        final int pos = fragments.beforeMatch.length();
+        inputText.selectRange(pos, pos);
     }
 
     @Immutable
