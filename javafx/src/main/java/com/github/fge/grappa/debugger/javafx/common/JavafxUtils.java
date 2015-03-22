@@ -17,6 +17,12 @@ public final class JavafxUtils
     public static final Color FILL_COLOR_4
         = Color.rgb(72, 164, 192);
 
+    public static final String STYLE_BEFOREMATCH = "-fx-fill: GRAY;";
+    public static final String STYLE_MATCHSUCCESS
+        = "-fx-fill: GREEN; -fx-underline: true;";
+    public static final String STYLE_MATCHFAILURE
+        = "-fx-fill: RED; -fx-underline: true;";
+    public static final String STYLE_AFTERMATCH = "-fx-fill: BLACK";
 
     @SuppressWarnings("ProhibitedExceptionThrown")
     private JavafxUtils()

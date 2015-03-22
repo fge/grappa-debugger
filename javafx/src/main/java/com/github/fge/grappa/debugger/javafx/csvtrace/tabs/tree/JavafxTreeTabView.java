@@ -8,22 +8,20 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabView;
 import com.github.fge.grappa.debugger.javafx.common.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
+import com.github.fge.grappa.debugger.model.common.RuleInfo;
 import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
-import com.github.fge.grappa.debugger.model.common.RuleInfo;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.escape.CharEscaper;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import org.fxmisc.richtext.InlineCssTextArea;
 import org.parboiled.support.Position;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.concurrent.Immutable;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -59,9 +57,9 @@ public class JavafxTreeTabView
         display.textInfo.setText(String.format("Input text: %d lines, %d "
             + "characters, %d code points", inputText.getNrLines(),
             inputText.getNrChars(), inputText.getNrCodePoints()));
-        final ObservableList<Node> children = display.inputText.getChildren();
+
         taskRunner.compute(() -> buffer.extract(0, buffer.length()),
-            text -> children.setAll(new Text(text)));
+            display.inputText::appendText);
     }
 
     @Override
@@ -71,12 +69,10 @@ public class JavafxTreeTabView
         final int realStart = Math.min(start, length);
         final int realEnd = Math.min(end, length);
 
-        final ObservableList<Node> nodes = display.inputText.getChildren();
-
         taskRunner.compute(
             () -> getSuccessfulMatchFragments(length, realStart, realEnd),
             fragments -> {
-                nodes.setAll(fragments);
+                appendSuccessfulMatchFragments(fragments);
                 setScroll(realStart);
             }
         );
@@ -87,11 +83,10 @@ public class JavafxTreeTabView
     {
         final int length = buffer.length();
         final int realEnd = Math.min(end, length);
-        final ObservableList<Node> nodes = display.inputText.getChildren();
 
         taskRunner.compute(() -> getFailedMatchFragments(length, realEnd),
             fragments -> {
-                nodes.setAll(fragments);
+                appendFailedMatchFragments(fragments);
                 setScroll(realEnd);
             });
     }
@@ -160,63 +155,41 @@ public class JavafxTreeTabView
         display.currentItem.loadingProperty().setValue(false);
     }
 
-    private List<Text> getFailedMatchFragments(final int length,
+    private MatchFragments getFailedMatchFragments(final int length,
         final int realEnd)
     {
-        final List<Text> list = new ArrayList<>(3);
-
         String fragment;
-        Text text;
-
-        fragment = buffer.extract(0, realEnd);
-        if (!fragment.isEmpty()) {
-            text = new Text(fragment);
-            text.setFill(Color.GRAY);
-            list.add(text);
-        }
-
-        text = new Text("\u2612");
-        text.setFill(Color.RED);
-        text.setUnderline(true);
-        list.add(text);
-
-        fragment = buffer.extract(realEnd, length);
-        if (!fragment.isEmpty())
-            list.add(new Text(fragment));
-        return list;
-    }
-
-    private List<Text> getSuccessfulMatchFragments(final int length,
-        final int realStart, final int realEnd)
-    {
-        final List<Text> list = new ArrayList<>(3);
-
-        String fragment;
-        Text text;
+        final String match;
+        String afterMatch = "";
+        String beforeMatch = "";
 
         // Before match
-        fragment = buffer.extract(0, realStart);
-        if (!fragment.isEmpty()) {
-            text = new Text(fragment);
-            text.setFill(Color.GRAY);
-            list.add(text);
-        }
+        fragment = buffer.extract(0, realEnd);
+        if (!fragment.isEmpty())
+            beforeMatch = fragment;
 
         // Match
-        fragment = buffer.extract(realStart, realEnd);
-        text = new Text(fragment.isEmpty() ? "\u2205"
-            : '\u21fe' + ESCAPER.escape(fragment) + '\u21fd');
-        text.setFill(Color.GREEN);
-        text.setUnderline(true);
-        list.add(text);
+        match = "\u2612";
 
         // After match
         fragment = buffer.extract(realEnd, length);
-        if (!fragment.isEmpty()) {
-            text = new Text(fragment);
-            list.add(text);
-        }
-        return list;
+        if (!fragment.isEmpty())
+            afterMatch = fragment;
+
+        return new MatchFragments(beforeMatch, match, afterMatch);
+    }
+
+    private MatchFragments getSuccessfulMatchFragments(final int length,
+        final int realStart, final int realEnd)
+    {
+        final String beforeMatch = buffer.extract(0, realStart);
+        final String afterMatch = buffer.extract(realEnd, length);
+
+        final String match = realStart == realEnd ? "\u2205"
+            : '\u21fe' + ESCAPER.escape(buffer.extract(realStart, realEnd))
+                + '\u21fd';
+
+        return new MatchFragments(beforeMatch, match, afterMatch);
     }
 
     private void setScroll(final int index)
@@ -226,6 +199,82 @@ public class JavafxTreeTabView
         final double nrLines = buffer.getLineCount();
         if (line != nrLines)
             line--;
-        display.inputTextScroll.setVvalue(line / nrLines);
+        //display.inputTextScroll.setVvalue(line / nrLines);
+    }
+
+    private void appendSuccessfulMatchFragments(final MatchFragments fragments)
+    {
+        final InlineCssTextArea inputText = display.inputText;
+
+        final StringBuilder sb = new StringBuilder(fragments.beforeMatch)
+            .append(fragments.match).append(fragments.afterMatch);
+
+        inputText.clear();
+        inputText.appendText(sb.toString());
+
+        int start;
+        String fragment;
+        int end;
+
+        start = 0;
+        fragment = fragments.beforeMatch;
+        end = start + fragment.length();
+        inputText.setStyle(start, end, JavafxUtils.STYLE_BEFOREMATCH);
+
+        start = end;
+        fragment = fragments.match;
+        end = start + fragment.length();
+        inputText.setStyle(start, end, JavafxUtils.STYLE_MATCHSUCCESS);
+
+        start = end;
+        fragment = fragments.afterMatch;
+        end = start + fragment.length();
+        inputText.setStyle(start, end, JavafxUtils.STYLE_AFTERMATCH);
+    }
+
+    private void appendFailedMatchFragments(final MatchFragments fragments)
+    {
+        final InlineCssTextArea inputText = display.inputText;
+
+        final StringBuilder sb = new StringBuilder(fragments.beforeMatch)
+            .append(fragments.match).append(fragments.afterMatch);
+
+        inputText.clear();
+        inputText.appendText(sb.toString());
+
+        int start;
+        String fragment;
+        int end;
+
+        start = 0;
+        fragment = fragments.beforeMatch;
+        end = start + fragment.length();
+        inputText.setStyle(start, end, JavafxUtils.STYLE_BEFOREMATCH);
+
+        start = end;
+        fragment = fragments.match;
+        end = start + fragment.length();
+        inputText.setStyle(start, end, JavafxUtils.STYLE_MATCHFAILURE);
+
+        start = end;
+        fragment = fragments.afterMatch;
+        end = start + fragment.length();
+        inputText.setStyle(start, end, JavafxUtils.STYLE_AFTERMATCH);
+    }
+
+    @Immutable
+    private static final class MatchFragments
+    {
+        private final String beforeMatch;
+        private final String match;
+        private final String afterMatch;
+
+        private MatchFragments(final String beforeMatch, final String match,
+            final String afterMatch)
+        {
+            this.beforeMatch = beforeMatch;
+            this.match = match;
+            this.afterMatch = afterMatch;
+        }
     }
 }
