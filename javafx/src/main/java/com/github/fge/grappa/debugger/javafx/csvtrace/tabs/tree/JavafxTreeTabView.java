@@ -59,9 +59,9 @@ public class JavafxTreeTabView
             + "characters, %d code points", inputText.getNrLines(),
             inputText.getNrChars(), inputText.getNrCodePoints()));
 
-        taskRunner.compute(() -> buffer.extract(0, buffer.length()), (text) -> {
+        taskRunner.compute(() -> buffer.extract(0, buffer.length()), text -> {
             display.inputText.appendText(text);
-            display.inputText.selectRange(0, 0);
+            display.inputText.moveTo(0);
         });
     }
 
@@ -225,7 +225,7 @@ public class JavafxTreeTabView
         inputText.setStyle(start, end, JavafxUtils.STYLE_AFTERMATCH);
 
         final int pos = fragments.beforeMatch.length();
-        inputText.selectRange(pos, pos);
+        inputText.moveTo(pos);
     }
 
     @Immutable
