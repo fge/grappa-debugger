@@ -58,8 +58,10 @@ public class JavafxTreeTabView
             + "characters, %d code points", inputText.getNrLines(),
             inputText.getNrChars(), inputText.getNrCodePoints()));
 
-        taskRunner.compute(() -> buffer.extract(0, buffer.length()),
-            display.inputText::appendText);
+        taskRunner.compute(() -> buffer.extract(0, buffer.length()), (text) -> {
+            display.inputText.appendText(text);
+            display.inputText.selectRange(0, 0);
+        });
     }
 
     @Override
