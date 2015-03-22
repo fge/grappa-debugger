@@ -19,6 +19,11 @@ public final class JavafxUtils
     public static final Color FILL_COLOR_4
         = Color.rgb(72, 164, 192);
 
+    public static final char MATCH_BEFORE = '\u21fe'; // right arrow
+    public static final char MATCH_AFTER = '\u21fd';  // left arrow
+    public static final String MATCH_EMPTY = "\u2205";     // empty set
+    public static final String MATCH_FAILURE = "\u2612";   // ballot box
+
     public static final List<String> STYLE_BEFOREMATCH
         = Collections.singletonList("beforeMatch");
     public static final List<String> STYLE_MATCHSUCCESS
