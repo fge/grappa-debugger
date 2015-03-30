@@ -13,10 +13,10 @@ import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.github.fge.grappa.support.Position;
 import com.google.common.escape.CharEscaper;
 import javafx.scene.paint.Color;
 import org.fxmisc.richtext.CodeArea;
-import org.parboiled.support.Position;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

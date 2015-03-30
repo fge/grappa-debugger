@@ -1,8 +1,10 @@
 apply(plugin: "info.solidsoft.pitest");
 
+description = "GUI application to debug grappa/parboiled 1.x parsers; core code";
+
 dependencies {
     compile(group: "com.github.fge", name: "grappa",
-        version: "2.0.0-alpha.3");
+        version: "2.0.0-beta.1");
     compile(group: "com.github.fge", name: "throwing-lambdas",
         version: "0.3.0");
     compile(group: "com.github.fge", name: "java7-fs-more", version: "0.1.0");
@@ -12,5 +14,3 @@ dependencies {
     //compile(group: "org.jooq", name: "jooq-meta", version: "3.5.3");
     //compile(group: "org.jooq", name: "jooq-codegen", version: "3.5.3");
 }
-
-description = "GUI application to debug grappa/parboiled 1.x parsers; core code";
