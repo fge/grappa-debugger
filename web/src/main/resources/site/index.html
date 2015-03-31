@@ -7,13 +7,14 @@
     <script type="text/javascript" src="static/scripts/jquery-2.0.2.min.js"></script>
     <script type="text/javascript" src="static/jqwidgets/jqxcore.js"></script>
     <script type="text/javascript" src="static/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="static/jqwidgets/jqxtabs.js"></script>
 </head>
 <body>
 <div id="content">
     <form enctype="multipart/form-data" method="post" action="/upload" hidden>
         <input type="file" id="uploadInput" name="uploadedFile">
     </form>
-    <div id="jqxWidget">
+    <div id="top">
         <div id="jqxMenu">
             <ul>
                 <li>File
@@ -24,6 +25,18 @@
                     </ul>
                 </li>
             </ul>
+        </div>
+    </div>
+    <div id="tabs">
+        <!--
+            Each li in the ul is the tab title; after that, each div below the
+            ul is the tab content, in the order where they appear in ul.
+        -->
+        <ul>
+            <li>Parse tree</li>
+        </ul>
+        <div>
+            meh
         </div>
     </div>
     <script type="text/javascript">
@@ -41,6 +54,12 @@
             $("#uploadInput").on("change", function(event) {
                 this.form.submit();
             });
+
+            $("#tabs").jqxTabs({
+                width: "100%",
+                height: "100%"
+            });
+
         }(jQuery));
     </script>
 </div>
