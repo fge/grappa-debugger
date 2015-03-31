@@ -1,0 +1,4 @@
+dependencies {
+    compile project(":grappa-debugger-core");
+    compile(group: "com.sparkjava", name: "spark-core", version: "2.1");
+}

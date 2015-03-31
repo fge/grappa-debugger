@@ -1,4 +1,4 @@
-include "core", "javafx";
+include "core", "javafx", "web";
 
 /*
  * We STILL have to do that!
@@ -6,3 +6,4 @@ include "core", "javafx";
 
 project(":core").name = "grappa-debugger-core";
 project(":javafx").name = "grappa-debugger-javafx";
+project(":web").name = "grappa-debugger-web";
