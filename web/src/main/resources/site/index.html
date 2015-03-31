@@ -9,25 +9,26 @@
     <script type="text/javascript" src="static/jqwidgets/jqxmenu.js"></script>
 </head>
 <body>
-<form enctype="multipart/form-data" id="fileUpload" hidden>
-    <input type="file">
-</form>
 <div id="content">
+    <form enctype="multipart/form-data" method="post" action="/upload" hidden>
+        <input type="file" id="uploadInput">
+    </form>
     <div id="jqxWidget">
         <div id="jqxMenu">
             <ul>
                 <li>File
                     <ul>
-                        <li id="loadFile">Load file...</li>
+                        <li id="loadFile">
+                            <label for="uploadInput">Load file...</label>
+                        </li>
                     </ul>
                 </li>
             </ul>
         </div>
     </div>
     <script type="text/javascript">
-        document.ready(function ($) {
-            var menu = $("#jqxMenu");
-            menu.jqxMenu({
+        $(document).ready(function ($) {
+            $("#jqxMenu").jqxMenu({
                 width: "100%",
                 height: "30px",
                 animationShowDelay: 0,
@@ -35,6 +36,10 @@
                 animationHideDelay: 0,
                 animationHideDuration: 0,
                 autoOpen: false
+            });
+
+            $("#uploadInput").on("change", function(event) {
+                this.form.submit();
             });
         }(jQuery));
     </script>
