@@ -1,8 +1,11 @@
-include "core", "javafx";
+include "db";
+include "core";
+include "javafx";
 
 /*
  * We STILL have to do that!
  */
 
+project(":db").name = "grappa-debugger-db";
 project(":core").name = "grappa-debugger-core";
 project(":javafx").name = "grappa-debugger-javafx";
