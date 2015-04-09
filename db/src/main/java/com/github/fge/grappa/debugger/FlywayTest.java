@@ -23,7 +23,6 @@ public final class FlywayTest
 
         final Flyway flyway = new Flyway();
 
-        flyway.setClassLoader(FlywayTest.class.getClassLoader());
         flyway.setDataSource(url, H2_USERNAME, H2_PASSWORD);
 
         flyway.migrate();
