@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.common;
 
-import com.github.fge.lambdas.suppliers.ThrowingSupplier;
+import com.github.fge.lambdas.runnable.ThrowingRunnable;
+import com.github.fge.lambdas.supplier.ThrowingSupplier;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import javafx.application.Platform;
 
@@ -95,7 +96,6 @@ import java.util.function.Supplier;
  * @see ExecutorService
  * @see Executor
  * @see ThrowingRunnable
- * @see ThrowingSupplier
  */
 @ParametersAreNonnullByDefault
 public final class GuiTaskRunner

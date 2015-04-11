@@ -6,8 +6,8 @@ import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.db.h2.load.H2TraceDbLoader;
-import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.github.fge.grappa.debugger.model.tree.InputText;
+import com.github.fge.lambdas.Throwing;
 import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jooq.DSLContext;
@@ -67,13 +67,7 @@ public final class H2TraceDb
         this.jooq = jooq;
 
         loader = new H2TraceDbLoader(fs, jooq);
-        executor.submit(() -> {
-            try {
-                loader.loadAll();
-            } catch (IOException e) {
-                throw new TraceModelException(e);
-            }
-        });
+        executor.submit(Throwing.runnable(loader::loadAll));
 
         info = loadParseInfo();
         inputText = loadInputText();

@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger;
 
-import com.github.fge.lambdas.suppliers.ThrowingSupplier;
+import com.github.fge.lambdas.supplier.ThrowingSupplier;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.testng.annotations.BeforeClass;

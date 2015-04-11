@@ -13,6 +13,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
     .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
 import com.github.fge.grappa.internal.NonFinalForTesting;
+import com.github.fge.lambdas.Throwing;
 import com.github.fge.lambdas.consumers.ThrowingConsumer;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -158,6 +159,7 @@ public class CsvTracePresenter
     {
         final ThrowingConsumer<CountDownLatch> await = CountDownLatch::await;
 
-        tabs.stream().map(TabPresenter::refresh).forEach(await.orDoNothing());
+        tabs.stream().map(TabPresenter::refresh)
+            .forEach(Throwing.consumer(await).orDoNothing());
     }
 }
