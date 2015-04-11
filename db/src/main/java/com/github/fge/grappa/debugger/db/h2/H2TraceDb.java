@@ -21,6 +21,7 @@ public final class H2TraceDb
 
     private final FileSystem fs;
     private final DSLContext jooq;
+    private final H2TraceDbLoader loader;
 
     public H2TraceDb(final Path zipfile, final DSLContext jooq)
         throws IOException
@@ -29,13 +30,14 @@ public final class H2TraceDb
 
         fs = FileSystems.newFileSystem(uri, ENV);
         this.jooq = jooq;
+
+        loader = new H2TraceDbLoader(fs,jooq);
     }
 
     @Override
     public TraceDbLoadStatus getLoadStatus()
     {
-        // TODO
-        return null;
+        return loader.getStatus();
     }
 
     @Override
@@ -48,7 +50,6 @@ public final class H2TraceDb
     @Override
     public DSLContext getJooq()
     {
-        // TODO
-        return null;
+        return jooq;
     }
 }

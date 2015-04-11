@@ -1,6 +1,5 @@
 package com.github.fge.grappa.debugger.db.h2;
 
-import com.github.fge.grappa.debugger.jooq.postgresql.Tables;
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
 
@@ -11,6 +10,9 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+
+import static com.github.fge.grappa.debugger.jooq.h2.Tables.MATCHERS;
+import static com.github.fge.grappa.debugger.jooq.h2.Tables.NODES;
 
 @ParametersAreNonnullByDefault
 public final class H2TraceDbLoader
@@ -38,6 +40,11 @@ public final class H2TraceDbLoader
         nodesPath = zipfs.getPath(NODES_PATH);
     }
 
+    public H2TraceDbLoadStatus getStatus()
+    {
+        return status;
+    }
+
     public void loadAll()
         throws IOException
     {
@@ -57,7 +64,7 @@ public final class H2TraceDbLoader
         ) {
             lines.map(csvToMatcher)
                 .peek(ignored -> status.incrementProcessedMatchers())
-                .forEach(r -> jooq.insertInto(Tables.MATCHERS).set(r).execute());
+                .forEach(r -> jooq.insertInto(MATCHERS).set(r).execute());
         }
     }
 
@@ -69,7 +76,7 @@ public final class H2TraceDbLoader
         ) {
             lines.map(csvToNode)
                 .peek(ignored -> status.incrementProcessedNodes())
-                .forEach(r -> jooq.insertInto(Tables.NODES).set(r).execute());
+                .forEach(r -> jooq.insertInto(NODES).set(r).execute());
         }
     }
 }
