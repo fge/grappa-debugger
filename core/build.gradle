@@ -2,7 +2,7 @@ apply(plugin: "info.solidsoft.pitest");
 
 dependencies {
     compile(group: "com.github.fge", name: "grappa",
-        version: "2.0.0-alpha.3");
+        version: "2.0.0-beta.4");
     compile(group: "com.github.fge", name: "throwing-lambdas",
         version: "0.3.0");
     compile(group: "com.github.fge", name: "java7-fs-more", version: "0.1.0");
