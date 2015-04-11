@@ -5,13 +5,13 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
-import com.github.fge.grappa.debugger.jooq.postgresql.Tables;
 import com.github.fge.grappa.debugger.jooq.postgresql.tables.records.ParseInfoRecord;
 import org.jooq.DSLContext;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.github.fge.grappa.debugger.jooq.postgresql.Tables.MATCHERS;
 import static com.github.fge.grappa.debugger.jooq.postgresql.Tables.NODES;
 import static com.github.fge.grappa.debugger.jooq.postgresql.Tables.PARSE_INFO;
 
@@ -38,7 +38,7 @@ public final class PostgresqlTraceDb
         final int nrNodes = jooq.selectCount().from(NODES)
             .where(PARSE_INFO.ID.eq(uuid)).fetchOne().value1();
 
-        final int nrMatchers = jooq.selectCount().from(Tables.MATCHERS)
+        final int nrMatchers = jooq.selectCount().from(MATCHERS)
             .where(PARSE_INFO.ID.eq(uuid)).fetchOne().value1();
 
         final LocalDateTime time = record.getDate().toLocalDateTime();
