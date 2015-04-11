@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.db.postgresql;
 
+import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.jooq.Configuration;
 import org.jooq.ConnectionProvider;
@@ -47,7 +48,7 @@ public final class PostgresqlTraceDbFactory
         try {
             source.setDriverClass("org.postgresql.Driver");
         } catch (PropertyVetoException e) {
-            throw new RuntimeException(e);
+            throw new TraceModelException(e);
         }
 
         source.setJdbcUrl(jdbcUrl);
