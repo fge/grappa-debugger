@@ -19,15 +19,10 @@ import java.util.concurrent.CountDownLatch;
 public class RulesTabPresenter
     extends TabPresenter<RulesTabView>
 {
-    private final MainWindowView mainView;
-    private final CsvTraceModel model;
-
     public RulesTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
     {
-        super(taskRunner);
-        this.mainView = mainView;
-        this.model = model;
+        super(taskRunner, mainView, model);
     }
 
     @OnUiThread

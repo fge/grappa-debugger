@@ -37,7 +37,7 @@ public class MatchesTabPresenterTest
         mainView = mock(MainWindowView.class);
         model = mock(CsvTraceModel.class);
         view = mock(MatchesTabView.class);
-        presenter = spy(new MatchesTabPresenter(taskRunner, model, mainView));
+        presenter = spy(new MatchesTabPresenter(taskRunner, mainView, model));
         presenter.setView(view);
     }
 

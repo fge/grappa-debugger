@@ -16,9 +16,6 @@ import java.util.concurrent.CountDownLatch;
 public class TreeDepthTabPresenter
     extends TabPresenter<TreeDepthTabView>
 {
-    private final MainWindowView mainView;
-    private final CsvTraceModel model;
-
     @VisibleForTesting
     int startLine = 1;
 
@@ -28,9 +25,7 @@ public class TreeDepthTabPresenter
     public TreeDepthTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
     {
-        super(taskRunner);
-        this.mainView = mainView;
-        this.model = model;
+        super(taskRunner, mainView, model);
     }
 
     @Override

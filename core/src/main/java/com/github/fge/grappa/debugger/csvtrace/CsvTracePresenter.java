@@ -101,7 +101,7 @@ public class CsvTracePresenter
     @VisibleForTesting
     MatchesTabPresenter createMatchesTabPresenter()
     {
-        return new MatchesTabPresenter(taskRunner, model, mainView);
+        return new MatchesTabPresenter(taskRunner, mainView, model);
     }
 
     @OnUiThread

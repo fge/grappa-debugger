@@ -12,15 +12,10 @@ import java.util.concurrent.CountDownLatch;
 public class MatchesTabPresenter
     extends TabPresenter<MatchesTabView>
 {
-    private final CsvTraceModel model;
-    private final MainWindowView mainView;
-
     public MatchesTabPresenter(final GuiTaskRunner taskRunner,
-        final CsvTraceModel model, final MainWindowView mainView)
+        final MainWindowView mainView, final CsvTraceModel model)
     {
-        super(taskRunner);
-        this.model = model;
-        this.mainView = mainView;
+        super(taskRunner, mainView, model);
     }
 
     @OnUiThread

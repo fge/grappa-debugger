@@ -17,15 +17,10 @@ import java.util.concurrent.CountDownLatch;
 public class TreeTabPresenter
     extends TabPresenter<TreeTabView>
 {
-    private final CsvTraceModel model;
-    private final MainWindowView mainView;
-
     public TreeTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final CsvTraceModel model)
     {
-        super(taskRunner);
-        this.mainView = Objects.requireNonNull(mainView);
-        this.model = Objects.requireNonNull(model);
+        super(taskRunner, mainView, model);
     }
 
     @Override
