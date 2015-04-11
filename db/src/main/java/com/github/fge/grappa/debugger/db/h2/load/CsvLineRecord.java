@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.db.h2;
+package com.github.fge.grappa.debugger.db.h2.load;
 
 import org.jooq.Record;
 

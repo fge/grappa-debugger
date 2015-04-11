@@ -1,4 +1,4 @@
-package com.github.fge.grappa.debugger.db.h2;
+package com.github.fge.grappa.debugger.db.h2.load;
 
 import com.google.common.base.Charsets;
 import org.jooq.DSLContext;
@@ -26,18 +26,20 @@ public final class H2TraceDbLoader
 
     private final CsvNodesRecord csvToNode = new CsvNodesRecord();
 
+    private final FileSystem fs;
     private final Path matchersPath;
     private final Path nodesPath;
     private final H2TraceDbLoadStatus status = new H2TraceDbLoadStatus();
 
     private final DSLContext jooq;
 
-    public H2TraceDbLoader(final FileSystem zipfs, final DSLContext jooq)
+    public H2TraceDbLoader(final FileSystem fs, final DSLContext jooq)
     {
+        this.fs = fs;
         this.jooq = jooq;
 
-        matchersPath = zipfs.getPath(MATCHERS_PATH);
-        nodesPath = zipfs.getPath(NODES_PATH);
+        matchersPath = fs.getPath(MATCHERS_PATH);
+        nodesPath = fs.getPath(NODES_PATH);
     }
 
     public H2TraceDbLoadStatus getStatus()
@@ -52,6 +54,7 @@ public final class H2TraceDbLoader
             insertMatchers(jooq);
             insertNodes(jooq);
         } finally {
+            fs.close();
             status.setReady();
         }
     }
