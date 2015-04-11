@@ -120,17 +120,6 @@ public class DbCsvTraceModel
     }
 
     @Override
-    public void waitForNodes()
-        throws GrappaDebuggerException
-    {
-        try {
-            status.waitForNodes();
-        } catch (InterruptedException e) {
-            throw new GrappaDebuggerException(e);
-        }
-    }
-
-    @Override
     public void waitForMatchers()
         throws GrappaDebuggerException
     {

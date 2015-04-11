@@ -72,10 +72,4 @@ public final class DbLoadStatus
     {
         matchersLatch.await();
     }
-
-    public void waitForNodes()
-        throws InterruptedException
-    {
-        readyLatch.await();
-    }
 }

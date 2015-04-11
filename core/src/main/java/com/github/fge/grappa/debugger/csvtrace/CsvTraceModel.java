@@ -17,9 +17,6 @@ public interface CsvTraceModel
 {
     boolean isLoadComplete();
 
-    void waitForNodes()
-        throws GrappaDebuggerException;
-
     void waitForMatchers()
         throws GrappaDebuggerException;
 
