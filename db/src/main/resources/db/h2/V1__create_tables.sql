@@ -15,7 +15,7 @@ create table nodes (
     matcher_id integer not null,
     start_index integer not null,
     end_index integer not null,
-    time long not null
+    time bigint not null
 );
 
 alter table nodes add primary key(id);
