@@ -20,7 +20,7 @@
                 <BorderPane>
                     <top>
                         <ToolBar>
-                            <Label fx:id="treeInfo" text="Please wait..."/>
+                            <Label fx:id="treeInfo"/>
                         </ToolBar>
                     </top>
                     <center>

@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
+import com.github.fge.grappa.debugger.csvtrace.tabs.TabView;
 import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public interface TreeTabView
+    extends TabView
 {
     void loadInputText(InputText inputText);
 

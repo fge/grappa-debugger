@@ -26,6 +26,7 @@ public class TreeTabPresenter
     @Override
     public void load()
     {
+        view.displayInfo(info);
         loadInputText();
         loadParseTree();
     }

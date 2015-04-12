@@ -7,7 +7,6 @@ import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.common.TabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.google.common.annotations.VisibleForTesting;
@@ -29,7 +28,6 @@ public class RulesTabPresenter
     @Override
     public void load()
     {
-        loadParseInfo();
         loadTotalParseTime();
         refresh();
     }
@@ -106,14 +104,6 @@ public class RulesTabPresenter
     {
         mainView.showError("Database error", "Unable to refresh rules",
             throwable);
-    }
-
-    @OnUiThread
-    @VisibleForTesting
-    void loadParseInfo()
-    {
-        final ParseInfo info = model.getParseInfo();
-        view.displayParseInfo(info);
     }
 
     @OnUiThread

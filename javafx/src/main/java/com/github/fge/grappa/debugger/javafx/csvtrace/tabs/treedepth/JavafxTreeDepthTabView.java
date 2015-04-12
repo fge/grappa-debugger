@@ -4,6 +4,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
     .TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabView;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart.Data;
@@ -26,17 +27,17 @@ public class JavafxTreeDepthTabView
     }
 
     @Override
+    public void displayInfo(final ParseInfo info)
+    {
+        display.totalLines.setText(String.format("/ %d", info.getNrLines()));
+    }
+
+    @Override
     public void disableToolbar()
     {
         Stream.of(display.requiredLine, display.linesDisplayed,
             display.prevLines, display.nextLines
         ).forEach(node -> node.setDisable(true));
-    }
-
-    @Override
-    public void setMaxLines(final int nrLines)
-    {
-        display.totalLines.setText(String.format("/ %d", nrLines));
     }
 
     @Override

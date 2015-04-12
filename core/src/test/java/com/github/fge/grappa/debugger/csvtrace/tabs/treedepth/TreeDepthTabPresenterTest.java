@@ -57,21 +57,6 @@ public class TreeDepthTabPresenterTest
         presenter.setView(view);
     }
 
-    @SuppressWarnings("AutoBoxing")
-    @Test
-    public void initTest()
-    {
-        final int theAnswer = 42;
-        final int depth = 100;
-
-        when(info.getNrLines()).thenReturn(theAnswer);
-        when(info.getTreeDepth()).thenReturn(depth);
-
-        presenter.init();
-
-        verify(view).setMaxLines(theAnswer);
-    }
-
     @Test
     public void loadTest()
     {

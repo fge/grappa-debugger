@@ -30,7 +30,7 @@ public class JavafxRulesTabView
     }
 
     @Override
-    public void displayParseInfo(final ParseInfo info)
+    public void displayInfo(final ParseInfo info)
     {
         Objects.requireNonNull(info);
 

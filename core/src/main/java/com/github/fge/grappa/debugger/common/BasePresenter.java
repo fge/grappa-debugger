@@ -14,12 +14,6 @@ public abstract class BasePresenter<V>
     public void setView(final V view)
     {
         this.view = Objects.requireNonNull(view);
-        init();
-    }
-
-    /// TODO: get rid of that
-    protected void init()
-    {
     }
 
     public abstract void load();

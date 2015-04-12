@@ -8,6 +8,7 @@ import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabView;
 import com.github.fge.grappa.debugger.javafx.common.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
+import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.common.RuleInfo;
 import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
@@ -52,12 +53,20 @@ public class JavafxTreeTabView
 
     @SuppressWarnings("AutoBoxing")
     @Override
+    public void displayInfo(final ParseInfo info)
+    {
+        display.treeInfo.setText(String.format("Tree: %d nodes; depth %d",
+            info.getNrInvocations(), info.getTreeDepth()));
+        display.textInfo.setText(String.format("Input text: %d lines, %d "
+                + "characters, %d code points", info.getNrLines(),
+            info.getNrChars(), info.getNrCodePoints()));
+    }
+
+    @SuppressWarnings("AutoBoxing")
+    @Override
     public void loadInputText(final InputText inputText)
     {
         buffer = inputText.getInputBuffer();
-        display.textInfo.setText(String.format("Input text: %d lines, %d "
-            + "characters, %d code points", inputText.getNrLines(),
-            inputText.getNrChars(), inputText.getNrCodePoints()));
 
         taskRunner.compute(() -> buffer.extract(0, buffer.length()), text -> {
             display.inputText.appendText(text);
@@ -92,15 +101,11 @@ public class JavafxTreeTabView
     @Override
     public void loadParseTree(@Nullable final ParseTree parseTree)
     {
-        if (parseTree == null) {
-            display.treeInfo.setText("Load error");
+        if (parseTree == null)
             return;
-        }
 
         final ParseTreeNode rootNode = parseTree.getRootNode();
         display.parseTree.setRoot(new ParseTreeItem(display, rootNode));
-        display.treeInfo.setText(String.format("Tree: %d nodes; depth %d",
-            parseTree.getNrInvocations(), parseTree.getTreeDepth()));
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.TabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -40,13 +39,6 @@ public class TreeDepthTabPresenter
         final CountDownLatch latch = new CountDownLatch(1);
         refreshChart(latch);
         return latch;
-    }
-
-    @Override
-    protected void init()
-    {
-        final ParseInfo parseInfo = model.getParseInfo();
-        view.setMaxLines(parseInfo.getNrLines());
     }
 
     public void handleChangeVisibleLines(final int visibleLines)

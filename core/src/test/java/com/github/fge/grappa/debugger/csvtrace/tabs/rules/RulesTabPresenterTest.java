@@ -4,9 +4,8 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.common.ParseInfo;
-import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -55,13 +54,11 @@ public class RulesTabPresenterTest
     @Test
     public void loadTest()
     {
-        doNothing().when(presenter).loadParseInfo();
         doNothing().when(presenter).loadTotalParseTime();
         doReturn(mock(CountDownLatch.class)).when(presenter).refresh();
 
         presenter.load();
 
-        verify(presenter).loadParseInfo();
         verify(presenter).loadTotalParseTime();
         verify(presenter).refresh();
     }
@@ -234,17 +231,6 @@ public class RulesTabPresenterTest
         }
 
         verify(latch).countDown();
-    }
-
-    @Test
-    public void loadParseInfoTest()
-    {
-        final ParseInfo info = mock(ParseInfo.class);
-        when(model.getParseInfo()).thenReturn(info);
-
-        presenter.loadParseInfo();
-
-        verify(view).displayParseInfo(same(info));
     }
 
     @Test
