@@ -2,7 +2,6 @@ package com.github.fge.grappa.debugger.model;
 
 import com.github.fge.grappa.debugger.model.matches.MatchesData;
 import com.github.fge.grappa.debugger.model.rules.PerClassStatistics;
-import com.github.fge.grappa.debugger.model.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tree.ParseTreeNode;
 import com.github.fge.grappa.matchers.MatcherType;
 
@@ -12,9 +11,6 @@ import java.util.Map;
 
 public interface TraceModel
 {
-    @Nonnull
-    ParseTree getParseTree();
-
     @Nonnull
     List<ParseTreeNode> getNodeChildren(int nodeId);
 

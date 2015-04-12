@@ -15,6 +15,8 @@ import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatisticsMapper;
 import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNodeMapper;
+import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.support.IndexRange;
 import com.github.fge.lambdas.functions.ThrowingFunction;
@@ -25,7 +27,9 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Record1;
+import org.jooq.Record2;
 import org.jooq.Result;
+import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
@@ -152,7 +156,7 @@ public class DbCsvTraceModel
     public ParseTree getParseTree()
         throws GrappaDebuggerException
     {
-        final ParseTreeNode node = getParseTreeNodeFromId(0);
+        final ParseTreeNode node = getNodeById(0);
 
         return new ParseTree(node, info.getNrInvocations(),
             info.getTreeDepth());
@@ -162,16 +166,8 @@ public class DbCsvTraceModel
     @Override
     public List<ParseTreeNode> getNodeChildren(final int nodeId)
     {
-        final Result<Record1<Integer>> result = jooq.select(NODES.ID)
-            .from(NODES).where(NODES.PARENT_ID.equal(nodeId)).fetch();
-
-        final ThrowingFunction<Integer, ParseTreeNode> function
-            = this::getParseTreeNodeFromId;
-
-        return result.stream()
-            .map(Record1::value1)
-            .map(function)
-            .collect(Collectors.toList());
+        final Condition condition = NODES.PARENT_ID.eq(nodeId);
+        return getNodes(condition);
     }
 
     @Nonnull
@@ -179,7 +175,44 @@ public class DbCsvTraceModel
     public ParseTreeNode getNodeById(final int id)
         throws GrappaDebuggerException
     {
-        return getParseTreeNodeFromId(id);
+        final Condition condition = NODES.ID.eq(id);
+        final List<ParseTreeNode> nodes = getNodes(condition);
+
+        if (nodes.size() != 1)
+            throw new GrappaException("expected only 1 record");
+
+        return nodes.get(0);
+    }
+
+    private List<ParseTreeNode> getNodes(final Condition condition)
+    {
+        try {
+            future.get();
+        } catch (InterruptedException | CancellationException
+            | ExecutionException e) {
+            throw new GrappaException(e);
+        }
+
+        final Field<Integer> children = DSL.count().as("nrChildren");
+
+        final Table<Record2<Integer, Integer>> subnodes
+            = jooq.select(NODES.PARENT_ID, children)
+            .from(NODES)
+            .groupBy(NODES.PARENT_ID)
+            .asTable();
+
+        final Field<Integer> parentId = subnodes.field(NODES.PARENT_ID);
+        final Field<Integer> nrChildren = subnodes.field(children);
+
+        return jooq.select(NODES.PARENT_ID, NODES.ID, NODES.LEVEL,
+            NODES.SUCCESS, MATCHERS.CLASS_NAME, MATCHERS.MATCHER_TYPE,
+            MATCHERS.NAME, NODES.START_INDEX, NODES.END_INDEX, NODES.TIME,
+            nrChildren)
+            .from(NODES, MATCHERS, subnodes)
+            .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
+            .and(parentId.eq(NODES.ID))
+            .and(condition)
+            .fetch().map(ParseTreeNodeMapper.INSTANCE);
     }
 
     @Nonnull
@@ -290,53 +323,6 @@ public class DbCsvTraceModel
             return new ParseInfo(time, treeDepth, nrMatchers, nrLines, nrChars,
                 nrCodePoints, nrInvocations);
         }
-    }
-
-    @Nonnull
-    private ParseTreeNode getParseTreeNodeFromId(final Integer id)
-        throws GrappaDebuggerException
-    {
-        final DSLContext dsl;
-        try {
-            dsl = future.get();
-        } catch (InterruptedException | CancellationException
-            | ExecutionException e) {
-            throw new GrappaDebuggerException(e);
-        }
-
-        final Record nodeRecord = dsl.select(NODES.fields())
-            .from(NODES)
-            .where(NODES.ID.equal(id))
-            .fetchOne();
-        final Integer matcherId = nodeRecord.getValue(NODES.MATCHER_ID);
-        final RuleInfo ruleInfo = getRuleInfoFromId(matcherId);
-        final int nrChildren = dsl.select(DSL.count())
-            .from(NODES)
-            .where(NODES.PARENT_ID.equal(id))
-            .fetchOne()
-            .value1();
-        return new ParseTreeNode(
-            nodeRecord.getValue(NODES.PARENT_ID),
-            nodeRecord.getValue(NODES.ID),
-            nodeRecord.getValue(NODES.LEVEL),
-            nodeRecord.getValue(NODES.SUCCESS) == 1,
-            ruleInfo,
-            nodeRecord.getValue(NODES.START_INDEX),
-            nodeRecord.getValue(NODES.END_INDEX),
-            nodeRecord.getValue(NODES.TIME),
-            nrChildren != 0
-        );
-    }
-
-    private RuleInfo getRuleInfoFromId(final Integer matcherId)
-    {
-        final Record matcherRecord = jooq.select(MATCHERS.fields())
-            .from(MATCHERS)
-            .where(MATCHERS.ID.equal(matcherId))
-            .fetchOne();
-        return new RuleInfo(matcherRecord.getValue(MATCHERS.CLASS_NAME),
-            MatcherType.valueOf(matcherRecord.getValue(MATCHERS.MATCHER_TYPE)),
-            matcherRecord.getValue(MATCHERS.NAME));
     }
 
     private synchronized void loadInputBuffer()
