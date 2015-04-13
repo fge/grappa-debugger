@@ -1,10 +1,10 @@
 package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -45,13 +45,13 @@ public class TreeTabPresenterTest
     @Test
     public void loadTest()
     {
-        doNothing().when(presenter).loadInputText();
+        doNothing().when(presenter).loadInputBuffer();
         doNothing().when(presenter).loadParseTree();
 
         presenter.load();
 
+        verify(presenter).loadInputBuffer();
         verify(presenter).loadParseTree();
-        verify(presenter).loadInputText();
     }
 
     @Test
@@ -84,34 +84,16 @@ public class TreeTabPresenterTest
     }
 
     @Test
-    public void loadInputTextSuccessTest()
-        throws GrappaDebuggerException
+    public void loadInputBufferTest()
     {
-        final InputText inputText = mock(InputText.class);
-        when(model.getInputText()).thenReturn(inputText);
+        final InputBuffer buffer = mock(InputBuffer.class);
+        when(model.getInputBuffer()).thenReturn(buffer);
 
-        presenter.loadInputText();
+        presenter.loadInputBuffer();
 
-        verify(model).getInputText();
-        verify(view).loadInputText(same(inputText));
+        verify(model).getInputBuffer();
+        verify(view).loadInputBuffer(same(buffer));
     }
-
-    @Test
-    public void loadInputTextErrorTest()
-        throws GrappaDebuggerException
-    {
-        final Exception cause = new Exception();
-        final GrappaDebuggerException exception
-            = new GrappaDebuggerException(cause);
-        when(model.getInputText()).thenThrow(exception);
-
-        presenter.loadInputText();
-
-        verify(model).getInputText();
-        verify(presenter).handleLoadInputTextError(same(exception));
-        verify(view, never()).loadInputText(any());
-    }
-
 
     @SuppressWarnings("AutoBoxing")
     @Test

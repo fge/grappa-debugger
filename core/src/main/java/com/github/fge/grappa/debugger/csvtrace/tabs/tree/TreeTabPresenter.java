@@ -25,8 +25,7 @@ public class TreeTabPresenter
     @Override
     public void load()
     {
-        view.displayInfo(info);
-        loadInputText();
+        loadInputBuffer();
         loadParseTree();
     }
 
@@ -37,17 +36,9 @@ public class TreeTabPresenter
     }
 
     @VisibleForTesting
-    void loadInputText()
+    void loadInputBuffer()
     {
-        taskRunner.computeOrFail(model::getInputText, view::loadInputText,
-            this::handleLoadInputTextError);
-    }
-
-    @VisibleForTesting
-    void handleLoadInputTextError(final Throwable throwable)
-    {
-        mainView.showError("Text loading error", "Unable to load input text",
-            throwable);
+        taskRunner.compute(model::getInputBuffer, view::loadInputBuffer);
     }
 
     @VisibleForTesting

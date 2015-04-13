@@ -12,7 +12,6 @@ import com.github.fge.grappa.debugger.model.tabs.matches.MatchStatisticsMapper;
 import com.github.fge.grappa.debugger.model.tabs.matches.MatchesData;
 import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
 import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatisticsMapper;
-import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNodeMapper;
@@ -94,7 +93,6 @@ public class DbCsvTraceModel
     private final Future<DSLContext> future;
 
     private final ParseInfo info;
-    private final String text;
     private final InputBuffer inputBuffer;
 
     public DbCsvTraceModel(final FileSystem zipfs, final DbLoader loader)
@@ -111,8 +109,7 @@ public class DbCsvTraceModel
         loader.createStatus(info);
         status = loader.getStatus();
 
-        text = loadText();
-        inputBuffer = new CharSequenceInputBuffer(text);
+        inputBuffer = new CharSequenceInputBuffer(loadText());
     }
 
     @Override
@@ -144,11 +141,9 @@ public class DbCsvTraceModel
 
     @Nonnull
     @Override
-    public InputText getInputText()
-        throws GrappaDebuggerException
+    public InputBuffer getInputBuffer()
     {
-        return new InputText(info.getNrLines(), info.getNrChars(),
-            info.getNrCodePoints(), inputBuffer);
+        return inputBuffer;
     }
 
     @Nonnull

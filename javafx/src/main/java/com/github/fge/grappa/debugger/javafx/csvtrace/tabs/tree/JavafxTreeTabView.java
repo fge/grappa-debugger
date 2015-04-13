@@ -10,7 +10,6 @@ import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
 import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.common.RuleInfo;
-import com.github.fge.grappa.debugger.model.tabs.tree.InputText;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
@@ -58,15 +57,14 @@ public class JavafxTreeTabView
         display.treeInfo.setText(String.format("Tree: %d nodes; depth %d",
             info.getNrInvocations(), info.getTreeDepth()));
         display.textInfo.setText(String.format("Input text: %d lines, %d "
-                + "characters, %d code points", info.getNrLines(),
+            + "characters, %d code points", info.getNrLines(),
             info.getNrChars(), info.getNrCodePoints()));
     }
 
-    @SuppressWarnings("AutoBoxing")
     @Override
-    public void loadInputText(final InputText inputText)
+    public void loadInputBuffer(final InputBuffer buffer)
     {
-        buffer = inputText.getInputBuffer();
+        this.buffer = buffer;
 
         taskRunner.compute(() -> buffer.extract(0, buffer.length()), text -> {
             display.inputText.appendText(text);
