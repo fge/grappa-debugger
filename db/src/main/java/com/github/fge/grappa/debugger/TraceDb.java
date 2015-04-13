@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger;
 
-import com.github.fge.grappa.debugger.model.tree.InputText;
+import com.github.fge.grappa.buffers.InputBuffer;
 import org.jooq.DSLContext;
 
 public interface TraceDb
@@ -10,7 +10,7 @@ public interface TraceDb
 
     ParseInfo getParseInfo();
 
-    InputText getInputText();
+    InputBuffer getInputBuffer();
 
     DSLContext getJooq();
 }

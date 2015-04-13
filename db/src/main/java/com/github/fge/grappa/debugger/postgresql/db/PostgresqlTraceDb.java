@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.postgresql.jooq.tables.records.ParseInfoRecord;
-import com.github.fge.grappa.debugger.model.tree.InputText;
 import org.jooq.DSLContext;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ public final class PostgresqlTraceDb
     private final DSLContext jooq;
     private final UUID uuid;
     private final ParseInfo parseInfo;
-    private final InputText inputText;
+    private final InputBuffer inputBuffer;
 
     @SuppressWarnings("AutoUnboxing")
     public PostgresqlTraceDb(final DSLContext jooq, final UUID uuid)
@@ -46,13 +45,12 @@ public final class PostgresqlTraceDb
 
         final LocalDateTime time = record.getDate().toLocalDateTime();
         final String content = record.getContent();
-        final InputBuffer buffer = new CharSequenceInputBuffer(content);
+        inputBuffer = new CharSequenceInputBuffer(content);
 
-        final int length = buffer.length();
-        final int nrLines = buffer.getLineCount();
+        final int length = content.length();
+        final int nrLines = inputBuffer.getLineCount();
         final int nrCodePoints = content.codePointCount(0, length);
 
-        inputText = new InputText(nrLines, length, nrCodePoints, buffer);
         parseInfo = new ParseInfo(time, treeDepth, nrMatchers, nrLines, length,
             nrCodePoints, nrNodes);
     }
@@ -70,9 +68,9 @@ public final class PostgresqlTraceDb
     }
 
     @Override
-    public InputText getInputText()
+    public InputBuffer getInputBuffer()
     {
-        return inputText;
+        return inputBuffer;
     }
 
     @Override

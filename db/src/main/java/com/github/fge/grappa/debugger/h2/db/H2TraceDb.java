@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.h2.db.load.H2TraceDbLoader;
-import com.github.fge.grappa.debugger.model.tree.InputText;
 import com.github.fge.lambdas.Throwing;
 import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -56,7 +55,7 @@ public final class H2TraceDb
         = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
     private final ParseInfo info;
-    private final InputText inputText;
+    private final InputBuffer inputBuffer;
 
     public H2TraceDb(final Path zipfile, final DSLContext jooq)
         throws IOException
@@ -70,7 +69,7 @@ public final class H2TraceDb
         executor.submit(Throwing.runnable(loader::loadAll));
 
         info = loadParseInfo();
-        inputText = loadInputText();
+        inputBuffer = loadInputBuffer();
     }
 
     @Override
@@ -86,9 +85,9 @@ public final class H2TraceDb
     }
 
     @Override
-    public InputText getInputText()
+    public InputBuffer getInputBuffer()
     {
-        return inputText;
+        return inputBuffer;
     }
 
     @Override
@@ -124,7 +123,7 @@ public final class H2TraceDb
         }
     }
 
-    private InputText loadInputText()
+    private InputBuffer loadInputBuffer()
         throws IOException
     {
         final Path path = fs.getPath(INPUT_TEXT_PATH);
@@ -134,11 +133,10 @@ public final class H2TraceDb
         ) {
             final StringBuilder sb = new StringBuilder();
             CharStreams.copy(reader, sb);
-            final InputBuffer buffer = new CharSequenceInputBuffer(sb);
 
-            return new InputText(info.getNrLines(), info.getNrChars(),
-                info.getNrCodePoints(), buffer);
+            return new CharSequenceInputBuffer(sb);
         }
+
     }
 
     @Override
