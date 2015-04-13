@@ -18,7 +18,9 @@ import java.util.concurrent.CountDownLatch;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -27,7 +29,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class RulesTabPresenterTest
@@ -111,7 +112,7 @@ public class RulesTabPresenterTest
         presenter.refreshMatchersByType(latch);
 
         verify(presenter).doGetMatchersByType(same(latch));
-        verifyZeroInteractions(view);
+        verify(view, never()).displayMatchersByType(anyMap());
         verify(presenter).handleLoadMatchersByTypeError(same(exception));
     }
 
@@ -188,7 +189,7 @@ public class RulesTabPresenterTest
         presenter.refreshRulesByClass(latch);
 
         verify(presenter).doGetRulesByClass(same(latch));
-        verifyZeroInteractions(view);
+        verify(view, never()).displayRules(anyList());
         verify(presenter).handleRefreshRulesByClassError(same(exception));
     }
 
