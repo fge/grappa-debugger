@@ -1,7 +1,9 @@
 package com.github.fge.grappa.debugger.javafx;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
+import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.h2.db.H2TraceDbFactory;
 import com.github.fge.grappa.debugger.javafx.common.AlertFactory;
 import com.github.fge.grappa.debugger.javafx.mainwindow.JavafxMainWindowView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
@@ -46,12 +48,14 @@ public final class GrappaDebugger
     private final GuiTaskRunner taskRunner
         = new GuiTaskRunner("grappa-debugger-%d", Platform::runLater);
 
+    private final ZipTraceDbFactory h2Factory = new H2TraceDbFactory();
+
     private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 
     @Override
     public void start(final Stage primaryStage)
     {
-        createWindow(primaryStage);
+        createWindow(primaryStage, h2Factory);
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             if (Platform.isFxApplicationThread())
                 alertFactory.unhandledError(e);
@@ -67,13 +71,14 @@ public final class GrappaDebugger
 
     @Override
     @Nullable
-    public MainWindowPresenter createWindow()
+    public MainWindowPresenter createWindow(final ZipTraceDbFactory factory)
     {
-        return createWindow(new Stage());
+        return createWindow(new Stage(), factory);
     }
 
     @Nullable
-    private MainWindowPresenter createWindow(final Stage stage)
+    private MainWindowPresenter createWindow(final Stage stage,
+        final ZipTraceDbFactory factory)
     {
         final MainWindowPresenter presenter;
 
@@ -94,7 +99,7 @@ public final class GrappaDebugger
         stage.setScene(scene);
         stage.setTitle("Grappa debugger");
 
-        presenter = new MainWindowPresenter(this, taskRunner);
+        presenter = new MainWindowPresenter(this, taskRunner, factory);
         presenter.setView(view);
         view.getDisplay().setPresenter(presenter);
 

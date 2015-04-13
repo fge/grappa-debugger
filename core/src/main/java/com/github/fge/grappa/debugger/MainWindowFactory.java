@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public interface MainWindowFactory
 {
     @Nullable
-    MainWindowPresenter createWindow();
+    MainWindowPresenter createWindow(ZipTraceDbFactory factory);
 
     void close(@Nonnull MainWindowPresenter presenter);
 }
