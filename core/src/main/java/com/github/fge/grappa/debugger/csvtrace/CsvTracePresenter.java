@@ -9,9 +9,9 @@ import com.github.fge.grappa.debugger.common.TabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.csvtrace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth
-    .TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.csvtrace.tabs.treedepth.TreeDepthTabPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
+import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.lambdas.Throwing;
 import com.github.fge.lambdas.consumers.ThrowingConsumer;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @NonFinalForTesting
 @ParametersAreNonnullByDefault
@@ -47,10 +48,29 @@ public class CsvTracePresenter
     @Override
     public void load()
     {
+        taskRunner.executeBackground(this::showLoadStatus);
         loadTreeTab();
         loadRulesTab();
         loadMatchesTab();
         loadTreeDepthTab();
+    }
+
+    @OnBackgroundThread
+    @VisibleForTesting
+    void showLoadStatus()
+    {
+        if (model.isLoadComplete())
+            return;
+        final DbLoadStatus status = model.getLoadStatus();
+
+        try {
+            while (!status.waitReady(1L, TimeUnit.SECONDS))
+                taskRunner.executeFront(
+                    () -> view.reportProgress(status)
+                );
+            taskRunner.executeFront(view::loadComplete);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     @OnUiThread

@@ -6,8 +6,6 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
 import com.github.fge.grappa.debugger.model.DbCsvTraceModel;
-import com.github.fge.grappa.debugger.model.common.ParseInfo;
-import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.model.db.DbLoader;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -21,7 +19,6 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @ParametersAreNonnullByDefault
 public class MainWindowPresenter
@@ -112,15 +109,7 @@ public class MainWindowPresenter
 
         final DbLoader loader = new DbLoader(zipfs);
 
-        final CsvTraceModel model = new DbCsvTraceModel(zipfs, loader);
-
-        final ParseInfo info = model.getParseInfo();
-
-        final DbLoadStatus status = loader.getStatus();
-
-        taskRunner.executeBackground(() -> checkLoadStatus(status, info));
-
-        return model;
+        return new DbCsvTraceModel(zipfs, loader);
     }
 
     @VisibleForTesting
@@ -129,20 +118,5 @@ public class MainWindowPresenter
         view.showError("Trace file error", "Unable to load trace file",
             throwable);
         view.setLabelText("Please load a trace file (File -> Load file)");
-    }
-
-    private void checkLoadStatus(final DbLoadStatus status,
-        final ParseInfo info)
-    {
-        taskRunner.executeFront(view::initLoad);
-        try {
-            while (!status.waitReady(1L, TimeUnit.SECONDS))
-                taskRunner.executeFront(
-                    () -> view.reportProgress(status, info)
-                );
-            taskRunner.executeFront(view::loadComplete);
-        } catch (InterruptedException ignored) {
-            taskRunner.executeFront(view::loadAborted);
-        }
     }
 }

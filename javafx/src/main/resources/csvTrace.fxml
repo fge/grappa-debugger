@@ -14,10 +14,10 @@
     <top>
         <ToolBar fx:id="toolbar">
             <HBox spacing="5.0" alignment="CENTER_LEFT">
-                <Label text="Click to refresh:"/>
                 <Button fx:id="refresh" text="Refresh"
                     onMouseClicked="#tabsRefreshEvent"/>
-                <ProgressBar fx:id="progressBar" visible="false"/>
+                <ProgressBar fx:id="progressBar"/>
+                <Label fx:id="progressMessage"/>
             </HBox>
         </ToolBar>
     </top>

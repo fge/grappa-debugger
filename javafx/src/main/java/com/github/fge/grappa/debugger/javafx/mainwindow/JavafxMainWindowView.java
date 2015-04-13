@@ -7,8 +7,6 @@ import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.csvtrace.JavafxCsvTraceView;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.common.ParseInfo;
-import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 import javafx.stage.FileChooser;
@@ -18,7 +16,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Objects;
 
 @NonFinalForTesting
 public class JavafxMainWindowView
@@ -90,54 +87,5 @@ public class JavafxMainWindowView
         throws IOException
     {
         return new JavafxCsvTraceView(taskRunner, this);
-    }
-
-    @Override
-    public void reportProgress(final DbLoadStatus status,
-        final ParseInfo info)
-    {
-        Objects.requireNonNull(status);
-        Objects.requireNonNull(info);
-
-        final int processedMatchers = status.getProcessedMatchers();
-        final int processedNodes = status.getProcessedNodes();
-
-        final int current = status.getCurrent();
-        final int total = status.getTotal();
-
-        final double pct = (double) current / total;
-
-        @SuppressWarnings("AutoBoxing")
-        final String msg = String.format("%d/%d matchers, %d/%d nodes",
-            processedMatchers, info.getNrMatchers(),
-            processedNodes, info.getNrInvocations()
-        );
-
-        display.dbLoadProgress.setProgress(pct);
-        display.dbLoadProgressMessage.setText(msg);
-    }
-
-    @Override
-    public void initLoad()
-    {
-        display.dbLoadStatus.setText("loading:");
-        display.dbLoadProgress.setVisible(true);
-        display.dbLoadProgressMessage.setVisible(true);
-    }
-
-    @Override
-    public void loadComplete()
-    {
-        display.dbLoadStatus.setText("loading complete");
-        display.dbLoadProgress.setVisible(false);
-        display.dbLoadProgressMessage.setVisible(false);
-    }
-
-    @Override
-    public void loadAborted()
-    {
-        display.dbLoadStatus.setText("loading aborted");
-        display.dbLoadProgress.setVisible(false);
-        display.dbLoadProgressMessage.setVisible(false);
     }
 }

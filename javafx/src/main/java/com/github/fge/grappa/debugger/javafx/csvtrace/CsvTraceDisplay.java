@@ -6,6 +6,7 @@ import com.github.fge.grappa.internal.NonFinalForTesting;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
@@ -29,6 +30,9 @@ public class CsvTraceDisplay
 
     @FXML
     protected ProgressBar progressBar;
+
+    @FXML
+    protected Label progressMessage;
 
     @FXML
     protected Tab treeTab;
