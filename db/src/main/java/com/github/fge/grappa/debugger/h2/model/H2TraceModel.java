@@ -6,7 +6,6 @@ import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.github.fge.grappa.debugger.model.matches.MatchesData;
 import com.github.fge.grappa.debugger.model.rules.PerClassStatistics;
 import com.github.fge.grappa.debugger.model.tree.ParseTreeNode;
-import com.github.fge.grappa.debugger.model.tree.ParseTreeNodeMapper;
 import com.github.fge.grappa.matchers.MatcherType;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -14,6 +13,7 @@ import org.jooq.Field;
 import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,16 +74,27 @@ public final class H2TraceModel
     @Override
     public Map<MatcherType, Integer> getMatchersByType()
     {
-        // TODO
-        return null;
+        final Map<MatcherType, Integer> ret = new EnumMap<>(MatcherType.class);
+
+        jooq.select(MATCHERS.MATCHER_TYPE, DSL.count())
+            .from(MATCHERS)
+            .groupBy(MATCHERS.MATCHER_TYPE)
+            .forEach(r -> ret.put(MatcherType.valueOf(r.value1()), r.value2()));
+
+        return ret;
     }
 
     @Nonnull
     @Override
     public List<PerClassStatistics> getRulesByClass()
     {
-        // TODO
-        return null;
+        return jooq.select(MATCHERS.CLASS_NAME, DSL.count().as("nrCalls"),
+            DSL.countDistinct(NODES.MATCHER_ID).as("nrRules"))
+            .from(MATCHERS, NODES)
+            .where(NODES.MATCHER_ID.eq(MATCHERS.ID))
+            .groupBy(MATCHERS.CLASS_NAME)
+            .fetch()
+            .map(PerClassStatisticsMapper.INSTANCE);
     }
 
     @Nonnull

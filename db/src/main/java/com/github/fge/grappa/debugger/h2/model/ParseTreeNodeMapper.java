@@ -1,5 +1,7 @@
-package com.github.fge.grappa.debugger.model.tree;
+package com.github.fge.grappa.debugger.h2.model;
 
+import com.github.fge.grappa.debugger.model.tree.ParseTreeNode;
+import com.github.fge.grappa.debugger.model.tree.RuleInfo;
 import com.github.fge.grappa.matchers.MatcherType;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
