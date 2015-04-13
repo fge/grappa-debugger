@@ -4,8 +4,8 @@ import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
+import com.github.fge.grappa.debugger.jooq.tables.Nodes;
 import com.github.fge.grappa.debugger.model.common.ParseInfo;
-import com.github.fge.grappa.debugger.model.common.RuleInfo;
 import com.github.fge.grappa.debugger.model.db.DbLoadStatus;
 import com.github.fge.grappa.debugger.model.db.DbLoader;
 import com.github.fge.grappa.debugger.model.tabs.matches.MatchStatisticsMapper;
@@ -19,23 +19,21 @@ import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNodeMapper;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.support.IndexRange;
-import com.github.fge.lambdas.functions.ThrowingFunction;
+import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jooq.CaseConditionStep;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
-import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record2;
-import org.jooq.Result;
+import org.jooq.SelectConditionStep;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -92,25 +90,33 @@ public class DbCsvTraceModel
         = Executors.newSingleThreadExecutor(THREAD_FACTORY);
 
     private final FileSystem zipfs;
+
     private final DbLoader loader;
-    private final DSLContext jooq;
-    private final ParseInfo info;
     private final DbLoadStatus status;
+
+    private final DSLContext jooq;
     private final Future<DSLContext> future;
 
-    private InputBuffer inputBuffer = null;
+    private final ParseInfo info;
+    private final String text;
+    private final InputBuffer inputBuffer;
 
     public DbCsvTraceModel(final FileSystem zipfs, final DbLoader loader)
         throws IOException
     {
         this.zipfs = Objects.requireNonNull(zipfs);
+
         this.loader = Objects.requireNonNull(loader);
 
-        info = readInfo();
         jooq = loader.getJooq();
         future = executor.submit(loader::loadAll);
+
+        info = readInfo();
         loader.createStatus(info);
         status = loader.getStatus();
+
+        text = loadText();
+        inputBuffer = new CharSequenceInputBuffer(text);
     }
 
     @Override
@@ -145,7 +151,6 @@ public class DbCsvTraceModel
     public InputText getInputText()
         throws GrappaDebuggerException
     {
-        loadInputBuffer();
         return new InputText(info.getNrLines(), info.getNrChars(),
             info.getNrCodePoints(), inputBuffer);
     }
@@ -192,24 +197,18 @@ public class DbCsvTraceModel
             throw new GrappaException(e);
         }
 
-        final Field<Integer> children = DSL.count().as("nrChildren");
+        final Nodes nodes2 = NODES.as("nodes2");
 
-        final Table<Record2<Integer, Integer>> subnodes
-            = jooq.select(NODES.PARENT_ID, children)
-            .from(NODES)
-            .groupBy(NODES.PARENT_ID)
-            .asTable();
-
-        final Field<Integer> parentId = subnodes.field(NODES.PARENT_ID);
-        final Field<Integer> nrChildren = subnodes.field(children);
+        final Field<Integer> nrChildren = jooq.selectCount().from(nodes2)
+            .where(nodes2.PARENT_ID.eq(NODES.ID))
+            .asField("nrChildren");
 
         return jooq.select(NODES.PARENT_ID, NODES.ID, NODES.LEVEL,
             NODES.SUCCESS, MATCHERS.CLASS_NAME, MATCHERS.MATCHER_TYPE,
             MATCHERS.NAME, NODES.START_INDEX, NODES.END_INDEX, NODES.TIME,
             nrChildren)
-            .from(NODES, MATCHERS, subnodes)
+            .from(NODES, MATCHERS)
             .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
-            .and(parentId.eq(NODES.ID))
             .and(condition)
             .fetch().map(ParseTreeNodeMapper.INSTANCE);
     }
@@ -324,24 +323,20 @@ public class DbCsvTraceModel
         }
     }
 
-    private synchronized void loadInputBuffer()
-        throws GrappaDebuggerException
+    // Call AFTER info has been set up
+    private String loadText()
+        throws IOException
     {
-        if (inputBuffer != null)
-            return;
-
         final Path path = zipfs.getPath(INPUT_TEXT_PATH);
 
+        final StringBuilder sb = new StringBuilder(info.getNrChars());
         try (
             final BufferedReader reader = Files.newBufferedReader(path, UTF8);
         ) {
-            final CharBuffer buf = CharBuffer.allocate(info.getNrChars());
-            reader.read(buf);
-            buf.flip();
-            inputBuffer = new CharSequenceInputBuffer(buf);
-        } catch (IOException e) {
-            throw new GrappaDebuggerException(e);
+            CharStreams.copy(reader, sb);
         }
+
+        return sb.toString();
     }
 
     @Nonnull
@@ -350,8 +345,6 @@ public class DbCsvTraceModel
         final int wantedLines)
         throws GrappaDebuggerException
     {
-        loadInputBuffer();
-
         final List<IndexRange> ranges
             = IntStream.range(startLine, startLine + wantedLines)
             .mapToObj(inputBuffer::getLineRange)

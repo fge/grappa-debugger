@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.h2.model;
 
+import com.github.fge.grappa.debugger.h2.jooq.tables.Nodes;
 import com.github.fge.grappa.debugger.model.TraceModel;
 import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.github.fge.grappa.debugger.model.matches.MatchesData;
@@ -10,9 +11,6 @@ import com.github.fge.grappa.matchers.MatcherType;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
-import org.jooq.Record2;
-import org.jooq.Table;
-import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -54,24 +52,18 @@ public final class H2TraceModel
 
     private List<ParseTreeNode> getNodes(final Condition condition)
     {
-        final Field<Integer> children = DSL.count().as("nrChildren");
+        final Nodes nodes2 = NODES.as("nodes2");
 
-        final Table<Record2<Integer, Integer>> subnodes
-            = jooq.select(NODES.PARENT_ID, children)
-            .from(NODES)
-            .groupBy(NODES.PARENT_ID)
-            .asTable();
-
-        final Field<Integer> parentId = subnodes.field(NODES.PARENT_ID);
-        final Field<Integer> nrChildren = subnodes.field(children);
+        final Field<Integer> nrChildren = jooq.selectCount().from(nodes2)
+            .where(nodes2.PARENT_ID.eq(NODES.ID))
+            .asField("nrChildren");
 
         return jooq.select(NODES.PARENT_ID, NODES.ID, NODES.LEVEL,
             NODES.SUCCESS, MATCHERS.CLASS_NAME, MATCHERS.MATCHER_TYPE,
             MATCHERS.NAME, NODES.START_INDEX, NODES.END_INDEX, NODES.TIME,
             nrChildren)
-            .from(NODES, MATCHERS, subnodes)
+            .from(NODES, MATCHERS)
             .where(MATCHERS.ID.eq(NODES.MATCHER_ID))
-            .and(parentId.eq(NODES.ID))
             .and(condition)
             .fetch().map(ParseTreeNodeMapper.INSTANCE);
     }
