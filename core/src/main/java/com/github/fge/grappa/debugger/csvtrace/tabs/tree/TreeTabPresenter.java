@@ -10,7 +10,6 @@ import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 @ParametersAreNonnullByDefault

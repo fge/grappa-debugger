@@ -179,16 +179,6 @@ public class JavafxTreeTabView
         );
     }
 
-    private void setScroll(final int index)
-    {
-        final Position position = buffer.getPosition(index);
-        double line = position.getLine();
-        final double nrLines = buffer.getLineCount();
-        if (line != nrLines)
-            line--;
-        //display.inputTextScroll.setVvalue(line / nrLines);
-    }
-
     private void appendSuccessfulMatchFragments(final MatchFragments fragments)
     {
         highlightMatch(fragments, JavafxUtils.STYLE_MATCHSUCCESS);
