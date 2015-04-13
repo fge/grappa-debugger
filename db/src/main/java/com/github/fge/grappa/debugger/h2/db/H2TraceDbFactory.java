@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.h2.db;
 
+import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.jooq.Configuration;
 import org.jooq.ConnectionProvider;
@@ -8,11 +9,14 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@ParametersAreNonnullByDefault
 public final class H2TraceDbFactory
+    implements ZipTraceDbFactory
 {
     private static final String H2_USERNAME = "sa";
     private static final String H2_PASSWORD = "";
@@ -20,7 +24,8 @@ public final class H2TraceDbFactory
     private static final String H2_JDBC_URL_FORMAT
         = "jdbc:h2:%s;LOG=0;LOCK_MODE=0;UNDO_LOG=0;CACHE_SIZE=131072";
 
-    public H2TraceDb create(final Path zipfile)
+    @Override
+    public H2TraceDb create(final Path arg)
         throws IOException
     {
         final Path dbpath
@@ -39,6 +44,6 @@ public final class H2TraceDbFactory
 
         final DSLContext jooq = DSL.using(cfg);
 
-        return new H2TraceDb(zipfile, jooq);
+        return new H2TraceDb(arg, jooq);
     }
 }

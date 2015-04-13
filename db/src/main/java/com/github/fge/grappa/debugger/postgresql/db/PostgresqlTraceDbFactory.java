@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.postgresql.db;
 
+import com.github.fge.grappa.debugger.RdbmsTraceDbFactory;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -10,6 +11,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +24,9 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public final class PostgresqlTraceDbFactory
+    implements RdbmsTraceDbFactory
 {
     private static final String POSTGRESQL_JDBC_URL_FORMAT
         = "jdbc:postgresql://%s:%s/%s";
@@ -38,9 +42,10 @@ public final class PostgresqlTraceDbFactory
         return new Builder().build();
     }
 
-    public TraceDb create(final UUID uuid)
+    @Override
+    public TraceDb create(final UUID arg)
     {
-        return new PostgresqlTraceDb(jooq, uuid);
+        return new PostgresqlTraceDb(jooq, arg);
     }
 
     private PostgresqlTraceDbFactory(final Builder builder)
