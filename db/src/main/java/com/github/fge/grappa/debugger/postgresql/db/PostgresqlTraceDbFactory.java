@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.postgresql.db;
 
+import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.jooq.Configuration;
@@ -19,6 +20,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.UUID;
 
 public final class PostgresqlTraceDbFactory
 {
@@ -34,6 +36,11 @@ public final class PostgresqlTraceDbFactory
     public static PostgresqlTraceDbFactory defaultFactory()
     {
         return new Builder().build();
+    }
+
+    public TraceDb create(final UUID uuid)
+    {
+        return new PostgresqlTraceDb(jooq, uuid);
     }
 
     private PostgresqlTraceDbFactory(final Builder builder)
