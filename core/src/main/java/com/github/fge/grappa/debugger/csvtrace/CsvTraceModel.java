@@ -17,9 +17,6 @@ public interface CsvTraceModel
 {
     boolean isLoadComplete();
 
-    void waitForMatchers()
-        throws GrappaDebuggerException;
-
     @Nonnull
     ParseInfo getParseInfo();
 

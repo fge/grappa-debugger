@@ -123,8 +123,7 @@ public class DbCsvTraceModel
         }
     }
 
-    @Override
-    public void waitForMatchers()
+    private void waitForMatchers()
         throws GrappaDebuggerException
     {
         try {
