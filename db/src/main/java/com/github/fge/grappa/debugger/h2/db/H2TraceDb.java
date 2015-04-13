@@ -6,6 +6,8 @@ import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.h2.db.load.H2TraceDbLoader;
+import com.github.fge.grappa.debugger.h2.model.H2TraceModel;
+import com.github.fge.grappa.debugger.model.TraceModel;
 import com.github.fge.lambdas.Throwing;
 import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -91,9 +93,9 @@ public final class H2TraceDb
     }
 
     @Override
-    public DSLContext getJooq()
+    public TraceModel getModel()
     {
-        return jooq;
+        return new H2TraceModel(jooq, inputBuffer);
     }
 
     private ParseInfo loadParseInfo()

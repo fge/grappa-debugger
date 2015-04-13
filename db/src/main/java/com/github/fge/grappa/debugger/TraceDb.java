@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger;
 
 import com.github.fge.grappa.buffers.InputBuffer;
-import org.jooq.DSLContext;
+import com.github.fge.grappa.debugger.model.TraceModel;
 
 public interface TraceDb
     extends AutoCloseable
@@ -12,5 +12,5 @@ public interface TraceDb
 
     InputBuffer getInputBuffer();
 
-    DSLContext getJooq();
+    TraceModel getModel();
 }

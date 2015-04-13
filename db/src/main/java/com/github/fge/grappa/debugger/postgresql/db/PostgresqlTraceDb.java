@@ -5,7 +5,10 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
+import com.github.fge.grappa.debugger.model.TraceModel;
 import com.github.fge.grappa.debugger.postgresql.jooq.tables.records.ParseInfoRecord;
+
+import com.github.fge.grappa.debugger.postgresql.model.PostgresqlTraceModel;
 import org.jooq.DSLContext;
 
 import java.time.LocalDateTime;
@@ -74,9 +77,9 @@ public final class PostgresqlTraceDb
     }
 
     @Override
-    public DSLContext getJooq()
+    public TraceModel getModel()
     {
-        return jooq;
+        return new PostgresqlTraceModel(uuid, jooq, inputBuffer);
     }
 
     @Override
