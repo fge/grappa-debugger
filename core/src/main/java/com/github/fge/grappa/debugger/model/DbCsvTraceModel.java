@@ -25,10 +25,6 @@ import org.jooq.CaseConditionStep;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
-import org.jooq.Record1;
-import org.jooq.Record2;
-import org.jooq.SelectConditionStep;
-import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
@@ -199,7 +195,8 @@ public class DbCsvTraceModel
 
         final Nodes nodes2 = NODES.as("nodes2");
 
-        final Field<Integer> nrChildren = jooq.selectCount().from(nodes2)
+        final Field<Integer> nrChildren = jooq.select(DSL.count(nodes2.ID))
+            .from(nodes2)
             .where(nodes2.PARENT_ID.eq(NODES.ID))
             .asField("nrChildren");
 

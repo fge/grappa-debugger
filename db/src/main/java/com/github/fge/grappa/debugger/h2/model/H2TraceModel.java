@@ -11,6 +11,7 @@ import com.github.fge.grappa.matchers.MatcherType;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import org.jooq.impl.DSL;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -54,7 +55,8 @@ public final class H2TraceModel
     {
         final Nodes nodes2 = NODES.as("nodes2");
 
-        final Field<Integer> nrChildren = jooq.selectCount().from(nodes2)
+        final Field<Integer> nrChildren = jooq.select(DSL.count(nodes2.ID))
+            .from(nodes2)
             .where(nodes2.PARENT_ID.eq(NODES.ID))
             .asField("nrChildren");
 
