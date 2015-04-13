@@ -5,7 +5,6 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.tabs.matches.MatchesData;
 import com.github.fge.grappa.debugger.model.tabs.rules.PerClassStatistics;
-import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.matchers.MatcherType;
 
@@ -24,7 +23,7 @@ public interface CsvTraceModel
     InputBuffer getInputBuffer();
 
     @Nonnull
-    ParseTree getParseTree()
+    ParseTreeNode getRootNode()
         throws GrappaDebuggerException;
 
     @Nonnull

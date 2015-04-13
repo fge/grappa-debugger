@@ -148,13 +148,10 @@ public class DbCsvTraceModel
 
     @Nonnull
     @Override
-    public ParseTree getParseTree()
+    public ParseTreeNode getRootNode()
         throws GrappaDebuggerException
     {
-        final ParseTreeNode node = getNodeById(0);
-
-        return new ParseTree(node, info.getNrInvocations(),
-            info.getTreeDepth());
+        return getNodeById(0);
     }
 
     @Nonnull

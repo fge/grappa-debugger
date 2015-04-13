@@ -5,7 +5,6 @@ import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.mainwindow.MainWindowView;
-import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.testng.annotations.BeforeMethod;
@@ -46,40 +45,39 @@ public class TreeTabPresenterTest
     public void loadTest()
     {
         doNothing().when(presenter).loadInputBuffer();
-        doNothing().when(presenter).loadParseTree();
+        doNothing().when(presenter).loadRootNode();
 
         presenter.load();
 
         verify(presenter).loadInputBuffer();
-        verify(presenter).loadParseTree();
+        verify(presenter).loadRootNode();
     }
 
     @Test
-    public void loadParseTreeSuccessTest()
+    public void loadRootNodeSuccessTest()
         throws GrappaDebuggerException
     {
-        final ParseTree parseTree = mock(ParseTree.class);
-        when(model.getParseTree()).thenReturn(parseTree);
+        final ParseTreeNode rootNode = mock(ParseTreeNode.class);
+        when(model.getRootNode()).thenReturn(rootNode);
 
-        presenter.loadParseTree();
+        presenter.loadRootNode();
 
-        verify(model).getParseTree();
-        verify(view).loadParseTree(same(parseTree));
+        verify(model).getRootNode();
+        verify(view).loadRootNode(same(rootNode));
     }
 
     @Test
-    public void loadParseTreeErrorTest()
+    public void loadRootNodeFailureTest()
         throws GrappaDebuggerException
     {
-        final Exception cause = new Exception();
         final GrappaDebuggerException exception
-            = new GrappaDebuggerException(cause);
-        when(model.getParseTree()).thenThrow(exception);
+            = new GrappaDebuggerException(new Exception());
+        when(model.getRootNode()).thenThrow(exception);
 
-        presenter.loadParseTree();
+        presenter.loadRootNode();
 
-        verify(model).getParseTree();
-        verify(view, never()).loadParseTree(any());
+        verify(model).getRootNode();
+        verify(view, never()).loadRootNode(any(ParseTreeNode.class));
         verify(presenter).handleLoadParseTreeError(same(exception));
     }
 

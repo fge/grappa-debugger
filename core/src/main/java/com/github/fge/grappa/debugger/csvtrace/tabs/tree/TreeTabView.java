@@ -2,10 +2,8 @@ package com.github.fge.grappa.debugger.csvtrace.tabs.tree;
 
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.csvtrace.tabs.TabView;
-import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public interface TreeTabView
 
     void highlightFailure(int end);
 
-    void loadParseTree(@Nullable ParseTree parseTree);
+    void loadRootNode(ParseTreeNode rootNode);
 
     void showParseTreeNode(ParseTreeNode node);
 

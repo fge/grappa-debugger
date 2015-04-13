@@ -26,7 +26,7 @@ public class TreeTabPresenter
     public void load()
     {
         loadInputBuffer();
-        loadParseTree();
+        loadRootNode();
     }
 
     @Override
@@ -42,9 +42,9 @@ public class TreeTabPresenter
     }
 
     @VisibleForTesting
-    void loadParseTree()
+    void loadRootNode()
     {
-        taskRunner.computeOrFail(model::getParseTree, view::loadParseTree,
+        taskRunner.computeOrFail(model::getRootNode, view::loadRootNode,
             this::handleLoadParseTreeError);
     }
 

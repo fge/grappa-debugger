@@ -10,7 +10,6 @@ import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.custom.ParseTreeItem;
 import com.github.fge.grappa.debugger.model.common.ParseInfo;
 import com.github.fge.grappa.debugger.model.common.RuleInfo;
-import com.github.fge.grappa.debugger.model.tabs.tree.ParseTree;
 import com.github.fge.grappa.debugger.model.tabs.tree.ParseTreeNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.support.Position;
@@ -18,7 +17,6 @@ import com.google.common.escape.CharEscaper;
 import javafx.scene.paint.Color;
 import org.fxmisc.richtext.CodeArea;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import java.io.IOException;
@@ -95,14 +93,9 @@ public class JavafxTreeTabView
             this::appendFailedMatchFragments);
     }
 
-    @SuppressWarnings("AutoBoxing")
     @Override
-    public void loadParseTree(@Nullable final ParseTree parseTree)
+    public void loadRootNode(final ParseTreeNode rootNode)
     {
-        if (parseTree == null)
-            return;
-
-        final ParseTreeNode rootNode = parseTree.getRootNode();
         display.parseTree.setRoot(new ParseTreeItem(display, rootNode));
     }
 
