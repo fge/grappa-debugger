@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
@@ -31,17 +30,14 @@ public class MainWindowPresenter
     private final GuiTaskRunner taskRunner;
     private final MainWindowFactory windowFactory;
 
-    private final ZipTraceDbFactory dbFactory;
-
     @VisibleForTesting
     CsvTracePresenter tracePresenter;
 
     public MainWindowPresenter(final MainWindowFactory windowFactory,
-        final GuiTaskRunner taskRunner, final ZipTraceDbFactory dbFactory)
+        final GuiTaskRunner taskRunner)
     {
         this.windowFactory = Objects.requireNonNull(windowFactory);
         this.taskRunner = Objects.requireNonNull(taskRunner);
-        this.dbFactory = dbFactory;
     }
 
     @Override
@@ -58,7 +54,7 @@ public class MainWindowPresenter
 
     public void handleNewWindow()
     {
-        windowFactory.createWindow(dbFactory);
+        windowFactory.createWindow();
     }
 
     public void handleLoadFile()
@@ -71,7 +67,7 @@ public class MainWindowPresenter
         MainWindowPresenter window = this;
 
         if (tracePresenter != null) {
-            window = windowFactory.createWindow(dbFactory);
+            window = windowFactory.createWindow();
             if (window == null)
                 return;
         }

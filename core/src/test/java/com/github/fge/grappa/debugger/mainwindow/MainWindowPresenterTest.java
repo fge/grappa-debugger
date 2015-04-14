@@ -1,7 +1,6 @@
 package com.github.fge.grappa.debugger.mainwindow;
 
 import com.github.fge.grappa.debugger.MainWindowFactory;
-import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.csvtrace.CsvTraceModel;
 import com.github.fge.grappa.debugger.csvtrace.CsvTracePresenter;
@@ -35,17 +34,13 @@ public class MainWindowPresenterTest
     private MainWindowFactory factory;
     private MainWindowView view;
     private MainWindowPresenter presenter;
-    private ZipTraceDbFactory dbFactory;
 
     @BeforeMethod
     public void init()
     {
         factory = mock(MainWindowFactory.class);
         view = mock(MainWindowView.class);
-        dbFactory = mock(ZipTraceDbFactory.class);
-
-        presenter = spy(new MainWindowPresenter(factory, taskRunner,
-            dbFactory));
+        presenter = spy(new MainWindowPresenter(factory, taskRunner));
         presenter.setView(view);
     }
 
@@ -71,7 +66,7 @@ public class MainWindowPresenterTest
     {
         presenter.handleNewWindow();
         verifyZeroInteractions(view);
-        verify(factory).createWindow(dbFactory);
+        verify(factory).createWindow();
     }
 
     @Test
@@ -116,7 +111,7 @@ public class MainWindowPresenterTest
 
         final MainWindowPresenter otherPresenter
             = mock(MainWindowPresenter.class);
-        when(factory.createWindow(dbFactory)).thenReturn(otherPresenter);
+        when(factory.createWindow()).thenReturn(otherPresenter);
 
         final Path path = mock(Path.class);
         when(view.chooseFile()).thenReturn(path);
