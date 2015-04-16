@@ -1,5 +1,7 @@
 package com.github.fge.grappa.debugger.h2.db;
 
+import com.github.fge.filesystem.MoreFiles;
+import com.github.fge.filesystem.RecursionMode;
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.debugger.ParseInfo;
@@ -51,6 +53,7 @@ public final class H2TraceDb
         .build();
 
     private final FileSystem fs;
+    private final Path dbpath;
     private final DSLContext jooq;
 
     private final H2TraceDbLoader loader;
@@ -60,12 +63,14 @@ public final class H2TraceDb
     private final ParseInfo info;
     private final InputBuffer inputBuffer;
 
-    public H2TraceDb(final Path zipfile, final DSLContext jooq)
+    public H2TraceDb(final Path zipfile, final Path dbpath,
+        final DSLContext jooq)
         throws IOException
     {
         final URI uri = URI.create("jar:" + zipfile.toUri());
 
         fs = FileSystems.newFileSystem(uri, ENV);
+        this.dbpath = dbpath;
         this.jooq = jooq;
 
         loader = new H2TraceDbLoader(fs, jooq);
@@ -146,7 +151,26 @@ public final class H2TraceDb
     public void close()
         throws IOException
     {
+        IOException exception = null;
+
         executor.shutdownNow();
-        fs.close();
+
+        try {
+            fs.close();
+        } catch (IOException e) {
+            exception = e;
+        }
+
+        try {
+            MoreFiles.deleteRecursive(dbpath, RecursionMode.KEEP_GOING);
+        } catch (IOException e) {
+            if (exception == null)
+                exception = e;
+            else
+                exception.addSuppressed(e);
+        }
+
+        if (exception != null)
+            throw exception;
     }
 }

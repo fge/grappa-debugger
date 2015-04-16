@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.trace.tabs.tree;
 
+import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
@@ -7,12 +8,15 @@ import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.model.TraceModel;
 import com.github.fge.grappa.debugger.model.tree.ParseTreeNode;
 import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public final class TreeTabPresenter
+@NonFinalForTesting
+public class TreeTabPresenter
     extends TabPresenter<TreeTabView>
 {
     private static final CountDownLatch LATCH = new CountDownLatch(0);
@@ -75,13 +79,27 @@ public final class TreeTabPresenter
 
     public void handleParseTreeNodeShow(final ParseTreeNode node)
     {
-        // TODO
-
+        final int end = node.getEndIndex();
+        view.showParseTreeNode(node);
+        if (node.isSuccess())
+            view.highlightSuccess(node.getStartIndex(), end);
+        else
+            view.highlightFailure(end);
     }
 
     public void handleNeedChildren(final ParseTreeNode value)
     {
-        // TODO
+        taskRunner.computeOrFail(
+            view::waitForChildren,
+            () -> getNodeChildren(value.getId()),
+            view::setTreeChildren,
+            throwable -> mainView.showError("Tree expand error",
+                "Unable to extend parse tree node", throwable)
+        );
+    }
 
+    public List<ParseTreeNode> getNodeChildren(final int nodeId)
+    {
+        return model.getNodeChildren(nodeId);
     }
 }

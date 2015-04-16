@@ -32,7 +32,8 @@ public final class H2TraceDbFactory
         final Path dbpath
             = Files.createTempDirectory("grappa-debugger").toRealPath();
 
-        final String jdbcUrl = String.format(H2_JDBC_URL_FORMAT, dbpath);
+        final String jdbcUrl
+            = String.format(H2_JDBC_URL_FORMAT, dbpath.resolve("db"));
 
         initdb(jdbcUrl);
 
@@ -47,7 +48,7 @@ public final class H2TraceDbFactory
 
         final DSLContext jooq = DSL.using(cfg);
 
-        return new H2TraceDb(arg, jooq);
+        return new H2TraceDb(arg, dbpath, jooq);
     }
 
     private void initdb(final String jdbcUrl)

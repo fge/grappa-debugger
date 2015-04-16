@@ -150,7 +150,7 @@ public class JavafxTreeTabView
     {
         return new MatchFragments(
             buffer.extract(0, realEnd),
-            JavafxUtils.MATCH_EMPTY,
+            JavafxUtils.MATCH_FAILURE,
             buffer.extract(realEnd, length)
         );
     }
