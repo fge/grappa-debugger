@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.h2.db.load;
 
 
-import com.github.fge.grappa.debugger.postgresql.jooq.tables.records.NodesRecord;
+import com.github.fge.grappa.debugger.h2.jooq.tables.records.NodesRecord;
 
 public final class CsvNodesRecord
     extends CsvLineRecord<NodesRecord>

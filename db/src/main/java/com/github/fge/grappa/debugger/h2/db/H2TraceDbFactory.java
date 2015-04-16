@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.h2.db;
 
 import com.github.fge.grappa.debugger.ZipTraceDbFactory;
+import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.jooq.Configuration;
 import org.jooq.ConnectionProvider;
@@ -33,6 +34,8 @@ public final class H2TraceDbFactory
 
         final String jdbcUrl = String.format(H2_JDBC_URL_FORMAT, dbpath);
 
+        initdb(jdbcUrl);
+
         final JdbcConnectionPool pool = JdbcConnectionPool.create(jdbcUrl,
             H2_USERNAME, H2_PASSWORD);
 
@@ -45,5 +48,15 @@ public final class H2TraceDbFactory
         final DSLContext jooq = DSL.using(cfg);
 
         return new H2TraceDb(arg, jooq);
+    }
+
+    private void initdb(final String jdbcUrl)
+    {
+        final Flyway flyway = new Flyway();
+
+        flyway.setLocations("classpath:db/h2");
+        flyway.setDataSource(jdbcUrl, H2_USERNAME, H2_PASSWORD);
+
+        flyway.migrate();
     }
 }

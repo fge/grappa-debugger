@@ -1,7 +1,7 @@
 package com.github.fge.grappa.debugger.h2.db.load;
 
 
-import com.github.fge.grappa.debugger.postgresql.jooq.tables.records.MatchersRecord;
+import com.github.fge.grappa.debugger.h2.jooq.tables.records.MatchersRecord;
 
 public final class CsvMatchersRecord
     extends CsvLineRecord<MatchersRecord>

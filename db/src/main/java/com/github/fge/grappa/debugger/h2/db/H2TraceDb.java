@@ -45,7 +45,8 @@ public final class H2TraceDb
     private static final String INPUT_TEXT_PATH = "/input.txt";
 
     private static final ThreadFactory THREAD_FACTORY
-        = new ThreadFactoryBuilder().setDaemon(true)
+        = new ThreadFactoryBuilder()
+        .setDaemon(true)
         .setNameFormat("grappa-db-load-%d")
         .build();
 
