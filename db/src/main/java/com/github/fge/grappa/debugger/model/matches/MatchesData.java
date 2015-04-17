@@ -1,5 +1,7 @@
 package com.github.fge.grappa.debugger.model.matches;
 
+import com.github.fge.grappa.internal.NonFinalForTesting;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collector;
 
-public final class MatchesData
+@NonFinalForTesting
+public class MatchesData
 {
     private static final Comparator<MatchStatistics> STATISTICS_COMPARATOR
         = (o1, o2) -> {

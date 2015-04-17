@@ -5,6 +5,7 @@ import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.common.BasePresenter;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.main.MainWindowView;
+import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CountDownLatch;
@@ -35,4 +36,11 @@ public abstract class TabPresenter<V extends TabView>
     }
 
     public abstract CountDownLatch refresh();
+
+    @VisibleForTesting
+    public void showError(final String title, final String message,
+        final Throwable throwable)
+    {
+        mainView.showError(title, message, throwable);
+    }
 }

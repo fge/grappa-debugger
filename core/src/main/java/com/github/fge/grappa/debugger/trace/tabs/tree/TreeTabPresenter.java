@@ -1,6 +1,5 @@
 package com.github.fge.grappa.debugger.trace.tabs.tree;
 
-import com.github.fge.grappa.debugger.GrappaDebuggerException;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
@@ -11,7 +10,6 @@ import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +71,7 @@ public class TreeTabPresenter
     void handleLoadTreeError(final Throwable throwable)
     {
         if (!(throwable instanceof InterruptedException))
-            mainView.showError("Tree load failure", "Failed to load parse tree",
+            showError("Tree load failure", "Failed to load parse tree",
                 throwable);
     }
 
@@ -91,15 +89,16 @@ public class TreeTabPresenter
     {
         taskRunner.computeOrFail(
             view::waitForChildren,
-            () -> getNodeChildren(value.getId()),
+            () -> model.getNodeChildren(value.getId()),
             view::setTreeChildren,
-            throwable -> mainView.showError("Tree expand error",
-                "Unable to extend parse tree node", throwable)
+            this::childrenLoadFailure
         );
     }
 
-    public List<ParseTreeNode> getNodeChildren(final int nodeId)
+    @VisibleForTesting
+    void childrenLoadFailure(final Throwable throwable)
     {
-        return model.getNodeChildren(nodeId);
+        showError("Tree expand error", "Unable to extend parse tree node",
+            throwable);
     }
 }
