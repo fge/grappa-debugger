@@ -37,13 +37,13 @@ public class JavafxTraceView
     @Override
     public void showLoadToolbar()
     {
-        display.toolbar.setVisible(true);
+        display.pane.setTop(display.toolbar);
     }
 
     @Override
     public void hideLoadToolbar()
     {
-        display.toolbar.setVisible(false);
+        display.pane.setTop(null);
     }
 
     @Override

@@ -12,11 +12,13 @@ import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.lambdas.Throwing;
+import com.github.fge.lambdas.consumers.ThrowingConsumer;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @NonFinalForTesting
@@ -47,6 +49,7 @@ public class TracePresenter
         loadTreeTab();
     }
 
+    // TODO: delegate this to GuiTaskRunner
     @VisibleForTesting
     @OnBackgroundThread
     void pollStatus()
@@ -61,13 +64,21 @@ public class TracePresenter
         final int total = info.getNrMatchers() + info.getNrNodes();
 
         taskRunner.executeFront(view::showLoadToolbar);
+
         while (!status.isReady()) {
-            TimeUnit.SECONDS.sleep(1L);
+            pause();
             final int current
                 = status.getLoadedMatchers() + status.getLoadedNodes();
             taskRunner.executeFront(() -> view.reportStatus(total, current));
         }
         taskRunner.executeFront(view::showLoadComplete);
+    }
+
+    @VisibleForTesting
+    void pause()
+        throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(1L);
     }
 
     public void close()
@@ -106,6 +117,34 @@ public class TracePresenter
 
     public void handleTabsRefreshEvent()
     {
-        // TODO
+        taskRunner.run(
+            view::disableTabRefresh,
+            this::doRefreshTabs,
+            this::postTabsRefresh
+        );
+    }
+
+    @VisibleForTesting
+    @OnBackgroundThread
+    void doRefreshTabs()
+    {
+        final ThrowingConsumer<CountDownLatch> await
+            = CountDownLatch::await;
+
+        tabs.stream().map(TabPresenter::refresh)
+            .forEach(Throwing.consumer(await).orDoNothing());
+    }
+
+    @VisibleForTesting
+    @OnUiThread
+    void postTabsRefresh()
+    {
+        final TraceDbLoadStatus status = traceDb.getLoadStatus();
+
+        final Runnable runnable = status.isReady()
+            ? view::hideLoadToolbar
+            : view::enableTabRefresh;
+
+        runnable.run();
     }
 }

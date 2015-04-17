@@ -49,6 +49,7 @@ public class TraceDisplay
     @Override
     public void init()
     {
+        pane.setTop(null);
     }
 
     public void tabsRefreshEvent(Event event)

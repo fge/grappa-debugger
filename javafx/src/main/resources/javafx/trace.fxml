@@ -13,7 +13,7 @@
     xmlns:fx="http://javafx.com/fxml/1" fx:id="pane"
     fx:controller="com.github.fge.grappa.debugger.javafx.trace.TraceDisplay">
     <top>
-        <ToolBar fx:id="toolbar" visible="false">
+        <ToolBar fx:id="toolbar">
             <HBox spacing="5.0" alignment="CENTER_LEFT">
                 <Button fx:id="refresh" text="Refresh"
                     onMouseClicked="#tabsRefreshEvent"/>
