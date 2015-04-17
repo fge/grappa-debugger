@@ -2,10 +2,13 @@ package com.github.fge.grappa.debugger.javafx.trace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
+import com.github.fge.grappa.debugger.javafx.trace.tabs.matches
+    .JavafxMatchesTabView;
 import com.github.fge.grappa.debugger.javafx.trace.tabs.tree.JavafxTreeTabView;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.trace.TracePresenter;
 import com.github.fge.grappa.debugger.trace.TraceView;
+import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
@@ -115,5 +118,29 @@ public class JavafxTraceView
         throws IOException
     {
         return new JavafxTreeTabView(taskRunner);
+    }
+
+    @Override
+    public void loadMatchesTab(final MatchesTabPresenter tabPresenter)
+    {
+        Objects.requireNonNull(tabPresenter);
+
+        final JavafxMatchesTabView tabView;
+        try {
+            tabView = getMatchesTabView();
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load matches tab", e);
+            return;
+        }
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
+        display.matchesTab.setContent(tabView.getNode());
+    }
+
+    @VisibleForTesting
+    JavafxMatchesTabView getMatchesTabView()
+        throws IOException
+    {
+        return new JavafxMatchesTabView();
     }
 }

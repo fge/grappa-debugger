@@ -7,6 +7,7 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.model.TraceModel;
 import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.mockito.InOrder;
@@ -60,11 +61,13 @@ public class TracePresenterTest
     {
         doNothing().when(presenter).pollStatus();
         doNothing().when(presenter).loadTreeTab();
+        doNothing().when(presenter).loadMatchesTab();
 
         presenter.load();
 
-        verify(presenter).loadTreeTab();
         verify(presenter).pollStatus();
+        verify(presenter).loadTreeTab();
+        verify(presenter).loadMatchesTab();
     }
 
     @SuppressWarnings("AutoBoxing")
@@ -140,6 +143,24 @@ public class TracePresenterTest
         presenter.loadTreeTab();
 
         inOrder.verify(view).loadTreeTab(tabPresenter);
+        inOrder.verify(tabPresenter).load();
+
+        assertThat(presenter.tabs).contains(tabPresenter);
+    }
+
+    @Test
+    public void loadMatchesTabTest()
+    {
+        final MatchesTabPresenter tabPresenter
+            = mock(MatchesTabPresenter.class);
+
+        doReturn(tabPresenter).when(presenter).createMatchesTabPresenter();
+
+        final InOrder inOrder = inOrder(tabPresenter, view);
+
+        presenter.loadMatchesTab();
+
+        inOrder.verify(view).loadMatchesTab(tabPresenter);
         inOrder.verify(tabPresenter).load();
 
         assertThat(presenter.tabs).contains(tabPresenter);

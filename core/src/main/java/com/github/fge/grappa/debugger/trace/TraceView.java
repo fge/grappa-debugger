@@ -1,5 +1,6 @@
 package com.github.fge.grappa.debugger.trace;
 
+import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 
 public interface TraceView
@@ -17,4 +18,6 @@ public interface TraceView
     void enableTabRefresh();
 
     void loadTreeTab(TreeTabPresenter tabPresenter);
+
+    void loadMatchesTab(MatchesTabPresenter tabPresenter);
 }

@@ -20,7 +20,7 @@ public class MatchesTabPresenter
 {
     private final TraceModel model;
 
-    protected MatchesTabPresenter(final GuiTaskRunner taskRunner,
+    public MatchesTabPresenter(final GuiTaskRunner taskRunner,
         final MainWindowView mainView, final TraceDb traceDb)
     {
         super(taskRunner, mainView, traceDb);

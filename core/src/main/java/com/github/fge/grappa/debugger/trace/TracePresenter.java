@@ -9,6 +9,7 @@ import com.github.fge.grappa.debugger.common.OnBackgroundThread;
 import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.lambdas.Throwing;
@@ -47,6 +48,7 @@ public class TracePresenter
             .orDoNothing();
         taskRunner.executeBackground(runnable);
         loadTreeTab();
+        loadMatchesTab();
     }
 
     // TODO: delegate this to GuiTaskRunner
@@ -106,6 +108,23 @@ public class TracePresenter
     TreeTabPresenter createTreeTabPresenter()
     {
         return new TreeTabPresenter(taskRunner, mainView, traceDb);
+    }
+
+    @OnUiThread
+    @VisibleForTesting
+    void loadMatchesTab()
+    {
+        final MatchesTabPresenter tabPresenter = createMatchesTabPresenter();
+        view.loadMatchesTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
+    }
+
+    @OnUiThread
+    @VisibleForTesting
+    MatchesTabPresenter createMatchesTabPresenter()
+    {
+        return new MatchesTabPresenter(taskRunner, mainView, traceDb);
     }
 
     @Override
