@@ -87,18 +87,10 @@ public class TreeTabPresenter
 
     public void handleNeedChildren(final ParseTreeNode value)
     {
-        taskRunner.computeOrFail(
+        taskRunner.compute(
             view::waitForChildren,
             () -> model.getNodeChildren(value.getId()),
-            view::setTreeChildren,
-            this::childrenLoadFailure
+            view::setTreeChildren
         );
-    }
-
-    @VisibleForTesting
-    void childrenLoadFailure(final Throwable throwable)
-    {
-        showError("Tree expand error", "Unable to extend parse tree node",
-            throwable);
     }
 }

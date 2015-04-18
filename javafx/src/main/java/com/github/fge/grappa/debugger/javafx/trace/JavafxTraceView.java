@@ -4,11 +4,14 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
 import com.github.fge.grappa.debugger.javafx.trace.tabs.matches
     .JavafxMatchesTabView;
+import com.github.fge.grappa.debugger.javafx.trace.tabs.rules
+    .JavafxRulesTabView;
 import com.github.fge.grappa.debugger.javafx.trace.tabs.tree.JavafxTreeTabView;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.trace.TracePresenter;
 import com.github.fge.grappa.debugger.trace.TraceView;
 import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
@@ -99,8 +102,6 @@ public class JavafxTraceView
     @Override
     public void loadTreeTab(final TreeTabPresenter tabPresenter)
     {
-        Objects.requireNonNull(tabPresenter);
-
         final JavafxTreeTabView tabView;
         try {
             tabView = getTreeTabView();
@@ -123,8 +124,6 @@ public class JavafxTraceView
     @Override
     public void loadMatchesTab(final MatchesTabPresenter tabPresenter)
     {
-        Objects.requireNonNull(tabPresenter);
-
         final JavafxMatchesTabView tabView;
         try {
             tabView = getMatchesTabView();
@@ -142,5 +141,28 @@ public class JavafxTraceView
         throws IOException
     {
         return new JavafxMatchesTabView();
+    }
+
+    @Override
+    public void loadRulesTab(final RulesTabPresenter tabPresenter)
+    {
+        final JavafxRulesTabView tabView;
+
+        try {
+            tabView = getRulesTabView();
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load matches tab", e);
+            return;
+        }
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
+        display.rulesTab.setContent(tabView.getNode());
+    }
+
+    @VisibleForTesting
+    JavafxRulesTabView getRulesTabView()
+        throws IOException
+    {
+        return new JavafxRulesTabView();
     }
 }

@@ -14,7 +14,6 @@ import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -150,7 +149,7 @@ public class TreeTabPresenterTest
 
     @SuppressWarnings("AutoBoxing")
     @Test
-    public void handleNeedChildrenSuccessTest()
+    public void handleNeedChildrenTest()
     {
         final ParseTreeNode node = mock(ParseTreeNode.class);
 
@@ -168,27 +167,5 @@ public class TreeTabPresenterTest
         verify(view).waitForChildren();
         verify(model).getNodeChildren(id);
         verify(view).setTreeChildren(same(children));
-    }
-
-    @SuppressWarnings({ "AutoBoxing", "unchecked" })
-    @Test
-    public void handleNeedChildrenFailureTest()
-    {
-        final ParseTreeNode node = mock(ParseTreeNode.class);
-
-        final int id = 42;
-
-        when(node.getId()).thenReturn(id);
-
-        final RuntimeException exception = new RuntimeException();
-
-        when(model.getNodeChildren(anyInt())).thenThrow(exception);
-
-        presenter.handleNeedChildren(node);
-
-        verify(view).waitForChildren();
-        verify(model).getNodeChildren(id);
-        verify(view, never()).setTreeChildren(anyList());
-        verify(presenter).childrenLoadFailure(same(exception));
     }
 }

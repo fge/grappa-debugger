@@ -10,6 +10,7 @@ import com.github.fge.grappa.debugger.common.OnUiThread;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.lambdas.Throwing;
@@ -49,6 +50,7 @@ public class TracePresenter
         taskRunner.executeBackground(runnable);
         loadTreeTab();
         loadMatchesTab();
+        loadRulesTab();
     }
 
     // TODO: delegate this to GuiTaskRunner
@@ -81,16 +83,6 @@ public class TracePresenter
         throws InterruptedException
     {
         TimeUnit.SECONDS.sleep(1L);
-    }
-
-    public void close()
-    {
-        try {
-            traceDb.close();
-        } catch (Exception e) {
-            mainView.showError("Closing error",
-                "Failed to close trace database properly", e);
-        }
     }
 
     @OnUiThread
@@ -127,20 +119,23 @@ public class TracePresenter
         return new MatchesTabPresenter(taskRunner, mainView, traceDb);
     }
 
-    @Override
-    @Nonnull
-    public String toString()
+    public void loadRulesTab()
     {
-        return traceDb.toString();
+        final RulesTabPresenter tabPresenter = createRulesTabPresenter();
+        view.loadRulesTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
+    }
+
+    public RulesTabPresenter createRulesTabPresenter()
+    {
+        return new RulesTabPresenter(taskRunner, mainView, traceDb);
     }
 
     public void handleTabsRefreshEvent()
     {
-        taskRunner.run(
-            view::disableTabRefresh,
-            this::doRefreshTabs,
-            this::postTabsRefresh
-        );
+        taskRunner.run(view::disableTabRefresh, this::doRefreshTabs,
+            this::postTabsRefresh);
     }
 
     @VisibleForTesting
@@ -165,5 +160,22 @@ public class TracePresenter
             : view::enableTabRefresh;
 
         runnable.run();
+    }
+
+    public void close()
+    {
+        try {
+            traceDb.close();
+        } catch (Exception e) {
+            mainView.showError("Closing error",
+                "Failed to close trace database properly", e);
+        }
+    }
+
+    @Override
+    @Nonnull
+    public String toString()
+    {
+        return traceDb.toString();
     }
 }
