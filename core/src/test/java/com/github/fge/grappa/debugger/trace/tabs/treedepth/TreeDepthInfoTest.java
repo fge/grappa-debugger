@@ -25,6 +25,9 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(1);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(25);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isFalse();
+        assertThat(treeDepthInfo.hasNextLines()).isTrue();
     }
 
     @Test
@@ -34,6 +37,9 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(1);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(10);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isFalse();
+        assertThat(treeDepthInfo.hasNextLines()).isFalse();
     }
 
     @Test
@@ -45,6 +51,9 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(18);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(42);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isTrue();
+        assertThat(treeDepthInfo.hasNextLines()).isFalse();
     }
 
     @Test
@@ -56,6 +65,9 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(1);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(42);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isFalse();
+        assertThat(treeDepthInfo.hasNextLines()).isFalse();
     }
 
     @Test
@@ -67,6 +79,9 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(6);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(30);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isTrue();
+        assertThat(treeDepthInfo.hasNextLines()).isFalse();
     }
 
     @Test(dependsOnMethods = "startLineAdjustTest")
@@ -79,6 +94,9 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(1);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(30);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isFalse();
+        assertThat(treeDepthInfo.hasNextLines()).isFalse();
     }
 
     @Test(dependsOnMethods = "startLineAdjustTest")
@@ -91,5 +109,8 @@ public final class TreeDepthInfoTest
 
         assertThat(treeDepthInfo.getStartLine()).isEqualTo(1);
         assertThat(treeDepthInfo.getEndLine()).isEqualTo(25);
+
+        assertThat(treeDepthInfo.hasPreviousLines()).isFalse();
+        assertThat(treeDepthInfo.hasNextLines()).isTrue();
     }
 }

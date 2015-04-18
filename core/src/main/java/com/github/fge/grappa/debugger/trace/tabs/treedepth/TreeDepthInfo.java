@@ -23,6 +23,9 @@ public final class TreeDepthInfo
     private long startLine = INITIAL_START_LINE;
     private long displayedLines = INITIAL_DISPLAYED_LINES;
 
+    private boolean hasPrevious = false;
+    private boolean hasNext = false;
+
     private long endLine;
 
     private Map<Integer, Integer> depths;
@@ -45,6 +48,16 @@ public final class TreeDepthInfo
     public int getEndLine()
     {
         return (int) endLine;
+    }
+
+    public boolean hasPreviousLines()
+    {
+        return hasPrevious;
+    }
+
+    public boolean hasNextLines()
+    {
+        return hasNext;
     }
 
     public void setStartLine(final int startLine)
@@ -76,6 +89,9 @@ public final class TreeDepthInfo
             .intersection(lines).canonical(LONGS);
 
         endLine = range.upperEndpoint() - 1;
+
+        hasPrevious = startLine > 1;
+        hasNext = endLine < nrLines;
 
         // TODO: change prototype of method?
         // We need +2 because the end is exclusive
