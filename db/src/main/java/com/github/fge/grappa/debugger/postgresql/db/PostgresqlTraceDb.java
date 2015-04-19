@@ -6,8 +6,8 @@ import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.model.TraceModel;
-import com.github.fge.grappa.debugger.postgresql.jooq.tables.records.ParseInfoRecord;
-
+import com.github.fge.grappa.debugger.postgresql.jooq.tables.records
+    .ParseInfoRecord;
 import com.github.fge.grappa.debugger.postgresql.model.PostgresqlTraceModel;
 import org.jooq.DSLContext;
 

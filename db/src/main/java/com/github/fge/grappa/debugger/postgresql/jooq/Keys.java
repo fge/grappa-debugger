@@ -8,7 +8,8 @@ import com.github.fge.grappa.debugger.postgresql.jooq.tables.Nodes;
 import com.github.fge.grappa.debugger.postgresql.jooq.tables.ParseInfo;
 import com.github.fge.grappa.debugger.postgresql.jooq.tables.records
 	.MatchersRecord;
-import com.github.fge.grappa.debugger.postgresql.jooq.tables.records.NodesRecord;
+import com.github.fge.grappa.debugger.postgresql.jooq.tables.records
+	.NodesRecord;
 import com.github.fge.grappa.debugger.postgresql.jooq.tables.records
 	.ParseInfoRecord;
 import org.jooq.impl.AbstractKeys;

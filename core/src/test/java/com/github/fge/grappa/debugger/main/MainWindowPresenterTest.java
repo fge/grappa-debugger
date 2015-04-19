@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.main;
 
-import com.github.fge.grappa.debugger.MainWindowFactory2;
+import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.trace.TracePresenter;
@@ -30,14 +30,14 @@ public class MainWindowPresenterTest
     private final GuiTaskRunner taskRunner = new GuiTaskRunner(
         MoreExecutors.newDirectExecutorService(), Runnable::run);
     private ZipTraceDbFactory dbFactory;
-    private MainWindowFactory2 factory;
+    private MainWindowFactory factory;
     private MainWindowView view;
     private MainWindowPresenter presenter;
 
     @BeforeMethod
     public void init()
     {
-        factory = mock(MainWindowFactory2.class);
+        factory = mock(MainWindowFactory.class);
         view = mock(MainWindowView.class);
         dbFactory = mock(ZipTraceDbFactory.class);
         presenter = spy(new MainWindowPresenter(factory, taskRunner,

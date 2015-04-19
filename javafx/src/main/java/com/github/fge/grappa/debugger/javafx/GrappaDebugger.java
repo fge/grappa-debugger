@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.javafx;
 
-import com.github.fge.grappa.debugger.MainWindowFactory2;
+import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.h2.db.H2TraceDbFactory;
@@ -27,7 +27,7 @@ import java.util.Set;
 @ParametersAreNonnullByDefault
 public final class GrappaDebugger
     extends Application
-    implements MainWindowFactory2
+    implements MainWindowFactory
 {
     private static final URL BASE_WINDOW_FXML;
     private static final URL MATCH_HIGHLIGHT_CSS;

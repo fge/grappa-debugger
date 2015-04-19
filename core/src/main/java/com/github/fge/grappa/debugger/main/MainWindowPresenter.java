@@ -1,6 +1,6 @@
 package com.github.fge.grappa.debugger.main;
 
-import com.github.fge.grappa.debugger.MainWindowFactory2;
+import com.github.fge.grappa.debugger.MainWindowFactory;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.BasePresenter;
@@ -16,14 +16,14 @@ public class MainWindowPresenter
     extends BasePresenter<MainWindowView>
 {
     private final GuiTaskRunner taskRunner;
-    private final MainWindowFactory2 windowFactory;
+    private final MainWindowFactory windowFactory;
 
     private final ZipTraceDbFactory factory;
 
     @VisibleForTesting
     TracePresenter tracePresenter;
 
-    public MainWindowPresenter(final MainWindowFactory2 windowFactory,
+    public MainWindowPresenter(final MainWindowFactory windowFactory,
         final GuiTaskRunner taskRunner, final ZipTraceDbFactory factory)
     {
         this.windowFactory = windowFactory;

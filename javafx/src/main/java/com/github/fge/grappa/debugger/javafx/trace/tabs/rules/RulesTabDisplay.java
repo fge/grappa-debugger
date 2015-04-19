@@ -1,8 +1,8 @@
 package com.github.fge.grappa.debugger.javafx.trace.tabs.rules;
 
-import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.javafx.common.JavafxDisplay;
 import com.github.fge.grappa.debugger.model.rules.PerClassStatistics;
+import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
