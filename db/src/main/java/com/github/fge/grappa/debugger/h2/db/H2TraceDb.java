@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 public final class H2TraceDb
@@ -46,19 +47,22 @@ public final class H2TraceDb
     private static final String INFO_PATH = "/info.csv";
     private static final String INPUT_TEXT_PATH = "/input.txt";
 
-    private static final ThreadFactory THREAD_FACTORY
-        = new ThreadFactoryBuilder()
-        .setDaemon(true)
-        .setNameFormat("grappa-db-load-%d")
-        .build();
 
     private final FileSystem fs;
     private final Path dbpath;
     private final DSLContext jooq;
 
     private final H2TraceDbLoader loader;
+    private final AtomicReference<Throwable> loadError
+        = new AtomicReference<>();
+    private final ThreadFactory threadFactory
+        = new ThreadFactoryBuilder()
+        .setDaemon(true)
+        .setNameFormat("grappa-db-load-%d")
+        .setUncaughtExceptionHandler((t, e) -> loadError.set(e))
+        .build();
     private final ExecutorService executor
-        = Executors.newSingleThreadExecutor(THREAD_FACTORY);
+        = Executors.newSingleThreadExecutor(threadFactory);
 
     private final ParseInfo info;
     private final InputBuffer inputBuffer;
@@ -73,7 +77,7 @@ public final class H2TraceDb
         this.dbpath = dbpath;
         this.jooq = jooq;
 
-        loader = new H2TraceDbLoader(fs, jooq);
+        loader = new H2TraceDbLoader(fs, jooq, loadError);
         executor.submit(Throwing.runnable(loader::loadAll));
 
         info = loadParseInfo();

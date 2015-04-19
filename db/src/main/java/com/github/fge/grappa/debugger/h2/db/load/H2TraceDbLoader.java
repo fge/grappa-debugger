@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import static com.github.fge.grappa.debugger.h2.jooq.Tables.MATCHERS;
@@ -29,14 +30,19 @@ public final class H2TraceDbLoader
     private final FileSystem fs;
     private final Path matchersPath;
     private final Path nodesPath;
-    private final H2TraceDbLoadStatus status = new H2TraceDbLoadStatus();
+    private final H2TraceDbLoadStatus status;
 
     private final DSLContext jooq;
 
-    public H2TraceDbLoader(final FileSystem fs, final DSLContext jooq)
+    private final AtomicReference<Throwable> loadError;
+
+    public H2TraceDbLoader(final FileSystem fs, final DSLContext jooq,
+        final AtomicReference<Throwable> loadError)
     {
         this.fs = fs;
         this.jooq = jooq;
+        this.loadError = loadError;
+        status = new H2TraceDbLoadStatus(loadError);
 
         matchersPath = fs.getPath(MATCHERS_PATH);
         nodesPath = fs.getPath(NODES_PATH);
@@ -47,12 +53,15 @@ public final class H2TraceDbLoader
         return status;
     }
 
+    @SuppressWarnings("ErrorNotRethrown")
     public void loadAll()
         throws IOException
     {
         try {
             insertMatchers(jooq);
             insertNodes(jooq);
+        } catch (IOException | RuntimeException | Error e) {
+            loadError.set(e);
         } finally {
             fs.close();
             status.setReady();

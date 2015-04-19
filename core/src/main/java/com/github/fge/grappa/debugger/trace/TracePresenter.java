@@ -12,8 +12,7 @@ import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.trace.tabs.treedepth
-    .TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.treedepth.TreeDepthTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.lambdas.Throwing;
 import com.github.fge.lambdas.consumers.ThrowingConsumer;
@@ -47,13 +46,14 @@ public class TracePresenter
     @Override
     public void load()
     {
-        final Runnable runnable = Throwing.runnable(this::pollStatus)
-            .orDoNothing();
-        taskRunner.executeBackground(runnable);
-        loadTreeTab();
-        loadMatchesTab();
-        loadRulesTab();
-        loadTreeDepthTab();
+        final Runnable runnable = () -> {
+            loadTreeTab();
+            loadMatchesTab();
+            loadRulesTab();
+            loadTreeDepthTab();
+        };
+
+        taskRunner.runOrFail(this::pollStatus, runnable, this::loadError);
     }
 
     // TODO: delegate this to GuiTaskRunner
@@ -185,6 +185,13 @@ public class TracePresenter
 
         runnable.run();
     }
+
+    void loadError(final Throwable throwable)
+    {
+        mainView.showError("Load error", "Unable to load database", throwable);
+        view.hideLoadToolbar();
+    }
+
 
     public void close()
     {
