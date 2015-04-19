@@ -15,8 +15,7 @@ import javafx.scene.text.Text;
 
 import java.util.function.Function;
 
-import static com.github.fge.grappa.debugger.javafx.common.JavafxUtils
-    .setColumnValue;
+import static com.github.fge.grappa.debugger.javafx.common.JavafxUtils.setColumnValue;
 
 public class MatchesTabDisplay
     extends JavafxDisplay<MatchesTabPresenter>
@@ -72,7 +71,6 @@ public class MatchesTabDisplay
 
     @FXML
     protected TableColumn<MatchStatistics, MatchStatistics> callGraph;
-
 
     @Override
     public void init()

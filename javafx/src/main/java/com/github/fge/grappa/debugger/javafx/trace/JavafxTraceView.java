@@ -2,21 +2,17 @@ package com.github.fge.grappa.debugger.javafx.trace;
 
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
-import com.github.fge.grappa.debugger.javafx.trace.tabs.matches
-    .JavafxMatchesTabView;
-import com.github.fge.grappa.debugger.javafx.trace.tabs.rules
-    .JavafxRulesTabView;
+import com.github.fge.grappa.debugger.javafx.trace.tabs.matches.JavafxMatchesTabView;
+import com.github.fge.grappa.debugger.javafx.trace.tabs.rules.JavafxRulesTabView;
 import com.github.fge.grappa.debugger.javafx.trace.tabs.tree.JavafxTreeTabView;
-import com.github.fge.grappa.debugger.javafx.trace.tabs.treedepth
-    .JavafxTreeDepthTabView;
+import com.github.fge.grappa.debugger.javafx.trace.tabs.treedepth.JavafxTreeDepthTabView;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.trace.TracePresenter;
 import com.github.fge.grappa.debugger.trace.TraceView;
 import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
-import com.github.fge.grappa.debugger.trace.tabs.treedepth
-    .TreeDepthTabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.treedepth.TreeDepthTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -156,7 +152,7 @@ public class JavafxTraceView
         try {
             tabView = getRulesTabView();
         } catch (IOException e) {
-            parentView.showError("Load error", "Unable to load matches tab", e);
+            parentView.showError("Load error", "Unable to load rules tab", e);
             return;
         }
         tabView.getDisplay().setPresenter(tabPresenter);
@@ -179,7 +175,8 @@ public class JavafxTraceView
         try {
             tabView = getTreeDepthTabView();
         } catch (IOException e) {
-            parentView.showError("Load error", "Unable to load matches tab", e);
+            parentView.showError("Load error", "Unable to load tree depth tab",
+                e);
             return;
         }
 

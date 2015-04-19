@@ -56,7 +56,8 @@ public class JavafxMatchesTabView
     }
 
     @SuppressWarnings("AutoBoxing")
-    private void showMatchesStats(final int nonEmpty, final int empty,
+    @VisibleForTesting
+    void showMatchesStats(final int nonEmpty, final int empty,
         final int failures)
     {
         final int success = nonEmpty + empty;
@@ -108,7 +109,8 @@ public class JavafxMatchesTabView
         display.invocationsChart.setTitle(fmt);
     }
 
-    private void showTopN(final Text text, @Nullable final Double pct)
+    @VisibleForTesting
+    void showTopN(final Text text, @Nullable final Double pct)
     {
         final String message = pct == null ? "N/A"
             : String.format("%.02f%% of all invocations", pct);
