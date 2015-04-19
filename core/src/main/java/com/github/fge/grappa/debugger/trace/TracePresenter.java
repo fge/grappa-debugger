@@ -12,6 +12,8 @@ import com.github.fge.grappa.debugger.trace.tabs.TabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.treedepth
+    .TreeDepthTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.lambdas.Throwing;
 import com.github.fge.lambdas.consumers.ThrowingConsumer;
@@ -51,6 +53,7 @@ public class TracePresenter
         loadTreeTab();
         loadMatchesTab();
         loadRulesTab();
+        loadTreeDepthTab();
     }
 
     // TODO: delegate this to GuiTaskRunner
@@ -127,15 +130,36 @@ public class TracePresenter
         tabs.add(tabPresenter);
     }
 
+    @OnUiThread
+    @VisibleForTesting
     public RulesTabPresenter createRulesTabPresenter()
     {
         return new RulesTabPresenter(taskRunner, mainView, traceDb);
     }
 
+    public void loadTreeDepthTab()
+    {
+        final TreeDepthTabPresenter tabPresenter
+            = createTreeDepthTabPresenter();
+        view.loadTreeDepthTab(tabPresenter);
+        tabPresenter.load();
+        tabs.add(tabPresenter);
+    }
+
+    @OnUiThread
+    @VisibleForTesting
+    TreeDepthTabPresenter createTreeDepthTabPresenter()
+    {
+        return new TreeDepthTabPresenter(taskRunner, mainView, traceDb);
+    }
+
     public void handleTabsRefreshEvent()
     {
-        taskRunner.run(view::disableTabRefresh, this::doRefreshTabs,
-            this::postTabsRefresh);
+        taskRunner.run(
+            view::disableTabRefresh,
+            this::doRefreshTabs,
+            this::postTabsRefresh
+        );
     }
 
     @VisibleForTesting

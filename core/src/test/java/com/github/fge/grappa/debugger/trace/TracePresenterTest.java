@@ -64,6 +64,7 @@ public class TracePresenterTest
         doNothing().when(presenter).loadTreeTab();
         doNothing().when(presenter).loadMatchesTab();
         doNothing().when(presenter).loadRulesTab();
+        doNothing().when(presenter).loadTreeDepthTab();
 
         presenter.load();
 
@@ -71,6 +72,7 @@ public class TracePresenterTest
         verify(presenter).loadTreeTab();
         verify(presenter).loadMatchesTab();
         verify(presenter).loadRulesTab();
+        verify(presenter).loadTreeDepthTab();
     }
 
     @SuppressWarnings("AutoBoxing")

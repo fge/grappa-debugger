@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.github.fge.grappa.debugger.javafx.custom.SmoothedAreaChart?>
+<?import com.github.fge.grappa.debugger.javafx.trace.tabs.treedepth.SmoothedAreaChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>

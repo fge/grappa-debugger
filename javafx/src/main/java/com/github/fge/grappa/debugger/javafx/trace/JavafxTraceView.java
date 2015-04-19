@@ -7,12 +7,16 @@ import com.github.fge.grappa.debugger.javafx.trace.tabs.matches
 import com.github.fge.grappa.debugger.javafx.trace.tabs.rules
     .JavafxRulesTabView;
 import com.github.fge.grappa.debugger.javafx.trace.tabs.tree.JavafxTreeTabView;
+import com.github.fge.grappa.debugger.javafx.trace.tabs.treedepth
+    .JavafxTreeDepthTabView;
 import com.github.fge.grappa.debugger.main.MainWindowView;
 import com.github.fge.grappa.debugger.trace.TracePresenter;
 import com.github.fge.grappa.debugger.trace.TraceView;
 import com.github.fge.grappa.debugger.trace.tabs.matches.MatchesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.rules.RulesTabPresenter;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
+import com.github.fge.grappa.debugger.trace.tabs.treedepth
+    .TreeDepthTabPresenter;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -61,6 +65,7 @@ public class JavafxTraceView
         final double pct = (double) loaded / total;
         display.progressBar.setProgress(pct);
 
+        @SuppressWarnings("AutoBoxing")
         final StringBuilder sb = new StringBuilder()
             .append(String.format("%.02f%%", pct * 100));
 
@@ -164,5 +169,29 @@ public class JavafxTraceView
         throws IOException
     {
         return new JavafxRulesTabView();
+    }
+
+    @Override
+    public void loadTreeDepthTab(final TreeDepthTabPresenter tabPresenter)
+    {
+        final JavafxTreeDepthTabView tabView;
+
+        try {
+            tabView = getTreeDepthTabView();
+        } catch (IOException e) {
+            parentView.showError("Load error", "Unable to load matches tab", e);
+            return;
+        }
+
+        tabView.getDisplay().setPresenter(tabPresenter);
+        tabPresenter.setView(tabView);
+        display.treeDepthTab.setContent(tabView.getNode());
+    }
+
+    @VisibleForTesting
+    JavafxTreeDepthTabView getTreeDepthTabView()
+        throws IOException
+    {
+        return new JavafxTreeDepthTabView();
     }
 }
