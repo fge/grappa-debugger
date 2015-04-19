@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.github.fge.grappa.debugger.javafx.custom.SmoothedAreaChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.github.fge.grappa.debugger.javafx.trace.tabs.treedepth.TreeDepthTabDisplay">
+    <top>
+        <ToolBar fx:id="toolbar">
+            <HBox alignment="CENTER" spacing="5.0" fx:id="hbox">
+
+                <Label text="Go to line:"/>
+                <TextField fx:id="requiredLine" prefWidth="60.0"
+                    onAction="#changeStartLineEvent"/>
+                <Label fx:id="totalLines"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Button fx:id="prevLines" text="Previous"
+                    onMouseClicked="#previousLinesEvent"/>
+                <Label fx:id="currentLines" text="(no data)"/>
+                <Button fx:id="nextLines" text="Next"
+                    onMouseClicked="#nextLinesEvent"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Lines to display:"/>
+                <ComboBox fx:id="linesDisplayed"/>
+                <!--
+                <ComboBox fx:id="linesDisplayed" onAction="#foo">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <Integer fx:value="10"/>
+                            <Integer fx:value="25"/>
+                            <Integer fx:value="50"/>
+                        </FXCollections>
+                    </items>
+                    <value>
+                        <Integer fx:value="25"/>
+                    </value>
+                </ComboBox>
+                -->
+            </HBox>
+        </ToolBar>
+    </top>
+    <center>
+        <SmoothedAreaChart fx:id="chart" legendVisible="false"
+            title="Tree depth by line" animated="false">
+            <xAxis>
+                <NumberAxis fx:id="xAxis" tickUnit="1.0" autoRanging="false"
+                    minorTickVisible="false" forceZeroInRange="false"
+                    label="Line number"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" forceZeroInRange="true"
+                    minorTickVisible="false" autoRanging="false"
+                    label="Tree depth"/>
+            </yAxis>
+        </SmoothedAreaChart>
+    </center>
+</BorderPane>

@@ -1,14 +1,16 @@
 package com.github.fge.grappa.debugger.trace.tabs.treedepth;
 
 import com.github.fge.grappa.debugger.model.TraceModel;
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 
 import java.util.Collections;
 import java.util.Map;
 
+@NonFinalForTesting
 @SuppressWarnings({ "AutoBoxing", "AutoUnboxing" })
-public final class TreeDepthInfo
+public class TreeDepthInfo
 {
     private static final long INITIAL_START_LINE = 1L;
     private static final long INITIAL_DISPLAYED_LINES = 25L;
@@ -50,6 +52,11 @@ public final class TreeDepthInfo
         return (int) endLine;
     }
 
+    public Map<Integer, Integer> getDepths()
+    {
+        return Collections.unmodifiableMap(depths);
+    }
+
     public boolean hasPreviousLines()
     {
         return hasPrevious;
@@ -72,12 +79,19 @@ public final class TreeDepthInfo
         update();
     }
 
-    public Map<Integer, Integer> getDepths()
+    public void nextLines()
     {
-        return Collections.unmodifiableMap(depths);
+        startLine += displayedLines;
+        update();
     }
 
-    private void update()
+    public void previousLines()
+    {
+        startLine -= displayedLines;
+        update();
+    }
+
+    void update()
     {
         if (startLine > nrLines - displayedLines + 1)
             startLine = nrLines - displayedLines + 1;
@@ -97,17 +111,5 @@ public final class TreeDepthInfo
         // We need +2 because the end is exclusive
         depths = model.getDepthMap((int) startLine,
             (int) (endLine - startLine + 2));
-    }
-
-    public void nextLines()
-    {
-        startLine += displayedLines;
-        update();
-    }
-
-    public void previousLines()
-    {
-        startLine -= displayedLines;
-        update();
     }
 }
