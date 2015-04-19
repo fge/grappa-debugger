@@ -96,7 +96,10 @@ public class TreeDepthTabPresenter
     @VisibleForTesting
     void doUpdate(final Runnable runnable)
     {
-        taskRunner.run(view::disableTreeDepthToolbar, runnable,
-            () -> view.displayTreeDepthInfo(treeDepthInfo));
+        taskRunner.run(
+            view::disableTreeDepthToolbar,
+            runnable,
+            () -> view.displayTreeDepthInfo(treeDepthInfo)
+        );
     }
 }

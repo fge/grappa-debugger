@@ -41,7 +41,7 @@ public abstract class JavafxViewTest
         try {
             latch.await();
         } catch (InterruptedException e) {
-            throw new ExceptionInInitializerError(e);
+            throw new RuntimeException(e);
         }
     }
 

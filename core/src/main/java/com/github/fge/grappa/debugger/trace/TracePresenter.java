@@ -46,14 +46,11 @@ public class TracePresenter
     @Override
     public void load()
     {
-        final Runnable runnable = () -> {
-            loadTreeTab();
-            loadMatchesTab();
-            loadRulesTab();
-            loadTreeDepthTab();
-        };
-
-        taskRunner.runOrFail(this::pollStatus, runnable, this::loadError);
+        taskRunner.executeBackgroundOrFail(this::pollStatus, this::loadError);
+        loadTreeTab();
+        loadMatchesTab();
+        loadRulesTab();
+        loadTreeDepthTab();
     }
 
     // TODO: delegate this to GuiTaskRunner

@@ -163,6 +163,23 @@ public final class GuiTaskRunner
         executor.submit(runnable);
     }
 
+    public void executeBackgroundOrFail(
+        @OnBackgroundThread final ThrowingRunnable runnable,
+        @OnUiThread final Consumer<Throwable> onError
+    )
+    {
+        Objects.requireNonNull(runnable);
+        Objects.requireNonNull(onError);
+
+        executor.submit(() -> {
+            try {
+                runnable.doRun();
+            } catch (Throwable throwable) {
+                frontExecutor.execute(() -> onError.accept(throwable));
+            }
+        });
+    }
+
     /**
      * Run a task in the background; schedule a task to run on the ui thread
      * after the background task completes
