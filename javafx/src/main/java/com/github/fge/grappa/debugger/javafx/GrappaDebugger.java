@@ -1,10 +1,12 @@
 package com.github.fge.grappa.debugger.javafx;
 
-import com.github.fge.grappa.debugger.MainWindowFactory;
+import com.github.fge.grappa.debugger.MainWindowFactory2;
+import com.github.fge.grappa.debugger.ZipTraceDbFactory;
 import com.github.fge.grappa.debugger.common.GuiTaskRunner;
+import com.github.fge.grappa.debugger.h2.db.H2TraceDbFactory;
 import com.github.fge.grappa.debugger.javafx.common.AlertFactory;
-import com.github.fge.grappa.debugger.javafx.mainwindow.JavafxMainWindowView;
-import com.github.fge.grappa.debugger.mainwindow.MainWindowPresenter;
+import com.github.fge.grappa.debugger.javafx.main.JavafxMainWindowView;
+import com.github.fge.grappa.debugger.main.MainWindowPresenter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -25,7 +27,7 @@ import java.util.Set;
 @ParametersAreNonnullByDefault
 public final class GrappaDebugger
     extends Application
-    implements MainWindowFactory
+    implements MainWindowFactory2
 {
     private static final URL BASE_WINDOW_FXML;
     private static final URL MATCH_HIGHLIGHT_CSS;
@@ -45,6 +47,9 @@ public final class GrappaDebugger
     private final AlertFactory alertFactory = new AlertFactory();
     private final GuiTaskRunner taskRunner
         = new GuiTaskRunner("grappa-debugger-%d", Platform::runLater);
+
+    private final ZipTraceDbFactory traceDbFactory
+        = new H2TraceDbFactory();
 
     private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 
@@ -94,7 +99,7 @@ public final class GrappaDebugger
         stage.setScene(scene);
         stage.setTitle("Grappa debugger");
 
-        presenter = new MainWindowPresenter(this, taskRunner);
+        presenter = new MainWindowPresenter(this, taskRunner, traceDbFactory);
         presenter.setView(view);
         view.getDisplay().setPresenter(presenter);
 
