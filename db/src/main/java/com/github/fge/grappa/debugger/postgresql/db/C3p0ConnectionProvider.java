@@ -33,6 +33,10 @@ public final class C3p0ConnectionProvider
     @Override
     public void release(final Connection connection)
     {
-        // Nothing
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new DataAccessException("cannot release connection", e);
+        }
     }
 }
