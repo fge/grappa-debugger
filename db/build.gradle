@@ -9,7 +9,7 @@ dependencies {
     compile(group: "org.postgresql", name: "postgresql",
         version: "9.4-1201-jdbc41");
     compile(group: "com.github.fge", name: "grappa", version: "2.0.0-beta.4");
-    compile(group: "com.github.fge", name: "java7-fs-more", version: "0.1.0");
+    compile(group: "com.github.fge", name: "java7-fs-more", version: "0.2.0");
     compile(group: "com.github.fge", name: "throwing-lambdas",
         version: "0.5.0");
     //compile(group: "net.sf.jopt-simple", name: "jopt-simple", version: "4.8");
