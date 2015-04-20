@@ -6,6 +6,7 @@ import com.github.fge.grappa.debugger.ParseInfo;
 import com.github.fge.grappa.debugger.TraceDb;
 import com.github.fge.grappa.debugger.TraceDbLoadStatus;
 import com.github.fge.grappa.debugger.model.TraceModel;
+import com.github.fge.grappa.debugger.model.TraceModelException;
 import com.github.fge.grappa.debugger.postgresql.jooq.tables.records
     .ParseInfoRecord;
 import com.github.fge.grappa.debugger.postgresql.model.PostgresqlTraceModel;
@@ -38,6 +39,9 @@ public final class PostgresqlTraceDb
         final ParseInfoRecord record = jooq.selectFrom(PARSE_INFO)
             .where(PARSE_INFO.ID.eq(uuid))
             .fetchOne();
+
+        if (record == null)
+            throw new TraceModelException("no trace found with id " + uuid);
 
         final int treeDepth = jooq.select(DSL.max(NODES.LEVEL))
             .from(NODES)
