@@ -34,7 +34,7 @@ public final class GrappaDebugger
 
     static {
         final Class<GrappaDebugger> me = GrappaDebugger.class;
-        BASE_WINDOW_FXML = me.getResource("/mainWindow.fxml");
+        BASE_WINDOW_FXML = me.getResource("/javafx/main.fxml");
         if (BASE_WINDOW_FXML == null)
             throw new ExceptionInInitializerError("unable to load base window"
                 + " fxml");
