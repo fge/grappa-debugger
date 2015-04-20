@@ -10,6 +10,7 @@ import com.github.fge.grappa.debugger.postgresql.jooq.tables.records
     .ParseInfoRecord;
 import com.github.fge.grappa.debugger.postgresql.model.PostgresqlTraceModel;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -35,16 +36,23 @@ public final class PostgresqlTraceDb
         this.uuid = uuid;
 
         final ParseInfoRecord record = jooq.selectFrom(PARSE_INFO)
-            .where(PARSE_INFO.ID.eq(uuid)).fetchOne();
+            .where(PARSE_INFO.ID.eq(uuid))
+            .fetchOne();
 
-        final int treeDepth = jooq.selectDistinct(NODES.LEVEL)
-            .from(NODES).where(PARSE_INFO.ID.eq(uuid)).fetchOne().value1();
+        final int treeDepth = jooq.select(DSL.max(NODES.LEVEL))
+            .from(NODES)
+            .where(NODES.PARSE_INFO_ID.eq(uuid))
+            .fetchOne().value1();
 
-        final int nrNodes = jooq.selectCount().from(NODES)
-            .where(PARSE_INFO.ID.eq(uuid)).fetchOne().value1();
+        final int nrNodes = jooq.selectCount()
+            .from(NODES)
+            .where(NODES.PARSE_INFO_ID.eq(uuid))
+            .fetchOne().value1();
 
-        final int nrMatchers = jooq.selectCount().from(MATCHERS)
-            .where(PARSE_INFO.ID.eq(uuid)).fetchOne().value1();
+        final int nrMatchers = jooq.selectCount()
+            .from(MATCHERS)
+            .where(MATCHERS.PARSE_INFO_ID.eq(uuid))
+            .fetchOne().value1();
 
         final LocalDateTime time = record.getDate().toLocalDateTime();
         final String content = record.getContent();
@@ -56,6 +64,12 @@ public final class PostgresqlTraceDb
 
         parseInfo = new ParseInfo(time, treeDepth, nrMatchers, nrLines, length,
             nrCodePoints, nrNodes);
+    }
+
+    @Override
+    public DSLContext getJooq()
+    {
+        return jooq;
     }
 
     @Override
