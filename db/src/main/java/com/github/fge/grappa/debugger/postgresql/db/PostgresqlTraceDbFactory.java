@@ -66,6 +66,7 @@ public final class PostgresqlTraceDbFactory
         source.setJdbcUrl(jdbcUrl);
         source.setUser(builder.user);
         source.setPassword(builder.password);
+        source.setAutoCommitOnClose(true);
 
         final ConnectionProvider provider = new C3p0ConnectionProvider(source);
 

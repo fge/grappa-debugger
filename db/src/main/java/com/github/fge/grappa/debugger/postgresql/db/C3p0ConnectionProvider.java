@@ -24,7 +24,9 @@ public final class C3p0ConnectionProvider
     public Connection acquire()
     {
         try {
-            return source.getConnection();
+            final Connection connection = source.getConnection();
+            connection.setAutoCommit(false);
+            return connection;
         } catch (SQLException e) {
             throw new DataAccessException("cannot acquire connection", e);
         }
