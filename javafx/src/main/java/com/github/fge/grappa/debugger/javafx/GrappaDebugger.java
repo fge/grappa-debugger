@@ -48,8 +48,7 @@ public final class GrappaDebugger
     private final GuiTaskRunner taskRunner
         = new GuiTaskRunner("grappa-debugger-%d", Platform::runLater);
 
-    private final ZipTraceDbFactory traceDbFactory
-        = new H2TraceDbFactory();
+    private final ZipTraceDbFactory traceDbFactory = new H2TraceDbFactory();
 
     private final Map<MainWindowPresenter, Stage> windows = new HashMap<>();
 
