@@ -13,6 +13,7 @@ import com.github.fge.grappa.debugger.model.TraceModel;
 import com.github.fge.lambdas.Throwing;
 import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.jooq.DSLContext;
 
 import java.io.BufferedReader;
@@ -51,6 +52,7 @@ public final class H2TraceDb
     private final FileSystem fs;
     private final Path dbpath;
     private final DSLContext jooq;
+    private final JdbcConnectionPool pool;
 
     private final H2TraceDbLoader loader;
     private final AtomicReference<Throwable> loadError
@@ -68,7 +70,7 @@ public final class H2TraceDb
     private final InputBuffer inputBuffer;
 
     public H2TraceDb(final Path zipfile, final Path dbpath,
-        final DSLContext jooq)
+        final DSLContext jooq, final JdbcConnectionPool pool)
         throws IOException
     {
         final URI uri = URI.create("jar:" + zipfile.toUri());
@@ -76,6 +78,7 @@ public final class H2TraceDb
         fs = FileSystems.newFileSystem(uri, ENV);
         this.dbpath = dbpath;
         this.jooq = jooq;
+        this.pool = pool;
 
         loader = new H2TraceDbLoader(fs, jooq, loadError);
         executor.submit(Throwing.runnable(loader::loadAll));
@@ -164,6 +167,7 @@ public final class H2TraceDb
         IOException exception = null;
 
         executor.shutdownNow();
+        pool.dispose();
 
         try {
             fs.close();

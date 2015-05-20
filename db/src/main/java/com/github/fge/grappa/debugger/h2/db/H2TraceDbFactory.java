@@ -48,7 +48,7 @@ public final class H2TraceDbFactory
 
         final DSLContext jooq = DSL.using(cfg);
 
-        return new H2TraceDb(arg, dbpath, jooq);
+        return new H2TraceDb(arg, dbpath, jooq, pool);
     }
 
     private void initdb(final String jdbcUrl)
