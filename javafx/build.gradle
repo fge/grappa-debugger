@@ -1,9 +1,8 @@
 dependencies {
     compile project(":grappa-debugger-core");
-    compile(group: "org.controlsfx", name: "openjfx-dialogs",
-        version: "1.0.3");
     compile(group: "org.fxmisc.easybind", name: "easybind", version: "1.0.3");
-    compile(group: "org.fxmisc.richtext", name: "richtextfx", version: "0.6.4");
+    compile(group: "org.fxmisc.richtext", name: "richtextfx",
+            version: "0.6.7");
 }
 
 description = "GUI application to debug grappa/parboiled 1.x parsers; JavaFX version";
