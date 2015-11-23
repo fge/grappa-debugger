@@ -24,14 +24,19 @@ public final class JavafxUtils
     public static final String MATCH_EMPTY = "\u2205";     // empty set
     public static final String MATCH_FAILURE = "\u2612";   // ballot box
 
+    public static final String CSS_STYLE_BEFOREMATCH = "beforeMatch";
+    public static final String CSS_STYLE_MATCHFAILURE = "matchFailure";
+    public static final String CSS_STYLE_MATCHSUCCESS = "matchSuccess";
+    public static final String CSS_STYLE_AFTERMATCH = "afterMatch";
+
     public static final List<String> STYLE_BEFOREMATCH
-        = Collections.singletonList("beforeMatch");
+        = Collections.singletonList(CSS_STYLE_BEFOREMATCH);
     public static final List<String> STYLE_MATCHSUCCESS
-        = Collections.singletonList("matchSuccess");
+        = Collections.singletonList(CSS_STYLE_MATCHSUCCESS);
     public static final List<String> STYLE_MATCHFAILURE
-        = Collections.singletonList("matchFailure");
+        = Collections.singletonList(CSS_STYLE_MATCHFAILURE);
     public static final List<String> STYLE_AFTERMATCH
-        = Collections.singletonList("afterMatch");
+        = Collections.singletonList(CSS_STYLE_AFTERMATCH);
 
     @SuppressWarnings("ProhibitedExceptionThrown")
     private JavafxUtils()
