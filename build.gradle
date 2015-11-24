@@ -7,7 +7,7 @@
         }
         dependencies {
         classpath(group: "info.solidsoft.gradle.pitest",
-            name: "gradle-pitest-plugin", version: "1.1.4");
+            name: "gradle-pitest-plugin", version: "1.1.6");
             classpath(group: "org.springframework.build.gradle",
                 name: "propdeps-plugin", version: "0.0.7");
         }
@@ -38,8 +38,8 @@ subprojects {
 
     dependencies {
         provided(group: "com.google.code.findbugs", name: "jsr305",
-            version: "3.0.0");
-        testCompile(group: "org.testng", name: "testng", version: "6.9.4") {
+            version: "3.0.1");
+        testCompile(group: "org.testng", name: "testng", version: "6.9.9") {
             exclude(group: "org.apache.ant", module: "ant");
             exclude(group: "com.google.inject", module: "guice");
             exclude(group: "junit", module: "junit");
@@ -49,7 +49,7 @@ subprojects {
         testCompile(group: "org.mockito", name: "mockito-core", version:
             "1.10.19");
         testCompile(group: "org.assertj", name: "assertj-core", version:
-            "3.0.0");
+            "3.2.0");
     }
 
     javadoc.options.links("http://docs.oracle.com/javase/8/docs/api/");
