@@ -6,6 +6,7 @@ import com.github.fge.grappa.debugger.common.GuiTaskRunner;
 import com.github.fge.grappa.debugger.common.TracingCharEscaper;
 import com.github.fge.grappa.debugger.javafx.common.JavafxUtils;
 import com.github.fge.grappa.debugger.javafx.common.JavafxView;
+import com.github.fge.grappa.debugger.javafx.common.highlight.MatchHighlightText;
 import com.github.fge.grappa.debugger.model.tree.ParseTreeNode;
 import com.github.fge.grappa.debugger.model.tree.RuleInfo;
 import com.github.fge.grappa.debugger.trace.tabs.tree.TreeTabPresenter;
@@ -17,9 +18,7 @@ import javafx.scene.paint.Color;
 import org.fxmisc.richtext.CodeArea;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -75,10 +74,13 @@ public class JavafxTreeTabView
         final int length = buffer.length();
         final int realStart = Math.min(start, length);
         final int realEnd = Math.min(end, length);
+        final boolean emptyMatch = realStart == realEnd;
 
         taskRunner.compute(
-            () -> getSuccessfulMatchFragments(length, realStart, realEnd),
-            this::appendSuccessfulMatchFragments
+            () -> emptyMatch
+                ? MatchHighlightText.emptyMatch(buffer, realStart)
+                : MatchHighlightText.nonemptyMatch(buffer, realStart, realEnd),
+            this::processHighlight
         );
     }
 
@@ -88,8 +90,20 @@ public class JavafxTreeTabView
         final int length = buffer.length();
         final int realEnd = Math.min(end, length);
 
-        taskRunner.compute(() -> getFailedMatchFragments(length, realEnd),
-            this::appendFailedMatchFragments);
+        taskRunner.compute(
+            () -> MatchHighlightText.failedMatch(buffer, realEnd),
+            this::processHighlight
+        );
+    }
+
+    private void processHighlight(final MatchHighlightText text)
+    {
+        final CodeArea area = display.inputText;
+
+        area.clear();
+        area.appendText(text.fullText());
+        area.setStyleSpans(0, text.getStyleSpans());
+        area.moveTo(text.matchStartIndex());
     }
 
     @Override
@@ -143,89 +157,5 @@ public class JavafxTreeTabView
             .collect(Collectors.toList());
         display.currentItem.getChildren().setAll(items);
         display.currentItem.loadingProperty().setValue(false);
-    }
-
-    private MatchFragments getFailedMatchFragments(final int length,
-        final int realEnd)
-    {
-        return new MatchFragments(
-            buffer.extract(0, realEnd),
-            JavafxUtils.MATCH_FAILURE,
-            buffer.extract(realEnd, length)
-        );
-    }
-
-    private MatchFragments getSuccessfulMatchFragments(final int length,
-        final int realStart, final int realEnd)
-    {
-        final String match = ESCAPER.escape(buffer.extract(realStart, realEnd));
-
-        return new MatchFragments(
-            buffer.extract(0, realStart),
-            realStart == realEnd
-                ? JavafxUtils.MATCH_EMPTY
-                : JavafxUtils.MATCH_BEFORE + match + JavafxUtils.MATCH_AFTER,
-            buffer.extract(realEnd, length)
-        );
-    }
-
-    private void appendSuccessfulMatchFragments(final MatchFragments fragments)
-    {
-        highlightMatch(fragments, JavafxUtils.STYLE_MATCHSUCCESS);
-    }
-
-    private void appendFailedMatchFragments(final MatchFragments fragments)
-    {
-        highlightMatch(fragments, JavafxUtils.STYLE_MATCHFAILURE);
-    }
-
-    private void highlightMatch(final MatchFragments fragments,
-        final Collection<String> matchStyle)
-    {
-        final CodeArea inputText = display.inputText;
-
-        final String text = fragments.beforeMatch + fragments.match
-            + fragments.afterMatch;
-
-        inputText.clear();
-        inputText.appendText(text);
-
-        int start;
-        String fragment;
-        int end;
-
-        start = 0;
-        fragment = fragments.beforeMatch;
-        end = start + fragment.length();
-        inputText.setStyle(start, end, JavafxUtils.STYLE_BEFOREMATCH);
-
-        start = end;
-        fragment = fragments.match;
-        end = start + fragment.length();
-        inputText.setStyle(start, end, matchStyle);
-
-        start = end;
-        fragment = fragments.afterMatch;
-        end = start + fragment.length();
-        inputText.setStyle(start, end, JavafxUtils.STYLE_AFTERMATCH);
-
-        final int pos = fragments.beforeMatch.length();
-        inputText.moveTo(pos);
-    }
-
-    @Immutable
-    private static final class MatchFragments
-    {
-        private final String beforeMatch;
-        private final String match;
-        private final String afterMatch;
-
-        private MatchFragments(final String beforeMatch, final String match,
-            final String afterMatch)
-        {
-            this.beforeMatch = beforeMatch;
-            this.match = match;
-            this.afterMatch = afterMatch;
-        }
     }
 }

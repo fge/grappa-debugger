@@ -19,6 +19,24 @@ public abstract class MatchHighlightText
     private final int endIndex;
     private final String matchStyle;
 
+    public static MatchHighlightText failedMatch(final InputBuffer buffer,
+        final int index)
+    {
+        return new FailedMatchHighlightText(buffer, index);
+    }
+
+    public static MatchHighlightText emptyMatch(final InputBuffer buffer,
+        final int index)
+    {
+        return new EmptyMatchHighlightText(buffer, index);
+    }
+
+    public static MatchHighlightText nonemptyMatch(final InputBuffer buffer,
+        final int startIndex, final int endIndex)
+    {
+        return new NonemptyMatchHighlightText(buffer, startIndex, endIndex);
+    }
+
     protected MatchHighlightText(final InputBuffer buffer, final int startIndex,
         final int endIndex, final String matchStyle)
     {
@@ -34,6 +52,11 @@ public abstract class MatchHighlightText
         extract = CRLF.matcher(extract).replaceAll("\n");
         extract = CR_THEN_EOI.matcher(extract).replaceAll("");
         return extract;
+    }
+
+    public final int matchStartIndex()
+    {
+        return textBeforeMatch().length();
     }
 
     // TODO: rewrite... How?
@@ -87,7 +110,7 @@ public abstract class MatchHighlightText
         length = text.length();
         builder.add(JavafxUtils.STYLE_BEFOREMATCH, length);
 
-        text = matchedText();
+        text = decoratedMatchText();
         length = text.length();
         builder.add(Collections.singleton(matchStyle), length);
 
