@@ -1,6 +1,7 @@
 package com.github.fge.grappa.debugger.javafx.common.highlight;
 
 import com.github.fge.grappa.buffers.CharSequenceInputBuffer;
+import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -8,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public final class MatchHighlightTextTest
 {
@@ -136,6 +135,33 @@ public final class MatchHighlightTextTest
         list.add(new Object[] { input, startIndex, endIndex, beforeMatch,
             matchedText, afterMatch});
 
+        input = "Cette petite piste";
+        startIndex = 6;
+        endIndex = 12;
+        beforeMatch = "Cette ";
+        matchedText = "petite";
+        afterMatch = " piste";
+        list.add(new Object[] { input, startIndex, endIndex, beforeMatch,
+            matchedText, afterMatch});
+
+        input = "ab\r\nc";
+        startIndex = 1;
+        endIndex = 3;
+        beforeMatch = "a";
+        matchedText = "b\\r";
+        afterMatch = "\nc";
+        list.add(new Object[] { input, startIndex, endIndex, beforeMatch,
+            matchedText, afterMatch});
+
+        input = "a\r\nbc";
+        startIndex = 2;
+        endIndex = 4;
+        beforeMatch = "a";
+        matchedText = "\\n\nb";
+        afterMatch = "c";
+        list.add(new Object[] { input, startIndex, endIndex, beforeMatch,
+            matchedText, afterMatch});
+
         Collections.shuffle(list);
         return list.iterator();
     }
@@ -148,14 +174,20 @@ public final class MatchHighlightTextTest
         final MatchHighlightText highlightText
             = new TestMatchHighlightText(input, startIndex, endIndex);
 
-        assertThat(highlightText.textBeforeMatch())
-            .as("text before match, with cr/lf substitutions")
-            .isEqualTo(beforeMatch);
-        assertThat(highlightText.matchedText())
-            .as("matched text, with cr/lf substitutions")
-            .isEqualTo(matchedText);
-        assertThat(highlightText.textAfterMatch())
-            .as("text after match, with cr/lf substitutions")
-            .isEqualTo(afterMatch);
+        try (
+            final AutoCloseableSoftAssertions soft
+                = new AutoCloseableSoftAssertions();
+        ) {
+            soft.assertThat(highlightText.textBeforeMatch())
+                .as("text before match")
+                .isEqualTo(beforeMatch);
+            soft.assertThat(highlightText.matchedText())
+                .as("matched text")
+                .isEqualTo(matchedText);
+            soft.assertThat(highlightText.textAfterMatch())
+                .as("text after match")
+                .isEqualTo(afterMatch);
+        }
+
     }
 }

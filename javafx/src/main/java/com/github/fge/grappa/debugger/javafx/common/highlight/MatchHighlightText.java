@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public abstract class MatchHighlightText
 {
     private static final Pattern CRLF = Pattern.compile("\r\n");
-    private static final Pattern LF_NO_CR = Pattern.compile("(?<!\r)\n");
+    private static final Pattern CR_THEN_EOI = Pattern.compile("\r$");
 
     private final InputBuffer buffer;
     private final int startIndex;
@@ -30,7 +30,10 @@ public abstract class MatchHighlightText
 
     protected final String textBeforeMatch()
     {
-        return CRLF.matcher(buffer.extract(0, startIndex)).replaceAll("\n");
+        String extract = buffer.extract(0, startIndex);
+        extract = CRLF.matcher(extract).replaceAll("\n");
+        extract = CR_THEN_EOI.matcher(extract).replaceAll("");
+        return extract;
     }
 
     // TODO: rewrite... How?
@@ -41,42 +44,19 @@ public abstract class MatchHighlightText
         final StringBuilder sb = new StringBuilder(len);
 
         char c;
-        boolean seenCR = false;
-        boolean seenLF = false;
 
         for (int index = 0; index < len; index++) {
             c = extract.charAt(index);
             switch (c) {
                 case '\r':
-                    seenCR = true;
+                    sb.append("\\r");
                     break;
                 case '\n':
-                    if (seenLF)
-                        sb.append("\\n\n");
-                    seenLF = true;
+                    sb.append("\\n\n");
                     break;
                 default:
-                    if (seenCR || seenLF) {
-                        if (seenCR)
-                            sb.append("\\r");
-                        if (seenLF)
-                            sb.append("\\n");
-                        sb.append('\n');
-                    }
                     sb.append(c);
-                    seenCR = false;
-                    seenLF = false;
             }
-        }
-
-        // Catch up...
-
-        if (seenCR || seenLF) {
-            if (seenCR)
-                sb.append("\\r");
-            if (seenLF)
-                sb.append("\\n");
-            sb.append('\n');
         }
 
         return sb.toString();
