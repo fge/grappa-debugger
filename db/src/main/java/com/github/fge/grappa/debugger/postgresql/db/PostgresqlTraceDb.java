@@ -71,12 +71,6 @@ public final class PostgresqlTraceDb
     }
 
     @Override
-    public DSLContext getJooq()
-    {
-        return jooq;
-    }
-
-    @Override
     public TraceDbLoadStatus getLoadStatus()
     {
         return status;

@@ -88,12 +88,6 @@ public final class H2TraceDb
     }
 
     @Override
-    public DSLContext getJooq()
-    {
-        return jooq;
-    }
-
-    @Override
     public TraceDbLoadStatus getLoadStatus()
     {
         return loader.getStatus();
