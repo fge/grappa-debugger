@@ -1,17 +1,17 @@
-    buildscript {
-        repositories {
-            maven {
-            mavenCentral();
-                url "http://repo.springsource.org/plugins-release";
-            }
+buildscript {
+    repositories {
+        maven {
+        mavenCentral();
+            url "http://repo.springsource.org/plugins-release";
         }
-        dependencies {
-        classpath(group: "info.solidsoft.gradle.pitest",
-            name: "gradle-pitest-plugin", version: "1.1.6");
-            classpath(group: "org.springframework.build.gradle",
-                name: "propdeps-plugin", version: "0.0.7");
-        }
-    };
+    }
+    dependencies {
+    classpath(group: "info.solidsoft.gradle.pitest",
+        name: "gradle-pitest-plugin", version: "1.1.6");
+        classpath(group: "org.springframework.build.gradle",
+            name: "propdeps-plugin", version: "0.0.7");
+    }
+};
 
 subprojects {
     repositories {
