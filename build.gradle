@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven {
-        mavenCentral();
+            mavenCentral();
             url "http://repo.springsource.org/plugins-release";
         }
     }
@@ -28,7 +28,7 @@ subprojects {
     apply(plugin: "propdeps-maven");
     apply(plugin: "propdeps-idea");
     apply(plugin: "propdeps-eclipse");
-    
+
     group = "com.github.fge";
     version = "0.3.1-SNAPSHOT";
 
@@ -60,9 +60,9 @@ subprojects {
             throw new IllegalStateException("Wrong java version; required is " +
                 javaVersion + ", but found " + foundVersion);
     }
-    
+
     compileJava.dependsOn(enforceVersion);
-    
+
     /*
      * Necessary! Otherwise TestNG will not be used...
      */
@@ -79,18 +79,18 @@ subprojects {
         classifier = "sources";
         from sourceSets.main.allSource;
     }
-    
+
     task javadocJar(type: Jar, dependsOn: javadoc) {
         classifier = "javadoc";
         from javadoc.destinationDir;
     }
-    
+
     artifacts {
         archives jar;
         archives sourcesJar;
         archives javadocJar;
     }
-    
+
     task wrapper(type: Wrapper) {
         gradleVersion = "2.9";
         distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip";
@@ -99,7 +99,7 @@ subprojects {
     /*
      * SIGNING
      */
-    
+
     project.ext {
         gitrwscm = sprintf("git@github.com:fge/%s", name);
         gitroscm = sprintf("https://github.com/fge/%s.git", name);
@@ -107,7 +107,7 @@ subprojects {
         sonatypeStaging = "https://oss.sonatype.org/service/local/staging/deploy/maven2/";
         sonatypeSnapshots = "https://oss.sonatype.org/content/repositories/snapshots/";
     };
-    
+
     task checkSigningRequirements << {
         def requiredProperties = [ "sonatypeUsername", "sonatypePassword" ];
         def noDice = false;
@@ -121,7 +121,7 @@ subprojects {
             throw new IllegalStateException("missing required properties for " +
                 "upload");
     }
-    
+
     uploadArchives {
         dependsOn(checkSigningRequirements);
         repositories {
@@ -129,14 +129,14 @@ subprojects {
                 beforeDeployment {
                     MavenDeployment deployment -> signing.signPom(deployment);
                 }
-    
+
                 repository(url: "${sonatypeStaging}") {
                     authentication(
                         userName: project.properties["sonatypeUsername"],
                         password: project.properties["sonatypePassword"]
                     );
                 }
-    
+
                 snapshotRepository(url: "${sonatypeSnapshots}") {
                     authentication(
                         userName: project.properties["sonatypeUsername"],
@@ -146,7 +146,7 @@ subprojects {
             }
         }
     }
-    
+
     /*
      * Configure pom.xml on install, uploadArchives
      */
@@ -159,13 +159,13 @@ subprojects {
             packaging "jar";
             description "${project.description}";
             url "${projectURL}";
-    
+
             scm {
                 url "${gitrwscm}";
                 connection "${gitrwscm}";
                 developerConnection "${gitroscm}";
             }
-    
+
             licenses {
                 license {
                     name "Lesser General Public License, version 3 or greater";
@@ -178,7 +178,7 @@ subprojects {
                     distribution "repo";
                 }
             }
-    
+
             developers {
                 developer {
                     id "fge";
@@ -188,7 +188,7 @@ subprojects {
             }
         }
     }
-    
+
     ext.forRelease = !version.endsWith("-SNAPSHOT");
     signing {
         required { forRelease && gradle.taskGraph.hasTask("uploadArchives") };
