@@ -5,3 +5,6 @@ dependencies {
 }
 
 description = "GUI application to debug grappa/parboiled 1.x parsers; core code";
+
+install.enabled = false;
+uploadArchives.enabled = false;

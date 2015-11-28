@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        jcenter();
+    }
+    dependencies {
+        classpath(group: "com.github.jengelman.gradle.plugins",
+                name:"shadow", version:"1.2.2");
+    }
+}
+
 dependencies {
     compile project(":grappa-debugger-core");
     compile(group: "org.fxmisc.easybind", name: "easybind", version: "1.0.3");
@@ -7,22 +17,128 @@ dependencies {
 
 description = "GUI application to debug grappa/parboiled 1.x parsers; JavaFX version";
 
+apply(plugin: "application");
+apply(plugin: "com.github.johnrengelman.shadow");
+
+mainClassName = "com.github.fge.grappa.debugger.javafx.GrappaDebugger";
+
+build.dependsOn(shadowJar);
+
+///*
+// * Creates a jar that can be used as a library on java projects.
+// * This jar already includes all the dependencies.
+// */
+//task libJar(type: Jar, dependsOn: jar) {
+//    classifier = "lib";
+//    from {
+//        configurations.compile.collect { zipTree(it) }
+//    };
+//    with jar;
+//    manifest {
+//        attributes("Main-Class": "com.github.fge.grappa.debugger.javafx.GrappaDebugger");
+//    }
+//}
+//
+artifacts {
+    archives shadowJar;
+}
+
+
 /*
- * Creates a jar that can be used as a library on java projects.
- * This jar already includes all the dependencies.
+ * SIGNING
  */
-task libJar(type: Jar, dependsOn: jar) {
-    classifier = "lib";
-    from {
-        configurations.compile.collect { zipTree(it) }
-    };
-    with jar;
-    manifest {
-        attributes("Main-Class": "com.github.fge.grappa.debugger.javafx.GrappaDebugger");
+
+project.ext {
+    gitrwscm = sprintf("git@github.com:fge/%s", name);
+    gitroscm = sprintf("https://github.com/fge/%s.git", name);
+    projectURL = sprintf("https://github.com/fge/%s", name);
+    sonatypeStaging = "https://oss.sonatype.org/service/local/staging/deploy/maven2/";
+    sonatypeSnapshots = "https://oss.sonatype.org/content/repositories/snapshots/";
+};
+
+task checkSigningRequirements << {
+    def requiredProperties = [ "sonatypeUsername", "sonatypePassword" ];
+    def noDice = false;
+    requiredProperties.each {
+        if (project.properties[it] == null) {
+            noDice = true;
+            System.err.printf("property \"%s\" is not defined!")
+        }
+    }
+    if (noDice)
+        throw new IllegalStateException("missing required properties for " +
+                "upload");
+}
+
+uploadArchives {
+    dependsOn(checkSigningRequirements);
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment);
+            }
+
+            repository(url: "${sonatypeStaging}") {
+                authentication(
+                        userName: project.properties["sonatypeUsername"],
+                        password: project.properties["sonatypePassword"]
+                );
+            }
+
+            snapshotRepository(url: "${sonatypeSnapshots}") {
+                authentication(
+                        userName: project.properties["sonatypeUsername"],
+                        password: project.properties["sonatypePassword"]
+                );
+            }
+        }
     }
 }
 
-artifacts {
-    archives libJar;
+/*
+ * Configure pom.xml on install, uploadArchives
+ */
+[
+        install.repositories.mavenInstaller,
+        uploadArchives.repositories.mavenDeployer
+]*.pom*.whenConfigured { pom ->
+    pom.project {
+        name "${project.name}";
+        packaging "jar";
+        description "${project.description}";
+        url "${projectURL}";
+
+        scm {
+            url "${gitrwscm}";
+            connection "${gitrwscm}";
+            developerConnection "${gitroscm}";
+        }
+
+        licenses {
+            license {
+                name "Lesser General Public License, version 3 or greater";
+                url "http://www.gnu.org/licenses/lgpl.html";
+                distribution "repo";
+            };
+            license {
+                name "Apache Software License, version 2.0";
+                url "http://www.apache.org/licenses/LICENSE-2.0";
+                distribution "repo";
+            }
+        }
+
+        developers {
+            developer {
+                id "fge";
+                name "Francis Galiegue";
+                email "fgaliegue@gmail.com";
+            }
+        }
+    }
 }
 
+ext.forRelease = !version.endsWith("-SNAPSHOT");
+signing {
+    required { forRelease && gradle.taskGraph.hasTask("uploadArchives") };
+    sign configurations.archives;
+}

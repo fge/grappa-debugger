@@ -14,3 +14,6 @@ dependencies {
         version: "0.5.0");
     //compile(group: "net.sf.jopt-simple", name: "jopt-simple", version: "4.8");
 }
+
+install.enabled = false;
+uploadArchives.enabled = false;
